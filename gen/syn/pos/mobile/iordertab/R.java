@@ -926,6 +926,7 @@ public final class R {
         public static final int clear_order_title=0x7f0b01d5;
         public static final int clear_queue_title=0x7f0b01dc;
         public static final int clear_table_title=0x7f0b01de;
+        public static final int close_table_success=0x7f0b020a;
         public static final int close_table_title=0x7f0b0208;
         public static final int computer_label=0x7f0b0165;
         public static final int contents_contact=0x7f0b001d;

@@ -5215,30 +5215,47 @@ public class TakeOrderActivity extends Activity{
 						}else{
 							btnConfirm.setEnabled(false);
 							
-							final CustomDialog customDialog = new CustomDialog(context,
-									R.style.CustomDialog);
-							customDialog.title.setVisibility(View.VISIBLE);
-							customDialog.title.setText(R.string.close_table_title);
-							customDialog.message.setText(R.string.cf_close_table);
-							
-							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									customDialog.dismiss();
-								}
-							});
-							
-							customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									customDialog.dismiss();
-									
-									// call close table task
-								}
-							});
-							customDialog.show();
+//							final CustomDialog customDialog = new CustomDialog(context,
+//									R.style.CustomDialog);
+//							customDialog.title.setVisibility(View.VISIBLE);
+//							customDialog.title.setText(R.string.close_table_title);
+//							customDialog.message.setText(R.string.cf_close_table);
+//							
+//							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
+//
+//								@Override
+//								public void onClick(View v) {
+//									customDialog.dismiss();
+//								}
+//							});
+//							
+//							customDialog.btnOk.setOnClickListener(new OnClickListener() {
+//
+//								@Override
+//								public void onClick(View v) {
+//									customDialog.dismiss();
+//									
+//									// call close table task
+//									new CloseTableTask(TakeOrderActivity.this,
+//											globalVar, 
+//											tbName.getTableID(),
+//											new WebServiceStateListener(){
+//
+//												@Override
+//												public void onSuccess() {
+//													
+//												}
+//
+//												@Override
+//												public void onNotSuccess() {
+//													
+//												}
+//										
+//									}).execute(globalVar.FULL_URL);
+//									
+//								}
+//							});
+//							customDialog.show();
 						}
 					}
 

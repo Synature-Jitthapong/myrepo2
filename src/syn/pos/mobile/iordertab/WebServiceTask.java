@@ -62,11 +62,11 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		String result = "";
 		String url = uri[0];
 
-		TextView tvError = new TextView(context);
-		tvError.setText(R.string.network_error);
-		Log.d("Param to send", soapRequest.toString());
+		//TextView tvError = new TextView(context);
+		//tvError.setText(R.string.network_error);
+		//Log.d("Param to send", soapRequest.toString());
 		
-		syn.pos.mobile.util.Log.appendLog(context, "SEND JSON \n" + soapRequest.toString());
+		//syn.pos.mobile.util.Log.appendLog(context, "SEND JSON \n" + soapRequest.toString());
 		
 		SoapSerializationEnvelope envelope = 
 				new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -75,33 +75,25 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		envelope.setOutputSoapObject(soapRequest);
 
 		System.setProperty("http.keepAlive", "false");
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
 		String soapAction = nameSpace + webMethod;
-		
+
 		try {
-			Thread.sleep(1000);
+			androidHttpTransport.call(soapAction, envelope);
 			try {
-				androidHttpTransport.call(soapAction, envelope);
-				try {
-					Log.i("result", envelope.getResponse().toString());
-					result = envelope.getResponse().toString();
-				} catch (SoapFault e) {
-					result = e.getMessage();
-					e.printStackTrace();
-				}
-			}catch (IOException e) {
-				result = tvError.getText().toString();
-				e.printStackTrace();
-			}catch (XmlPullParserException e) {
-				result = tvError.getText().toString();
+				Log.i("result", envelope.getResponse().toString());
+				result = envelope.getResponse().toString();
+			} catch (SoapFault e) {
+				result = e.getMessage();
 				e.printStackTrace();
 			}
-		} catch (InterruptedException e1) {
-			tvError.setText(R.string.msg_connection_timeout);
-			result = tvError.getText().toString();
-			e1.printStackTrace();
+		}catch (IOException e) {
+			result = e.getMessage();
+			e.printStackTrace();
+		}catch (XmlPullParserException e) {
+			result = e.getMessage();
+			e.printStackTrace();
 		}
-		
 		return result;
 	}
 

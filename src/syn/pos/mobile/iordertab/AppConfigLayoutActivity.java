@@ -1,6 +1,7 @@
 package syn.pos.mobile.iordertab;
 
 import java.util.List;
+import java.util.Locale;
 
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ShowMenuColumnName;
@@ -157,7 +158,6 @@ public class AppConfigLayoutActivity extends Activity {
 			
 			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
 			shopProp.setSelectedLanguage(lang.getLangID());
-			
 			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangCode());
 			
 			//loadSetting();
@@ -218,7 +218,7 @@ public class AppConfigLayoutActivity extends Activity {
 //						}
 //					});
 					customDialog.dismiss();
-					refreshActivity();
+					//refreshActivity();
 				}
 			});
 			customDialog.show();

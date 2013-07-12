@@ -421,6 +421,6 @@
     <string name="text_switch_lang">ภาษา</string>
     <string name="close_table_title">ปิดโต๊ะ</string>
     <string name="cf_close_table">ต้องการปิดโต๊ะนี้?</string>
-    
+    <string name="close_table_success">ปิดโต๊ะนี้เรียบร้อยแล้ว.</string>
 
 </resources>

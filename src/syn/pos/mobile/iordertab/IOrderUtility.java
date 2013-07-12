@@ -2,6 +2,7 @@ package syn.pos.mobile.iordertab;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -893,12 +894,23 @@ public class IOrderUtility {
 	public static void deleteLog(Context context) {
 		File sdcard = Environment.getExternalStorageDirectory();
 
-		File file = new File(sdcard, context.getPackageName() + "_log.txt");
+		File file = new File(sdcard, context.getPackageName());
 
 		if (file != null) {
-			file.delete();
+			File[] files = file.listFiles();
+			for(File f : files){
+				if(f.toString().contains(".txt")){
+					try {
+						f.delete();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
+	
 
 	public static void readLog(Context context, TextView tv) {
 		File sdcard = Environment.getExternalStorageDirectory();
@@ -944,7 +956,8 @@ public class IOrderUtility {
 	    // Change locale settings in the app.
 	    DisplayMetrics dm = res.getDisplayMetrics();
 	    android.content.res.Configuration conf = res.getConfiguration();
-	    conf.locale = new Locale(langCode);
+	    if(!langCode.equals(""))
+	    	conf.locale = new Locale(langCode);
 	    res.updateConfiguration(conf, dm);
 	}
 }
