@@ -109,6 +109,15 @@ public class SelectTableListAdapter extends BaseAdapter {
 			
 			if(tbName.getTableID() == 0)
 				holder.btnImgTbInfo.setVisibility(View.GONE);
+			
+			// already checkbill
+			if(tbName.getSTATUS() == 3){
+				// show dolla
+				holder.imgStatus.setImageResource(R.drawable.dollar);
+				holder.btnImgTbInfo.setVisibility(View.INVISIBLE);
+			}else{
+				holder.btnImgTbInfo.setVisibility(View.VISIBLE);
+			}
 
 			holder.btnImgTbInfo.setOnClickListener(new OnClickListener(){
 

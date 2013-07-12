@@ -439,5 +439,7 @@
     <string name="warn_clear_order">Warning current order will be clear! Are you sure?</string>
     <string name="text_sale_type">Sale Type</string>
     <string name="text_switch_lang">Language</string>
+    <string name="close_table_title">Close table</string>
+    <string name="cf_close_table">Do you want to close this table?</string>
 
 </resources>

@@ -419,5 +419,8 @@
     <string name="delete_menu_comment_cf">ต้องการลบ Comment นี้?</string>
     <string name="warn_clear_order">คำเตือน รายการที่กำลังสั่งจะถูกลบออก ต้องการออกจากระบบ?</string>
     <string name="text_switch_lang">ภาษา</string>
+    <string name="close_table_title">ปิดโต๊ะ</string>
+    <string name="cf_close_table">ต้องการปิดโต๊ะนี้?</string>
+    
 
 </resources>
