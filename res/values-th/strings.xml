@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">iOrder</string>
+    <string name="title_activity_take_order">Take order</string>
+    <string name="title_activity_menu_set">Menu set</string>
+
+    <!-- string order -->
+    <string name="tv_orderqty">Qty:</string>
+    <string name="btn_order_minus">-</string>
+    <string name="btn_order_plus">+</string>
+    <string name="btn_order_del">X</string>
+    <string name="btn_order_comment">Comment</string>
+    <string name="btn_sendorder">ส่งรายการ</string>
+    <string name="btn_holdorder">Hold รายการ</string>
+    <string name="btn_display_holdorder">รายการที่ hold</string>
+    <string name="btn_plu">PLU</string>
+
+    <!-- send order status -->
+    <string name="send_order_dialog_title">ส่งรายการ</string>
+    <string name="send_order_dialog_success_msg">ส่งรายการสำเร็จ</string>
+    <string name="send_order_dialog_fail">ส่งรายการล้มเหลว</string>
+    <string name="send_order_dialog_btn_close">ปิด</string>
+
+    <!-- menuitem -->
+    <string name="menuitem_btn_moredetail">More</string>
+
+    <!-- string action menu -->
+    <string name="action_movetable">ย้ายโต๊ะ</string>
+    <string name="action_mergetable">รวมโต๊ะ</string>
+    <string name="action_move_menu">ย้ายเมนู</string>
+    <string name="menu_settings">ตั้งค่า</string>
+    <string name="menu_updatews">อัพเดตข้อมูล</string>
+    <string name="menu_clearorder">ล้างรายการ</string>
+    <string name="menu_logout">ออกจากระบบ</string>
+    <string name="action_move_menu_confirm">ยืนยัน</string>
+    <string name="action_move_menu_cancel">ปิด</string>
+
+    <!-- string select table dialog -->
+    <string name="dialog_title_sendorder">ส่งรายการ</string>
+    <string name="dialog_sendorder_btnok">ตกลง</string>
+    <string name="dialog_sendorder_btncancel">ยกเลิก</string>
+    <string name="tv_sendorder_tablezone">โซน:</string>
+    <string name="tv_sendorder_tablestatus">สถานะ</string>
+    <string name="tv_sendorder_tablename">โต๊ะ</string>
+    <string name="tv_sendorder_tablecapacity">ที่นั่ง</string>
+    <string name="tv_sendorder_cusno">ลูกค้า</string>
+    <string name="selecttable_btnplus">+</string>
+    <string name="selecttable_btnminus">-</string>
+    <string name="selecttable_tv_select_tbname">โต๊ะ</string>
+    <string name="selecttable_tv_select_cusno">ลูกค้า</string>
+
+    <!-- string login activity -->
+    <string name="title_activity_login">iOrder</string>
+    <string name="title_activity_login_title">เข้าระบบ</string>
+    <string name="login_menu_exit">ออกจากโปรแกรม</string>
+    <string name="login_logo_text">iOrder</string>
+    <string name="tv_username">ชื่อผู้ใช้</string>
+    <string name="tv_password">รหัสผ่าน</string>
+    <string name="btn_login">เข้าระบบ</string>
+    <string name="login_dialog_title_cfm_exit">ออกจากโปรแกรม</string>
+    <string name="login_dialog_msg_cfm_exit">ต้องการออกจากโปรแกรม?</string>
+    <string name="login_dialog_btn_cfm_exit_Yes">ใช่</string>
+    <string name="login_dialog_btn_cfm_exit_No">ไม่ใช่</string>
+
+    <!-- view app config -->
+    <string name="title_activity_app_config_layout">ตั้งค่า</string>
+
+    <!-- string view menu comment -->
+    <string name="btn_comment_minus">-</string>
+    <string name="btn_comment_plus">+</string>
+    <string name="title_menu_comment">แก้ไขเมนู</string>
+    <string name="btn_ok_comment">ตกลง</string>
+    <string name="btn_cancel_comment">ยกเลิก</string>
+    <string name="label_menu_comment">Extra Comment</string>
+
+    <!-- string view hold order -->
+    <string name="dialog_title_holdorder">Hold รายการ</string>
+    <string name="dialog_holdorder_btnclose">ปิด</string>
+
+    <!-- plu view -->
+    <string name="txt_plu_hint">รหัส</string>
+    <string name="dialog_plu_search_notfound_title">ผลการค้นหา</string>
+    <string name="dialog_plu_search_notfound_msg">ไม่พบสินค้า</string>
+    <string name="dialog_plu_search_btn_close">ปิด</string>
+    <string name="btn_plu_del">ลบ</string>
+    <string name="btn_plu_enter">Enter</string>
+
+    <!-- sync data progress dialog -->
+    <string name="sync_data_success">อัพเดตข้อมูลสำเร็จ.</string>
+
+    <!-- menugroupset -->
+    <string name="dialog_cancel_title_setmenu">ยกเลิก</string>
+    <string name="dialog_cancel_msg_setmenu">ต้องการยกเลิก?</string>
+    <string name="dialog_cancel_btn_yes_setmenu">ใช่</string>
+    <string name="dialog_cancel_btn_no_setmenu">ไม่ใช่</string>
+    <string name="menu_setmenu_confirm">เสร็จ</string>
+    <string name="menu_setmenu_cancel">ยกเลิก</string>
+    <string name="tv_childitem_tv_req_text"></string>
+    <string name="btn_childorder_linktype7_minus">-</string>
+    <string name="btn_childorder_linktype7_plus">+</string>
+    <string name="btn_childorder_linktype7_delete">X</string>
+    <string name="btn_childorder_linktype7_comment">Comment</string>
+    <string name="btn_childorder_linktype7_edit">Edit</string>
+    <string name="title_activity_splash">iOrder</string>
+    <string name="menuset_dialog_done_title">คำเตือน</string>
+    <string name="menuset_dialog_done_msg">กรุณาเลือก</string>
+    <string name="menuset_dialog_done_close">ปิด</string>
+
+    <!-- table util -->
+    <string name="action_menu_table_util">จัดการโต๊ะ</string>
+
+    <!-- menu util -->
+    <string name="action_menu_menu_util">จัดการเมนู</string>
+    <string name="action_menu_move_menu">ย้ายรายการ</string>
+    <string name="action_menu_cancel_menu">ยกเลิกรายการ</string>
+
+    <!-- move table -->
+    <string name="move_table_title">ย้ายโต๊ะ</string>
+    <string name="move_table_tvfrom">จาก</string>
+    <string name="move_table_tvto">ไป</string>
+    <string name="move_table_tvzonefrom">โซน</string>
+    <string name="move_table_tvtbfrom">โต๊ะ</string>
+    <string name="move_table_tvzoneto">โซน</string>
+    <string name="move_table_tvtbto">โต๊ะ</string>
+    <string name="move_table_tvreason">หมายเหตุ</string>
+    <string name="move_table_dialog_title">ย้ายโต๊ะ</string>
+    <string name="move_table_action_menu_ok">ยืนยัน</string>
+    <string name="move_table_action_menu_Cancel">ปิด</string>
+    <string name="move_table_result_success">ย้ายโต๊ะสำเร็จ</string>
+    <string name="move_table_result_fail">ย้ายโต๊ะล้มเหลว</string>
+    <string name="merge_table_result_success">รวมโต๊ะสำเร็จ</string>
+    <string name="merge_table_result_fail">รวมโต๊ะล้มเหลว</string>
+
+    <!-- move menu -->
+    <string name="move_menu_dialog_title">ย้ายเมนู</string>
+    <string name="move_menu_dialog_btn_cancel">ยกเลิก</string>
+    <string name="move_menu_dialog_btn_confirm">ยืนยัน</string>
+    <string name="move_menu_btn_choose_menu">เลือกเมนู</string>
+    <string name="move_menu_tv_reason">หมายเหตุ</string>
+    <string name="move_menu_tv_menu_to_move">เมนูที่เลือก</string>
+    <string name="move_menu_result_success">ย้ายรายการสำเร็จ</string>
+    <string name="move_menu_result_fail">ย้ายรายการล้มเหลว</string>
+    
+    <!-- global close dialog btn -->
+    <string name="global_close_dialog_btn">ปิด</string>
+    <string name="title_activity_cancel_menu">ยกเลิกรายการ</string>
+
+    <!-- cancel menu -->
+    <string name="cancel_menu_btn_shoose_menu">เลือกเมนู</string>
+    <string name="cancel_menu_tv_reason">หมายเหตุ</string>
+    <string name="cancel_menu_action_menu_confirm">ยืนยัน</string>
+    <string name="cancel_menu_action_menu_cancel">ปิด</string>
+    <string name="cancel_menu_result_success">ยกเลิกรายการสำเร็จ</string>
+    <string name="cancel_menu_result_fail">ยกเลิกรายการล้มเหลว</string>
+    <string name="title_activity_check_bill">Bill summary</string>
+    <string name="send_order_progress">กำลังส่งรายการ รอสักครู่...</string>
+    <string name="ok_shoose_holded_order">ตกลง</string>
+    <string name="cancel_shoose_holded_order">ยกเลิก</string>
+    <string name="app_setting_save">บันทึก</string>
+    <string name="app_setting_close">ปิด</string>
+    <string name="app_setting_message">การเชื่อมต่อ</string>
+    <string name="device_not_register">ยังไม่ได้ลงทะเบียน กรุณาติดต่อเจ้าหน้าที่</string>
+    <string name="checking_device">กำลังตรวจสอบเครื่อง...</string>
+    <string name="update_shop_progress">อัพเดตข้อมูลร้าน...</string>
+    <string name="update_product_progress">อัพเดตข้อมูลสินค้า...</string>
+    <string name="update_menu_progress">อัพเดตข้อมูลเมนู...</string>
+    <string name="update_reason_progress">อัพเดตข้อมูลอื่นๆ...</string>
+    <string name="update_data_title">ผลการอัพเดตข้อมูล</string>
+    <string name="move_table_progress">กำลังย้ายโต๊ะ รอสักครู่...</string>
+    <string name="merge_table_progress">กำลังรวมโต๊ะ รอสักครู่...</string>
+    <string name="move_table_activity_title">ย้ายโต๊ะ</string>
+    <string name="merge_table_activity_title">รวมโต๊ะ</string>
+    <string name="btn_move_table">ย้าย</string>
+    <string name="btn_cancel_move_table">ยกเลิก</string>
+    <string name="btn_merge_table">รวม</string>
+    <string name="btn_cancel_merge_table">ยกเลิก</string>
+    <string name="load_current_order_progress">กำลังโหลดรายการ...</string>
+    <string name="check_bill_menu_close">ปิด</string>
+    <string name="call_checkbill_progress">กำลังเรียกเก็บเงิน รอสักครู่...</string>
+    <string name="call_chekcbill_success">เรียกเก็บเงินเรียบร้อย</string>
+    <string name="call_checkbill_dialog_title">เรียกเก็บเงิน</string>
+    <string name="please_select_table">กรุณาเลือกโต๊ะ</string>
+    <string name="load_table_progress">กำลังโหลดข้อมูลโต๊ะ รอสักครู่..</string>
+    <string name="call_checkbill_print">พิมพ์ใบลองบิล</string>
+    <string name="call_checkbill">เรียกเก็บเงิน</string>
+    <string name="call_checkbill_setmember">สมาชิก</string>
+    <string name="title_activity_menu_detail">ข้อมูลเมนู</string>
+    <string name="select_table">เลือกโต๊ะ</string>
+    <string name="move_menu_progress">กำลังย้ายรายการ รอสักครู่...</string>
+    <string name="cancel_menu_progress">กำลังยกเลิกรายการ รอสักครู่...</string>
+    <string name="cancel_menu_dialog_title">ยกเลิกรายการ</string>
+    <string name="title_activity_search_member">ข้อมูลสมาชิก</string>
+    <string name="btn_order">สั่ง</string>
+    <string name="loading_progress">กำลังโหลด...</string>
+    <string name="print_dialog_title">พิมพ์</string>
+    <string name="print_success">พิมพ์ใบลองบิลสำเร็จ</string>
+    <string name="print_progress">กำลังสั่งพิมพ์ รอสักครู่...</string>
+    <string name="select_source_table">กรุณาเลือกโต๊ะต้นทาง</string>
+    <string name="select_destination_table">กรุณาเลือกโต๊ะปลายทาง</string>
+    <string name="select_menu_to_move">กรุณาเลือกรายการที่ต้องการย้าย</string>
+    <string name="select_menu_to_cancel">กรุณาเลือกรายการที่ต้องการยกเลิก</string>
+    <string name="btn_shoose_table">เลือกโต๊ะ</string>
+    <string name="title_activity_move_menu">ย้ายรายการ</string>
+    <string name="selected_table_label">โต๊ะ:</string>
+    <string name="total_qty_label">จำนวน:</string>
+    <string name="btn_set_queue">เลือกคิว</string>
+    <string name="btn_cancel_menu_comment">ยกเลิก</string>
+    <string name="btn_ok_menu_comment">ตกลง</string>
+    <string name="menu_set_close">ปิด</string>
+    <string name="btn_custom_dialog_ok">ตกลง</string>
+    <string name="btn_custom_dialog_cancel">ยกเลิก</string>
+    <string name="dialog_delete_item_title">ลบ</string>
+    <string name="dialog_delete_item_message">ต้องการลบรายการนี้?</string>
+    <string name="dialog_delete_item_btn_ok">ตกลง</string>
+    <string name="dialog_delete_item_btn_cancel">ยกเลิก</string>
+    <string name="select_table_warning">กรุณาเลือกโต๊ะ</string>
+    <string name="select_table_title">เลือกโต๊ะ</string>
+    <string name="select_table_cust_label">จำนวนลูกค้า:</string>
+    <string name="app_config_btn_save">บันทึก</string>
+    <string name="app_config_btn_close">ปิด</string>
+    <string name="btn_global_yes">ใช่</string>
+    <string name="btn_global_no">ไม่ใช่</string>
+    <string name="btn_order_set_delete_all">ลบทั้งหมด</string>
+    <string name="btn_ok_logout">ใช่</string>
+    <string name="btn_cancel_logout">ไม่ใช่</string>
+    <string name="dialog_logout_title">ออกจากระบบ</string>
+    <string name="dialog_logout_message">ต้องการออกจากระบบ?</string>
+    <string name="dialog_delete_all_item">ต้องการลบรายการทั้งหมด?</string>
+    <string name="dialog_select_menu_ok">ตกลง</string>
+    <string name="dialog_select_menu_cancel">ยกเลิก</string>
+    <string name="dialog_select_menu_title">เลือกเมนู</string>
+    <string name="move_menu_btn_edit_menu">แก้ไขเมนู</string>
+    <string name="global_dialog_title_error">ผิดพลาด</string>
+    <string name="app_setting_dialog_title">ตั้งค่า</string>
+    <string name="app_setting_input_data">กรุณาใส่ ipaddress และ webservice</string>
+    <string name="app_setting_save_success">บันทึกการตั้งค่าสำเร็จ</string>
+    <string name="queue_customer_name_label">ชื่อลูกค้า:</string>
+    <string name="queue_customer_qty_label">จำนวนลูกค้า:</string>
+    <string name="queue_btn_call">เรียกคิว</string>
+    <string name="queue_btn_cancel">ยกเลิก</string>
+    <string name="queue_customer_tel_label">เบอร์โทร:</string>
+    <string name="generate_new_queue_progress">กำลังจองคิว รอสักครู่...</string>
+    <string name="generate_new_queue_success">จองคิวสำเร็จ.</string>
+    <string name="queue_customer_wait_label">รอ:</string>
+    <string name="queue_customer_start_label">เริ่ม:</string>
+    <string name="global_dialog_title_warning">คำเตือน</string>
+    <string name="queue_activity_title">เลือกคิว</string>
+    <string name="menu_manage_queue">จัดการคิว</string>
+    <string name="call_queue_progress">กำลังเรียกคิว รอสักครู่...</string>
+    <string name="call_queue_success">เรียกคิวสำเร็จ.</string>
+    <string name="cancel_queue_progress">กำลังยกเลิกคิว รอสักครู่...</string>
+    <string name="cancel_queue_success">ยกเลิกคิวสำเร็จ.</string>
+    <string name="call_queue_dialog_title">เรียกคิว</string>
+    <string name="cancel_queue_dialog_title">ยกเลิกคิว</string>
+    <string name="global_refresh">Refresh</string>
+    <string name="queue_refresh_progress">Refreshing...</string>
+    <string name="cancel_queue_confirm">ต้องการยกเลิกคิวนี้?</string>
+    <string name="global_btn_yes">ใช่</string>
+    <string name="global_btn_no">ไม่ใช่</string>
+    <string name="global_btn_close">ปิด</string>
+    <string name="global_network_connection_problem">ไม่สามารถเชื่อมต่อ server ได้</string>
+    <string name="hold_remark_label">หมายเหตุ:</string>
+    <string name="hold_dialog_title">hold รายการ</string>
+    <string name="queue_list_customer_qty_label">จำนวนลูกค้า:</string>
+    <string name="queue_list_customer_name_label">ชื่อลูกค้า:</string>
+    <string name="hold_order_remark_warning">กรุณาใส่หมายเหตุ.</string>
+    <string name="orders_hold_dialog_title">รายการที่ hold</string>
+    
+    <string name="queue_order_by_label">สั่งโดย:</string>
+    <string name="login_fail_title">ไม่สามารถเข้าระบบได้</string>
+    <string name="login_fail">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</string>
+    <string name="app_setting_server">Server IP:</string>
+    <string name="app_setting_service">WebService:</string>
+    <string name="title_activity_log">เข้าระบบ</string>
+    <string name="login_menu_log">Log</string>
+    <string name="last_update_label">อัพเดตล่าสุด:</string>
+    <string name="device_code_label">Device code:</string>
+    <string name="computer_label">Device name:</string>
+    <string name="text_version">Version:</string>
+    <string name="button_select_queue">Pre order</string>
+    <string name="button_queue_ok">ตกลง</string>
+    <string name="button_queue_cancel">ยกเลิก</string>
+    <string name="progress_searching_member">กำลังค้นหาข้อมูลสมาชิก รอสักครู่...</string>
+    <string name="btn_search_member_cancel">ยกเลิก</string>
+    <string name="btn_search_member_ok">ตกลง</string>
+    <string name="title_activity_kds_info">KDS</string>
+    <string name="action_settings">ตั้งค่า</string>
+    <string name="action_kds">KDS</string>
+    <string name="global_btn_cancel">ยกเลิก</string>
+    <string name="global_btn_ok">ตกลง</string>
+    <string name="activity_checkbill">Bill summary</string>
+    <string name="activity_login">เข้าระบบ</string>
+    <string name="activity_move_menu">ย้ายบางรายการ</string>
+    <string name="activity_cancel_menu">ยกเลิกรายการ</string>
+    <string name="activity_setting">ตั้งค่า</string>
+    <string name="activity_menu_set">ชุดเมนู</string>
+    <string name="activity_queue">คิว</string>
+    <string name="activity_kds">KDS</string>
+    <string name="no_order_msg">ไม่มีรายการที่จะส่ง</string>
+    <string name="call_checkbill_setmember_barcode">Bar Code</string>
+    <string name="call_checkbill_setmember_qrcode">QR Code</string>
+    <string name="network_error">ไม่สามารถเชื่อมต่อไปยัง Server กรุณาตรวจสอบการเชื่อมต่อ wifi หรือสถานะของ Server</string>
+    <string name="out_of_stock">สินค้าหมด</string>
+    <string name="action_bill_summary">Bill Summary</string>
+    <string name="button_clear">Clear</string>
+    <string name="cf_move_menu_title">ยืนยันย้ายรายการ</string>
+    <string name="cf_move_menu_msg">ต้องการย้ายรายการนี้?</string>
+    <string name="cf_move_table_title">ยืนยันย้ายโต๊ะ</string>
+    <string name="cf_move_table_msg">ต้องการย้ายโต๊ะ?</string>
+    <string name="cf_merge_table_title">ยืนยันรวมโต๊ะ</string>
+    <string name="cf_merge_table_msg">ต้องการรวมโต๊ะ?</string>
+    <string name="cf_cancel_menu_title">ยืนยันยกเลิกรายการ</string>
+    <string name="cf_cancel_menu_msg">ต้องการยกเลิกรายการ?</string>
+    <string name="text_send_fastfood_ref">Reference:</string>
+    <string name="cf_fastfood_title">Please input reference.</string>
+    <string name="fast_food_cust_qty">จำนวนลูกค้า:</string>
+    <string name="fast_food_send_order">ส่งรายการ</string>
+    <string name="member_code">รหัส:</string>
+    <string name="button_search_member">ค้นหา</string>
+    <string name="text_member_code">รหัสสมาชิก:</string>
+    <string name="text_member_name">ชื่อสมาชิก:</string>
+    <string name="input_member_code_msg">กรุณาใส่รหัสสมาชิก</string>
+    <string name="activity_member_title">ค้นหาสมาชิก</string>
+    <string name="wait_progress">รอสักครู่...</string>
+    <string name="text_member_group">กลุ่มสมาชิก:</string>
+    <string name="text_member_mobile">เบอร์โทร:</string>
+    <string name="text_bill_sale_date">Date:</string>
+    <string name="text_bill_customer_no">No of customer:</string>
+    <string name="text_bill_member">สมาชิก:</string>
+    <string name="text_member_birth_day">วันเกิด:</string>
+    <string name="text_member_expire">วันหมดอายุ:</string>
+    <string name="text_outof_stock">สินค้าหมด</string>
+    <string name="text_hold_cust_name">ชื่อลูกค้า:</string>
+    <string name="text_hold_cust_qty">จำนวนลูกค้า:</string>
+    <string name="text_pendding_date">Date:</string>
+    <string name="text_pending_cust_name">Customer Name:</string>
+    <string name="text_pending_order_qty">Qty:</string>
+    <string name="text_pending_remark">Remark:</string>
+    <string name="button_pending_edit">Edit</string>
+    <string name="button_pending_send">Send</string>
+    <string name="text_title_pending_list">Hold order list</string>
+    <string name="button_send_pending_all">Send All</string>
+    <string name="hold_curr_order_msg">กรุณา hold รายการปัจจุบันไว้ก่อน</string>
+    <string name="hold_order_custname_warning">กรุณาใส่ชือลูกค้า</string>
+    <string name="text_curr_queue">คิว:</string>
+    <string name="text_hold_selected_table">โต๊ะ:</string>
+    <string name="text_hold_selected_queue">คิว:</string>
+    <string name="text_change_table_promp">ต้องการเปลี่ยนโต๊ะ?</string>
+    <string name="text_pending_queue_name">Queue Name:</string>
+    <string name="text_pending_table_name">Table:</string>
+    <string name="btn_set">Set</string>
+    <string name="text_send_seleted_queue">คิวปัจจุบัน:</string>
+    <string name="text_already_set_queue">You already set queue.</string>
+    <string name="cf_send_to_table">Are you sure you want to send this order to table?</string>
+    <string name="text_total_pending">Hold:</string>
+    <string name="btn_clear_member">Clear สมาชิก</string>
+    <string name="clear_member_progress">Clear สมาชิก...</string>
+    <string name="cf_clear_member">ต้องการ clear ข้อมูลสมาชิกที่เลือกไว้?</string>
+    <string name="clear_member_title">Clear สมาชิก</string>
+    <string name="clear_member_succ">Clear สมาชิกสำเร็จ</string>
+    <string name="button_preorder">Pre order</string>
+    <string name="text_total_queue">Total:</string>
+    <string name="text_comp_setting_not_valid">ตั้งค่าคอมพิวเตอร์ไม่ถูกต้อง </string>
+    <string name="msg_already_set_queue">รายการนี้เป็นของคิว</string>
+    <string name="cf_change_queue">ต้องการเปลี่ยนคิว?</string>
+    <string name="msg_already_set_table">รายการนี้เป็นของโต๊ะ</string>
+    <string name="cf_change_table">ต้องการเปลี่ยนโต๊ะ?</string>
+    <string name="button_sale_mode">Sale mode</string>
+    <string name="button_set_queue">คิว</string>
+    <string name="button_set_table">โต๊ะ</string>
+    <string name="text_warn_replace_preorder">รายการที่กำลังสั่งจะถูกทับโดยรายการของคิวนี้ ยืนยันเลือกคิวนี้?</string>
+    <string name="text_err_sale_mode_takealway">ตอนนี้คุณเลือกโหมด Take Away แต่เมนูนี้ถูกตั้งค่าไว้เป็นโหมด Dine In</string>
+    <string name="text_err_sale_mode_eatin">ตอนนี้คุณเลือกโหมด Dine In แต่เมนูนี้ถูกตั้งค่าไว้เป็นโหมด Take Away</string>
+    <string name="text_order_of_queue">รายการล่าสุดของคิวนี้</string>
+    <string name="button_check_price">Summary</string>
+    <string name="button_set_member_from_main">สมาชิก</string>
+    <string name="checkin_queue_title">เรียกคิว</string>
+    <string name="checkin_queue_progress">กำลังเรียกคิว รอสักครู่...</string>
+    <string name="checkin_success">เรียกคิวสำเร็จ</string>
+    <string name="unknown_error_title">unknown error</string>
+    <string name="text_kds_table_zone">โซน:</string>
+    <string name="text_kds_table_name">โต๊ะ:</string>
+    <string name="text_move_menu_from">จาก</string>
+    <string name="text_move_menu_to">ไป</string>
+    <string name="msg_connection_timeout">การเชื่อมต่อหมดเวลา กรุณาลองใหม่</string>
+    <string name="text_table">โต๊ะ</string>
+    <string name="msg_input_customer_name">กรุณาใส่ชื่อลูกค้า</string>
+    <string name="msg_input_customer_telephone">กรุณาใส่เบอร์โทรลูกค้า</string>
+    <string name="button_cancel_queue">ยกเลิกคิว</string>
+    <string name="clear_order_title">ล้างรายการ</string>
+    <string name="msg_clear_order">ต้องการล้างรายการทั้งหมด?</string>
+    <string name="update_progress">กำลังอัพเดต รอสักครู่...</string>
+    <string name="order_by_group">กลุ่ม</string>
+    <string name="order_by_time">เวลา</string>
+    <string name="order_by_finish">เสร็จ</string>
+    <string name="order_by_name">ชื่อ</string>
+    <string name="button_clear">Clear</string>
+    <string name="clear_queue_title">Clear queue</string>
+    <string name="cf_clear_queue">ต้องการ clear คิวที่เลือกไว้?</string>
+    <string name="clear_table_title">Clear table</string>
+    <string name="cf_clear_table">ต้องการ clear โต๊ะที่เลือกไว้?</string>
+    <string name="enter_open_price">กรุณาใส่ราคาสินค้า</string>
+    <string name="session_expire">ปิดสิ้นวันแล้ว โปรแกรมจะออกจากระบบเพื่ออัพเดตข้อมูลใหม่</string>  
+    <string name="hint_price">ราคา</string>
+    <string name="enter_product_amount">กรุณาใส่จำนวนสินค้า</string>
+    <string name="hint_product_qty">จำนวน</string>
+    <string name="select_reason">กรุณาเลือกเหตุผล</string>
+    <string name="question_title">คำถาม</string>
+    <string name="reprint_quick_order">เร่งรายการ</string>
+    <string name="reprint_title">เร่งรายการ</string>
+    <string name="reprint_success">เร่งรายการสำเร็จแล้ว.</string>
+    <string name="button_edit_question">แก้คำถาม</string>
+    <string name="edit_question_title">แก้คำถาม</string>
+    <string name="edit_question_success">แก้คำถามเรียบร้อยแล้ว</string>
+    <string name="generald_setting">ทั่วไป</string>
+    <string name="display_menu_image">แสดงรูปเมนู</string>
+    <string name="delete_menu_comment_title">ลบ Comment</string>
+    <string name="delete_menu_comment_cf">ต้องการลบ Comment นี้?</string>
+    <string name="warn_clear_order">คำเตือน รายการที่กำลังสั่งจะถูกลบออก ต้องการออกจากระบบ?</string>
+    <string name="text_switch_lang">ภาษา</string>
+
+</resources>

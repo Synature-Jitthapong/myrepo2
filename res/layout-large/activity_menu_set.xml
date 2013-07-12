@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/syn.pos.mobile.iordertab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_light"
+    android:orientation="vertical"
+    android:scrollbars="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/LayoutPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:orientation="vertical" >
+
+            <ExpandableListView
+                android:id="@+id/orderSetListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/list_selector"
+                android:padding="4dp" >
+
+            </ExpandableListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/control_bar_bg"
+            android:orientation="vertical" >
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollViewPluResult"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp" >
+
+                <LinearLayout
+                    android:id="@+id/layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dip"
+                    android:orientation="horizontal" >
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LayoutSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ProgressBar
+                    android:id="@+id/progressBarLoadMenuSet"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <GridView
+                    android:id="@+id/gvSetMenuItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:horizontalSpacing="2dp"
+                    android:numColumns="3"
+                    android:padding="4dp"
+                    android:verticalSpacing="2dp" >
+
+                </GridView>
+
+            </FrameLayout>
+        </LinearLayout>
+</LinearLayout>

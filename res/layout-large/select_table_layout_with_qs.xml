@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_light"
+    android:orientation="vertical"
+    android:paddingBottom="2dp" >
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:gravity="center_horizontal"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutTotalCust"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/select_table_tvtablename"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/selecttable_tv_select_tbname"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/select_table_cusno_tvname"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/radius_bg"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:padding="4dp"
+            android:text="-"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/select_table_cusno_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/tv_sendorder_cusno"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/select_table_cusno_btnminus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="@drawable/light_grey_button"
+            android:enabled="false"
+            android:text="@string/btn_order_minus"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/select_table_txtcusno"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/radius_bg"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:padding="4dp"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/select_table_cusno_btnplus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="@drawable/light_grey_button"
+            android:enabled="false"
+            android:text="@string/btn_order_plus"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/tableListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:id="@+id/layoutTableList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutTableZone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp" >
+
+                <TextView
+                    android:id="@+id/txt_sel_table_zone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/tv_sendorder_tablezone"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinner_table_zone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dip"
+                android:paddingTop="8dip" >
+
+                <TextView
+                    android:id="@+id/tvTbStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="@string/tv_sendorder_tablestatus"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#f0f0f0"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvTbName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.25"
+                    android:text="@string/tv_sendorder_tablename"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/tvTbCusQty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.1"
+                    android:text="@string/tv_sendorder_tablecapacity"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/tableList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/radius_background_dropshadow"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/list_selector"
+                android:padding="8dp" >
+            </ListView>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loadTableProgress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/buttonConfirmCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@string/dialog_sendorder_btncancel" />
+
+        <Button
+            android:id="@+id/buttonClearSelectedTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_red_button"
+            android:text="@string/button_clear"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonCancelQueueFromCheckin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_red_button"
+            android:text="@string/button_cancel_queue"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:enabled="false"
+            android:text="@string/dialog_sendorder_btnok" />
+    </LinearLayout>
+
+</LinearLayout>

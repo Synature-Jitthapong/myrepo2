@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_button"
+    android:minHeight="48dip"
+    android:padding="0dp" >
+
+    <ImageView
+        android:id="@+id/menuitem_img"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="1dp"
+        android:src="@drawable/ic_list_nofood" />
+
+    <ImageButton
+        android:id="@+id/imageButtonSpeak"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:padding="0dp"
+        android:src="@android:drawable/ic_lock_silent_mode_off"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/menuitem_img"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvMenuCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="code"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/menuitem_tvMenuName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="2"
+            android:text="name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewMenuItemOutOfStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:shadowColor="#ffffff"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="@string/text_outof_stock"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="12sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+</RelativeLayout>

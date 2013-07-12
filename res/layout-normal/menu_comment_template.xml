@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="4dp" >
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvMenuCommentName"
+            style="@style/text_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Menu comment name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvMenuCommentPrice"
+            style="@style/text_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0.00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnMenuCommentMinus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/light_grey_button"
+        android:focusable="false"
+        android:padding="0dp"
+        android:text="@string/btn_order_minus" />
+
+    <TextView
+        android:id="@+id/tvMenuCommentQty"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/radius_bg"
+        android:gravity="center"
+        android:minWidth="32dp"
+        android:text="1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnMenuCommentPlus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/light_grey_button"
+        android:focusable="false"
+        android:padding="0dp"
+        android:text="@string/btn_order_plus" />
+
+</LinearLayout>
