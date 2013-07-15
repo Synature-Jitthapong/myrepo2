@@ -4940,6 +4940,7 @@ public class TakeOrderActivity extends Activity{
 		protected Spinner spinnerTbZone;
 		protected ProgressBar progressBar;
 		protected Dialog dialogSelectTable;
+		protected ProgressBar progressQty;
 		
 		protected List<ProductGroups.QuestionAnswerData> selectedAnswerLst;
 		protected TableInfo.TableName tbName;
@@ -4960,21 +4961,16 @@ public class TakeOrderActivity extends Activity{
 			btnConfirm = (Button) view.findViewById(R.id.buttonConfirm);
 			btnClearTable = (Button) view.findViewById(R.id.buttonClearSelectedTable);
 
-			tvSelectTableCusNo = (TextView) view
-					.findViewById(R.id.select_table_txtcusno);
-			tvSelectTableName = (TextView) view
-					.findViewById(R.id.select_table_cusno_tvname);
-			btnSelectTableMinus = (Button) view
-					.findViewById(R.id.select_table_cusno_btnminus);
-			btnSelectTablePlus = (Button) view
-					.findViewById(R.id.select_table_cusno_btnplus);
+			tvSelectTableCusNo = (TextView) view.findViewById(R.id.select_table_txtcusno);
+			tvSelectTableName = (TextView) view.findViewById(R.id.select_table_cusno_tvname);
+			btnSelectTableMinus = (Button) view.findViewById(R.id.select_table_cusno_btnminus);
+			btnSelectTablePlus = (Button) view.findViewById(R.id.select_table_cusno_btnplus);
 			
-			spinnerTbZone = (Spinner) view
-					.findViewById(R.id.spinner_table_zone);
+			spinnerTbZone = (Spinner) view.findViewById(R.id.spinner_table_zone);
 			tbListView = (ListView) view.findViewById(R.id.tableList);
 
-			progressBar = (ProgressBar) view
-					.findViewById(R.id.loadTableProgress);	
+			progressBar = (ProgressBar) view.findViewById(R.id.loadTableProgress);	
+			progressQty = (ProgressBar) view.findViewById(R.id.progressBar1);
 			
 			// hide layoutTotalCust by question config
 			if(GlobalVar.isEnableTableQuestion){
@@ -5105,8 +5101,44 @@ public class TakeOrderActivity extends Activity{
 						tbName = (TableName) parent.getItemAtPosition(position);
 
 						if(tbName.getTableStatus() != 3){
-							btnSelectTableMinus.setEnabled(true);
-							btnSelectTablePlus.setEnabled(true);
+							// load current total customer
+							new CustomerQtyTask(TakeOrderActivity.this, globalVar, 
+									tbName.getTableID(), new WebServiceTaskState(){
+
+										@Override
+										public void onSuccess() {
+											
+										}
+
+										@Override
+										public void onNotSuccess() {
+											progressQty.setVisibility(View.INVISIBLE);
+											btnSelectTableMinus.setEnabled(true);
+											btnSelectTablePlus.setEnabled(true);
+										}
+
+										@Override
+										public void onProgress() {
+											progressQty.setVisibility(View.VISIBLE);
+											btnSelectTableMinus.setEnabled(false);
+											btnSelectTablePlus.setEnabled(false);
+										}
+
+										@Override
+										public void onSuccess(int arg) {
+											int totalCust = arg;
+											
+											progressQty.setVisibility(View.INVISIBLE);
+											btnSelectTableMinus.setEnabled(true);
+											btnSelectTablePlus.setEnabled(true);
+											
+											if(totalCust > 0){
+												CUSTOMER_QTY = totalCust;
+												tvSelectTableCusNo.setText(Integer.toString(CUSTOMER_QTY));
+											}
+										}
+								
+							}).execute(globalVar.FULL_URL);
 	
 							btnSelectTableMinus
 									.setOnClickListener(new OnClickListener() {
@@ -5215,47 +5247,47 @@ public class TakeOrderActivity extends Activity{
 						}else{
 							btnConfirm.setEnabled(false);
 							
-//							final CustomDialog customDialog = new CustomDialog(context,
-//									R.style.CustomDialog);
-//							customDialog.title.setVisibility(View.VISIBLE);
-//							customDialog.title.setText(R.string.close_table_title);
-//							customDialog.message.setText(R.string.cf_close_table);
-//							
-//							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
-//
-//								@Override
-//								public void onClick(View v) {
-//									customDialog.dismiss();
-//								}
-//							});
-//							
-//							customDialog.btnOk.setOnClickListener(new OnClickListener() {
-//
-//								@Override
-//								public void onClick(View v) {
-//									customDialog.dismiss();
-//									
-//									// call close table task
-//									new CloseTableTask(TakeOrderActivity.this,
-//											globalVar, 
-//											tbName.getTableID(),
-//											new WebServiceStateListener(){
-//
-//												@Override
-//												public void onSuccess() {
-//													
-//												}
-//
-//												@Override
-//												public void onNotSuccess() {
-//													
-//												}
-//										
-//									}).execute(globalVar.FULL_URL);
-//									
-//								}
-//							});
-//							customDialog.show();
+							final CustomDialog customDialog = new CustomDialog(context,
+									R.style.CustomDialog);
+							customDialog.title.setVisibility(View.VISIBLE);
+							customDialog.title.setText(R.string.close_table_title);
+							customDialog.message.setText(R.string.cf_close_table);
+							
+							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									customDialog.dismiss();
+								}
+							});
+							
+							customDialog.btnOk.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									customDialog.dismiss();
+									
+									// call close table task
+									new CloseTableTask(TakeOrderActivity.this,
+											globalVar, 
+											tbName.getTableID(),
+											new WebServiceStateListener(){
+
+												@Override
+												public void onSuccess() {
+													
+												}
+
+												@Override
+												public void onNotSuccess() {
+													
+												}
+										
+									}).execute(globalVar.FULL_URL);
+									
+								}
+							});
+							customDialog.show();
 						}
 					}
 
