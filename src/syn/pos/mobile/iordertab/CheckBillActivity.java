@@ -152,12 +152,14 @@ public class CheckBillActivity extends Activity {
 				public void onClick(View view) {
 					LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
 					View v = inflater.inflate(R.layout.customer_qty, null);
+					TextView tvTitle = (TextView) v.findViewById(R.id.textView1);
 					Button btnMinus = (Button) v.findViewById(R.id.button1);
 					Button btnPlus = (Button) v.findViewById(R.id.button2);
 					Button btnCancel = (Button) v.findViewById(R.id.button3);
 					Button btnOk = (Button) v.findViewById(R.id.button4);
 					final TextView tvCustQty = (TextView) v.findViewById(R.id.textView2);
 					tvCustQty.setText(Integer.toString(customerQty));
+					tvTitle.setText(tvTableName.getText());
 					
 					final Dialog d = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
 					d.setContentView(v);
@@ -177,8 +179,10 @@ public class CheckBillActivity extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							if(--qty > 0)
+							if(--qty > 0){
 								tvCustQty.setText(Integer.toString(qty));
+								customerQty = qty;
+							}
 						}
 						
 					});
@@ -195,6 +199,7 @@ public class CheckBillActivity extends Activity {
 								e.printStackTrace();
 							}
 							tvCustQty.setText(Integer.toString(++qty));
+							customerQty = qty;
 						}
 						
 					});
@@ -212,7 +217,34 @@ public class CheckBillActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							d.dismiss();
+							new UpdateCustomerTask(CheckBillActivity.this, globalVar, CURR_TRANSACTION_ID,
+									CURR_COMPUTER_ID, customerQty, new WebServiceTaskState(){
+
+										@Override
+										public void onSuccess() {
+											d.dismiss();
+											new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
+										}
+
+										@Override
+										public void onNotSuccess() {
+
+											d.dismiss();
+										}
+
+										@Override
+										public void onProgress() {
+											// TODO Auto-generated method stub
+											
+										}
+
+										@Override
+										public void onSuccess(int arg) {
+											// TODO Auto-generated method stub
+											
+										}
+								
+							}).execute(globalVar.FULL_URL);
 						}
 						
 					});
@@ -749,7 +781,7 @@ public class CheckBillActivity extends Activity {
 					}
 					
 					if(SUMMARY_TRANS.CallForCheckBill == 99){
-						btnCheckbill.setEnabled(false);
+						disableButton();
 					}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(CheckBillActivity.this, 
