@@ -152,12 +152,14 @@ public class CheckBillActivity extends Activity {
 				public void onClick(View view) {
 					LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
 					View v = inflater.inflate(R.layout.customer_qty, null);
+					TextView tvTitle = (TextView) v.findViewById(R.id.textView1);
 					Button btnMinus = (Button) v.findViewById(R.id.button1);
 					Button btnPlus = (Button) v.findViewById(R.id.button2);
 					Button btnCancel = (Button) v.findViewById(R.id.button3);
 					Button btnOk = (Button) v.findViewById(R.id.button4);
 					final TextView tvCustQty = (TextView) v.findViewById(R.id.textView2);
 					tvCustQty.setText(Integer.toString(customerQty));
+					tvTitle.setText(tvTableName.getText());
 					
 					final Dialog d = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
 					d.setContentView(v);
@@ -749,7 +751,7 @@ public class CheckBillActivity extends Activity {
 					}
 					
 					if(SUMMARY_TRANS.CallForCheckBill == 99){
-						btnCheckbill.setEnabled(false);
+						disableButton();
 					}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(CheckBillActivity.this, 
