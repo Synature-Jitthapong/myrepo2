@@ -442,5 +442,6 @@
     <string name="close_table_title">Close table</string>
     <string name="cf_close_table">Do you want to close this table?</string>
     <string name="close_table_success">Close this table successfully.</string>
+    <string name="button_edit_customer_qty">Edit customer qty.</string>
 
 </resources>

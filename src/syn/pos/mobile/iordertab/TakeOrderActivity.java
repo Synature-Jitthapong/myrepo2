@@ -5046,9 +5046,6 @@ public class TakeOrderActivity extends Activity{
 
 				@Override
 				public void onClick(View v) {
-					// clear set table
-					// clearSetTable();
-
 					dialogSelectTable.dismiss();
 				}
 			});
@@ -5102,44 +5099,53 @@ public class TakeOrderActivity extends Activity{
 
 						if(tbName.getTableStatus() != 3){
 							// load current total customer
-							new CustomerQtyTask(TakeOrderActivity.this, globalVar, 
-									tbName.getTableID(), new WebServiceTaskState(){
+//							new CustomerQtyTask(TakeOrderActivity.this, globalVar, 
+//									tbName.getTableID(), new WebServiceTaskState(){
+//
+//										@Override
+//										public void onSuccess() {
+//											
+//										}
+//
+//										@Override
+//										public void onNotSuccess() {
+//											progressQty.setVisibility(View.INVISIBLE);
+//											btnSelectTableMinus.setEnabled(true);
+//											btnSelectTablePlus.setEnabled(true);
+//										}
+//
+//										@Override
+//										public void onProgress() {
+//											progressQty.setVisibility(View.VISIBLE);
+//											btnSelectTableMinus.setEnabled(false);
+//											btnSelectTablePlus.setEnabled(false);
+//										}
+//
+//										@Override
+//										public void onSuccess(int arg) {
+//											int totalCust = arg;
+//											
+//											progressQty.setVisibility(View.INVISIBLE);
+//											btnSelectTableMinus.setEnabled(true);
+//											btnSelectTablePlus.setEnabled(true);
+//											
+//											if(totalCust > 0){
+//												CUSTOMER_QTY = totalCust;
+//												tvSelectTableCusNo.setText(Integer.toString(CUSTOMER_QTY));
+//											}
+//										}
+//								
+//							}).execute(globalVar.FULL_URL);
 
-										@Override
-										public void onSuccess() {
-											
-										}
-
-										@Override
-										public void onNotSuccess() {
-											progressQty.setVisibility(View.INVISIBLE);
-											btnSelectTableMinus.setEnabled(true);
-											btnSelectTablePlus.setEnabled(true);
-										}
-
-										@Override
-										public void onProgress() {
-											progressQty.setVisibility(View.VISIBLE);
-											btnSelectTableMinus.setEnabled(false);
-											btnSelectTablePlus.setEnabled(false);
-										}
-
-										@Override
-										public void onSuccess(int arg) {
-											int totalCust = arg;
-											
-											progressQty.setVisibility(View.INVISIBLE);
-											btnSelectTableMinus.setEnabled(true);
-											btnSelectTablePlus.setEnabled(true);
-											
-											if(totalCust > 0){
-												CUSTOMER_QTY = totalCust;
-												tvSelectTableCusNo.setText(Integer.toString(CUSTOMER_QTY));
-											}
-										}
-								
-							}).execute(globalVar.FULL_URL);
-	
+							if(tbName.getSTATUS() == 0){
+								btnSelectTableMinus.setEnabled(true);
+								btnSelectTablePlus.setEnabled(true);
+							}else{
+								btnSelectTableMinus.setEnabled(false);
+								btnSelectTablePlus.setEnabled(false);
+							}
+							
+							
 							btnSelectTableMinus
 									.setOnClickListener(new OnClickListener() {
 	
@@ -5187,7 +5193,6 @@ public class TakeOrderActivity extends Activity{
 								TextView tvMsg2 = new TextView(
 										TakeOrderActivity.this);
 								tvMsg2.setText(CURR_TABLE_NAME);
-								tvMsg2.setTextSize(42);
 								TextView tvMsg3 = new TextView(
 										TakeOrderActivity.this);
 								tvMsg3.setText(R.string.cf_change_table);
@@ -5245,49 +5250,51 @@ public class TakeOrderActivity extends Activity{
 							if(!GlobalVar.isEnableTableQuestion)
 								btnConfirm.setEnabled(true);
 						}else{
+							btnSelectTableMinus.setEnabled(false);
+							btnSelectTablePlus.setEnabled(false);
 							btnConfirm.setEnabled(false);
 							
-							final CustomDialog customDialog = new CustomDialog(context,
-									R.style.CustomDialog);
-							customDialog.title.setVisibility(View.VISIBLE);
-							customDialog.title.setText(R.string.close_table_title);
-							customDialog.message.setText(R.string.cf_close_table);
-							
-							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									customDialog.dismiss();
-								}
-							});
-							
-							customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									customDialog.dismiss();
-									
-									// call close table task
-									new CloseTableTask(TakeOrderActivity.this,
-											globalVar, 
-											tbName.getTableID(),
-											new WebServiceStateListener(){
-
-												@Override
-												public void onSuccess() {
-													
-												}
-
-												@Override
-												public void onNotSuccess() {
-													
-												}
-										
-									}).execute(globalVar.FULL_URL);
-									
-								}
-							});
-							customDialog.show();
+//							final CustomDialog customDialog = new CustomDialog(context,
+//									R.style.CustomDialog);
+//							customDialog.title.setVisibility(View.VISIBLE);
+//							customDialog.title.setText(R.string.close_table_title);
+//							customDialog.message.setText(R.string.cf_close_table);
+//							
+//							customDialog.btnCancel.setOnClickListener(new OnClickListener() {
+//
+//								@Override
+//								public void onClick(View v) {
+//									customDialog.dismiss();
+//								}
+//							});
+//							
+//							customDialog.btnOk.setOnClickListener(new OnClickListener() {
+//
+//								@Override
+//								public void onClick(View v) {
+//									customDialog.dismiss();
+//									
+//									// call close table task
+//									new CloseTableTask(TakeOrderActivity.this,
+//											globalVar, 
+//											tbName.getTableID(),
+//											new WebServiceStateListener(){
+//
+//												@Override
+//												public void onSuccess() {
+//													
+//												}
+//
+//												@Override
+//												public void onNotSuccess() {
+//													
+//												}
+//										
+//									}).execute(globalVar.FULL_URL);
+//									
+//								}
+//							});
+//							customDialog.show();
 						}
 					}
 

@@ -71,6 +71,8 @@ public class CheckBillActivity extends Activity {
 	private int CURR_TRANSACTION_ID;
 	private int CURR_COMPUTER_ID;
 	private int TABLE_ID;
+	private int customerQty = 1;
+	
 	private SummaryTransaction SUMMARY_TRANS;
 	
 	@Override
@@ -79,8 +81,6 @@ public class CheckBillActivity extends Activity {
 		setContentView(R.layout.activity_check_bill);
 		
 		CONTEXT = this;
-		
-		//setTitle("");
 		
 		globalVar = new GlobalVar(this);
 		initComponent();
@@ -141,9 +141,214 @@ public class CheckBillActivity extends Activity {
 			enableButton();
 		}
 		
-		// hide btnEditQuestion
-		if(!GlobalVar.isEnableTableQuestion)
-			btnEditQuestion.setVisibility(View.GONE);
+		/* set text button edit question or customer qty.
+		 * and set event by feature
+		 */
+		if(!GlobalVar.isEnableTableQuestion){
+			btnEditQuestion.setText(R.string.button_edit_customer_qty);
+			btnEditQuestion.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View view) {
+					LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
+					View v = inflater.inflate(R.layout.customer_qty, null);
+					Button btnMinus = (Button) v.findViewById(R.id.button1);
+					Button btnPlus = (Button) v.findViewById(R.id.button2);
+					Button btnCancel = (Button) v.findViewById(R.id.button3);
+					Button btnOk = (Button) v.findViewById(R.id.button4);
+					final TextView tvCustQty = (TextView) v.findViewById(R.id.textView2);
+					tvCustQty.setText(Integer.toString(customerQty));
+					
+					final Dialog d = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
+					d.setContentView(v);
+					d.getWindow().setLayout(
+							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+					d.show();
+					
+					btnMinus.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							int qty = 1;
+							try {
+								qty = Integer.parseInt(tvCustQty.getText().toString());
+							} catch (NumberFormatException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							if(--qty > 0)
+								tvCustQty.setText(Integer.toString(qty));
+						}
+						
+					});
+					
+					btnPlus.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							int qty = 1;
+							try {
+								qty = Integer.parseInt(tvCustQty.getText().toString());
+							} catch (NumberFormatException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							tvCustQty.setText(Integer.toString(++qty));
+						}
+						
+					});
+					
+					btnCancel.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							d.dismiss();
+						}
+						
+					});
+					
+					btnOk.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							d.dismiss();
+						}
+						
+					});
+					
+				}
+				
+			});
+			
+		}
+		else{
+			btnEditQuestion.setText(R.string.button_edit_question);
+			btnEditQuestion.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					new CurrentAnswerQuestionTask(CheckBillActivity.this, globalVar, 
+							TABLE_ID, new CurrentAnswerQuestionTask.ICurrentAnswerListener() {
+								
+								@Override
+								public void listQuestionAnswer(List<QuestionAnswerData> questionLst) {
+									//add answer to temp 
+									final QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
+									qsGroup.insertCurrentAnswerQuestion(questionLst);
+									
+									// popup
+									LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
+									View questView = inflater.inflate(R.layout.question_list_layout, null);
+									TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
+									tvQestionTitle.setText(tvTableName.getText());
+									Button btnOk = (Button) questView.findViewById(R.id.button1);
+									Button btnCancel = (Button) questView.findViewById(R.id.button2);
+									final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
+									final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
+									lvQuestion.setEnabled(false);
+									
+									// question adapter
+									final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listCurrentQuestionDetail();
+									
+									if(qsDetailLst != null && qsDetailLst.size() > 0){
+										final SelectTableQuestionAdapter qsAdapter = 
+												new SelectTableQuestionAdapter(CheckBillActivity.this, globalVar, qsDetailLst);
+										lvQuestion.setAdapter(qsAdapter);
+										
+										final Dialog dialog = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
+										dialog.setContentView(questView);
+										dialog.setCancelable(false);
+										dialog.getWindow().setLayout(
+												android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+												android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+										dialog.show();
+										
+										btnOk.setOnClickListener(new OnClickListener(){
+			
+											@Override
+											public void onClick(View v) {
+												boolean isChoiceQuestion = qsGroup.checkChoiceTypeQuestion(4);
+												boolean requireSelect = true;
+												// check require question
+												for(int i = 0; i < qsDetailLst.size(); i++){
+													ProductGroups.QuestionDetail qsDetail = 
+															qsDetailLst.get(i);
+													
+													if(qsDetail.getIsRequired() == 1){
+														// check selected
+														if(!qsGroup.checkAddedQuestion(qsDetail.getQuestionID())){
+															if(qsDetail.getQuestionTypeID() == 2){
+																if(qsGroup.getTotalAnswerQty() > 0){
+																	if(!isChoiceQuestion){
+																		requireSelect = false;
+																		tvRequire.setVisibility(View.GONE);
+																	}
+																}else{
+																	requireSelect = true;
+																	tvRequire.setVisibility(View.VISIBLE);
+																	qsDetail.setRequireSelect(requireSelect);
+																	qsAdapter.notifyDataSetChanged();
+																	break;
+																}
+															}else{
+																requireSelect = true;
+																tvRequire.setVisibility(View.VISIBLE);
+																qsDetail.setRequireSelect(requireSelect);
+																qsAdapter.notifyDataSetChanged();
+																break;
+															}
+														}else{
+															requireSelect = false;
+															tvRequire.setVisibility(View.GONE);
+															
+															qsDetail.setRequireSelect(requireSelect);
+															qsAdapter.notifyDataSetChanged();
+														}
+													}
+												}
+												
+												if(!requireSelect){
+													dialog.dismiss();
+													
+													QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
+													List<ProductGroups.QuestionAnswerData> selectedAnswerLst = 
+															qsGroup.listAnswerQuestion();
+													
+													// send answer question
+													new QuestionTask(CheckBillActivity.this, globalVar, TABLE_ID, 
+															selectedAnswerLst, new WebServiceStateListener(){
+								
+																@Override
+																public void onSuccess() {
+																	IOrderUtility.alertDialog(CheckBillActivity.this, 
+																			R.string.edit_question_title, R.string.edit_question_success, 0);
+																}
+								
+																@Override
+																public void onNotSuccess() {
+																	// TODO Auto-generated method stub
+																	
+																}
+													}).execute(GlobalVar.FULL_URL);
+												}
+											}
+										});
+										
+										btnCancel.setOnClickListener(new OnClickListener(){
+
+											@Override
+											public void onClick(View v) {
+												dialog.dismiss();
+											}
+											
+										});
+									}
+								}
+							}).execute(GlobalVar.FULL_URL);
+					}
+			});
+		}
 		
 		btnPrint.setOnClickListener(new OnClickListener(){
 
@@ -203,132 +408,6 @@ public class CheckBillActivity extends Activity {
 				overridePendingTransition(R.animator.slide_in_up, R.animator.slide_in_out);		
 			}
 		});
-		
-		btnEditQuestion.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				new CurrentAnswerQuestionTask(CheckBillActivity.this, globalVar, 
-						TABLE_ID, new CurrentAnswerQuestionTask.ICurrentAnswerListener() {
-							
-							@Override
-							public void listQuestionAnswer(List<QuestionAnswerData> questionLst) {
-								//add answer to temp 
-								final QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
-								qsGroup.insertCurrentAnswerQuestion(questionLst);
-								
-								// popup
-								LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
-								View questView = inflater.inflate(R.layout.question_list_layout, null);
-								TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
-								tvQestionTitle.setText(tvTableName.getText());
-								Button btnOk = (Button) questView.findViewById(R.id.button1);
-								Button btnCancel = (Button) questView.findViewById(R.id.button2);
-								final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
-								final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
-								lvQuestion.setEnabled(false);
-								
-								// question adapter
-								final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listCurrentQuestionDetail();
-								
-								if(qsDetailLst != null && qsDetailLst.size() > 0){
-									final SelectTableQuestionAdapter qsAdapter = 
-											new SelectTableQuestionAdapter(CheckBillActivity.this, globalVar, qsDetailLst);
-									lvQuestion.setAdapter(qsAdapter);
-									
-									final Dialog dialog = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
-									dialog.setContentView(questView);
-									dialog.setCancelable(false);
-									dialog.getWindow().setLayout(
-											android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-											android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-									dialog.show();
-									
-									btnOk.setOnClickListener(new OnClickListener(){
-		
-										@Override
-										public void onClick(View v) {
-											boolean isChoiceQuestion = qsGroup.checkChoiceTypeQuestion(4);
-											boolean requireSelect = true;
-											// check require question
-											for(int i = 0; i < qsDetailLst.size(); i++){
-												ProductGroups.QuestionDetail qsDetail = 
-														qsDetailLst.get(i);
-												
-												if(qsDetail.getIsRequired() == 1){
-													// check selected
-													if(!qsGroup.checkAddedQuestion(qsDetail.getQuestionID())){
-														if(qsDetail.getQuestionTypeID() == 2){
-															if(qsGroup.getTotalAnswerQty() > 0){
-																if(!isChoiceQuestion){
-																	requireSelect = false;
-																	tvRequire.setVisibility(View.GONE);
-																}
-															}else{
-																requireSelect = true;
-																tvRequire.setVisibility(View.VISIBLE);
-																qsDetail.setRequireSelect(requireSelect);
-																qsAdapter.notifyDataSetChanged();
-																break;
-															}
-														}else{
-															requireSelect = true;
-															tvRequire.setVisibility(View.VISIBLE);
-															qsDetail.setRequireSelect(requireSelect);
-															qsAdapter.notifyDataSetChanged();
-															break;
-														}
-													}else{
-														requireSelect = false;
-														tvRequire.setVisibility(View.GONE);
-														
-														qsDetail.setRequireSelect(requireSelect);
-														qsAdapter.notifyDataSetChanged();
-													}
-												}
-											}
-											
-											if(!requireSelect){
-												dialog.dismiss();
-												
-												QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
-												List<ProductGroups.QuestionAnswerData> selectedAnswerLst = 
-														qsGroup.listAnswerQuestion();
-												
-												// send answer question
-												new QuestionTask(CheckBillActivity.this, globalVar, TABLE_ID, 
-														selectedAnswerLst, new WebServiceStateListener(){
-							
-															@Override
-															public void onSuccess() {
-																IOrderUtility.alertDialog(CheckBillActivity.this, 
-																		R.string.edit_question_title, R.string.edit_question_success, 0);
-															}
-							
-															@Override
-															public void onNotSuccess() {
-																// TODO Auto-generated method stub
-																
-															}
-												}).execute(GlobalVar.FULL_URL);
-											}
-										}
-									});
-									
-									btnCancel.setOnClickListener(new OnClickListener(){
-
-										@Override
-										public void onClick(View v) {
-											dialog.dismiss();
-										}
-										
-									});
-								}
-							}
-						}).execute(GlobalVar.FULL_URL);
-				}
-		});
-		
 		 new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
 	}
 
@@ -632,6 +711,9 @@ public class CheckBillActivity extends Activity {
 					
 					// enable button
 					enableButton();
+					
+					// set customer qty
+					customerQty = SUMMARY_TRANS.NoCustomer;
 					
 					tvSummaryDisplay.setText(null);
 					tvPriceValue.setText(null);
