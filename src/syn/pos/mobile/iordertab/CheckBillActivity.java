@@ -179,8 +179,10 @@ public class CheckBillActivity extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							if(--qty > 0)
+							if(--qty > 0){
 								tvCustQty.setText(Integer.toString(qty));
+								customerQty = qty;
+							}
 						}
 						
 					});
@@ -197,6 +199,7 @@ public class CheckBillActivity extends Activity {
 								e.printStackTrace();
 							}
 							tvCustQty.setText(Integer.toString(++qty));
+							customerQty = qty;
 						}
 						
 					});
@@ -214,7 +217,34 @@ public class CheckBillActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							d.dismiss();
+							new UpdateCustomerTask(CheckBillActivity.this, globalVar, CURR_TRANSACTION_ID,
+									CURR_COMPUTER_ID, customerQty, new WebServiceTaskState(){
+
+										@Override
+										public void onSuccess() {
+											d.dismiss();
+											new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
+										}
+
+										@Override
+										public void onNotSuccess() {
+
+											d.dismiss();
+										}
+
+										@Override
+										public void onProgress() {
+											// TODO Auto-generated method stub
+											
+										}
+
+										@Override
+										public void onSuccess(int arg) {
+											// TODO Auto-generated method stub
+											
+										}
+								
+							}).execute(globalVar.FULL_URL);
 						}
 						
 					});

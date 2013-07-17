@@ -222,34 +222,13 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutSwSaleMode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal" >
 
-                        <Button
-                            android:id="@+id/buttonDineIn"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="28dp"
-                            android:background="@drawable/light_grey_button"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:padding="4dp"
-                            android:text="@string/button_dinein"
-                            android:textSize="11sp" />
-
-                        <Button
-                            android:id="@+id/buttonTakeAway"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="28dp"
-                            android:background="@drawable/light_grey_button"
-                            android:minHeight="0dip"
-                            android:minWidth="0dip"
-                            android:padding="4dp"
-                            android:text="@string/button_take_away"
-                            android:textSize="11sp" />
                     </LinearLayout>
 
                     <LinearLayout
