@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class RegisterActivity extends Activity {
@@ -50,10 +52,15 @@ public class RegisterActivity extends Activity {
 		
 		// convert android id to numberic by synature register algorhythm
 		String deviceCode = syn.pos.mobile.util.SynRegisterAlghorhythm.generateDeviceCode(androidId);
-		formatKeyCodeStyle(deviceCode);
+		try {
+			txtDeviceCode.setText(formatKeyCodeStyle(deviceCode));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// device info
-		txtProductCode.setText(android.os.Build.ID);
+		txtProductCode.setText(Integer.toString(syn.pos.mobile.util.SynRegisterAlghorhythm.PRODUCT_CODE));
 		txtModel.setText(android.os.Build.MODEL);
 		txtManufacturer.setText(android.os.Build.MANUFACTURER);
 		txtDevice.setText(android.os.Build.DEVICE);
@@ -63,10 +70,37 @@ public class RegisterActivity extends Activity {
 		txtCPUAbi.setText(android.os.Build.CPU_ABI2);
 		
 		getRegisterInfo();
-		
 	}
 
-	private void formatKeyCodeStyle(String deviceCode){
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.register, menu);
+		View v = menu.findItem(R.id.item_confirm).getActionView();
+
+		Button btnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
+		Button btnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
+		btnConfirm.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				onRegisterClicked();
+			}
+			
+		});
+		
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				onCancelClicked();
+			}
+			
+		});
+		
+		return true;
+	}
+
+	private String formatKeyCodeStyle(String deviceCode) throws Exception{
 		StringBuilder code = new StringBuilder();
 		for(int i = 0; i < deviceCode.length(); i++){
 			code.append(deviceCode.charAt(i));
@@ -81,27 +115,102 @@ public class RegisterActivity extends Activity {
 				}
 			}
 		}
-		txtDeviceCode.setText(code);
+		return code.toString();
 	}
 	
 	public void getRegisterInfo(){
 		Register register = new Register(RegisterActivity.this);
-		txtKeyCode.setText(register.getKeyCode());
-		txtRegisterCode.setText(register.getRegisterCode());
+		register.getRegisterInfo();
+		try {
+			txtKeyCode.setText(formatKeyCodeStyle(register.getKeyCode()));
+			txtRegisterCode.setText(formatKeyCodeStyle(register.getRegisterCode()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void onRegisterClicked(final View v){
-		Register register = new Register(RegisterActivity.this);
-		register.insertRegisterInfo(txtKeyCode.getText().toString(), txtDeviceCode.getText().toString(),
-					txtRegisterCode.getText().toString());
+	public void onRegisterClicked(){
+		String keyCode = txtKeyCode.getText().toString().replace("-", "");
+		String deviceCode = txtDeviceCode.getText().toString().replace("-", "");
+		String regCode = txtRegisterCode.getText().toString().replace("-", "");
 		
-		Intent intent = new Intent(RegisterActivity.this, TakeOrderActivity.class);
-		RegisterActivity.this.startActivity(intent);
-		RegisterActivity.this.finish();
+		if(!keyCode.equals("") && !regCode.equals("")){
+			// check product code
+			
+			try {
+				int checkProCode = -1;
+				checkProCode = syn.pos.mobile.util.SynRegisterAlghorhythm.checkProductCode(keyCode);
+				if(checkProCode == 0){
+					try {
+						int compare = -1;
+						compare = syn.pos.mobile.util.SynRegisterAlghorhythm.comparison(keyCode,
+								deviceCode, regCode);
+
+						if(compare == 0){
+							Register register = new Register(RegisterActivity.this);
+							register.insertRegisterInfo(keyCode, deviceCode, regCode);
+
+							successPopup("Register", "Register successfully.",
+									new OnClickListener() {
+
+										@Override
+										public void onClick(View arg0) {
+											Intent intent = new Intent(
+													RegisterActivity.this,
+													TakeOrderActivity.class);
+											RegisterActivity.this
+													.startActivity(intent);
+											RegisterActivity.this.finish();
+										}
+									});
+						}else{
+							errorPopup("Product code is incorrect.");
+						}
+					} catch (Exception e) {
+						errorPopup("Key Code or Register Code is incorrect.");
+					}
+
+				}else{
+					errorPopup("Product code is incorrect.");
+				}
+			} catch (Exception e1) {
+				errorPopup("Key Code or Register Code is incorrect.");
+			}
+			
+		}else{
+			errorPopup(keyCode.equals("") ? "Please enter Key Code." : "Please enter Register Code.");
+		}
 	}
 	
-	public void onCancelClicked(final View v){
-		RegisterActivity.this.finish();
+	private void successPopup(String title, String msg, OnClickListener listener){
+		final CustomDialog d = new CustomDialog(RegisterActivity.this, R.style.CustomDialog);
+		d.title.setVisibility(View.VISIBLE);
+		d.title.setText(title);
+		d.message.setText(msg);
+		d.btnCancel.setVisibility(View.GONE);
+		d.btnOk.setOnClickListener(listener);
+		d.show();
 	}
 	
+	private void errorPopup(String msg){
+		final CustomDialog d = new CustomDialog(RegisterActivity.this, R.style.CustomDialog);
+		d.title.setVisibility(View.VISIBLE);
+		d.title.setText(R.string.global_dialog_title_error);
+		d.message.setText(msg);
+		d.btnCancel.setVisibility(View.GONE);
+		d.btnOk.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				d.dismiss();
+			}
+			
+		});
+		d.show();
+	}
+	
+	public void onCancelClicked(){
+		RegisterActivity.this.finish();
+	}
 }

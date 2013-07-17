@@ -937,9 +937,37 @@ public class IOrderUtility {
 	public static boolean checkRegister(Context c){
 		Register register = new Register(c);
 		register.getRegisterInfo();
-		if(register.getRegisterCode() != null && 
-				!register.getRegisterCode().equals(""))
-			return true;
+		if (register.getRegisterCode() != null
+				&& !register.getRegisterCode().equals("")) {
+
+			try {
+				int checkProCode = -1;
+				checkProCode = syn.pos.mobile.util.SynRegisterAlghorhythm
+						.checkProductCode(register.getKeyCode());
+				if (checkProCode == 0) {
+					try {
+						int compare = -1;
+						compare = syn.pos.mobile.util.SynRegisterAlghorhythm
+								.comparison(register.getKeyCode(),
+										register.getDeviceCode(),
+										register.getRegisterCode());
+						if (compare == 0) {
+							return true;
+						} 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+
+				}
+
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
 		return false;
 	}
 	

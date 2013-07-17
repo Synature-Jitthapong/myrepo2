@@ -115,10 +115,10 @@ public class TakeOrderActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_take_order);
 
-		// check config
-		if (IOrderUtility.checkConfig(TakeOrderActivity.this)) {
-			// check register
-			if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		// check register
+		if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+			// check config
+			if (IOrderUtility.checkConfig(TakeOrderActivity.this)) {
 
 				// check login
 				if (GlobalVar.STAFF_ID != 0) {
@@ -142,13 +142,13 @@ public class TakeOrderActivity extends Activity{
 				}
 			} else {
 				Intent intent = new Intent(TakeOrderActivity.this,
-						RegisterActivity.class);
+						AppConfigLayoutActivity.class);
 				TakeOrderActivity.this.startActivity(intent);
 				TakeOrderActivity.this.finish();
 			}
 		} else {
 			Intent intent = new Intent(TakeOrderActivity.this,
-					AppConfigLayoutActivity.class);
+					RegisterActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
 			TakeOrderActivity.this.finish();
 		}
