@@ -115,35 +115,40 @@ public class TakeOrderActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_take_order);
 
-		if(GlobalVar.STAFF_ID != 0){
-			if(IOrderUtility.checkConfig(TakeOrderActivity.this)){
-//				if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
-//
-//					// initial component
+		// check config
+		if (IOrderUtility.checkConfig(TakeOrderActivity.this)) {
+			// check register
+			if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+
+				// check login
+				if (GlobalVar.STAFF_ID != 0) {
+					// initial component
 					initComponent();
-					
+
 					// check feature
 					checkProgramFeature();
 
 					// list menu
 					listAllMenuItem();
-					
+
 					// load salemode
 					createSwSaleMode();
 
-//				} else {
-//					Intent intent = new Intent(TakeOrderActivity.this,
-//							RegisterActivity.class);
-//					TakeOrderActivity.this.startActivity(intent);
-//					TakeOrderActivity.this.finish();
-//				}
-			}else{
-				Intent intent = new Intent(TakeOrderActivity.this, AppConfigLayoutActivity.class);
+				} else {
+					Intent intent = new Intent(TakeOrderActivity.this,
+							LoginActivity.class);
+					TakeOrderActivity.this.startActivity(intent);
+					TakeOrderActivity.this.finish();
+				}
+			} else {
+				Intent intent = new Intent(TakeOrderActivity.this,
+						RegisterActivity.class);
 				TakeOrderActivity.this.startActivity(intent);
 				TakeOrderActivity.this.finish();
-			}	
-		}else{
-			Intent intent = new Intent(TakeOrderActivity.this, LoginActivity.class);
+			}
+		} else {
+			Intent intent = new Intent(TakeOrderActivity.this,
+					AppConfigLayoutActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
 			TakeOrderActivity.this.finish();
 		}
