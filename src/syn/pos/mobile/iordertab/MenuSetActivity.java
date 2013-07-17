@@ -896,11 +896,6 @@ public class MenuSetActivity extends Activity {
 					final EditText txtComment = (EditText) v.findViewById(R.id.txt_menu_comment);
 					Button btnCancel = (Button) v.findViewById(R.id.buttonCancelComment);
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
-					Button btnDinein = (Button) v.findViewById(R.id.buttonModDinein);
-					Button btnTakeAway = (Button) v.findViewById(R.id.buttonModTakeAway);
-
-					btnDinein.setVisibility(View.GONE);
-					btnTakeAway.setVisibility(View.GONE);
 					
 					tvTitle.setText(R.string.title_menu_comment);
 					txtComment.append(pcs.getOrderComment());

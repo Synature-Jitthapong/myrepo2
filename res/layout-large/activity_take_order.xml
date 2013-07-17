@@ -202,28 +202,13 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutSwSaleMode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal" >
 
-                        <Button
-                            android:id="@+id/buttonDineIn"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/light_grey_button"
-                            android:padding="4dp"
-                            android:text="@string/button_dinein" />
-
-                        <Button
-                            android:id="@+id/buttonTakeAway"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/light_grey_button"
-                            android:padding="4dp"
-                            android:text="@string/button_take_away" />
                     </LinearLayout>
 
                     <LinearLayout

@@ -75,14 +75,13 @@ public class TakeOrderActivity extends Activity{
 	private Button btnSetQueue;
 	private Button btnSetTable;
 	private Button btnSetmember;
-	private Button btnDinein;
-	private Button btnTakeAway;
 	private LinearLayout notificationLayout;
 	private TextView textViewNotification;
 	private TextView textViewNotification2;
 	private LinearLayout pluLayout;
 	private ImageButton btnToggleMaxMin;
 	private LinearLayout menuItemLayout;
+	private LinearLayout saleModeSwLayout;
 	private Button btnPlu;
 
 	private List<syn.pos.data.model.MenuDataItem> ORDER_LIST;
@@ -116,22 +115,35 @@ public class TakeOrderActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_take_order);
 
-		if(IOrderUtility.checkConfig(TakeOrderActivity.this)){
-			
-			//if(IOrderUtility.checkRegister(TakeOrderActivity.this)){
+		if(GlobalVar.STAFF_ID != 0){
+			if(IOrderUtility.checkConfig(TakeOrderActivity.this)){
+//				if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+//
+//					// initial component
+					initComponent();
 					
-				// initial component
-				//setTitle("");
-				
-				initComponent();
-				
-//			}else{
-//				Intent intent = new Intent(TakeOrderActivity.this, RegisterActivity.class);
-//				TakeOrderActivity.this.startActivity(intent);
-//				TakeOrderActivity.this.finish();
-//			}
+					// check feature
+					checkProgramFeature();
+
+					// list menu
+					listAllMenuItem();
+					
+					// load salemode
+					createSwSaleMode();
+
+//				} else {
+//					Intent intent = new Intent(TakeOrderActivity.this,
+//							RegisterActivity.class);
+//					TakeOrderActivity.this.startActivity(intent);
+//					TakeOrderActivity.this.finish();
+//				}
+			}else{
+				Intent intent = new Intent(TakeOrderActivity.this, AppConfigLayoutActivity.class);
+				TakeOrderActivity.this.startActivity(intent);
+				TakeOrderActivity.this.finish();
+			}	
 		}else{
-			Intent intent = new Intent(TakeOrderActivity.this, AppConfigLayoutActivity.class);
+			Intent intent = new Intent(TakeOrderActivity.this, LoginActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
 			TakeOrderActivity.this.finish();
 		}
@@ -153,15 +165,11 @@ public class TakeOrderActivity extends Activity{
 		btnSendByQueue = (Button) findViewById(R.id.buttonSendByQueue);
 		btnCheckDummyBill = (Button) findViewById(R.id.buttonCheckDummbyBill);
 		btnSetmember = (Button) findViewById(R.id.buttonSetMember);
-		btnDinein = (Button) findViewById(R.id.buttonDineIn);
-		btnTakeAway = (Button) findViewById(R.id.buttonTakeAway);
 		btnToggleMaxMin = (ImageButton) findViewById(R.id.imageButtonToggleMaxMin);
 		menuItemLayout = (LinearLayout) findViewById(R.id.MenuItemLayout);
 		btnPlu = (Button) findViewById(R.id.btnPlu);
-		pluLayout = (LinearLayout) findViewById(R.id.PLULayout);
-		
-		// check feature
-		checkProgramFeature();
+		pluLayout = (LinearLayout) findViewById(R.id.PLULayout); 
+		saleModeSwLayout = (LinearLayout) findViewById(R.id.layoutSwSaleMode);
 
 		orderListView.setGroupIndicator(null);
 		orderListView.setOnGroupClickListener(new OnGroupClickListener() {
@@ -185,34 +193,6 @@ public class TakeOrderActivity extends Activity{
 				return false;
 			}
 
-		});
-		
-		btnDinein.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
-				ProductGroups.SaleMode s = saleMode.getSaleMode(1);
-				setSaleMode(s);
-				
-				refreshPluResult();
-			}
-			
-		});
-		
-		btnDinein.setSelected(true);
-
-		btnTakeAway.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
-				ProductGroups.SaleMode s = saleMode.getSaleMode(2);
-				setSaleMode(s);
-
-				refreshPluResult();
-			}
-			
 		});
 		
 		btnToggleMaxMin.setOnClickListener(new OnClickListener() {
@@ -958,50 +938,37 @@ public class TakeOrderActivity extends Activity{
 						}).execute(GlobalVar.FULL_URL);
 			}
 		});
-		
-		// list menu
-		listAllMenuItem();
-		
-		// lis salemode
-		//listSaleMode();
-	
 	}
 	
 	@Override
 	protected void onResume() {
-		if(GlobalVar.STAFF_ID != 0){
-			iOrderInit();
-			countHoldOrder();
+		iOrderInit();
+		countHoldOrder();
+		
+		// param from QueueActivity
+		Intent intent = getIntent();
+		if (intent.getIntExtra("QUEUE_ID", 0) != 0) {
 			
-			// param from QueueActivity
-			Intent intent = getIntent();
-			if (intent.getIntExtra("QUEUE_ID", 0) != 0) {
-				
-				int queueId = intent.getIntExtra("QUEUE_ID", 0);
-				String queueName = intent
-						.getStringExtra("QUEUE_NAME");
-				int queueQty = intent
-						.getIntExtra("CUSTOMER_QTY", 1);
+			int queueId = intent.getIntExtra("QUEUE_ID", 0);
+			String queueName = intent
+					.getStringExtra("QUEUE_NAME");
+			int queueQty = intent
+					.getIntExtra("CUSTOMER_QTY", 1);
 
-				new LoadPreOrderTask(TakeOrderActivity.this,
-						globalVar, queueId, queueName, queueQty)
-						.execute(GlobalVar.FULL_URL);
-			}
-			
-			intent.removeExtra("QUEUE_ID");
-			intent.removeExtra("QUEUE_NAME");
-			intent.removeExtra("CUSTOMER_QTY");
+			new LoadPreOrderTask(TakeOrderActivity.this,
+					globalVar, queueId, queueName, queueQty)
+					.execute(GlobalVar.FULL_URL);
+		}
+		
+		intent.removeExtra("QUEUE_ID");
+		intent.removeExtra("QUEUE_NAME");
+		intent.removeExtra("CUSTOMER_QTY");
 
-			// set member name to button setmember
-			if (globalVar.MEMBER_NAME != "") {
-				setSelectedMember();
-			} else {
-				clearSelectedMember();
-			}
-		}else{
-			Intent intent = new Intent(TakeOrderActivity.this, LoginActivity.class);
-			TakeOrderActivity.this.startActivity(intent);
-			TakeOrderActivity.this.finish();
+		// set member name to button setmember
+		if (globalVar.MEMBER_NAME != "") {
+			setSelectedMember();
+		} else {
+			clearSelectedMember();
 		}
 		super.onResume();
 	}
@@ -1072,18 +1039,15 @@ public class TakeOrderActivity extends Activity{
 
 		SubMenu sub = menu.findItem(R.id.item_other).getSubMenu();
 		SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
-		List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode();
+		int[] saleModeId = {1,2};
+		List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode(saleModeId);
 		
-		if(saleModeLst != null && saleModeLst.size() > 1){
+		if(saleModeLst != null && saleModeLst.size() > 0){
+			
 			SubMenu subSaleMode = sub.addSubMenu("SaleMode");
-			for(ProductGroups.SaleMode s : saleModeLst){
-				if(s.getSaleModeID() == 1 || s.getSaleModeID() == 2){
-					subSaleMode.addSubMenu(0, s.getSaleModeID(), 0, s.getSaleModeName());
-				}
+			for(final ProductGroups.SaleMode s : saleModeLst){
+				subSaleMode.addSubMenu(0, s.getSaleModeID(), 0, s.getSaleModeName());
 			}
-		}else{
-			btnTakeAway.setVisibility(View.GONE);
-			btnDinein.setVisibility(View.GONE);
 		}
 		
 		SubMenu subStaff = sub.addSubMenu(0, R.id.menu_logout, 0, "Log Out | " + GlobalVar.STAFF_NAME);
@@ -1760,12 +1724,19 @@ public class TakeOrderActivity extends Activity{
 		SALE_MODE_POS_PREFIX = s.getPositionPrefix();
 		SALE_MODE_TEXT = s.getSaleModeName();
 		
-		if(s.getSaleModeID() == 1){
-			btnDinein.setSelected(true);
-			btnTakeAway.setSelected(false);
-		}else{
-			btnDinein.setSelected(false);
-			btnTakeAway.setSelected(true);
+		Button btnEatIn = (Button) saleModeSwLayout.findViewById(1);
+		Button btnTakeAway = (Button) saleModeSwLayout.findViewById(2);
+		if(s.getSaleModeID() == 1)
+		{
+			if(btnEatIn != null)
+				btnEatIn.setSelected(true);
+			if(btnTakeAway != null)
+				btnTakeAway.setSelected(false);
+		}else if(s.getSaleModeID() == 2){
+			if(btnEatIn != null)
+				btnEatIn.setSelected(false);
+			if(btnTakeAway != null)
+				btnTakeAway.setSelected(true);
 		}
 		refreshMenu();
 	}
@@ -1777,16 +1748,27 @@ public class TakeOrderActivity extends Activity{
 		SALE_MODE_POS_PREFIX = s.getPositionPrefix();
 		SALE_MODE_TEXT = s.getSaleModeName();
 		
+		Button btnEatIn = (Button) saleModeSwLayout.findViewById(1);
+		Button btnTakeAway = (Button) saleModeSwLayout.findViewById(2);
+
 		if(TRANS_SALE_MODE != 1){
-			btnDinein.setEnabled(false);
-			btnTakeAway.setEnabled(false);
-			btnDinein.setSelected(false);
-			btnTakeAway.setSelected(true);
+			if(btnEatIn != null){
+				btnEatIn.setEnabled(false);
+				btnEatIn.setSelected(false);
+			}
+			if(btnTakeAway != null){
+				btnTakeAway.setEnabled(false);
+				btnTakeAway.setSelected(true);
+			}
 		}else if(TRANS_SALE_MODE == 1){
-			btnDinein.setEnabled(true);
-			btnTakeAway.setEnabled(true);
-			btnDinein.setSelected(true);
-			btnTakeAway.setSelected(false);
+			if(btnEatIn != null){
+				btnEatIn.setEnabled(true);
+				btnEatIn.setSelected(true);
+			}
+			if(btnTakeAway != null){
+				btnTakeAway.setEnabled(true);
+				btnTakeAway.setSelected(false);
+			}
 		}
 		refreshMenu();
 	}
@@ -2483,54 +2465,86 @@ public class TakeOrderActivity extends Activity{
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					Button btnCancel = (Button) v.findViewById(R.id.buttonCancelComment);
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
-					final Button btnModDinein = (Button) v.findViewById(R.id.buttonModDinein);
-					final Button btnModTakeAway = (Button) v.findViewById(R.id.buttonModTakeAway);
 					
 					final ListView menuCommentListView = (ListView) v.findViewById(R.id.menuCommentListView);
 					final ListView selectedMenuCommentListView = (ListView) v.findViewById(R.id.listViewCommentSelected);
 					final EditText txtComment = (EditText) v.findViewById(R.id.txt_menu_comment);
 					tvTitle.setText(R.string.title_menu_comment);
 
-					if(mi.getSaleMode() == 1){
-						btnModDinein.setSelected(true);
-						btnModTakeAway.setSelected(false);
-					}else{
-						btnModDinein.setSelected(false);
-						btnModTakeAway.setSelected(true);
-					}
-					
 					SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
-					List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode();
-					if(saleModeLst != null && saleModeLst.size() > 1)
+					List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode(new int[]{1,2});
+					if(saleModeLst != null && saleModeLst.size() > 0)
 					{
-						btnModDinein.setVisibility(View.VISIBLE);
-						btnModTakeAway.setVisibility(View.VISIBLE);
-					}else{
-						btnModDinein.setVisibility(View.GONE);
-						btnModTakeAway.setVisibility(View.GONE);
+						// sale mode mod layout
+						final LinearLayout saleModeModSwLayout = (LinearLayout) v.findViewById(R.id.saleModeModSwLayout);
+						for(final ProductGroups.SaleMode s : saleModeLst){
+							View saleModeView = factory.inflate(R.layout.button_sale_mode, null);
+							Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
+							btnSwSaleMode.setId(s.getSaleModeID());
+							btnSwSaleMode.setText(s.getSaleModeName());
+							
+							if(s.getSaleModeID() == 1)
+								btnSwSaleMode.setSelected(true);
+							
+							btnSwSaleMode.setOnClickListener(new OnClickListener(){
+
+								@Override
+								public void onClick(View arg0) {
+									modSaleMode = s.getSaleModeID();
+									
+									Button btnEatIn = (Button) saleModeModSwLayout.findViewById(1);
+									Button btnTakeAway = (Button) saleModeModSwLayout.findViewById(2);
+									
+									if(s.getSaleModeID() == 1){
+										if(btnEatIn != null){
+											btnEatIn.setSelected(true);
+										}
+										if(btnTakeAway != null){
+											btnTakeAway.setSelected(false);
+										}
+									}else if(s.getSaleModeID() == 2){
+										if(btnEatIn != null){
+											btnEatIn.setSelected(false);
+										}
+										if(btnTakeAway != null){
+											btnTakeAway.setSelected(true);
+										}
+									}
+								}
+								
+							});
+							
+							saleModeModSwLayout.addView(saleModeView);
+						}
+
+						Button btnEatIn = (Button) saleModeModSwLayout.findViewById(1);
+						Button btnTakeAway = (Button) saleModeModSwLayout.findViewById(2);
+						
+						if(modSaleMode == 1){
+							if(btnEatIn != null){
+								btnEatIn.setSelected(true);
+							}
+							if(btnTakeAway != null){
+								btnTakeAway.setSelected(false);
+							}
+						}else if(modSaleMode == 2){
+							if(btnEatIn != null){
+								btnEatIn.setSelected(false);
+							}
+							if(btnTakeAway != null){
+								btnTakeAway.setSelected(true);
+							}
+						}
+						
+						if(TRANS_SALE_MODE == 2){
+							if(btnEatIn != null){
+								btnEatIn.setEnabled(false);
+							}
+							if(btnTakeAway != null){
+								btnTakeAway.setEnabled(false);
+							}
+						}
 					}
-					
-					btnModDinein.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View v) {
-							modSaleMode = 1;
-							btnModDinein.setSelected(true);
-							btnModTakeAway.setSelected(false);
-						}
-						
-					});
-					
-					btnModTakeAway.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View v) {
-							modSaleMode = 2;
-							btnModDinein.setSelected(false);
-							btnModTakeAway.setSelected(true);
-						}
-						
-					});
 					
 					final MenuComment mc = new MenuComment(TakeOrderActivity.this);
 					loadCommentGroup(mc, spMcg);
@@ -5525,4 +5539,33 @@ public class TakeOrderActivity extends Activity{
 		notificationLayout.setVisibility(View.GONE);
 	}
 
+	private void createSwSaleMode(){
+		SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
+		int[] saleModeId = {1,2}; 
+		List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode(saleModeId);
+		
+		for(final ProductGroups.SaleMode s : saleModeLst){
+			LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+			View saleModeView = inflater.inflate(R.layout.button_sale_mode, null);
+			final Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
+			btnSwSaleMode.setId(s.getSaleModeID());
+			btnSwSaleMode.setText(s.getSaleModeName());
+			
+			// default Eat In
+			if(s.getSaleModeID() == 1)
+				btnSwSaleMode.setSelected(true);
+			
+			btnSwSaleMode.setOnClickListener(new OnClickListener(){
+	
+				@Override
+				public void onClick(View v) {
+					setSaleMode(s);
+					btnSwSaleMode.setSelected(true);
+					refreshPluResult();
+				}
+				
+			});
+			saleModeSwLayout.addView(saleModeView);
+		}
+	}
 }
