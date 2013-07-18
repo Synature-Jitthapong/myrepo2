@@ -2549,6 +2549,11 @@ public class TakeOrderActivity extends Activity{
 								btnTakeAway.setEnabled(false);
 							}
 						}
+						
+						if(saleModeLst.size() == 1){
+							if(saleModeLst.get(0).getSaleModeID() == 1)
+								saleModeModSwLayout.setVisibility(View.INVISIBLE);
+						}
 					}
 					
 					final MenuComment mc = new MenuComment(TakeOrderActivity.this);
@@ -5549,28 +5554,35 @@ public class TakeOrderActivity extends Activity{
 		int[] saleModeId = {1,2}; 
 		List<ProductGroups.SaleMode> saleModeLst = saleMode.listSaleMode(saleModeId);
 		
-		for(final ProductGroups.SaleMode s : saleModeLst){
-			LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
-			View saleModeView = inflater.inflate(R.layout.button_sale_mode, null);
-			final Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
-			btnSwSaleMode.setId(s.getSaleModeID());
-			btnSwSaleMode.setText(s.getSaleModeName());
-			
-			// default Eat In
-			if(s.getSaleModeID() == 1)
-				btnSwSaleMode.setSelected(true);
-			
-			btnSwSaleMode.setOnClickListener(new OnClickListener(){
-	
-				@Override
-				public void onClick(View v) {
-					setSaleMode(s);
-					btnSwSaleMode.setSelected(true);
-					refreshPluResult();
-				}
+		if(saleModeLst != null && saleModeLst.size() > 0){
+			for(final ProductGroups.SaleMode s : saleModeLst){
+				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+				View saleModeView = inflater.inflate(R.layout.button_sale_mode, null);
+				final Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
+				btnSwSaleMode.setId(s.getSaleModeID());
+				btnSwSaleMode.setText(s.getSaleModeName());
 				
-			});
-			saleModeSwLayout.addView(saleModeView);
+				// default Eat In
+				if(s.getSaleModeID() == 1)
+					btnSwSaleMode.setSelected(true);
+				
+				btnSwSaleMode.setOnClickListener(new OnClickListener(){
+		
+					@Override
+					public void onClick(View v) {
+						setSaleMode(s);
+						btnSwSaleMode.setSelected(true);
+						refreshPluResult();
+					}
+					
+				});
+				saleModeSwLayout.addView(saleModeView);
+			}
+			
+			if(saleModeLst.size() == 1){
+				if(saleModeLst.get(0).getSaleModeID() == 1)
+					saleModeSwLayout.setVisibility(View.INVISIBLE);
+			}
 		}
 	}
 }
