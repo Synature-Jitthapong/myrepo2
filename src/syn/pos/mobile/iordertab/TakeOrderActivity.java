@@ -116,7 +116,7 @@ public class TakeOrderActivity extends Activity{
 		setContentView(R.layout.activity_take_order);
 
 		// check register
-		if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
 			// check config
 			if (IOrderUtility.checkConfig(TakeOrderActivity.this)) {
 
@@ -146,12 +146,12 @@ public class TakeOrderActivity extends Activity{
 				TakeOrderActivity.this.startActivity(intent);
 				TakeOrderActivity.this.finish();
 			}
-		} else {
-			Intent intent = new Intent(TakeOrderActivity.this,
-					RegisterActivity.class);
-			TakeOrderActivity.this.startActivity(intent);
-			TakeOrderActivity.this.finish();
-		}
+//		} else {
+//			Intent intent = new Intent(TakeOrderActivity.this,
+//					RegisterActivity.class);
+//			TakeOrderActivity.this.startActivity(intent);
+//			TakeOrderActivity.this.finish();
+//		}
 	}
 
 	private void initComponent(){
