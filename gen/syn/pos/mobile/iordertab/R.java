@@ -158,11 +158,12 @@ public final class R {
         public static final int radius_light_grey_background_dropshadow=0x7f02005d;
         public static final int share_via_barcode=0x7f02005e;
         public static final int shopper_icon=0x7f02005f;
-        public static final int user_green=0x7f020060;
-        public static final int white_background_dropshadow=0x7f020061;
-        public static final int white_button=0x7f020062;
-        public static final int white_normal=0x7f020063;
-        public static final int white_pressed=0x7f020064;
+        public static final int synature_logo=0x7f020060;
+        public static final int user_green=0x7f020061;
+        public static final int white_background_dropshadow=0x7f020062;
+        public static final int white_button=0x7f020063;
+        public static final int white_normal=0x7f020064;
+        public static final int white_pressed=0x7f020065;
     }
     public static final class id {
         public static final int BillMemberLayout=0x7f0c001c;
