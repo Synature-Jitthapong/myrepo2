@@ -114,24 +114,10 @@
                         android:background="@drawable/light_grey_button"
                         android:src="@drawable/ic_action_maximize_light" />
 
-                    <HorizontalScrollView
-                        android:id="@+id/horizontalScrollView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" >
-
-                        <LinearLayout
-                            android:id="@+id/saleModeLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal" >
-                        </LinearLayout>
-                    </HorizontalScrollView>
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="right|center_vertical" >
 
                         <TextView

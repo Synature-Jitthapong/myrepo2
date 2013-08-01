@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
-	<solid 
-	    android:color="@color/disabled"/>
+	<gradient
+	    android:startColor="@color/light_blue_start"
+	    android:endColor="@color/light_blue_end"
+	    android:angle="270"></gradient>
 	
 	<corners
-	    android:radius="6dp"></corners>
+	    android:topLeftRadius="6dp"
+	    android:bottomLeftRadius="6dp"></corners>
 	
 	<stroke 
 	    android:width="1px"
 	    android:color="@color/grey_stroke"/>
-	
+
 	<padding 
 	    android:left="8dp"
 	    android:top="8dp"

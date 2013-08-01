@@ -5576,6 +5576,10 @@ public class TakeOrderActivity extends Activity{
 					}
 					
 				});
+				if(s.getSaleModeID() == 1)
+					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
+				else if(s.getSaleModeID() == 2)
+					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
 				saleModeSwLayout.addView(saleModeView);
 			}
 			
