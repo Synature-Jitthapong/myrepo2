@@ -207,11 +207,11 @@ public class TakeOrderActivity extends Activity{
 				if (isMaximize == false) {
 					menuItemLayout.setVisibility(View.GONE);
 					pluLayout.setVisibility(View.GONE);
-					btnToggleMaxMin.setImageResource(R.drawable.ic_action_minimize_light);
+					btnToggleMaxMin.setImageResource(R.drawable.ic_find_previous_holo_light);
 					isMaximize = true;
 				} else {
 					menuItemLayout.setVisibility(View.VISIBLE);
-					btnToggleMaxMin.setImageResource(R.drawable.ic_action_maximize_light);
+					btnToggleMaxMin.setImageResource(R.drawable.ic_find_next_holo_light);
 					isMaximize = false;
 				}
 			}
@@ -2518,6 +2518,11 @@ public class TakeOrderActivity extends Activity{
 								}
 								
 							});
+							
+							if(s.getSaleModeID() == 1)
+								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
+							else if(s.getSaleModeID() == 2)
+								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
 							
 							saleModeModSwLayout.addView(saleModeView);
 						}
