@@ -14,6 +14,6 @@
     <color name="light_orenge_end">#FFD365</color>
 	<color name="light_red_start">#FF8B88</color>
 	<color name="light_red_end">#EE423F</color>
-    <color name="grey_stroke">#AFAFAF</color>
+    <color name="grey_stroke">#FFA5A5A5</color>
     <color name="disabled">#E2E2E2</color>
 </resources>
