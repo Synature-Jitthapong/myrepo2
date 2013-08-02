@@ -23,7 +23,6 @@ import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -36,8 +35,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -59,7 +58,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.RadioGroup.LayoutParams;
-import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
 public class TakeOrderActivity extends Activity{
@@ -112,10 +110,10 @@ public class TakeOrderActivity extends Activity{
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		globalVar = new GlobalVar(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_take_order);
 
+		globalVar = new GlobalVar(this);
 		// check register
 		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
 			// check config
@@ -182,8 +180,12 @@ public class TakeOrderActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
+				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+				v = inflater.inflate(R.layout.seat_template, null);
 				final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
-				
+				d.setContentView(v);
+				d.getWindow().setGravity(Gravity.TOP);
+				d.show();
 			}
 			
 		});
@@ -277,7 +279,6 @@ public class TakeOrderActivity extends Activity{
 					tvMsg1.setText(R.string.msg_already_set_table);
 					TextView tvMsg2 = new TextView(TakeOrderActivity.this);
 					tvMsg2.setText(CURR_TABLE_NAME);
-					tvMsg2.setTextSize(42);
 					TextView tvMsg3 = new TextView(TakeOrderActivity.this);
 					tvMsg3.setText(R.string.cf_change_queue);
 					cusDialog.message.setText(tvMsg1.getText().toString() + " "
@@ -326,7 +327,6 @@ public class TakeOrderActivity extends Activity{
 					tvMsg1.setText(R.string.msg_already_set_queue);
 					TextView tvMsg2 = new TextView(TakeOrderActivity.this);
 					tvMsg2.setText(CURR_QUEUE_NAME);
-					tvMsg2.setTextSize(42);
 					TextView tvMsg3 = new TextView(TakeOrderActivity.this);
 					tvMsg3.setText(R.string.cf_change_table);
 					cusDialog.message.setText(tvMsg1.getText().toString() + " "
@@ -383,21 +383,21 @@ public class TakeOrderActivity extends Activity{
 				Button btnPluClear = (Button) findViewById(R.id.btnPluClear);
 				Button btnPluDelete = (Button) findViewById(R.id.btnPluDel);
 
-				txtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
-				    @Override
-				    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				        boolean handled = false;
-				        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-							if (!txtPluCode.getText().toString().equals("")) {
-								new PluSearchTask().execute("");
-							}
-							
-				            handled = true;
-				        }
-				        return handled;
-				    }
-				});
+//				txtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
+//				    @Override
+//				    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//				        boolean handled = false;
+//				        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//
+//							if (!txtPluCode.getText().toString().equals("")) {
+//								new PluSearchTask().execute("");
+//							}
+//							
+//				            handled = true;
+//				        }
+//				        return handled;
+//				    }
+//				});
 				btnPlu0.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -571,7 +571,6 @@ public class TakeOrderActivity extends Activity{
 					btnSendOrderFromSumm
 							.setOnClickListener(new OnClickListener() {
 
-								@SuppressLint("NewApi")
 								@Override
 								public void onClick(View v) {
 									btnSendOrder.callOnClick();
