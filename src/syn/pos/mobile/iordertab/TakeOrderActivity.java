@@ -23,6 +23,7 @@ import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -154,6 +155,7 @@ public class TakeOrderActivity extends Activity{
 //		}
 	}
 
+	@SuppressLint("NewApi")
 	private void initComponent(){
 		menuGroupSpinner = (Spinner) findViewById(R.id.spinnerMenuGroup);
 		menuDeptSpinner = (Spinner) findViewById(R.id.spinnerMenuDept);
@@ -186,6 +188,9 @@ public class TakeOrderActivity extends Activity{
 				final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
 				d.setContentView(v);
 				d.getWindow().setGravity(Gravity.TOP);
+				d.getWindow().setLayout(
+						WindowManager.LayoutParams.MATCH_PARENT,
+						WindowManager.LayoutParams.WRAP_CONTENT);
 				d.show();
 			}
 			
