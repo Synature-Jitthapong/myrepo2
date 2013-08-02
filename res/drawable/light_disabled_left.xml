@@ -4,8 +4,8 @@
 	    android:color="@color/disabled"/>
 	
 	<corners
-	    android:topLeftRadius="6dp"
-	    android:bottomLeftRadius="6dp"></corners>
+	    android:topLeftRadius="3dp"
+	    android:bottomLeftRadius="3dp"></corners>
 	
 	<stroke 
 	    android:width="1px"

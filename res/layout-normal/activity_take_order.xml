@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="1.2"
         android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
@@ -84,27 +84,22 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
+            android:layout_weight="1"
             android:choiceMode="singleChoice"
             android:listSelector="@drawable/list_selector"
             android:paddingBottom="1dp"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="0dp" >
-        </ExpandableListView>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/MenuItemLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+        </ExpandableListView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/control_bar_bg"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="2dp" >
 
             <LinearLayout
                 android:id="@+id/LinearLayout1"
@@ -186,7 +181,8 @@
                         android:minHeight="0dp"
                         android:minWidth="48dp"
                         android:padding="0dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/buttonSetTable"
@@ -197,7 +193,8 @@
                         android:drawableLeft="@drawable/ic_action_table_utility"
                         android:minHeight="0dp"
                         android:minWidth="48dp"
-                        android:padding="0dp" />
+                        android:padding="0dp"
+                        android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/buttonSetMember"
@@ -208,7 +205,8 @@
                         android:drawableLeft="@drawable/ic_action_member_light"
                         android:minHeight="0dp"
                         android:minWidth="48dp"
-                        android:padding="0dp" />
+                        android:padding="0dp"
+                        android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/buttonSeat"
@@ -220,6 +218,7 @@
                         android:minWidth="0dp"
                         android:padding="4dp"
                         android:text="Seat"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -275,6 +274,15 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/MenuItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/LinearLayoutGroupDept"
