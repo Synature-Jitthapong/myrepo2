@@ -83,6 +83,7 @@ public class TakeOrderActivity extends Activity{
 	private LinearLayout menuItemLayout;
 	private LinearLayout saleModeSwLayout;
 	private Button btnPlu;
+	private Button btnSeat;
 
 	private List<syn.pos.data.model.MenuDataItem> ORDER_LIST;
 	private OrderListExpandableAdapter ORDER_LIST_ADAPTER;
@@ -175,6 +176,17 @@ public class TakeOrderActivity extends Activity{
 		btnPlu = (Button) findViewById(R.id.btnPlu);
 		pluLayout = (LinearLayout) findViewById(R.id.PLULayout); 
 		saleModeSwLayout = (LinearLayout) findViewById(R.id.layoutSwSaleMode);
+		btnSeat = (Button) findViewById(R.id.buttonSeat);
+		
+		btnSeat.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
+				
+			}
+			
+		});
 
 		orderListView.setGroupIndicator(null);
 		orderListView.setOnGroupClickListener(new OnGroupClickListener() {

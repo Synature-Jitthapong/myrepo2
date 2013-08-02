@@ -719,17 +719,18 @@ public final class R {
         public static final int search_book_contents=0x7f030033;
         public static final int search_book_contents_header=0x7f030034;
         public static final int search_book_contents_list_item=0x7f030035;
-        public static final int select_order_template=0x7f030036;
-        public static final int select_table_layout=0x7f030037;
-        public static final int select_table_layout_with_qs=0x7f030038;
-        public static final int select_table_ques_template=0x7f030039;
-        public static final int select_table_template=0x7f03003a;
-        public static final int send_order_listview_template=0x7f03003b;
-        public static final int send_sale_mode=0x7f03003c;
-        public static final int share=0x7f03003d;
-        public static final int shoose_menu_layout=0x7f03003e;
-        public static final int shoose_menu_template=0x7f03003f;
-        public static final int spinner_item=0x7f030040;
+        public static final int seat_template=0x7f030036;
+        public static final int select_order_template=0x7f030037;
+        public static final int select_table_layout=0x7f030038;
+        public static final int select_table_layout_with_qs=0x7f030039;
+        public static final int select_table_ques_template=0x7f03003a;
+        public static final int select_table_template=0x7f03003b;
+        public static final int send_order_listview_template=0x7f03003c;
+        public static final int send_sale_mode=0x7f03003d;
+        public static final int share=0x7f03003e;
+        public static final int shoose_menu_layout=0x7f03003f;
+        public static final int shoose_menu_template=0x7f030040;
+        public static final int spinner_item=0x7f030041;
     }
     public static final class menu {
         public static final int activity_app_setting=0x7f0d0000;
