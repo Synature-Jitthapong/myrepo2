@@ -112,7 +112,8 @@ public class TakeOrderActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_take_order);
-
+		setTitle("");
+		
 		globalVar = new GlobalVar(this);
 		// check register
 		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
