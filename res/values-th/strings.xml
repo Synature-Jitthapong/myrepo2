@@ -395,7 +395,6 @@
     <string name="order_by_time">เวลา</string>
     <string name="order_by_finish">เสร็จ</string>
     <string name="order_by_name">ชื่อ</string>
-    <string name="button_clear">Clear</string>
     <string name="clear_queue_title">Clear queue</string>
     <string name="cf_clear_queue">ต้องการ clear คิวที่เลือกไว้?</string>
     <string name="clear_table_title">Clear table</string>

@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="2"
+            android:maxLines="4"
             android:text="menu name"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
