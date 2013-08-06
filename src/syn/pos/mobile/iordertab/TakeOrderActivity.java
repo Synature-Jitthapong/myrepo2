@@ -1,6 +1,7 @@
 package syn.pos.mobile.iordertab;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.ksoap2.serialization.PropertyInfo;
 import com.google.gson.Gson;
@@ -101,6 +102,8 @@ public class TakeOrderActivity extends Activity{
 
 	private int TRANS_SALE_MODE = 1;
 	private int SALE_MODE = 1; // default Eat In
+	private int seatId = 0;
+	private String seatName = "";
 	private String SALE_MODE_WORD = "";
 	private String SALE_MODE_TEXT = "";
 	private int SALE_MODE_POS_PREFIX = 0;
@@ -183,15 +186,7 @@ public class TakeOrderActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
-				v = inflater.inflate(R.layout.seat_template, null);
-				final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
-				d.setContentView(v);
-				d.getWindow().setGravity(Gravity.TOP);
-				d.getWindow().setLayout(
-						WindowManager.LayoutParams.MATCH_PARENT,
-						WindowManager.LayoutParams.WRAP_CONTENT);
-				d.show();
+				popupSeat();
 			}
 			
 		});
@@ -599,7 +594,7 @@ public class TakeOrderActivity extends Activity{
 			private void send(){
 				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, 0);
 
 				if (ml.size() > 0) {
 					/*
@@ -866,7 +861,7 @@ public class TakeOrderActivity extends Activity{
 			private void send(){
 				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, 0);
 
 				if (ml.size() > 0) {
 					if (CURR_TABLE_ID != 0) {
@@ -1524,7 +1519,7 @@ public class TakeOrderActivity extends Activity{
 	public void listAllOrder() {
 		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 		ORDER_LIST = posOrder.listAllOrder(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID);
+				GlobalVar.COMPUTER_ID, seatId);
 
 		ORDER_LIST_ADAPTER = new OrderListExpandableAdapter();
 		orderListView.setAdapter(ORDER_LIST_ADAPTER);
@@ -2318,7 +2313,10 @@ public class TakeOrderActivity extends Activity{
 				holder.imgOrder.setVisibility(View.GONE);
 			}
 
-			holder.tvOrderNo.setText(String.valueOf(groupPosition + 1) + ".");
+			if(mi.getSeatId() != 0)
+				holder.tvOrderNo.setText(mi.getSeatName());
+			else
+				holder.tvOrderNo.setText(Integer.toString(groupPosition + 1) + ".");
 			
 			String menuName = mi.getMenuName();
 			
@@ -2407,7 +2405,7 @@ public class TakeOrderActivity extends Activity{
 
 						MenuDataItem menuItem = posOrder.listOrder(
 								GlobalVar.TRANSACTION_ID,
-								GlobalVar.COMPUTER_ID, mi.getOrderDetailId());
+								GlobalVar.COMPUTER_ID, mi.getOrderDetailId(), seatId);
 
 						ORDER_LIST.set(groupPosition, menuItem);
 						ORDER_LIST_ADAPTER.notifyDataSetChanged();
@@ -2433,7 +2431,7 @@ public class TakeOrderActivity extends Activity{
 
 					MenuDataItem menuItem = posOrder.listOrder(
 							GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID,
-							mi.getOrderDetailId());
+							mi.getOrderDetailId(), seatId);
 
 					ORDER_LIST.set(groupPosition, menuItem);
 					ORDER_LIST_ADAPTER.notifyDataSetChanged();
@@ -2503,7 +2501,6 @@ public class TakeOrderActivity extends Activity{
 							View saleModeView = factory.inflate(R.layout.button_sale_mode, null);
 							Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
 							btnSwSaleMode.setId(s.getSaleModeID());
-							btnSwSaleMode.setText(s.getSaleModeName());
 							
 							if(s.getSaleModeID() == 1)
 								btnSwSaleMode.setSelected(true);
@@ -2536,10 +2533,14 @@ public class TakeOrderActivity extends Activity{
 								
 							});
 							
-							if(s.getSaleModeID() == 1)
+							if(s.getSaleModeID() == 1){
+								btnSwSaleMode.setText("DI");
 								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
-							else if(s.getSaleModeID() == 2)
+							}
+							else if(s.getSaleModeID() == 2){
+								btnSwSaleMode.setText("TW");
 								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
+							}
 							
 							saleModeModSwLayout.addView(saleModeView);
 						}
@@ -2747,7 +2748,7 @@ public class TakeOrderActivity extends Activity{
 							MenuDataItem menuDataItem = posOrdering.listOrder(
 									GlobalVar.TRANSACTION_ID,
 									GlobalVar.COMPUTER_ID,
-									mi.getOrderDetailId());
+									mi.getOrderDetailId(), seatId);
 							ORDER_LIST.set(groupPosition, menuDataItem);
 							ORDER_LIST_ADAPTER.notifyDataSetChanged();
 
@@ -3167,7 +3168,7 @@ public class TakeOrderActivity extends Activity{
 					GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, mi.getProductID(),
 					mi.getMenuName(), mi.getProductTypeID(), SALE_MODE, 
 					1, mi.getPricePerUnit(), mi.getVatAmount(), 0,
-					0, 0, 0);
+					0, 0, 0, seatId, seatName);
 			
 			// list set of product
 			List<ProductGroups.PComponentSet> pCompSetLst = 
@@ -3285,13 +3286,10 @@ public class TakeOrderActivity extends Activity{
 						int orderId = posOrder.addOrderDetail(GlobalVar.TRANSACTION_ID,
 								GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, productId,
 								menuName, productType, saleMode, openQty, price, vatAmount, 0,
-								0, 0, 0);
+								0, 0, 0, seatId, seatName);
 					
-						MenuDataItem menuDataItem = 
-								posOrder.listOrder(
-										GlobalVar.TRANSACTION_ID,
-										GlobalVar.COMPUTER_ID,
-										orderId);
+						MenuDataItem menuDataItem = posOrder.listOrder(GlobalVar.TRANSACTION_ID,
+										GlobalVar.COMPUTER_ID, orderId, seatId);
 						ORDER_LIST.add(menuDataItem);
 						ORDER_LIST_ADAPTER.notifyDataSetChanged();
 
@@ -3357,7 +3355,7 @@ public class TakeOrderActivity extends Activity{
 							int orderId = posOrder.addOrderDetail(GlobalVar.TRANSACTION_ID,
 									GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, productId,
 									menuName, productType, saleMode, qty, openPrice, vatAmount, 0,
-									0, 0, 0);
+									0, 0, 0, seatId, seatName);
 						
 							// produce order set
 							if (productType == 7) {
@@ -3373,10 +3371,8 @@ public class TakeOrderActivity extends Activity{
 							}
 								
 							MenuDataItem menuDataItem = 
-									posOrder.listOrder(
-											GlobalVar.TRANSACTION_ID,
-											GlobalVar.COMPUTER_ID,
-											orderId);
+									posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
+											orderId, seatId);
 							ORDER_LIST.add(menuDataItem);
 							ORDER_LIST_ADAPTER.notifyDataSetChanged();
 	
@@ -3411,7 +3407,7 @@ public class TakeOrderActivity extends Activity{
 			int orderId = posOrder.addOrderDetail(GlobalVar.TRANSACTION_ID,
 					GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, productId,
 					menuName, productType, saleMode, qty, price, vatAmount, 0,
-					0, 0, 0);
+					0, 0, 0, seatId, seatName);
 			
 			// produce order set
 			if (productType == 7) {
@@ -3427,10 +3423,8 @@ public class TakeOrderActivity extends Activity{
 			}
 			
 			MenuDataItem menuDataItem = 
-					posOrder.listOrder(
-							GlobalVar.TRANSACTION_ID,
-							GlobalVar.COMPUTER_ID,
-							orderId);
+					posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
+							orderId, seatId);
 			ORDER_LIST.add(menuDataItem);
 			ORDER_LIST_ADAPTER.notifyDataSetChanged();
 	
@@ -3582,7 +3576,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3702,7 +3696,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3829,7 +3823,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3937,7 +3931,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -4059,7 +4053,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -5582,7 +5576,6 @@ public class TakeOrderActivity extends Activity{
 				View saleModeView = inflater.inflate(R.layout.button_sale_mode, null);
 				final Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
 				btnSwSaleMode.setId(s.getSaleModeID());
-				btnSwSaleMode.setText(s.getSaleModeName());
 				
 				// default Eat In
 				if(s.getSaleModeID() == 1)
@@ -5598,10 +5591,14 @@ public class TakeOrderActivity extends Activity{
 					}
 					
 				});
-				if(s.getSaleModeID() == 1)
+				if(s.getSaleModeID() == 1){
+					btnSwSaleMode.setText("DI");
 					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
-				else if(s.getSaleModeID() == 2)
+				}
+				else if(s.getSaleModeID() == 2){
+					btnSwSaleMode.setText("TW");
 					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
+				}
 				saleModeSwLayout.addView(saleModeView);
 			}
 			
@@ -5610,5 +5607,105 @@ public class TakeOrderActivity extends Activity{
 					saleModeSwLayout.setVisibility(View.INVISIBLE);
 			}
 		}
+	}
+	
+	private void popupSeat(){
+		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+		final View v = inflater.inflate(R.layout.seat_template, null);
+		final GridView gvSeat = (GridView) v.findViewById(R.id.gridView1);
+				
+		final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
+		d.setContentView(v);
+		d.show();
+		
+		ArrayList<HashMap<String, String>> seatLst = 
+				new ArrayList<HashMap<String, String>>();
+		String[] seats = new String[]{"ALL", "A", "B", "C", "D", "E", "F", "G", "H", 
+				"I", "J"};
+		for(int i = 0; i < seats.length; i ++){
+			HashMap<String, String> seat = new HashMap<String, String>();
+			seat.put("seatId", Integer.toString(i));
+			seat.put("seatName", seats[i]);
+			seatLst.add(seat);
+		}
+		
+		SeatAdapter seatAdapter = new SeatAdapter(seatLst, new OnSeatClickListener(){
+
+			@Override
+			public void onClick(String id, String name) {
+				seatId = Integer.parseInt(id);
+				seatName = name;
+				btnSeat.setText("Seat:" + name);
+				listAllOrder();
+				d.dismiss();
+			}
+
+			
+		});
+		gvSeat.setAdapter(seatAdapter);
+
+	}
+	
+	private class SeatAdapter extends BaseAdapter{
+
+		private ArrayList<HashMap<String, String>> seatLst;
+		private LayoutInflater inflater;
+		private OnSeatClickListener listener;
+		
+		public SeatAdapter(ArrayList<HashMap<String, String>> seatLst, OnSeatClickListener onClick){
+			this.seatLst = seatLst;
+			inflater = LayoutInflater.from(TakeOrderActivity.this);
+			this.listener = onClick;
+		}
+		
+		@Override
+		public int getCount() {
+			return seatLst != null ? seatLst.size() : 0;
+		}
+
+		@Override
+		public HashMap<String, String> getItem(int arg0) {
+			return seatLst.get(arg0);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			
+			ViewHolder holder;
+			if(convertView == null){
+				convertView = inflater.inflate(R.layout.seat_button, null);
+				holder = new ViewHolder();
+				holder.btnSeat = (Button) convertView.findViewById(R.id.button1);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			
+			holder.btnSeat.setText(seatLst.get(position).get("seatName"));
+			holder.btnSeat.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					listener.onClick(seatLst.get(position).get("seatId"), seatLst.get(position).get("seatName"));
+				}});
+			if(seatId == Integer.parseInt(seatLst.get(position).get("seatId")))
+				holder.btnSeat.setSelected(true);
+			else
+				holder.btnSeat.setSelected(false);
+			return convertView;
+		}
+		
+		private class ViewHolder{
+			Button btnSeat;
+		}
+	}
+		
+	public interface OnSeatClickListener{
+		public void onClick(String id, String name);
 	}
 }

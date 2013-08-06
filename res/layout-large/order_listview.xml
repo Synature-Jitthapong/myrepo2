@@ -22,12 +22,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
             android:focusable="false"
-            android:text="100" />
+            android:text="100"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageViewMenuPic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginRight="2dp"
             android:src="@drawable/ic_list_nofood" />
 

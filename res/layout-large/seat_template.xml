@@ -17,6 +17,7 @@
         android:gravity="center"
         android:text="Select Seat"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="32sp"
         android:textStyle="bold" />
 
     <GridView
@@ -28,7 +29,7 @@
         android:layout_margin="8dp"
         android:gravity="center"
         android:horizontalSpacing="4dp"
-        android:numColumns="5"
+        android:numColumns="8"
         android:verticalSpacing="4dp" >
 
     </GridView>

@@ -17,6 +17,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="1dp"
         android:layout_marginTop="1dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_list_nofood" />
 
     <ImageButton
@@ -51,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="2"
+            android:maxLines="3"
             android:text="name"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="12sp" />
