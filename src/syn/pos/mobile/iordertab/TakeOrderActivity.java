@@ -2316,7 +2316,7 @@ public class TakeOrderActivity extends Activity{
 			if(mi.getSeatId() != 0)
 				holder.tvOrderNo.setText(mi.getSeatName());
 			else
-				holder.tvOrderNo.setText(Integer.toString(groupPosition + 1) + ".");
+				holder.tvOrderNo.setText("");
 			
 			String menuName = mi.getMenuName();
 			
@@ -5613,10 +5613,20 @@ public class TakeOrderActivity extends Activity{
 		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 		final View v = inflater.inflate(R.layout.seat_template, null);
 		final GridView gvSeat = (GridView) v.findViewById(R.id.gridView1);
+		final ImageButton btnClose = (ImageButton) v.findViewById(R.id.imageButton1);
 				
 		final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
 		d.setContentView(v);
 		d.show();
+		
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+			}
+			
+		});
 		
 		ArrayList<HashMap<String, String>> seatLst = 
 				new ArrayList<HashMap<String, String>>();

@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="4dp" >
 
     <LinearLayout
         android:id="@+id/LinearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical" >
 
         <TextView
             android:id="@+id/tvChildOrderLinkType7No"
@@ -20,7 +22,7 @@
             android:layout_marginRight="4dp"
             android:paddingLeft="8dp"
             android:text="-"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ImageView
             android:id="@+id/imageViewMenuPic"
@@ -67,13 +69,14 @@
             android:id="@+id/tvChildOrderLinkType7Qty"
             style="@style/text_medium"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/radius_bg"
             android:gravity="center"
             android:minWidth="48dp"
             android:padding="4dp"
             android:text="1"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp" />
 
         <Button
             android:id="@+id/btnChildOrderLinkType7Plus"

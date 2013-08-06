@@ -17,30 +17,30 @@
         android:gravity="center"
         android:text="Select Seat"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32sp"
         android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignRight="@+id/gridView1"
+        android:layout_alignTop="@+id/textView1"
+        android:background="@drawable/light_grey_normal"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     <GridView
         android:id="@+id/gridView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageButton1"
         android:layout_margin="8dp"
         android:gravity="center"
         android:horizontalSpacing="4dp"
-        android:numColumns="8"
+        android:numColumns="5"
         android:verticalSpacing="4dp" >
 
     </GridView>
-
-    <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/gridView1"
-        android:layout_alignTop="@+id/textView1"
-        android:background="@drawable/light_grey_button"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>
