@@ -49,13 +49,13 @@ public final class R {
 		public static final int history_title = 0x7f0c00e7;
 		public static final int image_view = 0x7f0c00e3;
 		public static final int launch_product_query = 0x7f0c0003;
-		public static final int menu_encode = 0x7f0c01e7;
-		public static final int menu_help = 0x7f0c01e6;
-		public static final int menu_history = 0x7f0c01e5;
-		public static final int menu_history_clear_text = 0x7f0c01e9;
-		public static final int menu_history_send = 0x7f0c01e8;
-		public static final int menu_settings = 0x7f0c01d2;
-		public static final int menu_share = 0x7f0c01e4;
+		public static final int menu_encode = 0x7f0c01e1;
+		public static final int menu_help = 0x7f0c01e0;
+		public static final int menu_history = 0x7f0c01df;
+		public static final int menu_history_clear_text = 0x7f0c01e3;
+		public static final int menu_history_send = 0x7f0c01e2;
+		public static final int menu_settings = 0x7f0c01cc;
+		public static final int menu_share = 0x7f0c01de;
 		public static final int meta_text_view = 0x7f0c00b7;
 		public static final int meta_text_view_label = 0x7f0c00b6;
 		public static final int page_number_view = 0x7f0c018b;
@@ -68,11 +68,11 @@ public final class R {
 		public static final int result_list_view = 0x7f0c018a;
 		public static final int result_view = 0x7f0c00b1;
 		public static final int return_scan_result = 0x7f0c0006;
-		public static final int share_app_button = 0x7f0c01c3;
-		public static final int share_bookmark_button = 0x7f0c01c4;
-		public static final int share_clipboard_button = 0x7f0c01c6;
-		public static final int share_contact_button = 0x7f0c01c5;
-		public static final int share_text_view = 0x7f0c01c7;
+		public static final int share_app_button = 0x7f0c01bd;
+		public static final int share_bookmark_button = 0x7f0c01be;
+		public static final int share_clipboard_button = 0x7f0c01c0;
+		public static final int share_contact_button = 0x7f0c01bf;
+		public static final int share_text_view = 0x7f0c01c1;
 		public static final int shopper_button = 0x7f0c00bb;
 		public static final int snippet_view = 0x7f0c018c;
 		public static final int status_view = 0x7f0c00bc;
@@ -89,7 +89,7 @@ public final class R {
 		public static final int search_book_contents = 0x7f030033;
 		public static final int search_book_contents_header = 0x7f030034;
 		public static final int search_book_contents_list_item = 0x7f030035;
-		public static final int share = 0x7f03003e;
+		public static final int share = 0x7f03003f;
 	}
 	public static final class menu {
 		public static final int capture = 0x7f0d000d;
