@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="syn.pos.mobile.iordertab"
-    android:versionCode="22"
-    android:versionName="1.6.22" >
+    android:versionCode="23"
+    android:versionName="1.6.23" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -33,7 +33,7 @@
             android:name="syn.pos.mobile.iordertab.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustUnspecified" >
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.AppConfigLayoutActivity"
