@@ -238,7 +238,7 @@ public final class R {
         public static final int btnChildOrderLinkType7Delete=0x7f0c00dc;
         public static final int btnChildOrderLinkType7Minus=0x7f0c00d8;
         public static final int btnChildOrderLinkType7Plus=0x7f0c00da;
-        public static final int btnLogin=0x7f0c0031;
+        public static final int btnLogin=0x7f0c0030;
         public static final int btnMenuCommentMinus=0x7f0c011d;
         public static final int btnMenuCommentPlus=0x7f0c011f;
         public static final int btnOrderComment=0x7f0c0154;
@@ -372,7 +372,7 @@ public final class R {
         public static final int imageButtonPluClose=0x7f0c0088;
         public static final int imageButtonSpeak=0x7f0c012b;
         public static final int imageButtonToggleMaxMin=0x7f0c0071;
-        public static final int imageView1=0x7f0c002f;
+        public static final int imageView1=0x7f0c002e;
         public static final int imageView2=0x7f0c017d;
         public static final int imageViewIcMember=0x7f0c006e;
         public static final int imageViewIcQueue=0x7f0c006b;
@@ -385,7 +385,7 @@ public final class R {
         public static final int imageViewTableDetail=0x7f0c01b1;
         public static final int imageViewWaitPrint=0x7f0c00a7;
         public static final int image_view=0x7f0c00e4;
-        public static final int imgLogo=0x7f0c002b;
+        public static final int imgLogo=0x7f0c0031;
         public static final int item_close=0x7f0c01ca;
         public static final int item_confirm=0x7f0c01c9;
         public static final int item_other=0x7f0c01ce;
@@ -402,7 +402,7 @@ public final class R {
         public static final int linearLayout1=0x7f0c0032;
         public static final int linearLayout2=0x7f0c0035;
         public static final int linearLayout3=0x7f0c0038;
-        public static final int linearLayout4=0x7f0c002d;
+        public static final int linearLayout4=0x7f0c002c;
         public static final int linearLayout5=0x7f0c003b;
         public static final int listView1=0x7f0c016c;
         public static final int listViewCancelMenu=0x7f0c000f;
@@ -586,7 +586,7 @@ public final class R {
         public static final int textViewSaleModeCust=0x7f0c01b9;
         public static final int textViewSelTable=0x7f0c0014;
         public static final int textViewSelectedQueue=0x7f0c017e;
-        public static final int textViewShopName=0x7f0c002c;
+        public static final int textViewShopName=0x7f0c002b;
         public static final int textViewSizeName=0x7f0c016a;
         public static final int textViewSizePrice=0x7f0c016b;
         public static final int textViewSumPrice=0x7f0c0147;
@@ -639,11 +639,11 @@ public final class R {
         public static final int tvTbStatus=0x7f0c019c;
         public static final int tvTbTo=0x7f0c0134;
         public static final int txtCancelMenuReason=0x7f0c0011;
-        public static final int txtPassword=0x7f0c0030;
+        public static final int txtPassword=0x7f0c002f;
         public static final int txtPluCode=0x7f0c0087;
         public static final int txtServerIp=0x7f0c009d;
         public static final int txtTotalSalePrice=0x7f0c0076;
-        public static final int txtUserName=0x7f0c002e;
+        public static final int txtUserName=0x7f0c002d;
         public static final int txtWsName=0x7f0c009e;
         public static final int txt_label_comment=0x7f0c0113;
         public static final int txt_menu_comment=0x7f0c0114;
