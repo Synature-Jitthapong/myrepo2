@@ -46,7 +46,7 @@
         android:id="@+id/tvMenuCommentQty"
         style="@style/text_medium"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="48dp"
         android:background="@drawable/radius_bg"
         android:gravity="center"
         android:minWidth="48dp"
