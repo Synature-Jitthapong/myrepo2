@@ -78,7 +78,7 @@
         <TextView
             android:id="@+id/tvOrderListMenuQty"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
             android:background="@drawable/radius_bg"
             android:focusable="false"
             android:gravity="center"

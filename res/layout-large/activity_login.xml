@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
         android:text="---"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -40,6 +41,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="8dp"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
         <ImageView
@@ -58,7 +60,9 @@
             android:inputType="textPassword"
             android:lines="1"
             android:padding="8dp"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
     </LinearLayout>
 
     <Button
@@ -76,7 +80,7 @@
         android:id="@+id/imgLogo"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="20dp"
         android:src="@drawable/company_logo" />
 
