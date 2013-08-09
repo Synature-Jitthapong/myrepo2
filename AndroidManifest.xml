@@ -33,7 +33,7 @@
             android:name="syn.pos.mobile.iordertab.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden|adjustUnspecified" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.AppConfigLayoutActivity"

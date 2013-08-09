@@ -869,16 +869,39 @@ public class MenuSetActivity extends Activity {
 					spMcg.setAdapter(mcgAdapter);
 				}
 				
-				private void updateSelectedComment(ListView selectedMenuCommentListView){
-					POSOrdering posOrdering = new POSOrdering(
-							MenuSetActivity.this);
+				class UpdateSelectedCommentTask extends AsyncTask<Void, Void, List<MenuGroups.MenuComment>>{
+					ListView selectedMenuCommentListView;
 					
-					List<MenuGroups.MenuComment> mcLst
-						= posOrdering.listOrderSetComment(TRANSACTION_ID, ORDER_ID, pcs.getOrderSetID());
+					public UpdateSelectedCommentTask(ListView lv){
+						selectedMenuCommentListView = lv;
+					}
 					
-					MenuCommentSelectedAdapter selectedCommentAdapter = 
-							new MenuCommentSelectedAdapter(MenuSetActivity.this, globalVar, mcLst);
-					selectedMenuCommentListView.setAdapter(selectedCommentAdapter);
+					
+					@Override
+					protected void onPostExecute(List<MenuGroups.MenuComment> mcLst) {
+						MenuCommentSelectedAdapter selectedCommentAdapter = 
+								new MenuCommentSelectedAdapter(MenuSetActivity.this, globalVar, mcLst);
+						selectedMenuCommentListView.setAdapter(selectedCommentAdapter);
+					}
+
+
+					@Override
+					protected void onPreExecute() {
+						// TODO Auto-generated method stub
+						super.onPreExecute();
+					}
+
+
+					@Override
+					protected List<MenuGroups.MenuComment> doInBackground(Void... params) {
+						POSOrdering posOrdering = new POSOrdering(
+								MenuSetActivity.this);
+						
+						List<MenuGroups.MenuComment> mcLst
+							= posOrdering.listOrderSetComment(TRANSACTION_ID, ORDER_ID, pcs.getOrderSetID());
+						return mcLst;
+					}
+					
 				}
 				
 				@Override
@@ -963,7 +986,7 @@ public class MenuSetActivity extends Activity {
 									posOrder.deleteOrderSetComment(TRANSACTION_ID, ORDER_ID, 
 											pcs.getOrderSetID(), mcData.getMenuCommentID());
 									
-									updateSelectedComment(selectedMenuCommentListView);
+									new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 									menuCommentAdapter.notifyDataSetInvalidated();
 									cusDialog.dismiss();
 								}
@@ -973,8 +996,8 @@ public class MenuSetActivity extends Activity {
 						}
 						
 					});
-					
-					updateSelectedComment(selectedMenuCommentListView);
+
+					new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 					
 					menuCommentListView
 							.setOnItemClickListener(new OnItemClickListener() {
@@ -1000,9 +1023,7 @@ public class MenuSetActivity extends Activity {
 										holder.btnMenuCommentPlus
 												.setEnabled(true);
 
-										POSOrdering posOrdering = new POSOrdering(
-												CONTEXT);
-										posOrdering.addOrderSetComment(
+										posOrder.addOrderSetComment(
 												TRANSACTION_ID, ORDER_ID,
 												pcs.getOrderSetID(),
 												pcg.getPGroupID(),
@@ -1018,15 +1039,13 @@ public class MenuSetActivity extends Activity {
 										holder.btnMenuCommentPlus
 												.setEnabled(false);
 
-										POSOrdering posOrdering = new POSOrdering(
-												CONTEXT);
-										posOrdering.deleteOrderSetComment(
+										posOrder.deleteOrderSetComment(
 												TRANSACTION_ID, ORDER_ID,
 												pcs.getOrderSetID(),
 												mc.getMenuCommentID());
 
 									}
-									updateSelectedComment(selectedMenuCommentListView);
+									new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 								}
 
 							});
@@ -1038,7 +1057,7 @@ public class MenuSetActivity extends Activity {
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
 							WindowManager.LayoutParams.WRAP_CONTENT);
-					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 					dialog.show();
 
 					btnOk.setOnClickListener(new OnClickListener() {

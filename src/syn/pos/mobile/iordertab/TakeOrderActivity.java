@@ -2441,16 +2441,39 @@ public class TakeOrderActivity extends Activity{
 					spMcg.setAdapter(mcgAdapter);
 				}
 				
-				private void updateSelectedComment(ListView selectedMenuCommentListView){
-					POSOrdering posOrdering = new POSOrdering(
-							TakeOrderActivity.this);
+				class UpdateSelectedCommentTask extends AsyncTask<Void, Void, List<MenuGroups.MenuComment>>{
+					ListView selectedMenuCommentListView;
 					
-					List<MenuGroups.MenuComment> mcLst
-						= posOrdering.listOrderCommentTemp(GlobalVar.TRANSACTION_ID, mi.getOrderDetailId());
+					public UpdateSelectedCommentTask(ListView lv){
+						selectedMenuCommentListView = lv;
+					}
 					
-					MenuCommentSelectedAdapter selectedCommentAdapter = 
-							new MenuCommentSelectedAdapter(TakeOrderActivity.this, globalVar, mcLst);
-					selectedMenuCommentListView.setAdapter(selectedCommentAdapter);
+					
+					@Override
+					protected void onPostExecute(List<MenuGroups.MenuComment> mcLst) {
+						MenuCommentSelectedAdapter selectedCommentAdapter = 
+								new MenuCommentSelectedAdapter(TakeOrderActivity.this, globalVar, mcLst);
+						selectedMenuCommentListView.setAdapter(selectedCommentAdapter);
+					}
+
+
+					@Override
+					protected void onPreExecute() {
+						// TODO Auto-generated method stub
+						super.onPreExecute();
+					}
+
+
+					@Override
+					protected List<MenuGroups.MenuComment> doInBackground(Void... params) {
+						POSOrdering posOrdering = new POSOrdering(
+								TakeOrderActivity.this);
+						
+						List<MenuGroups.MenuComment> mcLst
+							= posOrdering.listOrderCommentTemp(GlobalVar.TRANSACTION_ID, mi.getOrderDetailId());
+						return mcLst;
+					}
+					
 				}
 				
 				@Override
@@ -2623,7 +2646,7 @@ public class TakeOrderActivity extends Activity{
 									posOrder.deleteOrderComment(GlobalVar.TRANSACTION_ID, 
 											mi.getOrderDetailId(), mcData.getMenuCommentID());
 									
-									updateSelectedComment(selectedMenuCommentListView);
+									new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 
 									menuCommentAdapter.notifyDataSetInvalidated();
 									
@@ -2635,8 +2658,8 @@ public class TakeOrderActivity extends Activity{
 						}
 						
 					});
-					
-					updateSelectedComment(selectedMenuCommentListView);
+
+					new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 					// set adapter view click listenner
 					menuCommentListView
 							.setOnItemClickListener(new OnItemClickListener() {
@@ -2662,9 +2685,7 @@ public class TakeOrderActivity extends Activity{
 										holder.btnMenuCommentPlus
 												.setEnabled(true);
 
-										POSOrdering posOrdering = new POSOrdering(
-												TakeOrderActivity.this);
-										posOrdering.addOrderComment(
+										posOrder.addOrderComment(
 												GlobalVar.TRANSACTION_ID,
 												mi.getOrderDetailId(),
 												mc.getMenuCommentID(),
@@ -2680,14 +2701,12 @@ public class TakeOrderActivity extends Activity{
 										holder.btnMenuCommentPlus
 												.setEnabled(false);
 
-										POSOrdering posOrdering = new POSOrdering(
-												TakeOrderActivity.this);
-										posOrdering.deleteOrderComment(
+										posOrder.deleteOrderComment(
 												GlobalVar.TRANSACTION_ID,
 												mi.getOrderDetailId(),
 												mc.getMenuCommentID());
 									}
-									updateSelectedComment(selectedMenuCommentListView);
+									new UpdateSelectedCommentTask(selectedMenuCommentListView).execute();
 								}
 
 							});
@@ -2703,7 +2722,7 @@ public class TakeOrderActivity extends Activity{
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow()
 							.setSoftInputMode(
-									WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+									WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 					dialog.getWindow().setLayout(
 							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
