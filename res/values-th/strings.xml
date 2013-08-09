@@ -277,7 +277,7 @@
     <string name="last_update_label">อัพเดตล่าสุด:</string>
     <string name="device_code_label">Device code:</string>
     <string name="computer_label">Device name:</string>
-    <string name="text_version">Version:</string>
+    <string name="text_version">iOrder Version:</string>
     <string name="button_select_queue">Pre order</string>
     <string name="button_queue_ok">ตกลง</string>
     <string name="button_queue_cancel">ยกเลิก</string>
