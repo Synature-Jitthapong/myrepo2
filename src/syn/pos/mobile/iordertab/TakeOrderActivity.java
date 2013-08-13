@@ -18,6 +18,7 @@ import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.QueueInfo;
 import syn.pos.data.model.ShopData;
+import syn.pos.data.model.ShopData.SeatNo;
 import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.ShopData.StaffPermission;
 import syn.pos.data.model.TableInfo.TableName;
@@ -5669,6 +5670,11 @@ public class TakeOrderActivity extends Activity{
 				new syn.pos.data.dao.ShopProperty(TakeOrderActivity.this, null);
 		
 		seatLst = shopProp.getSeatNo();
+		
+		ShopData.SeatNo seat = new ShopData.SeatNo();
+		seat.setSeatID(0);
+		seat.setSeatName("All");
+		seatLst.add(0, seat);
 		
 		SeatAdapter seatAdapter = new SeatAdapter(seatLst, new OnSeatClickListener(){
 

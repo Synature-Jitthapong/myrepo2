@@ -22,15 +22,9 @@ public class PermissionCheckingTask extends WebServiceTask {
 		
 		PropertyInfo property = new PropertyInfo();
 		property.setName("iStaffID");
-		property.setValue(GlobalVar.SHOP_ID);
+		property.setValue(GlobalVar.STAFF_ID);
 		property.setType(int.class);
 		soapRequest.addProperty(property);
-	}
-
-	@Override
-	protected void onPreExecute() {
-		// TODO Auto-generated method stub
-		super.onPreExecute();
 	}
 
 	@Override
