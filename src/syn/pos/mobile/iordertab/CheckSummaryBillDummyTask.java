@@ -66,7 +66,7 @@ public class CheckSummaryBillDummyTask extends WebServiceTask {
 
 		POSOrdering posOrder = new POSOrdering(context);
 		List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-				GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, 0);
+				GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 		if (ml.size() > 0) {
 			orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();

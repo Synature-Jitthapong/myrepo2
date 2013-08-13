@@ -423,5 +423,7 @@
     <string name="cf_close_table">ต้องการปิดโต๊ะนี้?</string>
     <string name="close_table_success">ปิดโต๊ะนี้เรียบร้อยแล้ว.</string>
     <string name="button_edit_customer_qty">แก้จำนวนลูกค้า</string>
+    <string name="not_access_pocket">คุณไม่มีสิทธิ์เข้าใช้เครื่องนี้</string>
+    <string name="check_permission_progress">กำลังตรวจสอบสิทธิ์การเข้าถึง...</string>
 
 </resources>

@@ -28,6 +28,13 @@ public class PermissionCheckingTask extends WebServiceTask {
 	}
 
 	@Override
+	protected void onPreExecute() {
+		tvProgress.setText(R.string.check_permission_progress);
+		progress.setMessage(tvProgress.getText());
+		progress.show();
+	}
+
+	@Override
 	protected void onPostExecute(String result) {
 		if(progress.isShowing())
 			progress.dismiss();

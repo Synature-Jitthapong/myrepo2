@@ -1,10 +1,12 @@
 package syn.pos.mobile.iordertab;
 
+import java.util.List;
 import java.util.Locale;
 
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
+import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
@@ -185,12 +187,46 @@ public class LoginActivity extends Activity {
 			imm.hideSoftInputFromWindow(
 					txtPassWord.getWindowToken(), 0);
 			
-			Intent intent = new Intent(LoginActivity.this,
-					TakeOrderActivity.class);
-			LoginActivity.this.startActivity(intent);
-//			overridePendingTransition(R.animator.slide_left_in,
-//					R.animator.slide_left_out);
-			LoginActivity.this.finish();
+			
+			new PermissionCheckingTask(LoginActivity.this, globalVar, new PermissionCheckingTask.IPermissionChecking() {
+				
+				@Override
+				public void onSuccess(List<StaffPermission> permissionLst) {
+					syn.pos.data.dao.ShopProperty shopProperty = 
+							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
+					shopProperty.insertStaffPermissionData(permissionLst);
+					
+					if(!shopProperty.chkAccessPocketPermission()){
+						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
+						dialog.title.setVisibility(View.VISIBLE);
+						dialog.title.setText(R.string.title_info);
+						dialog.message.setText(R.string.not_access_pocket);
+						dialog.btnCancel.setVisibility(View.GONE);
+						dialog.btnOk.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View arg0) {
+								btnLogin.setEnabled(true);
+								dialog.dismiss();
+							}
+							
+						});
+						dialog.show();
+					}else{
+						Intent intent = new Intent(LoginActivity.this,
+								TakeOrderActivity.class);
+						LoginActivity.this.startActivity(intent);
+			//			overridePendingTransition(R.animator.slide_left_in,
+			//					R.animator.slide_left_out);
+						LoginActivity.this.finish();
+					}
+				}
+				
+				@Override
+				public void onError(String msg) {
+					
+				}
+			}).execute(globalVar.FULL_URL);
 		} else {
 			btnLogin.setEnabled(true);
 			TextView tvMsg = new TextView(getApplicationContext());

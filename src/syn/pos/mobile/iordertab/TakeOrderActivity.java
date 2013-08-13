@@ -258,7 +258,9 @@ public class TakeOrderActivity extends Activity{
 			btnSetTable.setVisibility(View.GONE);
 			btnSetQueue.setVisibility(View.GONE);
 			btnSendByQueue.setVisibility(View.GONE);
+			btnSeat.setVisibility(View.GONE);
 		} else {
+			btnSeat.setVisibility(View.VISIBLE);
 			btnCheckDummyBill.setVisibility(View.GONE);
 		}
 
@@ -599,7 +601,7 @@ public class TakeOrderActivity extends Activity{
 			private void send(){
 				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, 0);
+						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 				if (ml.size() > 0) {
 					/*
@@ -866,7 +868,7 @@ public class TakeOrderActivity extends Activity{
 			private void send(){
 				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, 0);
+						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 				if (ml.size() > 0) {
 					if (CURR_TABLE_ID != 0) {
@@ -1358,7 +1360,7 @@ public class TakeOrderActivity extends Activity{
 
 		@Override
 		public int getCount() {
-			return holdLst.size();
+			return holdLst != null ? holdLst.size() : 0;
 		}
 
 		@Override
@@ -1418,6 +1420,8 @@ public class TakeOrderActivity extends Activity{
 						pos.prepareTransaction(GlobalVar.TRANSACTION_ID,
 								GlobalVar.COMPUTER_ID, GlobalVar.STAFF_ID, "");
 
+						seatId = 0;
+						btnSeat.setText("Seat");
 						listAllOrder();
 						countHoldOrder();
 					}
@@ -3607,7 +3611,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3728,7 +3732,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3856,7 +3860,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -3965,7 +3969,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -4088,7 +4092,7 @@ public class TakeOrderActivity extends Activity{
 
 			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID, seatId);
+					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
 
 			if (ml.size() > 0) {
 				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
@@ -5757,21 +5761,6 @@ public class TakeOrderActivity extends Activity{
 	}
 	
 	private void permissionChecking(){
-		new PermissionCheckingTask(TakeOrderActivity.this, globalVar, new PermissionCheckingTask.IPermissionChecking() {
-			
-			@Override
-			public void onSuccess(List<StaffPermission> permissionLst) {
-				syn.pos.data.dao.ShopProperty shopProperty = 
-						new syn.pos.data.dao.ShopProperty(TakeOrderActivity.this, null);
-				shopProperty.insertStaffPermissionData(permissionLst);
-				
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				
-			}
-		}).execute(globalVar.FULL_URL);
+		// some permission ??
 	}
 }

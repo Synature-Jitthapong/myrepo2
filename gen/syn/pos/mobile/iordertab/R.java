@@ -211,10 +211,10 @@ public final class R {
         public static final int LinearLayout3=0x7f0a0013;
         public static final int LinearLayout4=0x7f0a0018;
         public static final int LinearLayoutGroupDept=0x7f0a007d;
-        public static final int LinearLayoutHeader=0x7f0a019b;
+        public static final int LinearLayoutHeader=0x7f0a019c;
         public static final int LinearLayoutNotification=0x7f0a0069;
-        public static final int LinearLayoutTableZone=0x7f0a0198;
-        public static final int LinearLayoutTotalCust=0x7f0a01a4;
+        public static final int LinearLayoutTableZone=0x7f0a0199;
+        public static final int LinearLayoutTotalCust=0x7f0a01a5;
         public static final int LinearLeft=0x7f0a0009;
         public static final int LinearRight=0x7f0a000c;
         public static final int MenuItemLayout=0x7f0a007c;
@@ -233,13 +233,13 @@ public final class R {
         public static final int TextView1=0x7f0a00eb;
         public static final int TextView10=0x7f0a0064;
         public static final int TextView11=0x7f0a0067;
-        public static final int Update=0x7f0a01cd;
-        public static final int action_cancel_menu=0x7f0a01d7;
-        public static final int action_kds=0x7f0a01d4;
-        public static final int action_mergeTable=0x7f0a01d3;
-        public static final int action_moveTable=0x7f0a01d2;
-        public static final int action_move_menu=0x7f0a01d6;
-        public static final int action_reprint=0x7f0a01d8;
+        public static final int Update=0x7f0a01ce;
+        public static final int action_cancel_menu=0x7f0a01d8;
+        public static final int action_kds=0x7f0a01d5;
+        public static final int action_mergeTable=0x7f0a01d4;
+        public static final int action_moveTable=0x7f0a01d3;
+        public static final int action_move_menu=0x7f0a01d7;
+        public static final int action_reprint=0x7f0a01d9;
         public static final int back_button=0x7f0a00e4;
         public static final int barcode_image_view=0x7f0a00b1;
         public static final int bookmark_title=0x7f0a00a7;
@@ -281,14 +281,14 @@ public final class R {
         public static final int buttonBillSetMember=0x7f0a0026;
         public static final int buttonCall=0x7f0a0187;
         public static final int buttonCancelComment=0x7f0a0113;
-        public static final int buttonCancelQueueFromCheckin=0x7f0a01a2;
+        public static final int buttonCancelQueueFromCheckin=0x7f0a01a3;
         public static final int buttonCheckDummbyBill=0x7f0a0079;
         public static final int buttonClear=0x7f0a00aa;
         public static final int buttonClearMember=0x7f0a0027;
         public static final int buttonClearSelectedQueue=0x7f0a017f;
-        public static final int buttonClearSelectedTable=0x7f0a01a1;
+        public static final int buttonClearSelectedTable=0x7f0a01a2;
         public static final int buttonClose=0x7f0a00a9;
-        public static final int buttonConfirm=0x7f0a01a3;
+        public static final int buttonConfirm=0x7f0a01a4;
         public static final int buttonConfirmCancel=0x7f0a00ab;
         public static final int buttonConfirmOk=0x7f0a00ac;
         public static final int buttonDeleteAll=0x7f0a0158;
@@ -327,8 +327,8 @@ public final class R {
         public static final int buttonPlus=0x7f0a0122;
         public static final int buttonPreOrder=0x7f0a0186;
         public static final int buttonQrCode=0x7f0a010c;
-        public static final int buttonQuestMinus=0x7f0a01ab;
-        public static final int buttonQuestPlus=0x7f0a01ad;
+        public static final int buttonQuestMinus=0x7f0a01ac;
+        public static final int buttonQuestPlus=0x7f0a01ae;
         public static final int buttonQueueCancel=0x7f0a017e;
         public static final int buttonQueueEdit=0x7f0a0176;
         public static final int buttonQueueGroup1=0x7f0a0171;
@@ -338,10 +338,10 @@ public final class R {
         public static final int buttonQueueOk=0x7f0a0180;
         public static final int buttonQueuePlus=0x7f0a016e;
         public static final int buttonQueueRefresh=0x7f0a0177;
-        public static final int buttonSaleModeCancel=0x7f0a01bb;
-        public static final int buttonSaleModeMinus=0x7f0a01b8;
-        public static final int buttonSaleModeOk=0x7f0a01bc;
-        public static final int buttonSaleModePlus=0x7f0a01ba;
+        public static final int buttonSaleModeCancel=0x7f0a01bc;
+        public static final int buttonSaleModeMinus=0x7f0a01b9;
+        public static final int buttonSaleModeOk=0x7f0a01bd;
+        public static final int buttonSaleModePlus=0x7f0a01bb;
         public static final int buttonSearchMember=0x7f0a0100;
         public static final int buttonSeat=0x7f0a0077;
         public static final int buttonSendByQueue=0x7f0a007a;
@@ -353,7 +353,7 @@ public final class R {
         public static final int buttonSortQueueByGroup=0x7f0a0174;
         public static final int buttonSortQueueByTime=0x7f0a0175;
         public static final int checkBox1=0x7f0a00fe;
-        public static final int checkbill=0x7f0a01d9;
+        public static final int checkbill=0x7f0a01da;
         public static final int contents_supplement_text_view=0x7f0a00b8;
         public static final int contents_text_view=0x7f0a00b7;
         public static final int decode=0x7f0a0000;
@@ -367,7 +367,7 @@ public final class R {
         public static final int editTextHoldRemark=0x7f0a00ef;
         public static final int editTextMemberCode=0x7f0a00ff;
         public static final int editTextProductCode=0x7f0a0048;
-        public static final int editTextRef=0x7f0a01b7;
+        public static final int editTextRef=0x7f0a01b8;
         public static final int ffSendCustLayout=0x7f0a00bd;
         public static final int format_text_view=0x7f0a00b2;
         public static final int gridView1=0x7f0a018d;
@@ -376,7 +376,7 @@ public final class R {
         public static final int help_contents=0x7f0a00e3;
         public static final int history_detail=0x7f0a00e7;
         public static final int history_title=0x7f0a00e6;
-        public static final int hold_order=0x7f0a01da;
+        public static final int hold_order=0x7f0a01db;
         public static final int horizontalScrollViewPluResult=0x7f0a0042;
         public static final int imageButton1=0x7f0a018e;
         public static final int imageButtonCloseOrderDialog=0x7f0a0140;
@@ -394,24 +394,24 @@ public final class R {
         public static final int imageViewMenuPic=0x7f0a00d3;
         public static final int imageViewMvMrgSign=0x7f0a013a;
         public static final int imageViewQueueHasPre=0x7f0a0182;
-        public static final int imageViewStatus=0x7f0a01ae;
-        public static final int imageViewTableDetail=0x7f0a01b1;
+        public static final int imageViewStatus=0x7f0a01af;
+        public static final int imageViewTableDetail=0x7f0a01b2;
         public static final int imageViewWaitPrint=0x7f0a00a4;
         public static final int image_view=0x7f0a00e2;
         public static final int imgLogo=0x7f0a0031;
-        public static final int item_close=0x7f0a01ca;
-        public static final int item_confirm=0x7f0a01c9;
-        public static final int item_other=0x7f0a01ce;
-        public static final int item_setting_control=0x7f0a01c8;
+        public static final int item_close=0x7f0a01cb;
+        public static final int item_confirm=0x7f0a01ca;
+        public static final int item_other=0x7f0a01cf;
+        public static final int item_setting_control=0x7f0a01c9;
         public static final int launch_product_query=0x7f0a0003;
         public static final int layout=0x7f0a0043;
         public static final int layoutCommentGroup=0x7f0a0115;
         public static final int layoutPluProgress=0x7f0a0088;
         public static final int layoutQueueCtrl=0x7f0a0185;
         public static final int layoutSwSaleMode=0x7f0a0078;
-        public static final int layoutTableList=0x7f0a0191;
-        public static final int layoutType2=0x7f0a01aa;
-        public static final int layoutType4=0x7f0a01a8;
+        public static final int layoutTableList=0x7f0a0192;
+        public static final int layoutType2=0x7f0a01ab;
+        public static final int layoutType4=0x7f0a01a9;
         public static final int linearLayout1=0x7f0a0032;
         public static final int linearLayout2=0x7f0a0035;
         public static final int linearLayout3=0x7f0a0038;
@@ -432,22 +432,22 @@ public final class R {
         public static final int listViewSorceTableName=0x7f0a012e;
         public static final int listViewTable=0x7f0a00f2;
         public static final int listViewTableName=0x7f0a0017;
-        public static final int loadTableProgress=0x7f0a01a0;
-        public static final int login_menu_exit=0x7f0a01cf;
+        public static final int loadTableProgress=0x7f0a01a1;
+        public static final int login_menu_exit=0x7f0a01d0;
         public static final int menuCommentListView=0x7f0a010f;
         public static final int menuItemMordetailImg=0x7f0a011e;
-        public static final int menu_clear_order=0x7f0a01dc;
-        public static final int menu_close=0x7f0a01cb;
-        public static final int menu_encode=0x7f0a01e1;
-        public static final int menu_help=0x7f0a01e0;
-        public static final int menu_history=0x7f0a01df;
-        public static final int menu_history_clear_text=0x7f0a01e3;
-        public static final int menu_history_send=0x7f0a01e2;
-        public static final int menu_logout=0x7f0a01dd;
-        public static final int menu_manage_queue=0x7f0a01d0;
-        public static final int menu_settings=0x7f0a01cc;
-        public static final int menu_share=0x7f0a01de;
-        public static final int menu_util=0x7f0a01d5;
+        public static final int menu_clear_order=0x7f0a01dd;
+        public static final int menu_close=0x7f0a01cc;
+        public static final int menu_encode=0x7f0a01e2;
+        public static final int menu_help=0x7f0a01e1;
+        public static final int menu_history=0x7f0a01e0;
+        public static final int menu_history_clear_text=0x7f0a01e4;
+        public static final int menu_history_send=0x7f0a01e3;
+        public static final int menu_logout=0x7f0a01de;
+        public static final int menu_manage_queue=0x7f0a01d1;
+        public static final int menu_settings=0x7f0a01cd;
+        public static final int menu_share=0x7f0a01df;
+        public static final int menu_util=0x7f0a01d6;
         public static final int menuitem_img=0x7f0a0128;
         public static final int menuitem_tvMenuName=0x7f0a012b;
         public static final int meta_text_view=0x7f0a00b6;
@@ -461,14 +461,14 @@ public final class R {
         public static final int moveMergeTableReasonListView=0x7f0a013e;
         public static final int moveMergeTableTxtReason=0x7f0a013d;
         public static final int moveMergeTvReason=0x7f0a013c;
-        public static final int optionLayout=0x7f0a01a9;
+        public static final int optionLayout=0x7f0a01aa;
         public static final int orderDetailListView=0x7f0a0020;
         public static final int orderSetListView=0x7f0a0041;
-        public static final int order_hold=0x7f0a01db;
+        public static final int order_hold=0x7f0a01dc;
         public static final int pCompGroupImg=0x7f0a015a;
         public static final int page_number_view=0x7f0a018b;
         public static final int preview_view=0x7f0a00ae;
-        public static final int progressBar1=0x7f0a01a5;
+        public static final int progressBar1=0x7f0a01a6;
         public static final int progressBarKds=0x7f0a00f7;
         public static final int progressBarListQueue=0x7f0a017d;
         public static final int progressBarLoadMenu=0x7f0a0082;
@@ -490,25 +490,25 @@ public final class R {
         public static final int return_scan_result=0x7f0a0006;
         public static final int saleModeModSwLayout=0x7f0a0117;
         public static final int scrollView1=0x7f0a0029;
-        public static final int select_table_cusno_btnminus=0x7f0a0194;
-        public static final int select_table_cusno_btnplus=0x7f0a0197;
-        public static final int select_table_cusno_capacity=0x7f0a0195;
-        public static final int select_table_cusno_tvname=0x7f0a0193;
-        public static final int select_table_tvtablename=0x7f0a0192;
-        public static final int select_table_txtcusno=0x7f0a0196;
-        public static final int selecttable_tvcapacity=0x7f0a01b0;
-        public static final int selecttable_tvname=0x7f0a01af;
-        public static final int share_app_button=0x7f0a01bd;
-        public static final int share_bookmark_button=0x7f0a01be;
-        public static final int share_clipboard_button=0x7f0a01c0;
-        public static final int share_contact_button=0x7f0a01bf;
-        public static final int share_text_view=0x7f0a01c1;
-        public static final int shooseMenuDialogMenuFromListView=0x7f0a01c3;
-        public static final int shooseMenuDialogMenuToListView=0x7f0a01c5;
-        public static final int shooseMenuDialogTvFromTableName=0x7f0a01c2;
-        public static final int shooseMenuDialogTvToTableName=0x7f0a01c4;
-        public static final int shooseMenuTvMenuName=0x7f0a01c6;
-        public static final int shooseMenuTvMenuQty=0x7f0a01c7;
+        public static final int select_table_cusno_btnminus=0x7f0a0195;
+        public static final int select_table_cusno_btnplus=0x7f0a0198;
+        public static final int select_table_cusno_capacity=0x7f0a0196;
+        public static final int select_table_cusno_tvname=0x7f0a0194;
+        public static final int select_table_tvtablename=0x7f0a0193;
+        public static final int select_table_txtcusno=0x7f0a0197;
+        public static final int selecttable_tvcapacity=0x7f0a01b1;
+        public static final int selecttable_tvname=0x7f0a01b0;
+        public static final int share_app_button=0x7f0a01be;
+        public static final int share_bookmark_button=0x7f0a01bf;
+        public static final int share_clipboard_button=0x7f0a01c1;
+        public static final int share_contact_button=0x7f0a01c0;
+        public static final int share_text_view=0x7f0a01c2;
+        public static final int shooseMenuDialogMenuFromListView=0x7f0a01c4;
+        public static final int shooseMenuDialogMenuToListView=0x7f0a01c6;
+        public static final int shooseMenuDialogTvFromTableName=0x7f0a01c3;
+        public static final int shooseMenuDialogTvToTableName=0x7f0a01c5;
+        public static final int shooseMenuTvMenuName=0x7f0a01c7;
+        public static final int shooseMenuTvMenuQty=0x7f0a01c8;
         public static final int shopper_button=0x7f0a00ba;
         public static final int snippet_view=0x7f0a018c;
         public static final int spinnerCancelMenuTableZone=0x7f0a000a;
@@ -520,12 +520,12 @@ public final class R {
         public static final int spinnerShowMenuField=0x7f0a00a1;
         public static final int spinnerSourceTableZone=0x7f0a012c;
         public static final int spinnerTableZone=0x7f0a0015;
-        public static final int spinner_table_zone=0x7f0a019a;
+        public static final int spinner_table_zone=0x7f0a019b;
         public static final int status_view=0x7f0a00bb;
         public static final int switchDisplayMenuImage=0x7f0a009f;
-        public static final int tableList=0x7f0a019f;
-        public static final int tableListLayout=0x7f0a01a6;
-        public static final int table_util=0x7f0a01d1;
+        public static final int tableList=0x7f0a01a0;
+        public static final int tableListLayout=0x7f0a01a7;
+        public static final int table_util=0x7f0a01d2;
         public static final int textView1=0x7f0a003e;
         public static final int textView2=0x7f0a0047;
         public static final int textView3=0x7f0a0051;
@@ -590,12 +590,13 @@ public final class R {
         public static final int textViewPluProgress=0x7f0a008a;
         public static final int textViewPrice=0x7f0a0124;
         public static final int textViewPriceValue=0x7f0a0022;
-        public static final int textViewQuestQty=0x7f0a01ac;
+        public static final int textViewQuestQty=0x7f0a01ad;
         public static final int textViewQueue=0x7f0a0181;
         public static final int textViewQueueListTitle=0x7f0a0028;
         public static final int textViewQueueName=0x7f0a00be;
-        public static final int textViewRequire=0x7f0a01a7;
-        public static final int textViewSaleModeCust=0x7f0a01b9;
+        public static final int textViewRequire=0x7f0a01a8;
+        public static final int textViewSaleModeCust=0x7f0a01ba;
+        public static final int textViewSeatName=0x7f0a018f;
         public static final int textViewSelTable=0x7f0a0014;
         public static final int textViewSelectedQueue=0x7f0a017c;
         public static final int textViewShopName=0x7f0a002b;
@@ -619,17 +620,17 @@ public final class R {
         public static final int tvChildOrderLinkType7No=0x7f0a00d2;
         public static final int tvChildOrderLinkType7Price=0x7f0a00d5;
         public static final int tvChildOrderLinkType7Qty=0x7f0a00d7;
-        public static final int tvCurrOrderNo=0x7f0a01b2;
+        public static final int tvCurrOrderNo=0x7f0a01b3;
         public static final int tvMenuCode=0x7f0a012a;
         public static final int tvMenuCommentName=0x7f0a0119;
         public static final int tvMenuCommentPrice=0x7f0a011a;
         public static final int tvMenuCommentQty=0x7f0a011c;
-        public static final int tvMenuName=0x7f0a01b3;
-        public static final int tvMenuPrice=0x7f0a01b5;
-        public static final int tvMenuQty=0x7f0a01b4;
+        public static final int tvMenuName=0x7f0a01b4;
+        public static final int tvMenuPrice=0x7f0a01b6;
+        public static final int tvMenuQty=0x7f0a01b5;
         public static final int tvMenuSetName=0x7f0a015b;
         public static final int tvMenuSetReqAmount=0x7f0a015c;
-        public static final int tvMenuTotalPrice=0x7f0a01b6;
+        public static final int tvMenuTotalPrice=0x7f0a01b7;
         public static final int tvMoveTableFrom=0x7f0a0139;
         public static final int tvMoveTableTo=0x7f0a013b;
         public static final int tvOrderListMenuComment=0x7f0a0155;
@@ -641,14 +642,14 @@ public final class R {
         public static final int tvOrderNo=0x7f0a014b;
         public static final int tvOrderQty=0x7f0a0072;
         public static final int tvQty=0x7f0a0121;
-        public static final int tvSelectOrderOrderName=0x7f0a018f;
-        public static final int tvSelectOrderQty=0x7f0a0190;
+        public static final int tvSelectOrderOrderName=0x7f0a0190;
+        public static final int tvSelectOrderQty=0x7f0a0191;
         public static final int tvSubmitTime=0x7f0a00f0;
         public static final int tvTableName=0x7f0a001a;
-        public static final int tvTbCusQty=0x7f0a019e;
+        public static final int tvTbCusQty=0x7f0a019f;
         public static final int tvTbFrom=0x7f0a012d;
-        public static final int tvTbName=0x7f0a019d;
-        public static final int tvTbStatus=0x7f0a019c;
+        public static final int tvTbName=0x7f0a019e;
+        public static final int tvTbStatus=0x7f0a019d;
         public static final int tvTbTo=0x7f0a0132;
         public static final int txtCancelMenuReason=0x7f0a0011;
         public static final int txtPassword=0x7f0a002f;
@@ -659,7 +660,7 @@ public final class R {
         public static final int txtWsName=0x7f0a009b;
         public static final int txt_label_comment=0x7f0a0111;
         public static final int txt_menu_comment=0x7f0a0112;
-        public static final int txt_sel_table_zone=0x7f0a0199;
+        public static final int txt_sel_table_zone=0x7f0a019a;
         public static final int type_text_view=0x7f0a00b3;
         public static final int viewfinder_view=0x7f0a00af;
     }
@@ -931,6 +932,7 @@ public final class R {
         public static final int cf_move_table_title=0x7f0b0183;
         public static final int cf_send_to_table=0x7f0b01b1;
         public static final int check_bill_menu_close=0x7f0b0102;
+        public static final int check_permission_progress=0x7f0b020e;
         public static final int checkin_queue_progress=0x7f0b01c9;
         public static final int checkin_queue_title=0x7f0b01c8;
         public static final int checkin_success=0x7f0b01ca;
@@ -1130,6 +1132,7 @@ public final class R {
         public static final int msg_unmount_usb=0x7f0b004b;
         public static final int network_error=0x7f0b017d;
         public static final int no_order_msg=0x7f0b017a;
+        public static final int not_access_pocket=0x7f0b020c;
         public static final int ok_shoose_holded_order=0x7f0b00ed;
         public static final int order_by_finish=0x7f0b01da;
         public static final int order_by_group=0x7f0b01d8;
@@ -1303,6 +1306,7 @@ public final class R {
         public static final int title_activity_search_member=0x7f0b0110;
         public static final int title_activity_splash=0x7f0b00c4;
         public static final int title_activity_take_order=0x7f0b0079;
+        public static final int title_info=0x7f0b020d;
         public static final int title_menu_comment=0x7f0b00ab;
         public static final int total_qty_label=0x7f0b011d;
         public static final int tv_childitem_tv_req_text=0x7f0b00be;
@@ -1335,19 +1339,33 @@ public final class R {
         public static final int wifi_type_label=0x7f0b0078;
     }
     public static final class style {
-        public static final int AppTheme=0x7f0c0000;
-        public static final int ButtonTextSmallNoMargin=0x7f0c0008;
-        public static final int CustomDialog=0x7f0c0006;
-        public static final int CustomDialogBottomRadius=0x7f0c0005;
-        public static final int CustomDialogTopRadius=0x7f0c0004;
-        public static final int DialogAnimation=0x7f0c0002;
-        public static final int DialogFromBottomAnimation=0x7f0c0001;
-        public static final int FullScreenDialog=0x7f0c0003;
-        public static final int button_text=0x7f0c000b;
-        public static final int button_text_medium=0x7f0c000a;
-        public static final int button_text_no_margin=0x7f0c000c;
-        public static final int text_generald=0x7f0c0007;
-        public static final int text_medium=0x7f0c0009;
+        /** 
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    
+
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        
+         */
+        public static final int AppBaseTheme=0x7f0c0000;
+        /**  Application theme. 
+ All customizations that are NOT specific to a particular API-level can go here. 
+         */
+        public static final int AppTheme=0x7f0c0001;
+        public static final int ButtonTextSmallNoMargin=0x7f0c0009;
+        public static final int CustomDialog=0x7f0c0007;
+        public static final int CustomDialogBottomRadius=0x7f0c0006;
+        public static final int CustomDialogTopRadius=0x7f0c0005;
+        public static final int DialogAnimation=0x7f0c0003;
+        public static final int DialogFromBottomAnimation=0x7f0c0002;
+        public static final int FullScreenDialog=0x7f0c0004;
+        public static final int button_text=0x7f0c000c;
+        public static final int button_text_medium=0x7f0c000b;
+        public static final int button_text_no_margin=0x7f0c000d;
+        public static final int text_generald=0x7f0c0008;
+        public static final int text_medium=0x7f0c000a;
     }
     public static final class xml {
         public static final int preferences=0x7f050000;

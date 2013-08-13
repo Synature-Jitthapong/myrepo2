@@ -443,5 +443,8 @@
     <string name="cf_close_table">Do you want to close this table?</string>
     <string name="close_table_success">Close this table successfully.</string>
     <string name="button_edit_customer_qty">Edit customer qty.</string>
+    <string name="not_access_pocket">You not have permission to access this device.</string>
+    <string name="title_info">Infomation</string>
+    <string name="check_permission_progress">Checking permission...</string>
 
 </resources>

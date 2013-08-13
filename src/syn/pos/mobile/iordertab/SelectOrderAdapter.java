@@ -3,6 +3,7 @@ package syn.pos.mobile.iordertab;
 import java.util.List;
 
 import syn.pos.data.dao.MenuUtil;
+import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.model.OrderSendData;
 
 import android.content.Context;
@@ -19,7 +20,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 	private List<OrderSendData.OrderDetail> orderLst;
 	private Context context;
 	private GlobalVar globalVar;
-	
+	private ShopProperty shopProperty;
 	private LayoutInflater inflater;
 	
 	public SelectOrderAdapter(Context c, GlobalVar gb, List<OrderSendData.OrderDetail> ordLst){
@@ -27,6 +28,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 		orderLst = ordLst;
 		globalVar = gb;
 		inflater = LayoutInflater.from(c);
+		shopProperty = new ShopProperty(c, null);
 	}
 	
 	@Override
@@ -53,6 +55,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.select_order_template, null);
 			
 			holder.checkBox1 = (CheckBox) convertView.findViewById(R.id.checkBox1);
+			holder.tvSeatName = (TextView) convertView.findViewById(R.id.textViewSeatName);
 			holder.tvOrderName = (TextView) convertView.findViewById(R.id.tvSelectOrderOrderName);
 			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.tvSelectOrderQty);
 			
@@ -68,6 +71,13 @@ public class SelectOrderAdapter extends BaseAdapter {
 		else
 			holder.checkBox1.setChecked(false);
 		
+		if(detail.getiSeatID() != 0){
+			syn.pos.data.model.ShopData.SeatNo seat = 
+					shopProperty.getSeatNo(detail.getiSeatID());
+			
+			holder.tvSeatName.setText(seat.getSeatName());
+		}
+		
 		holder.tvOrderName.setText(detail.getSzProductName());
 		holder.tvOrderQty.setText("x" + globalVar.qtyFormat.format(detail.getfItemQty()));
 		
@@ -76,6 +86,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 
 	protected static class SelectOrderViewHolder{
 		CheckBox checkBox1;
+		TextView tvSeatName;
 		TextView tvOrderName;
 		TextView tvOrderQty;
 	}

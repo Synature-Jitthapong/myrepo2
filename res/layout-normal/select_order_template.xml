@@ -15,6 +15,14 @@
         android:focusable="false" />
 
     <TextView
+        android:id="@+id/textViewSeatName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="2dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/tvSelectOrderOrderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
