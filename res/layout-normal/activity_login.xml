@@ -1,6 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_light"
@@ -16,27 +16,79 @@
         style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imgLogo"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:text="---"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/radius_background_dropshadow"
+        android:orientation="vertical"
+        android:padding="4dp" >
+
+        <EditText
+            android:id="@+id/txtUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg_white"
+            android:ems="10"
+            android:hint="@string/tv_username"
+            android:lines="1"
+            android:maxLines="1"
+            android:nextFocusForward="@id/txtPassword"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse" >
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line_split_input" />
+
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg_white"
+            android:ems="10"
+            android:hint="@string/tv_password"
+            android:inputType="textPassword"
+            android:lines="1"
+            android:nextFocusForward="@id/btnLogin"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/light_grey_button"
+        android:padding="0dp"
+        android:text="@string/btn_login"
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/imgLogo"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/synature_logo" />
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/company_logo" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/btnLogin"
         android:gravity="center" >
 
         <TextView
@@ -57,12 +109,31 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textViewDevice"
+            style="@style/text_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Device code:" />
+
+        <TextView
+            android:id="@+id/textViewDeviceCode"
+            style="@style/text_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textStyle="italic|bold" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout2"
         android:gravity="center" >
 
         <TextView
@@ -86,9 +157,6 @@
         android:id="@+id/linearLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout3"
         android:gravity="center" >
 
         <TextView
@@ -105,92 +173,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout1"
-        android:gravity="center" >
-
-        <TextView
-            android:id="@+id/textViewDevice"
-            style="@style/text_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device code:" />
-
-        <TextView
-            android:id="@+id/textViewDeviceCode"
-            style="@style/text_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textStyle="italic|bold" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linearLayout4"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:background="@drawable/light_grey_button"
-        android:padding="0dp"
-        android:text="@string/btn_login"
-        android:textSize="14sp" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textViewShopName"
-        android:background="@drawable/radius_background_dropshadow"
-        android:orientation="vertical"
-        android:padding="4dp" >
-
-        <EditText
-            android:id="@+id/txtUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/input_bg_white"
-            android:ems="10"
-            android:hint="@string/tv_username"
-            android:lines="1"
-            android:maxLines="1"
-            android:nextFocusForward="@id/txtPassword"
-            android:textAppearance="?android:attr/textAppearanceSmallInverse" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/line_split_input" />
-
-        <EditText
-            android:id="@+id/txtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/input_bg_white"
-            android:ems="10"
-            android:hint="@string/tv_password"
-            android:inputType="textPassword"
-            android:lines="1"
-            android:nextFocusForward="@id/btnLogin"
-            android:textAppearance="?android:attr/textAppearanceSmallInverse" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout5"
-        android:layout_centerHorizontal="true"
         android:gravity="center_vertical" >
 
         <TextView
@@ -205,7 +189,6 @@
             android:layout_height="wrap_content"
             android:text="-"
             android:textStyle="bold" />
-
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
