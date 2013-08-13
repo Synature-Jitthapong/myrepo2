@@ -443,8 +443,9 @@ public class IOrderUtility {
 				ShopProperty sp = new ShopProperty(context, null);
 				sp.insertShopProperty(sd);
 				sp.insertStaffData(sd);
-				sp.insertStaffPermissionData(sd);
+				//sp.insertStaffPermissionData(sd);
 				sp.insertLanguage(sd);
+				sp.insertSeatNo(sd);
 
 				ComputerProperty cp = new ComputerProperty(context);
 				cp.insertComputerProperty(sd);
@@ -911,7 +912,6 @@ public class IOrderUtility {
 		}
 	}
 	
-
 	public static void readLog(Context context, TextView tv) {
 		File sdcard = Environment.getExternalStorageDirectory();
 

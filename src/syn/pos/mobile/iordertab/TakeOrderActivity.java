@@ -19,6 +19,7 @@ import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.QueueInfo;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.TableInfo;
+import syn.pos.data.model.ShopData.StaffPermission;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
@@ -132,6 +133,9 @@ public class TakeOrderActivity extends Activity{
 					// check feature
 					checkProgramFeature();
 
+					// check permissiom
+					permissionChecking();
+					
 					// list menu
 					listAllMenuItem();
 
@@ -1044,6 +1048,13 @@ public class TakeOrderActivity extends Activity{
 					break;
 				case 5:
 					commentType = feature.getFeatureValue();
+					break;
+				case 6:
+					if(feature.getFeatureValue() == 1){
+						btnSeat.setVisibility(View.VISIBLE);
+					}else{
+						btnSeat.setVisibility(View.GONE);
+					}
 					break;
 				}
 			}
@@ -3587,6 +3598,7 @@ public class TakeOrderActivity extends Activity{
 					orderItem.setfProductPrice(mi.getPricePerUnit());
 					orderItem.setSzOrderComment(mi.getOrderComment());
 					orderItem.setiSaleMode(mi.getSaleMode());
+					orderItem.setiSeatID(mi.getSeatId());
 
 					// type7
 					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
@@ -3707,6 +3719,7 @@ public class TakeOrderActivity extends Activity{
 					orderItem.setfProductPrice(mi.getPricePerUnit());
 					orderItem.setSzOrderComment(mi.getOrderComment());
 					orderItem.setiSaleMode(mi.getSaleMode());
+					orderItem.setiSeatID(mi.getSeatId());
 
 					// type7
 					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
@@ -3834,6 +3847,7 @@ public class TakeOrderActivity extends Activity{
 					orderItem.setfProductPrice(mi.getPricePerUnit());
 					orderItem.setSzOrderComment(mi.getOrderComment());
 					orderItem.setiSaleMode(mi.getSaleMode());
+					orderItem.setiSeatID(mi.getSeatId());
 
 					// type7
 					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
@@ -3942,6 +3956,7 @@ public class TakeOrderActivity extends Activity{
 					orderItem.setfProductPrice(mi.getPricePerUnit());
 					orderItem.setSzOrderComment(mi.getOrderComment());
 					orderItem.setiSaleMode(mi.getSaleMode());
+					orderItem.setiSeatID(mi.getSeatId());
 
 					// type7
 					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
@@ -4064,6 +4079,7 @@ public class TakeOrderActivity extends Activity{
 					orderItem.setfProductPrice(mi.getPricePerUnit());
 					orderItem.setSzOrderComment(mi.getOrderComment());
 					orderItem.setiSaleMode(mi.getSaleMode());
+					orderItem.setiSeatID(mi.getSeatId());
 
 					// type7
 					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
@@ -5628,22 +5644,18 @@ public class TakeOrderActivity extends Activity{
 			
 		});
 		
-		ArrayList<HashMap<String, String>> seatLst = 
-				new ArrayList<HashMap<String, String>>();
-		String[] seats = new String[]{"ALL", "A", "B", "C", "D", "E", "F", "G", "H", 
-				"I", "J"};
-		for(int i = 0; i < seats.length; i ++){
-			HashMap<String, String> seat = new HashMap<String, String>();
-			seat.put("seatId", Integer.toString(i));
-			seat.put("seatName", seats[i]);
-			seatLst.add(seat);
-		}
+		
+		List<ShopData.SeatNo> seatLst = new ArrayList<ShopData.SeatNo>();
+		syn.pos.data.dao.ShopProperty shopProp = 
+				new syn.pos.data.dao.ShopProperty(TakeOrderActivity.this, null);
+		
+		seatLst = shopProp.getSeatNo();
 		
 		SeatAdapter seatAdapter = new SeatAdapter(seatLst, new OnSeatClickListener(){
 
 			@Override
-			public void onClick(String id, String name) {
-				seatId = Integer.parseInt(id);
+			public void onClick(int id, String name) {
+				seatId = id;
 				seatName = name;
 				btnSeat.setText("Seat:" + name);
 				listAllOrder();
@@ -5658,11 +5670,11 @@ public class TakeOrderActivity extends Activity{
 	
 	private class SeatAdapter extends BaseAdapter{
 
-		private ArrayList<HashMap<String, String>> seatLst;
+		private List<ShopData.SeatNo> seatLst;
 		private LayoutInflater inflater;
 		private OnSeatClickListener listener;
 		
-		public SeatAdapter(ArrayList<HashMap<String, String>> seatLst, OnSeatClickListener onClick){
+		public SeatAdapter(List<ShopData.SeatNo> seatLst, OnSeatClickListener onClick){
 			this.seatLst = seatLst;
 			inflater = LayoutInflater.from(TakeOrderActivity.this);
 			this.listener = onClick;
@@ -5674,7 +5686,7 @@ public class TakeOrderActivity extends Activity{
 		}
 
 		@Override
-		public HashMap<String, String> getItem(int arg0) {
+		public ShopData.SeatNo getItem(int arg0) {
 			return seatLst.get(arg0);
 		}
 
@@ -5696,14 +5708,14 @@ public class TakeOrderActivity extends Activity{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			
-			holder.btnSeat.setText(seatLst.get(position).get("seatName"));
+			holder.btnSeat.setText(seatLst.get(position).getSeatName());
 			holder.btnSeat.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View arg0) {
-					listener.onClick(seatLst.get(position).get("seatId"), seatLst.get(position).get("seatName"));
+					listener.onClick(seatLst.get(position).getSeatID(), seatLst.get(position).getSeatName());
 				}});
-			if(seatId == Integer.parseInt(seatLst.get(position).get("seatId")))
+			if(seatId == seatLst.get(position).getSeatID())
 				holder.btnSeat.setSelected(true);
 			else
 				holder.btnSeat.setSelected(false);
@@ -5716,6 +5728,25 @@ public class TakeOrderActivity extends Activity{
 	}
 		
 	public interface OnSeatClickListener{
-		public void onClick(String id, String name);
+		public void onClick(int id, String name);
+	}
+	
+	private void permissionChecking(){
+		new PermissionCheckingTask(TakeOrderActivity.this, globalVar, new PermissionCheckingTask.IPermissionChecking() {
+			
+			@Override
+			public void onSuccess(List<StaffPermission> permissionLst) {
+				syn.pos.data.dao.ShopProperty shopProperty = 
+						new syn.pos.data.dao.ShopProperty(TakeOrderActivity.this, null);
+				shopProperty.insertStaffPermissionData(permissionLst);
+				
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				
+			}
+		}).execute(globalVar.FULL_URL);
 	}
 }
