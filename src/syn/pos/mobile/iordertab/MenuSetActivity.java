@@ -172,7 +172,8 @@ public class MenuSetActivity extends Activity {
 										pSet.getPGroupID(),
 										pcgData.getSetGroupNo(),
 										pSet.getProductID(), flexiblePrice,
-										pSet.getChildProductAmount(), pSet.getChildProductAmount(), "");
+										pSet.getChildProductAmount(), 
+										pSet.getChildProductAmount(), "");
 							}
 
 							listAllSetOrder();
@@ -553,7 +554,8 @@ public class MenuSetActivity extends Activity {
 									.getFlexibleProductPrice() : 0;
 							posOrder.addOrderSet(TRANSACTION_ID, ORDER_ID,
 									pcs.getPGroupID(), pGroupNo,
-									pcs.getProductID(), flexiblePrice, 1, pcs.getChildProductAmount(), "");
+									pcs.getProductID(), flexiblePrice, 1, 
+									pcs.getChildProductAmount(), "");
 
 							balance = recalculateSetRequireAmount(
 									pcs.getPGroupID(), requireAmount);
@@ -568,7 +570,8 @@ public class MenuSetActivity extends Activity {
 								.getFlexibleProductPrice() : 0;
 						posOrder.addOrderSet(TRANSACTION_ID, ORDER_ID,
 								pcs.getPGroupID(), pGroupNo,
-								pcs.getProductID(), flexiblePrice, 1, pcs.getChildProductAmount(), "");
+								pcs.getProductID(), flexiblePrice, 1, 
+								pcs.getChildProductAmount(), "");
 
 						listAllSetOrder();
 					}
@@ -751,11 +754,17 @@ public class MenuSetActivity extends Activity {
 				public void onClick(View v) {
 					double qty = Double.parseDouble(holder.tvMenuQty.getText()
 							.toString());
+					PComponentSet pCompSet = new PComponentSet(MenuSetActivity.this);
+					double childAmount = pCompSet.getChildProductAmount(pcs.getPGroupID(), pcs.getProductID());
+					
 					POSOrdering posOrder = new POSOrdering(CONTEXT);
+					double weightAmount = posOrder.countOrderSet(TRANSACTION_ID, ORDER_ID, pcs.getPGroupID());
+					
+					weightAmount = weightAmount - childAmount;
 					--qty;
 					if (qty > 0) {
 						posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
-								pcs.getOrderSetID(), qty);
+								pcs.getOrderSetID(), qty, weightAmount);
 
 						if (pcg.getRequireAmount() > 0)
 							recalculateSetRequireAmount(pcg.getPGroupID(),
@@ -774,6 +783,9 @@ public class MenuSetActivity extends Activity {
 				public void onClick(View v) {
 					double qty = Double.parseDouble(holder.tvMenuQty.getText()
 							.toString());
+					double weightQty = pcs.getChildProductAmount();
+					
+					weightQty += weightQty;
 					++qty;
 
 					if (pcg.getRequireAmount() > 0) {
@@ -782,7 +794,7 @@ public class MenuSetActivity extends Activity {
 						if (balance > 0 && balance >= pcs.getChildProductAmount()) {
 							POSOrdering posOrder = new POSOrdering(CONTEXT);
 							posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
-									pcs.getOrderSetID(), qty);
+									pcs.getOrderSetID(), qty, weightQty);
 
 							holder.tvMenuQty.setText(globalVar.qtyFormat
 									.format(qty));
@@ -792,7 +804,7 @@ public class MenuSetActivity extends Activity {
 					} else {
 						POSOrdering posOrder = new POSOrdering(CONTEXT);
 						posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
-								pcs.getOrderSetID(), qty);
+								pcs.getOrderSetID(), qty, qty);
 						holder.tvMenuQty.setText(globalVar.qtyFormat
 								.format(qty));
 					}
