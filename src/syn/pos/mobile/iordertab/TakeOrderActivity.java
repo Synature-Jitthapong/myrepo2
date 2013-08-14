@@ -9,6 +9,7 @@ import syn.pos.data.dao.MenuComment;
 import syn.pos.data.dao.POSOrdering;
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.dao.SaleMode;
+import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.MenuDataItem;
 import syn.pos.data.model.MenuGroups;
@@ -60,6 +61,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.RadioGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
@@ -111,6 +113,7 @@ public class TakeOrderActivity extends Activity{
 	private String SALE_MODE_TEXT = "";
 	private int SALE_MODE_POS_PREFIX = 0;
 	private boolean isEnableQueue = false;
+	private boolean isEnableSeat = false;
 	private String searchColumn = "";
 	private boolean addEveryOneItem = false;
 	private int commentType = 0; // global
@@ -1056,10 +1059,14 @@ public class TakeOrderActivity extends Activity{
 					break;
 				case 6:
 					if(feature.getFeatureValue() == 1){
-						btnSeat.setVisibility(View.VISIBLE);
-						tvTotalSeat.setVisibility(View.VISIBLE);
-						clearSeat();
+						if(globalVar.SHOP_DATA.getShopType() == 1){
+							btnSeat.setVisibility(View.VISIBLE);
+							tvTotalSeat.setVisibility(View.VISIBLE);
+							isEnableSeat = true;
+							clearSeat();
+						}
 					}else{
+						isEnableSeat = false;
 						btnSeat.setVisibility(View.GONE);
 						tvTotalSeat.setVisibility(View.GONE);
 					}
@@ -2465,6 +2472,7 @@ public class TakeOrderActivity extends Activity{
 			holder.btnComment.setOnClickListener(new View.OnClickListener() {
 
 				int modSaleMode = mi.getSaleMode();
+				int modSeatId = mi.getSeatId();
 				
 				private void loadCommentGroup(MenuComment mc, Spinner spMcg){
 					//menu comment group 
@@ -2529,6 +2537,63 @@ public class TakeOrderActivity extends Activity{
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					Button btnCancel = (Button) v.findViewById(R.id.buttonCancelComment);
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
+					final Button btnModSeat = (Button) v.findViewById(R.id.buttonModSeat);
+					
+					if(isEnableSeat){
+						final ShopProperty shopProperty = new ShopProperty(TakeOrderActivity.this, null);
+						syn.pos.data.model.ShopData.SeatNo seat = shopProperty.getSeatNo(modSeatId);
+						btnModSeat.setText(seat.getSeatID() == 0 ? "..." : seat.getSeatName());
+						btnModSeat.setOnClickListener(new OnClickListener(){
+	
+							@Override
+							public void onClick(View v) {
+								LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+								v = inflater.inflate(R.layout.seat_template, null);
+								final GridView gvSeat = (GridView) v.findViewById(R.id.gridView1);
+								final ImageButton btnClose = (ImageButton) v.findViewById(R.id.imageButton1);
+										
+								final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
+								d.setContentView(v);
+								d.getWindow().setGravity(Gravity.TOP);
+								d.show();
+								
+								btnClose.setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										d.dismiss();
+									}
+									
+								});
+								
+								
+								List<ShopData.SeatNo> seatLst = new ArrayList<ShopData.SeatNo>();
+								seatLst = shopProperty.getSeatNo();
+								
+								ShopData.SeatNo seat = new ShopData.SeatNo();
+								seat.setSeatID(0);
+								seat.setSeatName("All");
+								seatLst.add(0, seat);
+								
+								SeatModAdapter seatAdapter = new SeatModAdapter(seatLst, modSeatId, new OnSeatClickListener(){
+
+									@Override
+									public void onClick(int id, String name) {
+										POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+										posOrder.updateSeatOrderDetail(GlobalVar.TRANSACTION_ID, 
+												mi.getOrderDetailId(), id, name);
+										modSeatId = id;
+										btnModSeat.setText(name);
+										d.dismiss();
+									}
+								});
+								gvSeat.setAdapter(seatAdapter);
+							}
+						});
+					}else{
+						TableRow seatLayout = (TableRow) v.findViewById(R.id.tableRowSeat);
+						seatLayout.setVisibility(View.GONE);
+					}
 					
 					final ListView menuCommentListView = (ListView) v.findViewById(R.id.menuCommentListView);
 					final ListView selectedMenuCommentListView = (ListView) v.findViewById(R.id.listViewCommentSelected);
@@ -2785,18 +2850,17 @@ public class TakeOrderActivity extends Activity{
 									mi.getOrderDetailId(), modSaleMode,
 									txtComment.getText().toString());
 
-							MenuDataItem menuDataItem = posOrdering.listOrder(
-									GlobalVar.TRANSACTION_ID,
-									GlobalVar.COMPUTER_ID,
-									mi.getOrderDetailId(), seatId);
-							ORDER_LIST.set(groupPosition, menuDataItem);
-							ORDER_LIST_ADAPTER.notifyDataSetChanged();
-
-							// listAllOrder();
-							// orderListView.setItemChecked(groupPosition,
-							// true);
+//							MenuDataItem menuDataItem = posOrdering.listOrder(
+//									GlobalVar.TRANSACTION_ID,
+//									GlobalVar.COMPUTER_ID,
+//									mi.getOrderDetailId(), modSeatId);
+//							ORDER_LIST.set(groupPosition, menuDataItem);
+//							ORDER_LIST_ADAPTER.notifyDataSetChanged();
+							
+							listAllOrder();
 							orderListView.setSelection(groupPosition);
-							summaryTotalSalePrice();
+
+							//summaryTotalSalePrice();
 
 							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 							imm.hideSoftInputFromWindow(
@@ -5661,7 +5725,7 @@ public class TakeOrderActivity extends Activity{
 		btnSeat.setText(seatName);
 		tvTotalSeat.setText("");
 	}
-	
+
 	private void popupSeat(){
 		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 		final View v = inflater.inflate(R.layout.seat_template, null);
@@ -5701,7 +5765,9 @@ public class TakeOrderActivity extends Activity{
 				seatName = name;
 				btnSeat.setText("Seat:" + name);
 				
-				if(id != 0)
+				if(id == 0)
+					tvTotalSeat.setText("");
+				else
 					tvTotalSeat.setText(seatName + ":");
 				
 				listAllOrder();
@@ -5714,16 +5780,25 @@ public class TakeOrderActivity extends Activity{
 
 	}
 	
+	private class SeatModAdapter extends SeatAdapter{
+		public SeatModAdapter(List<SeatNo> seatLst, int currSeatId, OnSeatClickListener onClick) {
+			super(seatLst, onClick);
+			selectedSeatId = currSeatId;
+		}
+	}
+	
 	private class SeatAdapter extends BaseAdapter{
 
 		private List<ShopData.SeatNo> seatLst;
 		private LayoutInflater inflater;
 		private OnSeatClickListener listener;
+		protected int selectedSeatId;
 		
 		public SeatAdapter(List<ShopData.SeatNo> seatLst, OnSeatClickListener onClick){
 			this.seatLst = seatLst;
 			inflater = LayoutInflater.from(TakeOrderActivity.this);
 			this.listener = onClick;
+			selectedSeatId = seatId;
 		}
 		
 		@Override
@@ -5741,7 +5816,6 @@ public class TakeOrderActivity extends Activity{
 			return position;
 		}
 
-		@SuppressLint("NewApi")
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			
@@ -5762,7 +5836,7 @@ public class TakeOrderActivity extends Activity{
 				public void onClick(View arg0) {
 					listener.onClick(seatLst.get(position).getSeatID(), seatLst.get(position).getSeatName());
 				}});
-			if(seatId == seatLst.get(position).getSeatID())
+			if(selectedSeatId == seatLst.get(position).getSeatID())
 				holder.btnSeat.setSelected(true);
 			else
 				holder.btnSeat.setSelected(false);
