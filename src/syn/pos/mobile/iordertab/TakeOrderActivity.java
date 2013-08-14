@@ -2533,13 +2533,15 @@ public class TakeOrderActivity extends Activity{
 					View v = factory.inflate(R.layout.menu_comment_layout2, null);
 
 					TextView tvTitle = (TextView) v.findViewById(R.id.textViewMenuCommentTitle);
-					//LinearLayout layoutCommentGroup = (LinearLayout) v.findViewById(R.id.layoutCommentGroup);
+					TableRow seatLayout = (TableRow) v.findViewById(R.id.tableRowSeat);
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					Button btnCancel = (Button) v.findViewById(R.id.buttonCancelComment);
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
 					final Button btnModSeat = (Button) v.findViewById(R.id.buttonModSeat);
 					
 					if(isEnableSeat){
+						seatLayout.setVisibility(View.VISIBLE);
+						
 						final ShopProperty shopProperty = new ShopProperty(TakeOrderActivity.this, null);
 						syn.pos.data.model.ShopData.SeatNo seat = shopProperty.getSeatNo(modSeatId);
 						btnModSeat.setText(seat.getSeatID() == 0 ? "..." : seat.getSeatName());
@@ -2591,7 +2593,6 @@ public class TakeOrderActivity extends Activity{
 							}
 						});
 					}else{
-						TableRow seatLayout = (TableRow) v.findViewById(R.id.tableRowSeat);
 						seatLayout.setVisibility(View.GONE);
 					}
 					
