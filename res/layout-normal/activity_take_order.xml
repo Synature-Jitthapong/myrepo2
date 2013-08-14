@@ -139,10 +139,17 @@
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/textViewTotalSeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/tvOrderQty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="12dp"
+                        android:layout_marginRight="20dp"
                         android:gravity="center_vertical"
                         android:text="0"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -155,7 +162,7 @@
                         android:gravity="right|center_vertical"
                         android:text="0.00"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold|italic" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 

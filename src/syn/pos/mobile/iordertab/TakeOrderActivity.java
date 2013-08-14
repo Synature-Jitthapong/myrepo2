@@ -71,6 +71,7 @@ public class TakeOrderActivity extends Activity{
 	private ExpandableListView orderListView;
 	private TextView tvTotalPrice;
 	private TextView tvTotalQty;
+	private TextView tvTotalSeat;
 	private Button btnSendByQueue;
 	private Button btnSendOrder;
 	private Button btnCheckDummyBill;
@@ -174,6 +175,7 @@ public class TakeOrderActivity extends Activity{
 		textViewNotification2 = (TextView) findViewById(R.id.textViewNotification2);
 		tvTotalPrice = (TextView) findViewById(R.id.txtTotalSalePrice);
 		tvTotalQty = (TextView) findViewById(R.id.tvOrderQty);
+		tvTotalSeat = (TextView) findViewById(R.id.textViewTotalSeat);
 		btnSetTable = (Button) findViewById(R.id.buttonSetTable);
 		btnSetQueue = (Button) findViewById(R.id.buttonSetQueue);
 		btnSendOrder = (Button) findViewById(R.id.btnSendOrder);
@@ -1055,9 +1057,11 @@ public class TakeOrderActivity extends Activity{
 				case 6:
 					if(feature.getFeatureValue() == 1){
 						btnSeat.setVisibility(View.VISIBLE);
+						tvTotalSeat.setVisibility(View.VISIBLE);
 						clearSeat();
 					}else{
 						btnSeat.setVisibility(View.GONE);
+						tvTotalSeat.setVisibility(View.GONE);
 					}
 					break;
 				}
@@ -5655,6 +5659,7 @@ public class TakeOrderActivity extends Activity{
 		seatId = 0;
 		seatName = "Seat:All";
 		btnSeat.setText(seatName);
+		tvTotalSeat.setText("");
 	}
 	
 	private void popupSeat(){
@@ -5695,6 +5700,10 @@ public class TakeOrderActivity extends Activity{
 				seatId = id;
 				seatName = name;
 				btnSeat.setText("Seat:" + name);
+				
+				if(id != 0)
+					tvTotalSeat.setText(seatName + ":");
+				
 				listAllOrder();
 				d.dismiss();
 			}
@@ -5757,9 +5766,6 @@ public class TakeOrderActivity extends Activity{
 				holder.btnSeat.setSelected(true);
 			else
 				holder.btnSeat.setSelected(false);
-			
-			if(seatLst.get(position).getSeatID() == 0)
-				holder.btnSeat.callOnClick();
 			
 			return convertView;
 		}
