@@ -1055,6 +1055,7 @@ public class TakeOrderActivity extends Activity{
 				case 6:
 					if(feature.getFeatureValue() == 1){
 						btnSeat.setVisibility(View.VISIBLE);
+						clearSeat();
 					}else{
 						btnSeat.setVisibility(View.GONE);
 					}
@@ -4225,6 +4226,7 @@ public class TakeOrderActivity extends Activity{
 			clearTransaction();
 			clearSetTable();
 			clearSetQueue();
+			clearSeat();
 
 			iOrderInit();	
 		}
@@ -5649,6 +5651,12 @@ public class TakeOrderActivity extends Activity{
 		}
 	}
 	
+	private void clearSeat(){
+		seatId = 0;
+		seatName = "Seat:All";
+		btnSeat.setText(seatName);
+	}
+	
 	private void popupSeat(){
 		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 		final View v = inflater.inflate(R.layout.seat_template, null);
@@ -5724,6 +5732,7 @@ public class TakeOrderActivity extends Activity{
 			return position;
 		}
 
+		@SuppressLint("NewApi")
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			
@@ -5748,6 +5757,10 @@ public class TakeOrderActivity extends Activity{
 				holder.btnSeat.setSelected(true);
 			else
 				holder.btnSeat.setSelected(false);
+			
+			if(seatLst.get(position).getSeatID() == 0)
+				holder.btnSeat.callOnClick();
+			
 			return convertView;
 		}
 		
