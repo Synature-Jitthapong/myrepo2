@@ -242,15 +242,6 @@ public class TakeOrderActivity extends Activity{
 		} else {
 			btnCheckDummyBill.setVisibility(View.GONE);
 		}
-
-		// enable / disable by feature
-		if (isEnableQueue) {
-			btnSetQueue.setVisibility(View.VISIBLE);
-			btnSendByQueue.setVisibility(View.VISIBLE);
-		} else {
-			btnSetQueue.setVisibility(View.GONE);
-			btnSendByQueue.setVisibility(View.GONE);
-		}
 		
 		btnSetQueue.setOnClickListener(new OnClickListener() {
 
@@ -1002,8 +993,12 @@ public class TakeOrderActivity extends Activity{
 				case 1:
 					if (feature.getFeatureValue() == 1) {
 						isEnableQueue = true;
+						btnSetQueue.setVisibility(View.VISIBLE);
+						btnSendByQueue.setVisibility(View.VISIBLE);
 					} else {
 						isEnableQueue = false;
+						btnSetQueue.setVisibility(View.GONE);
+						btnSendByQueue.setVisibility(View.GONE);
 					}
 
 					break;
