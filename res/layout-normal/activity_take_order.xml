@@ -222,7 +222,7 @@
                         android:layout_margin="1dp"
                         android:background="@drawable/light_grey_button"
                         android:minHeight="0dp"
-                        android:minWidth="0dp"
+                        android:minWidth="32dp"
                         android:padding="4dp"
                         android:text="Seat"
                         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -263,7 +263,7 @@
                         android:layout_marginRight="1dp"
                         android:background="@drawable/light_lemon_button"
                         android:minHeight="0dp"
-                        android:minWidth="0dp"
+                        android:minWidth="32dp"
                         android:padding="4dp"
                         android:text="@string/button_select_queue"
                         android:textSize="12sp" />
@@ -274,7 +274,7 @@
                         android:layout_height="28dp"
                         android:background="@drawable/light_green_button"
                         android:minHeight="0dp"
-                        android:minWidth="0dp"
+                        android:minWidth="32dp"
                         android:padding="4dp"
                         android:text="@string/btn_sendorder"
                         android:textSize="12sp" />

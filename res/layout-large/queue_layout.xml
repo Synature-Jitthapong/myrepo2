@@ -161,14 +161,14 @@
                 android:id="@+id/buttonSortQueueByGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/light_grey_button"
+                android:background="@drawable/light_grey_button_left"
                 android:text="@string/order_by_group" />
 
             <Button
                 android:id="@+id/buttonSortQueueByTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/light_grey_button"
+                android:background="@drawable/light_grey_button_right"
                 android:text="@string/order_by_time" />
 
         </LinearLayout>

@@ -11,13 +11,13 @@
     <string name="btn_order_plus">+</string>
     <string name="btn_order_del">X</string>
     <string name="btn_order_comment">Comment</string>
-    <string name="btn_sendorder">ส่งรายการ</string>
+    <string name="btn_sendorder">ส่ง</string>
     <string name="btn_holdorder">Hold รายการ</string>
     <string name="btn_display_holdorder">รายการที่ hold</string>
     <string name="btn_plu">PLU</string>
 
     <!-- send order status -->
-    <string name="send_order_dialog_title">ส่งรายการ</string>
+    <string name="send_order_dialog_title">ส่ง</string>
     <string name="send_order_dialog_success_msg">ส่งรายการสำเร็จ</string>
     <string name="send_order_dialog_fail">ส่งรายการล้มเหลว</string>
     <string name="send_order_dialog_btn_close">ปิด</string>
@@ -37,7 +37,7 @@
     <string name="action_move_menu_cancel">ปิด</string>
 
     <!-- string select table dialog -->
-    <string name="dialog_title_sendorder">ส่งรายการ</string>
+    <string name="dialog_title_sendorder">ส่ง</string>
     <string name="dialog_sendorder_btnok">ตกลง</string>
     <string name="dialog_sendorder_btncancel">ยกเลิก</string>
     <string name="tv_sendorder_tablezone">โซน:</string>
@@ -278,7 +278,7 @@
     <string name="device_code_label">Device code:</string>
     <string name="computer_label">Device name:</string>
     <string name="text_version">iOrder Version:</string>
-    <string name="button_select_queue">Pre order</string>
+    <string name="button_select_queue">Pre</string>
     <string name="button_queue_ok">ตกลง</string>
     <string name="button_queue_cancel">ยกเลิก</string>
     <string name="progress_searching_member">กำลังค้นหาข้อมูลสมาชิก รอสักครู่...</string>
@@ -315,7 +315,7 @@
     <string name="text_send_fastfood_ref">Reference:</string>
     <string name="cf_fastfood_title">Please input reference.</string>
     <string name="fast_food_cust_qty">จำนวนลูกค้า:</string>
-    <string name="fast_food_send_order">ส่งรายการ</string>
+    <string name="fast_food_send_order">ส่ง</string>
     <string name="member_code">รหัส:</string>
     <string name="button_search_member">ค้นหา</string>
     <string name="text_member_code">รหัสสมาชิก:</string>
@@ -359,7 +359,7 @@
     <string name="cf_clear_member">ต้องการ clear ข้อมูลสมาชิกที่เลือกไว้?</string>
     <string name="clear_member_title">Clear สมาชิก</string>
     <string name="clear_member_succ">Clear สมาชิกสำเร็จ</string>
-    <string name="button_preorder">Pre order</string>
+    <string name="button_preorder">Pre</string>
     <string name="text_total_queue">Total:</string>
     <string name="text_comp_setting_not_valid">ตั้งค่าคอมพิวเตอร์ไม่ถูกต้อง </string>
     <string name="msg_already_set_queue">รายการนี้เป็นของคิว</string>

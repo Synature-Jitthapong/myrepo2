@@ -11,13 +11,13 @@
     <string name="btn_order_plus">+</string>
     <string name="btn_order_del">X</string>
     <string name="btn_order_comment">Comment</string>
-    <string name="btn_sendorder">Send order</string>
+    <string name="btn_sendorder">Send</string>
     <string name="btn_holdorder">Hold order</string>
     <string name="btn_display_holdorder">Hold order list</string>
     <string name="btn_plu">PLU</string>
 
     <!-- send order status -->
-    <string name="send_order_dialog_title">Send order</string>
+    <string name="send_order_dialog_title">Send</string>
     <string name="send_order_dialog_success_msg">Send order successfully</string>
     <string name="send_order_dialog_fail">Send order fail</string>
     <string name="send_order_dialog_btn_close">Close</string>
@@ -37,7 +37,7 @@
     <string name="action_move_menu_cancel">Close</string>
 
     <!-- string select table dialog -->
-    <string name="dialog_title_sendorder">Send order</string>
+    <string name="dialog_title_sendorder">Send</string>
     <string name="dialog_sendorder_btnok">Ok</string>
     <string name="dialog_sendorder_btncancel">Cancel</string>
     <string name="tv_sendorder_tablezone">Table zone:</string>
@@ -277,7 +277,7 @@
     <string name="device_code_label">Device code:</string>
     <string name="computer_label">Device name:</string>
     <string name="text_version">iOrder Version:</string>
-    <string name="button_select_queue">Pre order</string>
+    <string name="button_select_queue">Pre</string>
     <string name="button_queue_ok">Ok</string>
     <string name="button_queue_cancel">Cancel</string>
     <string name="progress_searching_member">Searching member info please wait...</string>
@@ -314,7 +314,7 @@
     <string name="text_send_fastfood_ref">Reference:</string>
     <string name="cf_fastfood_title">Please enter reference.</string>
     <string name="fast_food_cust_qty">Customer qty:</string>
-    <string name="fast_food_send_order">Send order</string>
+    <string name="fast_food_send_order">Send</string>
     <string name="member_code">Code:</string>
     <string name="button_search_member">Search</string>
     <string name="text_member_code">Member Code:</string>
@@ -358,7 +358,7 @@
     <string name="cf_clear_member">Are you sure you want to clear member?</string>
     <string name="clear_member_title">Clear Member</string>
     <string name="clear_member_succ">Clear member successfully.</string>
-    <string name="button_preorder">Pre order</string>
+    <string name="button_preorder">Pre</string>
     <string name="text_total_queue">Total:</string>
     <string name="text_comp_setting_not_valid">Computer setting not valid !</string>
     <string name="msg_already_set_queue">This order already set to queue</string>

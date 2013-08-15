@@ -10,7 +10,7 @@
 	    android:color="@color/grey_stroke"/>
 	
 	<corners
-	    android:radius="6dp"></corners>
+	    android:radius="3dp"></corners>
 	
 	<padding 
 	    android:left="8dp"

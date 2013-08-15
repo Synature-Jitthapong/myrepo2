@@ -268,15 +268,6 @@ public class TakeOrderActivity extends Activity{
 			btnSeat.setVisibility(View.VISIBLE);
 			btnCheckDummyBill.setVisibility(View.GONE);
 		}
-
-		// enable / disable by feature
-		if (isEnableQueue) {
-			btnSetQueue.setVisibility(View.VISIBLE);
-			btnSendByQueue.setVisibility(View.VISIBLE);
-		} else {
-			btnSetQueue.setVisibility(View.GONE);
-			btnSendByQueue.setVisibility(View.GONE);
-		}
 		
 		btnSetQueue.setOnClickListener(new OnClickListener() {
 
@@ -1025,8 +1016,12 @@ public class TakeOrderActivity extends Activity{
 				case 1:
 					if (feature.getFeatureValue() == 1) {
 						isEnableQueue = true;
+						btnSetQueue.setVisibility(View.VISIBLE);
+						btnSendByQueue.setVisibility(View.VISIBLE);
 					} else {
 						isEnableQueue = false;
+						btnSetQueue.setVisibility(View.GONE);
+						btnSendByQueue.setVisibility(View.GONE);
 					}
 
 					break;
@@ -1432,8 +1427,7 @@ public class TakeOrderActivity extends Activity{
 						pos.prepareTransaction(GlobalVar.TRANSACTION_ID,
 								GlobalVar.COMPUTER_ID, GlobalVar.STAFF_ID, "");
 
-						seatId = 0;
-						btnSeat.setText("Seat");
+						clearSeat();
 						listAllOrder();
 						countHoldOrder();
 					}
@@ -5722,7 +5716,7 @@ public class TakeOrderActivity extends Activity{
 	
 	private void clearSeat(){
 		seatId = 0;
-		seatName = "Seat:All";
+		seatName = "All";
 		btnSeat.setText(seatName);
 		tvTotalSeat.setText("");
 	}
@@ -5764,7 +5758,7 @@ public class TakeOrderActivity extends Activity{
 			public void onClick(int id, String name) {
 				seatId = id;
 				seatName = name;
-				btnSeat.setText("Seat:" + name);
+				btnSeat.setText(name);
 				
 				if(id == 0)
 					tvTotalSeat.setText("");
