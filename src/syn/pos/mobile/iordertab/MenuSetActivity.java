@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.GridView;
@@ -760,8 +761,12 @@ public class MenuSetActivity extends Activity {
 					POSOrdering posOrder = new POSOrdering(CONTEXT);
 					double weightAmount = posOrder.countOrderSet(TRANSACTION_ID, ORDER_ID, pcs.getPGroupID());
 					
-					weightAmount = weightAmount - childAmount;
 					--qty;
+					if(childAmount > 1)
+						weightAmount = weightAmount - childAmount;
+					else
+						weightAmount = qty;
+					
 					if (qty > 0) {
 						posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
 								pcs.getOrderSetID(), qty, weightAmount);
@@ -783,18 +788,26 @@ public class MenuSetActivity extends Activity {
 				public void onClick(View v) {
 					double qty = Double.parseDouble(holder.tvMenuQty.getText()
 							.toString());
-					double weightQty = pcs.getChildProductAmount();
+					PComponentSet pCompSet = new PComponentSet(MenuSetActivity.this);
+					double childAmount = pCompSet.getChildProductAmount(pcs.getPGroupID(), 
+							pcs.getProductID());
 					
-					weightQty += weightQty;
+					POSOrdering posOrder = new POSOrdering(CONTEXT);
+					double weightAmount = posOrder.countOrderSet(TRANSACTION_ID, 
+							ORDER_ID, pcs.getPGroupID());
+					
 					++qty;
+					if(childAmount > 1)
+						weightAmount = weightAmount + childAmount;
+					else
+						weightAmount = qty;
 
 					if (pcg.getRequireAmount() > 0) {
 						double balance = recalculateSetRequireAmount(
 								pcg.getPGroupID(), pcg.getRequireAmount());
 						if (balance > 0 && balance >= pcs.getChildProductAmount()) {
-							POSOrdering posOrder = new POSOrdering(CONTEXT);
 							posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
-									pcs.getOrderSetID(), qty, weightQty);
+									pcs.getOrderSetID(), qty, weightAmount);
 
 							holder.tvMenuQty.setText(globalVar.qtyFormat
 									.format(qty));
@@ -802,7 +815,6 @@ public class MenuSetActivity extends Activity {
 									pcg.getPGroupID(), pcg.getRequireAmount());
 						} 
 					} else {
-						POSOrdering posOrder = new POSOrdering(CONTEXT);
 						posOrder.updateOrderSet(TRANSACTION_ID, ORDER_ID,
 								pcs.getOrderSetID(), qty, qty);
 						holder.tvMenuQty.setText(globalVar.qtyFormat
@@ -921,7 +933,8 @@ public class MenuSetActivity extends Activity {
 					View v = factory.inflate(R.layout.menu_comment_layout2, null);
 					
 					TextView tvTitle = (TextView) v.findViewById(R.id.textViewMenuCommentTitle);
-					//LinearLayout layoutCommentGroup = (LinearLayout) v.findViewById(R.id.layoutCommentGroup);
+					TableRow tbRowSaleMode = (TableRow) v.findViewById(R.id.tableRowSaleMode);
+					tbRowSaleMode.setVisibility(View.GONE);
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					final ListView menuCommentListView = (ListView) v.findViewById(R.id.menuCommentListView);
 					final ListView selectedMenuCommentListView = (ListView) v.findViewById(R.id.listViewCommentSelected);

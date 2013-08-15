@@ -30,29 +30,38 @@
             android:id="@+id/tableRow2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical" >
 
-            <TextView
-                android:id="@+id/textView3"
+            <TableRow
+                android:id="@+id/tableRowSaleMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:text="Sale Mode"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:gravity="center_vertical" >
 
-            <LinearLayout
-                android:id="@+id/saleModeModSwLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:text="Sale Mode"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <LinearLayout
+                    android:id="@+id/saleModeModSwLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </TableRow>
 
             <TableRow
                 android:id="@+id/tableRowSeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
                 android:visibility="gone" >
 
                 <TextView
