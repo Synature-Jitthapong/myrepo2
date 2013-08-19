@@ -62,26 +62,18 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		String result = "";
 		String url = uri[0];
 
-		//TextView tvError = new TextView(context);
-		//tvError.setText(R.string.network_error);
-		//Log.d("Param to send", soapRequest.toString());
-		
-		//syn.pos.mobile.util.Log.appendLog(context, "SEND JSON \n" + soapRequest.toString());
-		
 		SoapSerializationEnvelope envelope = 
 				new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		envelope.dotNet = true;
 		envelope.setOutputSoapObject(soapRequest);
 
-		System.setProperty("http.keepAlive", "false");
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
-		String soapAction = nameSpace + webMethod;
-
-		try {
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
+		
+		try {		
+			String soapAction = nameSpace + webMethod;
 			androidHttpTransport.call(soapAction, envelope);
 			try {
-				Log.i("result", envelope.getResponse().toString());
 				result = envelope.getResponse().toString();
 			} catch (SoapFault e) {
 				result = e.getMessage();
