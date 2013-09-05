@@ -446,5 +446,6 @@
     <string name="not_access_pocket">You not have permission to access this device.</string>
     <string name="title_info">Infomation</string>
     <string name="check_permission_progress">Checking permission...</string>
+    <string name="mobile">Mobile</string>
 
 </resources>

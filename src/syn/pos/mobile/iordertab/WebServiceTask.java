@@ -1,6 +1,8 @@
 package syn.pos.mobile.iordertab;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;

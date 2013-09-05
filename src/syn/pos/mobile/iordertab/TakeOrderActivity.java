@@ -704,6 +704,7 @@ public class TakeOrderActivity extends Activity{
 						View v = inflater.inflate(R.layout.send_sale_mode, null);
 						TextView title = (TextView) v.findViewById(R.id.textView1);
 						final EditText txtRef = (EditText) v.findViewById(R.id.editTextRef);
+						final EditText txtMobile = (EditText) v.findViewById(R.id.editTextMobile);
 						final TextView tvCustQty = (TextView) v.findViewById(R.id.textViewSaleModeCust);
 						Button btnMinus = (Button) v.findViewById(R.id.buttonSaleModeMinus);
 						Button btnPlus = (Button) v.findViewById(R.id.buttonSaleModePlus);
@@ -751,8 +752,14 @@ public class TakeOrderActivity extends Activity{
 							@Override
 							public void onClick(View v) {
 								CUSTOMER_QTY = 1;
+								String ref = txtRef.getText().toString();
+								String mobile = txtMobile.getText().toString();
+								
+								if(!mobile.isEmpty())
+									ref += ":" + mobile;
+								
 								new SubmitSendOrder(TakeOrderActivity.this, globalVar, "WSiOrder_JSON_SendSaleModeOrderTransactionData", 
-										TRANS_SALE_MODE, txtRef.getText().toString(), CUSTOMER_QTY).execute(GlobalVar.FULL_URL);
+										TRANS_SALE_MODE, ref, CUSTOMER_QTY).execute(GlobalVar.FULL_URL);
 								smDialog.dismiss();
 							}
 							
