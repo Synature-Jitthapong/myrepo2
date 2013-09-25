@@ -443,9 +443,16 @@ public class IOrderUtility {
 				ShopProperty sp = new ShopProperty(context, null);
 				sp.insertShopProperty(sd);
 				sp.insertStaffData(sd);
-				//sp.insertStaffPermissionData(sd);
 				sp.insertLanguage(sd);
-				sp.insertSeatNo(sd);
+				
+				// version 1.7
+				try {
+					sp.insertStaffPermissionData(sd);
+					sp.insertSeatNo(sd);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				ComputerProperty cp = new ComputerProperty(context);
 				cp.insertComputerProperty(sd);

@@ -224,7 +224,30 @@ public class LoginActivity extends Activity {
 				
 				@Override
 				public void onError(String msg) {
-					
+					syn.pos.data.dao.ShopProperty shopProperty = 
+							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
+					if(!shopProperty.chkAccessPocketPermission()){
+						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
+						dialog.title.setVisibility(View.VISIBLE);
+						dialog.title.setText(R.string.title_info);
+						dialog.message.setText(R.string.not_access_pocket);
+						dialog.btnCancel.setVisibility(View.GONE);
+						dialog.btnOk.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View arg0) {
+								btnLogin.setEnabled(true);
+								dialog.dismiss();
+							}
+							
+						});
+						dialog.show();
+					}else{
+						Intent intent = new Intent(LoginActivity.this,
+								TakeOrderActivity.class);
+						LoginActivity.this.startActivity(intent);
+						LoginActivity.this.finish();
+					}
 				}
 			}).execute(globalVar.FULL_URL);
 		} else {
