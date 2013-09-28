@@ -49,13 +49,13 @@ public final class R {
 		public static final int history_title = 0x7f0a00e8;
 		public static final int image_view = 0x7f0a00e4;
 		public static final int launch_product_query = 0x7f0a0003;
-		public static final int menu_encode = 0x7f0a01ea;
-		public static final int menu_help = 0x7f0a01e9;
-		public static final int menu_history = 0x7f0a01e8;
-		public static final int menu_history_clear_text = 0x7f0a01ec;
-		public static final int menu_history_send = 0x7f0a01eb;
-		public static final int menu_settings = 0x7f0a01d5;
-		public static final int menu_share = 0x7f0a01e7;
+		public static final int menu_encode = 0x7f0a01ee;
+		public static final int menu_help = 0x7f0a01ed;
+		public static final int menu_history = 0x7f0a01ec;
+		public static final int menu_history_clear_text = 0x7f0a01f0;
+		public static final int menu_history_send = 0x7f0a01ef;
+		public static final int menu_settings = 0x7f0a01d8;
+		public static final int menu_share = 0x7f0a01eb;
 		public static final int meta_text_view = 0x7f0a00b8;
 		public static final int meta_text_view_label = 0x7f0a00b7;
 		public static final int page_number_view = 0x7f0a0192;
@@ -81,20 +81,20 @@ public final class R {
 		public static final int viewfinder_view = 0x7f0a00b1;
 	}
 	public static final class layout {
-		public static final int bookmark_picker_list_item = 0x7f03000a;
-		public static final int capture = 0x7f03000e;
-		public static final int encode = 0x7f030014;
-		public static final int help = 0x7f030015;
-		public static final int history_list_item = 0x7f030016;
-		public static final int search_book_contents = 0x7f030033;
-		public static final int search_book_contents_header = 0x7f030034;
-		public static final int search_book_contents_list_item = 0x7f030035;
-		public static final int share = 0x7f03003f;
+		public static final int bookmark_picker_list_item = 0x7f03000b;
+		public static final int capture = 0x7f03000f;
+		public static final int encode = 0x7f030015;
+		public static final int help = 0x7f030016;
+		public static final int history_list_item = 0x7f030017;
+		public static final int search_book_contents = 0x7f030034;
+		public static final int search_book_contents_header = 0x7f030035;
+		public static final int search_book_contents_list_item = 0x7f030036;
+		public static final int share = 0x7f030040;
 	}
 	public static final class menu {
-		public static final int capture = 0x7f0d000d;
-		public static final int encode = 0x7f0d000e;
-		public static final int history = 0x7f0d000f;
+		public static final int capture = 0x7f0d000e;
+		public static final int encode = 0x7f0d000f;
+		public static final int history = 0x7f0d0010;
 	}
 	public static final class raw {
 		public static final int beep = 0x7f060000;

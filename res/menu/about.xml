@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/itemClose" android:showAsAction="always|withText" android:title="Close"></item><item
+        android:id="@+id/itemManageDb"
+        android:showAsAction="always" android:icon="@drawable/ic_menu_moreoverflow_normal_holo_light">
+        <menu>
+            <item android:id="@+id/itemDeleteDb" android:title="Clear data"/>
+        </menu>
+    </item>
+    
+
+</menu>

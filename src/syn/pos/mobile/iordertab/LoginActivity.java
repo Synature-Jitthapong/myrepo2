@@ -69,6 +69,8 @@ public class LoginActivity extends Activity {
 		
 		txtUserName = (EditText) findViewById(R.id.txtUserName);
 		txtPassWord = (EditText) findViewById(R.id.txtPassword);
+		txtUserName.setSelectAllOnFocus(true);
+		txtPassWord.setSelectAllOnFocus(true);
 
 		txtUserName.clearFocus();
 		txtPassWord.clearFocus();
@@ -267,11 +269,12 @@ public class LoginActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
 			LoginActivity.this.finish();
 
-			Intent intent = new Intent(LoginActivity.this,
+			intent = new Intent(LoginActivity.this,
 					AppConfigLayoutActivity.class);
 			LoginActivity.this.startActivity(intent);
 			return true;
@@ -300,6 +303,11 @@ public class LoginActivity extends Activity {
 //			intent = new Intent(LoginActivity.this, LogActivity.class);
 //			LoginActivity.this.startActivity(intent);
 //			return true;
+		case R.id.itemAbout:
+			intent = new Intent(LoginActivity.this,
+					AboutActivity.class);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

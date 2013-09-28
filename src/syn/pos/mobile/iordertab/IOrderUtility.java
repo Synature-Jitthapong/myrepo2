@@ -445,7 +445,6 @@ public class IOrderUtility {
 				sp.insertStaffData(sd);
 				sp.insertLanguage(sd);
 				
-				// version 1.7
 				try {
 					sp.insertStaffPermissionData(sd);
 					sp.insertSeatNo(sd);
