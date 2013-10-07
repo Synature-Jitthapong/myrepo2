@@ -1079,7 +1079,8 @@ public class MenuSetActivity extends Activity {
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
 							WindowManager.LayoutParams.WRAP_CONTENT);
-					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
+					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN |
+							WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 					dialog.show();
 
 					btnOk.setOnClickListener(new OnClickListener() {

@@ -144,8 +144,6 @@
         android:gravity="top"
         android:inputType="textMultiLine"
         android:lines="2" >
-
-        <requestFocus />
     </EditText>
 
     <LinearLayout

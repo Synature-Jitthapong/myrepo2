@@ -2852,7 +2852,8 @@ public class TakeOrderActivity extends Activity{
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow()
 							.setSoftInputMode(
-									WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
+									WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN |
+									WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 					dialog.getWindow().setLayout(
 							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -5710,8 +5711,13 @@ public class TakeOrderActivity extends Activity{
 				btnSwSaleMode.setId(s.getSaleModeID());
 				
 				// default Eat In
-				if(s.getSaleModeID() == 1)
+				if(s.getSaleModeID() == 1){
 					btnSwSaleMode.setSelected(true);
+
+					if(mIsEnableSalemode){
+						mTvSaleMode.setText(s.getSaleModeName());
+					}
+				}
 				
 				btnSwSaleMode.setOnClickListener(new OnClickListener(){
 		
