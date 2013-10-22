@@ -595,36 +595,36 @@ public class TakeOrderActivity extends Activity{
 												.toString().equals("")) {
 											dialog.dismiss();
 											if (globalVar.MEMBER_ID == 0) {
-												new SubmitSendOrder(
-														TakeOrderActivity.this,
-														globalVar,
-														"WSiOrder_JSON_SendFastFoodOrderTransactionData",
-														dialog.txtFastRef
-																.getText()
-																.toString(),
-														Integer.parseInt(dialog.tvCustQty
-																.getText()
-																.toString()))
-														.execute(GlobalVar.FULL_URL);
+												if(TRANS_SALE_MODE == 1){
+													new SubmitSendOrder(
+															TakeOrderActivity.this,
+															globalVar,
+															"WSiOrder_JSON_SendFastFoodOrderTransactionData",
+															dialog.txtFastRef
+																	.getText()
+																	.toString(),
+															Integer.parseInt(dialog.tvCustQty
+																	.getText()
+																	.toString()))
+															.execute(GlobalVar.FULL_URL);
+												}else if(TRANS_SALE_MODE == 2){
+													new SubmitSendOrder(
+															TakeOrderActivity.this,
+															globalVar,
+															"WSiOrder_JSON_SendFastFoodSaleModeOrderTransactionData",
+															dialog.txtFastRef
+																	.getText()
+																	.toString(),
+															Integer.parseInt(dialog.tvCustQty
+																	.getText()
+																	.toString()))
+															.execute(GlobalVar.FULL_URL);
+												}
 											} else {
 												new SubmitSendOrder(
 														TakeOrderActivity.this,
 														globalVar,
 														"WSiOrder_JSON_SendFastFoodOrderTransactionDataWithMemberID",
-														dialog.txtFastRef
-																.getText()
-																.toString(),
-														Integer.parseInt(dialog.tvCustQty
-																.getText()
-																.toString()))
-														.execute(GlobalVar.FULL_URL);
-											}
-											
-											if(TRANS_SALE_MODE == 2){
-												new SubmitSendOrder(
-														TakeOrderActivity.this,
-														globalVar,
-														"WSiOrder_JSON_SendFastFoodSaleModeOrderTransactionData",
 														dialog.txtFastRef
 																.getText()
 																.toString(),
