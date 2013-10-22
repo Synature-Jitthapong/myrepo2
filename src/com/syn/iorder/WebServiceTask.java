@@ -69,7 +69,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		envelope.setOutputSoapObject(soapRequest);
 
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
-		
+
 		try {		
 			String soapAction = nameSpace + webMethod;
 			androidHttpTransport.call(soapAction, envelope);

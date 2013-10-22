@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="2dp" >
+
+    <TextView
+        android:id="@+id/textViewRequire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minWidth="80dp"
+        android:text="TextView" />
+
+    <HorizontalScrollView
+        android:id="@+id/layoutType4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:focusable="false" >
+
+        <LinearLayout
+            android:id="@+id/optionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:orientation="horizontal" >
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/layoutType2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:gravity="right|center_vertical" >
+
+        <Button
+            android:id="@+id/buttonQuestMinus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:background="@drawable/light_grey_button"
+            android:focusable="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/textViewQuestQty"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/radius_bg"
+            android:gravity="center"
+            android:minWidth="24dp"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/buttonQuestPlus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:background="@drawable/light_grey_button"
+            android:focusable="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:text="+" />
+
+    </LinearLayout>
+
+</LinearLayout>
