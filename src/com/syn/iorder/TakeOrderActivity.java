@@ -619,6 +619,20 @@ public class TakeOrderActivity extends Activity{
 																.toString()))
 														.execute(GlobalVar.FULL_URL);
 											}
+											
+											if(TRANS_SALE_MODE == 2){
+												new SubmitSendOrder(
+														TakeOrderActivity.this,
+														globalVar,
+														"WSiOrder_JSON_SendFastFoodSaleModeOrderTransactionData",
+														dialog.txtFastRef
+																.getText()
+																.toString(),
+														Integer.parseInt(dialog.tvCustQty
+																.getText()
+																.toString()))
+														.execute(GlobalVar.FULL_URL);
+											}
 										} else {
 											final CustomDialog customDialog = new CustomDialog(
 													TakeOrderActivity.this,
@@ -3571,6 +3585,14 @@ public class TakeOrderActivity extends Activity{
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
+				property.setType(int.class);
+				soapRequest.addProperty(property);
+			}
+			
+			if(TRANS_SALE_MODE == 2){
+				property = new PropertyInfo();
+				property.setName("iSaleMode");
+				property.setValue(TRANS_SALE_MODE);
 				property.setType(int.class);
 				soapRequest.addProperty(property);
 			}
