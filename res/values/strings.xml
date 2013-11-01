@@ -443,5 +443,8 @@
     <string name="close_table_success">Close this table successfully.</string>
     <string name="button_edit_customer_qty">Edit customer qty.</string>
     <string name="mobile">Mobile</string>
+    <string name="software_about">55/165 M.Banklangmuang, Soi Ladprao 88, Ladprao Rd. Wangthonglang, Bangkok, Thailand. 10310
+Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</string>
+    <string name="software_copy_right">© 2013 All Rights Reserved. \nSynature Technology Co., Ltd.</string>
 
 </resources>
