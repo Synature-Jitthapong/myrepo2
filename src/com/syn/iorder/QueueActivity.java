@@ -533,7 +533,7 @@ public class QueueActivity extends Activity {
 							@Override
 							public void onClick(View v) {
 								Intent intent = new Intent(QueueActivity.this,
-										TakeOrderActivity.class);
+										MainActivity.class);
 								intent.putExtra("QUEUE_ID", queueId);
 								intent.putExtra("QUEUE_NAME", queueName);
 								intent.putExtra("CUSTOMER_QTY", queueQty);
@@ -546,7 +546,7 @@ public class QueueActivity extends Activity {
 						dialog.show();
 					} else {
 						Intent intent = new Intent(QueueActivity.this,
-								TakeOrderActivity.class);
+								MainActivity.class);
 						intent.putExtra("QUEUE_ID", queueId);
 						intent.putExtra("QUEUE_NAME", queueName);
 						intent.putExtra("CUSTOMER_QTY", queueQty);

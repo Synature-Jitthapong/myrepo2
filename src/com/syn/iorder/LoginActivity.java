@@ -186,7 +186,7 @@ public class LoginActivity extends Activity {
 					txtPassWord.getWindowToken(), 0);
 			
 			Intent intent = new Intent(LoginActivity.this,
-					TakeOrderActivity.class);
+					MainActivity.class);
 			LoginActivity.this.startActivity(intent);
 //			overridePendingTransition(R.animator.slide_left_in,
 //					R.animator.slide_left_out);

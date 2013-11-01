@@ -158,7 +158,7 @@ public class RegisterActivity extends Activity {
 										public void onClick(View arg0) {
 											Intent intent = new Intent(
 													RegisterActivity.this,
-													TakeOrderActivity.class);
+													MainActivity.class);
 											RegisterActivity.this
 													.startActivity(intent);
 											RegisterActivity.this.finish();
