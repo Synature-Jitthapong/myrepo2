@@ -1,4 +1,4 @@
-package syn.pos.mobile.iordertab;
+package com.syn.iorder;
 
 import syn.pos.data.dao.DataBaseHelper;
 import android.os.Bundle;

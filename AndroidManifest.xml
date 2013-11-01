@@ -123,6 +123,7 @@
             android:name="com.syn.iorder.RegisterActivity"
             android:label="@string/title_activity_register" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait">
         </activity>
+        <activity android:name="AboutActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

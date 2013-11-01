@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:background="@drawable/menu_selector"
+    android:gravity="center_vertical"
+    android:minHeight="100dp"
     android:padding="4dp" >
 
     <ImageButton
@@ -52,8 +54,7 @@
         android:id="@+id/textViewMenuItemOutOfStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/menuitem_img"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:shadowColor="#ffffff"
         android:shadowDx="1"

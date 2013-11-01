@@ -49,13 +49,13 @@ public final class R {
 		public static final int history_title = 0x7f0a00e8;
 		public static final int image_view = 0x7f0a00e4;
 		public static final int launch_product_query = 0x7f0a0003;
-		public static final int menu_encode = 0x7f0a01e2;
-		public static final int menu_help = 0x7f0a01e1;
-		public static final int menu_history = 0x7f0a01e0;
-		public static final int menu_history_clear_text = 0x7f0a01e4;
-		public static final int menu_history_send = 0x7f0a01e3;
-		public static final int menu_settings = 0x7f0a01cd;
-		public static final int menu_share = 0x7f0a01df;
+		public static final int menu_encode = 0x7f0a01e6;
+		public static final int menu_help = 0x7f0a01e5;
+		public static final int menu_history = 0x7f0a01e4;
+		public static final int menu_history_clear_text = 0x7f0a01e8;
+		public static final int menu_history_send = 0x7f0a01e7;
+		public static final int menu_settings = 0x7f0a01d0;
+		public static final int menu_share = 0x7f0a01e3;
 		public static final int meta_text_view = 0x7f0a00b8;
 		public static final int meta_text_view_label = 0x7f0a00b7;
 		public static final int page_number_view = 0x7f0a018d;
@@ -92,9 +92,9 @@ public final class R {
 		public static final int share = 0x7f03003e;
 	}
 	public static final class menu {
-		public static final int capture = 0x7f0d000d;
-		public static final int encode = 0x7f0d000e;
-		public static final int history = 0x7f0d000f;
+		public static final int capture = 0x7f0d000e;
+		public static final int encode = 0x7f0d000f;
+		public static final int history = 0x7f0d0010;
 	}
 	public static final class raw {
 		public static final int beep = 0x7f060000;

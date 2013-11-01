@@ -208,11 +208,12 @@ public class LoginActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
 			LoginActivity.this.finish();
 
-			Intent intent = new Intent(LoginActivity.this,
+			intent = new Intent(LoginActivity.this,
 					AppConfigLayoutActivity.class);
 			LoginActivity.this.startActivity(intent);
 			return true;
@@ -236,6 +237,11 @@ public class LoginActivity extends Activity {
 				
 			});
 
+			return true;
+		case R.id.itemAbout:
+			intent = new Intent(LoginActivity.this,
+					AboutActivity.class);
+			startActivity(intent);
 			return true;
 //		case R.id.log:
 //			intent = new Intent(LoginActivity.this, LogActivity.class);
