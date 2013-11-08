@@ -41,21 +41,7 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		context = this;
 		super.onCreate(savedInstanceState);
-
-		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-		ShopData.Language lang = shopProp.getLanguage();
-		IOrderUtility.switchLanguage(context, lang.getLangCode());
-		
 		setContentView(R.layout.activity_login);
-
-		//
-		// getWindow().getDecorView().setSystemUiVisibility
-		// (View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		//
-		//
-		// getWindow().getDecorView().setSystemUiVisibility
-		// (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-		//
 
 		globalVar = new GlobalVar(context);
 
@@ -63,8 +49,6 @@ public class LoginActivity extends Activity {
 		tvComputer = (TextView) findViewById(R.id.textViewComputer);
 		tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
 		tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
-		loadDeviceData();
-		
 		txtUserName = (EditText) findViewById(R.id.txtUserName);
 		txtPassWord = (EditText) findViewById(R.id.txtPassword);
 
@@ -124,6 +108,17 @@ public class LoginActivity extends Activity {
 		});
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+		ShopData.Language lang = shopProp.getLanguage();
+		IOrderUtility.switchLanguage(context, lang.getLangCode());
+		
+		loadDeviceData();
+	}
+
 	private void updateWebserviceVersion(){
 		new IOrderUtility.UpdateWebServiceVersion(LoginActivity.this, globalVar, 
 				new WebServiceStateListener(){

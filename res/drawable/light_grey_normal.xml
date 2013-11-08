@@ -4,8 +4,7 @@
 	    android:startColor="@color/light_grey_start"
 	    android:endColor="@color/light_grey_end"
 	    android:angle="270"/>
-	
-	<stroke 
+	<stroke
 	    android:width="1px"
 	    android:color="@color/grey_stroke"/>
 	
