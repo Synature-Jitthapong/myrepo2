@@ -16,7 +16,9 @@ import syn.pos.data.model.WebServiceResult;
 
 import com.google.gson.Gson;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -28,7 +30,6 @@ public class CheckSummaryBillDummyTask extends WebServiceTask {
 	protected ListView lvBill;
 	protected TextView tvSumText;
 	protected TextView tvSumPriceVal;
-	protected ProgressBar progress;
 	
 	public CheckSummaryBillDummyTask(Context c, GlobalVar gb, ListView lvBill, TextView tvSumText, 
 			TextView tvSumVal, ProgressBar progress) {
@@ -37,8 +38,6 @@ public class CheckSummaryBillDummyTask extends WebServiceTask {
 		this.lvBill = lvBill;
 		this.tvSumText = tvSumText;
 		this.tvSumPriceVal = tvSumVal;
-		
-		this.progress = progress;
 		
 		PropertyInfo property = new PropertyInfo();
 		property.setName("iStaffID");
@@ -142,16 +141,10 @@ public class CheckSummaryBillDummyTask extends WebServiceTask {
 		soapRequest.addProperty(property);
 	}
 
-	
-	@Override
-	protected void onPreExecute() {
-		tvProgress.setText(R.string.loading_progress);
-		this.progress.setVisibility(View.VISIBLE);
-	}
-
 	@Override
 	protected void onPostExecute(String result) {
-		this.progress.setVisibility(View.GONE);
+		if(progress.isShowing())
+			progress.dismiss();
 		
 		GsonDeserialze gdz = new GsonDeserialze();
 		try {
@@ -180,17 +173,36 @@ public class CheckSummaryBillDummyTask extends WebServiceTask {
 					tvSumText.append(displaySummary.szDisplayName + "\n");
 					tvSumPriceVal.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
 				}
-				TextView tvCallCheckBill = new TextView(context);
-				tvCallCheckBill.setText(R.string.call_checkbill);
-
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(context, 
 						globalVar, summaryTrans);
 				lvBill.setAdapter(billDetailAdapter);
 			}else{
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 			}
 		} catch (Exception e) {
-			IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+			new AlertDialog.Builder(context)
+			.setTitle(R.string.error)
+			.setMessage(result)
+			.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			})
+			.show();
 		}
 	}
 }

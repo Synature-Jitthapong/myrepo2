@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -34,7 +35,7 @@ import android.widget.TextView;
 public class AppConfigLayoutActivity extends Activity {
 	private Context context;
 	private EditText txtServerIp;
-	private EditText txtWsName;
+	private EditText txtBackoffice;
 	private Switch swDisplayMenuImage;
 	private Spinner spinnerShowMenuField;
 	private Spinner spinnerLanguage;
@@ -52,13 +53,13 @@ public class AppConfigLayoutActivity extends Activity {
 		
 		if(message != null)
 		{
-			TextView tvMessage = (TextView) findViewById(R.id.textViewMessage);
-			tvMessage.setVisibility(View.VISIBLE);
-			tvMessage.setText(message);
+//			TextView tvMessage = (TextView) findViewById(R.id.textViewMessage);
+//			tvMessage.setVisibility(View.VISIBLE);
+//			tvMessage.setText(message);
 		}
 		
 		txtServerIp = (EditText) findViewById(R.id.txtServerIp);
-		txtWsName = (EditText) findViewById(R.id.txtWsName);
+		txtBackoffice = (EditText) findViewById(R.id.txtBackoffice);
 		tvWsVersion = (TextView) findViewById(R.id.textView2);
 		swDisplayMenuImage = (Switch) findViewById(R.id.switchDisplayMenuImage);
 		spinnerShowMenuField = (Spinner) findViewById(R.id.spinnerShowMenuField);
@@ -87,11 +88,8 @@ public class AppConfigLayoutActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_app_setting, menu);
 		View v = menu.findItem(R.id.item_setting_control).getActionView();
 
-		Button btnSave = (Button) v.findViewById(R.id.buttonConfirmOk);
-		btnSave.setText(R.string.app_config_btn_save);
-		//btnSave.setBackgroundResource(R.drawable.green_button);
-		Button btnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
-		btnClose.setText(R.string.global_btn_close);
+		Button btnSave = (Button) v.findViewById(R.id.btnSave);
+		Button btnClose = (Button) v.findViewById(R.id.btnCancel);
 		btnSave.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -132,9 +130,9 @@ public class AppConfigLayoutActivity extends Activity {
 
 	protected void saveSetting() {
 		String serverIp = txtServerIp.getText().toString();
-		String wsName = txtWsName.getText().toString();
+		String backOffice = txtBackoffice.getText().toString();
 		
-		if(!serverIp.equals("") && !wsName.equals("")){
+		if(!serverIp.equals("") && !backOffice.equals("")){
 			// delete dbfile
 //			syn.pos.data.dao.DataBaseHelper dbHelper
 //				= new syn.pos.data.dao.DataBaseHelper(getApplicationContext());
@@ -144,7 +142,7 @@ public class AppConfigLayoutActivity extends Activity {
 			syn.pos.data.dao.AppConfig setting = new syn.pos.data.dao.AppConfig(
 					context);
 			
-			setting.addAppConfig(serverIp, wsName, GlobalVar.DISPLAY_MENU_IMG);
+			setting.addAppConfig(serverIp, backOffice, GlobalVar.DISPLAY_MENU_IMG);
 
 			ShowMenuColumnName showColName = 
 					new ShowMenuColumnName(AppConfigLayoutActivity.this);
@@ -160,99 +158,6 @@ public class AppConfigLayoutActivity extends Activity {
 			shopProp.setSelectedLanguage(lang.getLangID());
 			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangCode());
 			
-			//loadSetting();
-			
-//			new AlertDialog.Builder(context)
-//					.setIcon(android.R.drawable.ic_dialog_alert)
-//					.setTitle("Setting")
-//					.setMessage("Save setting success.")
-//					.setNeutralButton(R.string.global_close_dialog_btn,
-//							new DialogInterface.OnClickListener() {
-//	
-//								@Override
-//								public void onClick(DialogInterface dialog,
-//										int which) {
-//									IOrderUtility util = new IOrderUtility();
-//									util.syncDataWebService(context, globalVar);
-//								}
-//	
-//							}).show();
-			
-			final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
-			customDialog.title.setVisibility(View.VISIBLE);
-			customDialog.title.setText(R.string.app_setting_dialog_title);
-			customDialog.message.setText(R.string.app_setting_save_success);
-			customDialog.btnCancel.setVisibility(View.GONE);
-			customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-			//customDialog.btnOk.setBackgroundResource(R.drawable.green_button);
-			customDialog.btnOk.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-//					IOrderUtility util = new IOrderUtility();
-//					util.syncDataWebService(context, globalVar, new WebServiceStateListener(){
-//
-//						@Override
-//						public void onSuccess() {
-//							new IOrderUtility.UpdateWebServiceVersion(AppConfigLayoutActivity.this, globalVar, 
-//									new WebServiceStateListener(){
-//
-//										@Override
-//										public void onSuccess() {
-//											SyncDataLog syncLog = new SyncDataLog(AppConfigLayoutActivity.this);
-//											SyncDataLogModel syncData = syncLog.getSyncTimeStamp();
-//											tvWsVersion.setText(syncData.getWebServiceVersion());
-//										}
-//
-//										@Override
-//										public void onNotSuccess() {
-//											
-//										}
-//								
-//							}).execute(GlobalVar.FULL_URL);
-//						}
-//
-//						@Override
-//						public void onNotSuccess() {
-//							
-//						}
-//					});
-					customDialog.dismiss();
-					//refreshActivity();
-				}
-			});
-			customDialog.show();
-		}else{
-//			new AlertDialog.Builder(context)
-//			.setIcon(android.R.drawable.ic_dialog_alert)
-//			.setTitle("Setting")
-//			.setMessage("Please input server IP and webservice name")
-//			.setNeutralButton(R.string.global_close_dialog_btn,
-//					new DialogInterface.OnClickListener() {
-//
-//						@Override
-//						public void onClick(DialogInterface dialog,
-//								int which) {
-//							IOrderUtility util = new IOrderUtility();
-//							util.syncDataWebService(context, globalVar);
-//						}
-//
-//					}).show();
-			
-			final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
-			customDialog.title.setVisibility(View.VISIBLE);
-			customDialog.title.setText(R.string.app_setting_dialog_title);
-			customDialog.message.setText(R.string.app_setting_input_data);
-			customDialog.btnCancel.setVisibility(View.GONE);
-			customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-			customDialog.btnOk.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					customDialog.dismiss();
-				}
-			});
-			customDialog.show();
 		}
 	}
 
@@ -263,7 +168,7 @@ public class AppConfigLayoutActivity extends Activity {
 		syn.pos.data.model.AppConfigModel appModel = setting.getConfigs();
 
 		txtServerIp.setText(appModel.getServerIP());
-		txtWsName.setText(appModel.getWebServiceUrl());
+		txtBackoffice.setText(appModel.getWebServiceUrl());
 		GlobalVar.DISPLAY_MENU_IMG = appModel.getDisplayImageMenu();
 		
 		if(GlobalVar.DISPLAY_MENU_IMG == 1){
@@ -290,8 +195,12 @@ public class AppConfigLayoutActivity extends Activity {
 		List<ShowMenuColumnName.MenuColumn> menuColLst = 
 				showColName.listMenuColumn();
 		
-		ShowMenuColumnAdapter menuColAdapter =
-				new ShowMenuColumnAdapter(menuColLst);
+//		ShowMenuColumnAdapter menuColAdapter =
+//				new ShowMenuColumnAdapter(menuColLst);
+		
+		ArrayAdapter<ShowMenuColumnName.MenuColumn> menuColAdapter = 
+				new ArrayAdapter<ShowMenuColumnName.MenuColumn>(this,
+						android.R.layout.simple_spinner_dropdown_item, menuColLst);
 		
 		spinnerShowMenuField.setAdapter(menuColAdapter);
 		ShowMenuColumnName.MenuColumn mc = showColName.getShowMenuColumnObj();
@@ -312,7 +221,10 @@ public class AppConfigLayoutActivity extends Activity {
 		ShopProperty sp = new ShopProperty(AppConfigLayoutActivity.this, null);
 		
 		List<ShopData.Language> langLst = sp.listLanguage();
-		LanguageAdapter langAdapter = new LanguageAdapter(langLst);
+		//LanguageAdapter langAdapter = new LanguageAdapter(langLst);
+		ArrayAdapter<ShopData.Language> langAdapter = 
+				new ArrayAdapter<ShopData.Language>(this, 
+						android.R.layout.simple_spinner_dropdown_item, langLst);
 		spinnerLanguage.setAdapter(langAdapter);
 		
 		for(int i = 0; i < langLst.size(); i++){
@@ -323,93 +235,93 @@ public class AppConfigLayoutActivity extends Activity {
 		}
 	}
 	
-	private class LanguageAdapter extends BaseAdapter{
-		private List<ShopData.Language> langLst;
-		private LayoutInflater inflater;
-		
-		public LanguageAdapter(List<ShopData.Language> langList){
-			this.langLst = langList;
-			inflater = LayoutInflater.from(AppConfigLayoutActivity.this);
-		}
-		
-		@Override
-		public int getCount() {
-			return langLst != null ? langLst.size(): 0;
-		}
-
-		@Override
-		public ShopData.Language getItem(int position) {
-			return langLst.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ShopData.Language lang = langLst.get(position);
-			ViewHolder holder;
-			if(convertView == null){
-				convertView = inflater.inflate(R.layout.spinner_item, null);
-				holder = new ViewHolder();
-				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
-				convertView.setTag(holder);
-			}else{
-				holder = (ViewHolder) convertView.getTag();
-			}
-			holder.textView1.setText(lang.getLangName());
-			return convertView;
-		}
-		
-		private class ViewHolder{
-			public TextView textView1;
-		}
-	}
-	
-	private class ShowMenuColumnAdapter extends BaseAdapter{
-		private List<ShowMenuColumnName.MenuColumn> menuColumnLst;
-		private LayoutInflater inflater;
-		
-		public ShowMenuColumnAdapter(List<ShowMenuColumnName.MenuColumn> colLst){
-			this.menuColumnLst = colLst;
-			this.inflater = LayoutInflater.from(AppConfigLayoutActivity.this);
-		}
-		
-		@Override
-		public int getCount() {
-			return menuColumnLst != null ? menuColumnLst.size() : 0;
-		}
-
-		@Override
-		public ShowMenuColumnName.MenuColumn getItem(int position) {
-			return menuColumnLst.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ShowMenuColumnName.MenuColumn col = menuColumnLst.get(position);
-			ViewHolder holder;
-			if(convertView == null){
-				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.spinner_item, null);
-				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
-				convertView.setTag(holder);
-			}else{
-				holder = (ViewHolder) convertView.getTag();
-			}
-			holder.textView1.setText(col.getShowMenuColName());
-			return convertView;
-		}
-		
-		private class ViewHolder{
-			private TextView textView1;
-		}
-	}
+//	private class LanguageAdapter extends BaseAdapter{
+//		private List<ShopData.Language> langLst;
+//		private LayoutInflater inflater;
+//		
+//		public LanguageAdapter(List<ShopData.Language> langList){
+//			this.langLst = langList;
+//			inflater = LayoutInflater.from(AppConfigLayoutActivity.this);
+//		}
+//		
+//		@Override
+//		public int getCount() {
+//			return langLst != null ? langLst.size(): 0;
+//		}
+//
+//		@Override
+//		public ShopData.Language getItem(int position) {
+//			return langLst.get(position);
+//		}
+//
+//		@Override
+//		public long getItemId(int position) {
+//			return position;
+//		}
+//
+//		@Override
+//		public View getView(int position, View convertView, ViewGroup parent) {
+//			ShopData.Language lang = langLst.get(position);
+//			ViewHolder holder;
+//			if(convertView == null){
+//				convertView = inflater.inflate(R.layout.spinner_item, null);
+//				holder = new ViewHolder();
+//				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
+//				convertView.setTag(holder);
+//			}else{
+//				holder = (ViewHolder) convertView.getTag();
+//			}
+//			holder.textView1.setText(lang.getLangName());
+//			return convertView;
+//		}
+//		
+//		private class ViewHolder{
+//			public TextView textView1;
+//		}
+//	}
+//	
+//	private class ShowMenuColumnAdapter extends BaseAdapter{
+//		private List<ShowMenuColumnName.MenuColumn> menuColumnLst;
+//		private LayoutInflater inflater;
+//		
+//		public ShowMenuColumnAdapter(List<ShowMenuColumnName.MenuColumn> colLst){
+//			this.menuColumnLst = colLst;
+//			this.inflater = LayoutInflater.from(AppConfigLayoutActivity.this);
+//		}
+//		
+//		@Override
+//		public int getCount() {
+//			return menuColumnLst != null ? menuColumnLst.size() : 0;
+//		}
+//
+//		@Override
+//		public ShowMenuColumnName.MenuColumn getItem(int position) {
+//			return menuColumnLst.get(position);
+//		}
+//
+//		@Override
+//		public long getItemId(int position) {
+//			return position;
+//		}
+//
+//		@Override
+//		public View getView(int position, View convertView, ViewGroup parent) {
+//			ShowMenuColumnName.MenuColumn col = menuColumnLst.get(position);
+//			ViewHolder holder;
+//			if(convertView == null){
+//				holder = new ViewHolder();
+//				convertView = inflater.inflate(R.layout.spinner_item, null);
+//				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
+//				convertView.setTag(holder);
+//			}else{
+//				holder = (ViewHolder) convertView.getTag();
+//			}
+//			holder.textView1.setText(col.getShowMenuColName());
+//			return convertView;
+//		}
+//		
+//		private class ViewHolder{
+//			private TextView textView1;
+//		}
+//	}
 }

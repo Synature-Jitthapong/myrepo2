@@ -6,7 +6,7 @@
     android:orientation="horizontal" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnClear"
         style="@style/ButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,23 +16,33 @@
         android:text="@string/clear" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnSave"
         style="@style/ButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/button1"
+        android:layout_toRightOf="@+id/btnCancel"
         android:background="@drawable/gray_button"
-        android:text="@android:string/cancel" />
+        android:text="@string/save" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnConfirm"
         style="@style/ButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/button2"
+        android:layout_toRightOf="@+id/btnSave"
         android:background="@drawable/gray_button"
         android:text="@string/confirm" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        style="@style/ButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/btnClear"
+        android:background="@drawable/gray_button"
+        android:text="@android:string/cancel" />
 
 </RelativeLayout>

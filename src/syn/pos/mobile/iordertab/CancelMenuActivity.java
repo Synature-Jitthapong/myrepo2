@@ -22,7 +22,9 @@ import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -30,13 +32,10 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 public class CancelMenuActivity extends Activity {
@@ -50,7 +49,6 @@ public class CancelMenuActivity extends Activity {
 	private EditText txtCancelMenuReason;
 	private Button btnConfirm;
 	private Button btnCancel;
-	private ProgressBar progressBar;
 	OrderSendData detail;
 	SelectOrderAdapter menuAdapter;
 	private List<OrderSendData.OrderDetail> orderDetailLst;
@@ -65,16 +63,11 @@ public class CancelMenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cancel_menu);
 		
-		spinnerTableZone = (Spinner) findViewById(R.id.spinnerCancelMenuTableZone);
-		listViewTableName = (ListView) findViewById(R.id.listViewCancelMenuTableName);
-		listViewMenu = (ListView) findViewById(R.id.listViewCancelMenu);
-		reasonListView = (ListView) findViewById(R.id.listViewCancelMenuReason);
-//		btnConfirm = (Button) findViewById(R.id.buttonConfirm);
-//		btnCancel = (Button) findViewById(R.id.buttonConfirmCancel);
-		
-		
-		progressBar = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
-		txtCancelMenuReason = (EditText) findViewById(R.id.txtCancelMenuReason);
+		spinnerTableZone = (Spinner) findViewById(R.id.spinner1);
+		listViewTableName = (ListView) findViewById(R.id.listView1);
+		listViewMenu = (ListView) findViewById(R.id.listView2);
+		reasonListView = (ListView) findViewById(R.id.listView3);
+		txtCancelMenuReason = (EditText) findViewById(R.id.editText1);
 		
 		new LoadTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
 
@@ -83,8 +76,6 @@ public class CancelMenuActivity extends Activity {
 				.loadReasonFromWs(context, globalVar, 2);
 		
 		final ReasonAdapter reasonAdapter = new ReasonAdapter(CancelMenuActivity.this, reasonDetailLst);
-
-		reasonListView = (ListView) findViewById(R.id.listViewCancelMenuReason);
 		reasonListView.setAdapter(reasonAdapter);
 
 		final Reason reason = new Reason(context);
@@ -116,8 +107,8 @@ public class CancelMenuActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_cancel_menu, menu);
 		View v = menu.findItem(R.id.item_confirm).getActionView();
-		btnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
-		btnCancel = (Button) v.findViewById(R.id.buttonConfirmCancel);
+		btnConfirm = (Button) v.findViewById(R.id.btnConfirm);
+		btnCancel = (Button) v.findViewById(R.id.btnCancel);
 		
 		btnConfirm.setOnClickListener(new OnClickListener(){
 
@@ -132,40 +123,44 @@ public class CancelMenuActivity extends Activity {
 							.listMenuToCancel();
 					
 					 if(orderDetailLst == null){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
+						new AlertDialog.Builder(CancelMenuActivity.this)
+						.setMessage(R.string.select_menu)
+						.show();
 					 }else if(orderDetailLst != null && orderDetailLst.size() == 0){
-						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
+						 new AlertDialog.Builder(CancelMenuActivity.this)
+							.setMessage(R.string.select_menu)
+							.show();
 					 }else if((allReasonLst != null && allReasonLst.size() > 0) && 
 							 (reasonLst != null && reasonLst.size() == 0)){
-						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
+						 new AlertDialog.Builder(CancelMenuActivity.this)
+							.setMessage(R.string.select_reason)
+							.show();
 					 }else{
 						CANCEL_MENU_REASON = txtCancelMenuReason.getText().toString();
 						
-						final CustomDialog cfDialog = new CustomDialog(CancelMenuActivity.this, R.style.CustomDialog);
-						cfDialog.title.setVisibility(View.VISIBLE);
-						cfDialog.title.setText(R.string.cf_cancel_menu_title);
-						cfDialog.message.setText(R.string.cf_cancel_menu_msg);
-						cfDialog.btnCancel.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								cfDialog.dismiss();
-							}
+						new AlertDialog.Builder(CancelMenuActivity.this)
+						.setMessage(R.string.confirm_cancel_menu)
+						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 							
-						});
-						cfDialog.btnOk.setOnClickListener(new OnClickListener(){
-
 							@Override
-							public void onClick(View v) {
-								cfDialog.dismiss();
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						})
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
 								new CancelMenuTask(context, globalVar).execute(GlobalVar.FULL_URL);
 							}
-							
-						});	
-						cfDialog.show();
+						})
+						.show();
 					 }
 				}else{
-					IOrderUtility.alertDialog(context,R.string.global_dialog_title_error, R.string.select_source_table, 0);
+					new AlertDialog.Builder(CancelMenuActivity.this)
+					.setMessage(R.string.select_source_table)
+					.show();
 				}
 			}
 		});	
@@ -173,8 +168,7 @@ public class CancelMenuActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
-				CancelMenuActivity.this.finish();
+				finish();
 			}
 		});
 		return true;
@@ -248,8 +242,7 @@ public class CancelMenuActivity extends Activity {
 		}
 		@Override
 		protected void onPreExecute() {
-			tvProgress.setText(R.string.cancel_menu_progress);
-			progress.setMessage(tvProgress.getText().toString());
+			progress.setMessage(context.getString(R.string.loading_progress));
 			progress.show();
 		}
 		@Override
@@ -262,72 +255,36 @@ public class CancelMenuActivity extends Activity {
 			try {
 				WebServiceResult wsResult = gdz.deserializeWsResultJSON(result);
 				if(wsResult.getiResultID() == 0){
-//					new AlertDialog.Builder(context)
-//					.setTitle(R.string.cancel_menu_dialog_title)
-//					.setMessage(R.string.cancel_menu_result_success)
-//					.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							CancelMenuActivity.this.finish();
-//							dialog.dismiss();
-//						}
-//					}).show();
-					final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
-					customDialog.title.setVisibility(View.VISIBLE);
-					customDialog.title.setText(R.string.cancel_menu_dialog_title);
-					customDialog.message.setText(R.string.cancel_menu_result_success);
-					customDialog.btnCancel.setVisibility(View.GONE);
-					customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-					customDialog.btnOk.setOnClickListener(new OnClickListener(){
-
+					new AlertDialog.Builder(context)
+					.setMessage(R.string.success)
+					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+						
 						@Override
-						public void onClick(View v) {
-							CancelMenuActivity.this.finish();
-							customDialog.dismiss();
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
 						}
-					});
-					customDialog.show();
+					}).show();
 				}else{
-//					new AlertDialog.Builder(context)
-//					.setTitle(R.string.cancel_menu_dialog_title)
-//					.setMessage(wsResult.getSzResultData())
-//					.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							CancelMenuActivity.this.finish();
-//							dialog.dismiss();
-//						}
-//					}).show();
-					final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
-					customDialog.title.setVisibility(View.VISIBLE);
-					customDialog.title.setText(R.string.global_dialog_title_error);
-					customDialog.message.setText(wsResult.getSzResultData().equals("") ? result : wsResult.getSzResultData());
-					customDialog.btnCancel.setVisibility(View.GONE);
-					customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-					customDialog.btnOk.setOnClickListener(new OnClickListener(){
-
+					new AlertDialog.Builder(context)
+					.setMessage(wsResult.getSzResultData().equals("") ? result : wsResult.getSzResultData())
+					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+						
 						@Override
-						public void onClick(View v) {
-							CancelMenuActivity.this.finish();
-							customDialog.dismiss();
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
 						}
-					});
-					customDialog.show();
+					}).show();
 				}
 			} catch (Exception e) {
-//				new AlertDialog.Builder(context)
-//				.setTitle("Exception")
-//				.setMessage(result)
-//				.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						dialog.dismiss();
-//					}
-//				}).show();
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				}).show();
 			}
 		}
 	}
@@ -391,24 +348,21 @@ public class CancelMenuActivity extends Activity {
 					
 				});
 			} catch (Exception e) {
-//				new AlertDialog.Builder(context)
-//				.setTitle("Exception")
-//				.setMessage(result)
-//				.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						dialog.dismiss();
-//					}
-//				}).show();
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				}).show();
 			}
 		}
 
 		@Override
 		protected void onPreExecute() {
-			tvProgress.setText(R.string.loading_progress);
-			progress.setMessage(tvProgress.getText().toString());
+			progress.setMessage(context.getString(R.string.loading_progress));
 			progress.show();
 		}
 		
@@ -426,14 +380,11 @@ public class CancelMenuActivity extends Activity {
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}
-		@Override
-		protected void onPreExecute() {
-			tvProgress.setText(R.string.load_current_order_progress);
-			progressBar.setVisibility(View.VISIBLE);
-		}
+		
 		@Override
 		protected void onPostExecute(String result) {
-			progressBar.setVisibility(View.GONE);
+			if(progress.isShowing())
+				progress.dismiss();
 			
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
@@ -454,29 +405,27 @@ public class CancelMenuActivity extends Activity {
 							MenuUtil menuUtil = new MenuUtil(context);
 							menuUtil.prepareMenuForCacnel(data);
 							
-							CheckBox chkBox = (CheckBox) v.findViewById(R.id.checkBox1);
+							CheckedTextView chkMenuName = (CheckedTextView) v.findViewById(R.id.checkedTextView1);
 							// check if item is selected
 							menuUtil = new MenuUtil(context);
 							if(menuUtil.checkSelectedMenu(data.getiOrderID(), data.getiProductID()) != 0)
-								chkBox.setChecked(true);
+								chkMenuName.setChecked(true);
 							else
-								chkBox.setChecked(false);
+								chkMenuName.setChecked(false);
 						}
 					}
 				});
 				
 			} catch (Exception e) {
-//				new AlertDialog.Builder(context)
-//				.setTitle("Exception")
-//				.setMessage(result)
-//				.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						dialog.dismiss();
-//					}
-//				}).show();
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).show();
 			}
 			
 		}

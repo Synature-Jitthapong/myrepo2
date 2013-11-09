@@ -12,7 +12,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 public class CurrentAnswerQuestionTask extends WebServiceTask{
 	private static final String method = "WSiOrder_JSON_GetCurrentAnswerQuestion";
@@ -43,13 +45,6 @@ public class CurrentAnswerQuestionTask extends WebServiceTask{
 	}
 
 	@Override
-	protected void onPreExecute() {
-		tvProgress.setText(R.string.loading_progress);
-		progress.setMessage(tvProgress.getText().toString());
-		progress.show();
-	}
-
-	@Override
 	protected void onPostExecute(String result) {
 		if(progress.isShowing())
 			progress.dismiss();
@@ -65,13 +60,33 @@ public class CurrentAnswerQuestionTask extends WebServiceTask{
 			if(wsResult.getiResultID() == 0){
 				questionLst = gson.fromJson(wsResult.getSzResultData(), type);
 			}else{
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, 
-						wsResult.getSzResultData(), 0);
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(wsResult.getSzResultData())
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 			}
 			iCurrAns.listQuestionAnswer(questionLst);
 		} catch (Exception e) {
-			IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, 
-				result, 0);
+			new AlertDialog.Builder(context)
+			.setTitle(R.string.error)
+			.setMessage(result)
+			.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			})
+			.show();
 			e.printStackTrace();
 		}
 

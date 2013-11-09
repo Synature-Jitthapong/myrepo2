@@ -4,7 +4,9 @@ import org.ksoap2.serialization.PropertyInfo;
 
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.OrderSendData;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.widget.ListView;
 
 public class CurrentOrderFromTableTask extends WebServiceTask {
@@ -35,8 +37,18 @@ public class CurrentOrderFromTableTask extends WebServiceTask {
 					new CurrOrderAdapter(context, globalVar, currData);
 			lv.setAdapter(currOrderAdapter);
 		} catch (Exception e) {
-			IOrderUtility.alertDialog(context,
-					R.string.global_dialog_title_error, result, 0);
+			new AlertDialog.Builder(context)
+			.setTitle(R.string.error)
+			.setMessage(result)
+			.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			})
+			.show();
 		}
 	}
 }

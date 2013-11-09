@@ -11,8 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 public class SelectOrderAdapter extends BaseAdapter {
@@ -53,11 +52,9 @@ public class SelectOrderAdapter extends BaseAdapter {
 		if(convertView == null){
 			holder = new SelectOrderViewHolder();
 			convertView = inflater.inflate(R.layout.select_order_template, null);
-			
-			holder.checkBox1 = (CheckBox) convertView.findViewById(R.id.checkBox1);
-			holder.tvSeatName = (TextView) convertView.findViewById(R.id.textViewSeatName);
-			holder.tvOrderName = (TextView) convertView.findViewById(R.id.tvSelectOrderOrderName);
-			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.tvSelectOrderQty);
+			holder.tvSeatName = (TextView) convertView.findViewById(R.id.textView1);
+			holder.chkMenuName = (CheckedTextView) convertView.findViewById(R.id.checkedTextView1);
+			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.textView2);
 			
 			convertView.setTag(holder);
 		}else{
@@ -67,9 +64,9 @@ public class SelectOrderAdapter extends BaseAdapter {
 		// check if item is selected
 		MenuUtil menuUtil = new MenuUtil(context);
 		if(menuUtil.checkSelectedMenu(detail.getiOrderID(), detail.getiProductID()) != 0)
-			holder.checkBox1.setChecked(true);
+			holder.chkMenuName.setChecked(true);
 		else
-			holder.checkBox1.setChecked(false);
+			holder.chkMenuName.setChecked(false);
 		
 		if(detail.getiSeatID() != 0){
 			syn.pos.data.model.ShopData.SeatNo seat = 
@@ -78,16 +75,15 @@ public class SelectOrderAdapter extends BaseAdapter {
 			holder.tvSeatName.setText(seat.getSeatName());
 		}
 		
-		holder.tvOrderName.setText(detail.getSzProductName());
+		holder.chkMenuName.setText(detail.getSzProductName());
 		holder.tvOrderQty.setText("x" + globalVar.qtyFormat.format(detail.getfItemQty()));
 		
 		return convertView;
 	}
 
 	protected static class SelectOrderViewHolder{
-		CheckBox checkBox1;
+		CheckedTextView chkMenuName;
 		TextView tvSeatName;
-		TextView tvOrderName;
 		TextView tvOrderQty;
 	}
 }

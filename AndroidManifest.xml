@@ -37,18 +37,18 @@
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.AppConfigLayoutActivity"
-            android:label="@string/activity_setting"
+            android:label="@string/setting"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.MenuSetActivity"
-            android:label="@string/activity_menu_set"
+            android:label="@string/menu_set"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.MoveMenuActivity"
-            android:label="@string/activity_move_menu"
+            android:label="@string/move_menu"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
@@ -59,33 +59,31 @@
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.CancelMenuActivity"
-            android:label="@string/activity_cancel_menu"
+            android:label="@string/cancel_menu"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name="syn.pos.mobile.iordertab.CheckBillActivity"
-            android:label="@string/activity_checkbill"
+            android:name="syn.pos.mobile.iordertab.SummaryActivity"
+            android:label="@string/summary"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.SearchMemberActivity"
-            android:label="@string/activity_member_title"
+            android:label="@string/search_member"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.SetMemberFromMain"
-            android:label="@string/activity_member_title"
+            android:label="@string/set_member"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.QueueActivity"
-            android:label="@string/activity_queue"
+            android:label="@string/queue"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" >
-        </activity>
-        <activity android:name="syn.pos.mobile.iordertab.LogActivity" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -106,22 +104,22 @@
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.KdsInfoActivity"
-            android:label="@string/activity_kds"
+            android:label="@string/kds"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.ReprintMenuActivity"
-            android:label="@string/reprint_quick_order"
+            android:label="@string/reprint"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.RegisterActivity"
-            android:label="@string/title_activity_register"
+            android:label="@string/register"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/about" >
         </activity>
         <activity
             android:name="syn.pos.mobile.iordertab.MenuModifyActivity"

@@ -16,29 +16,35 @@
         android:src="@drawable/ic_menu_clock" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_alignTop="@+id/textView1"
-        android:layout_toLeftOf="@+id/textView3"
-        android:layout_toRightOf="@+id/imageView1"
-        android:text="Order Name" />
-
-    <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView3"
-        android:text="1" />
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:text="1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/textView3"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text="Order Name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView1"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="100" />
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:text="100"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

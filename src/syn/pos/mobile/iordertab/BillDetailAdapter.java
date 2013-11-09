@@ -48,12 +48,12 @@ public class BillDetailAdapter extends BaseAdapter{
 		SummaryTransaction.Order order = summaryTrans.OrderList.get(position);
 
 		if(convertView == null){
-			convertView = inflater.inflate(R.layout.bill_detail_layout, null);
+			convertView = inflater.inflate(R.layout.billdetail_template, null);
 			holder = new ViewHolder();
-			holder.imgWaitPrint = (ImageView) convertView.findViewById(R.id.imageViewWaitPrint);
-			holder.tvOrderName = (TextView) convertView.findViewById(R.id.textViewOrderName);
-			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.textViewOrderQty);
-			holder.tvOrderTotalPrice = (TextView) convertView.findViewById(R.id.textViewOrderTotalPrice);
+			holder.imgWaitPrint = (ImageView) convertView.findViewById(R.id.imageView1);
+			holder.tvOrderName = (TextView) convertView.findViewById(R.id.textView2);
+			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.textView1);
+			holder.tvOrderTotalPrice = (TextView) convertView.findViewById(R.id.textView3);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
@@ -102,7 +102,7 @@ public class BillDetailAdapter extends BaseAdapter{
 				holder.tvOrderTotalPrice.setPaintFlags(holder.tvOrderTotalPrice.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 			}
 		} catch (Exception e) {
-			Log.appendLog(context, "Error at " + CheckBillActivity.class + " Message " + e.getMessage());
+			Log.appendLog(context, "Error at " + SummaryActivity.class + " Message " + e.getMessage());
 		}
 		return convertView;
 	}

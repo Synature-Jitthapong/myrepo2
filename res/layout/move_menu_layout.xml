@@ -49,7 +49,7 @@
             </ListView>
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btnEditCustome"
                 style="@style/ButtonTextWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

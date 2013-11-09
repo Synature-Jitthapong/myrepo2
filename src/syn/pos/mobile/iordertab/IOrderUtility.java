@@ -2,7 +2,6 @@ package syn.pos.mobile.iordertab;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -12,14 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-
-import org.ksoap2.serialization.PropertyInfo;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
 import syn.pos.data.dao.AppConfig;
 import syn.pos.data.dao.ComputerProperty;
 import syn.pos.data.dao.GlobalProperty;
@@ -50,29 +44,24 @@ import syn.pos.data.model.ReasonGroups;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.SyncDataLogModel;
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.ProductGroups.QuestionGroup;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class IOrderUtility {
 	private static ProgressDialog progress;
@@ -85,8 +74,7 @@ public class IOrderUtility {
 			
 			webServiceState = state;
 			IOrderUtility.progress = new ProgressDialog(c);
-			tvProgress.setText(R.string.loading_progress);
-			IOrderUtility.progress.setMessage(tvProgress.getText());
+			IOrderUtility.progress.setMessage(context.getString(R.string.loading_progress));
 		}
 		
 		@Override
@@ -141,7 +129,18 @@ public class IOrderUtility {
 				}
 				
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 			}
 		}
 	}
@@ -160,48 +159,6 @@ public class IOrderUtility {
 		List<ProductGroups.PComponentSet> sizeList = listPComSet(c, productId);
 		ProductSizeAdapter adapter = new ProductSizeAdapter(c, sizeList);
 		return adapter;
-	}
-
-	public static void alertDialog(Context context, int title, String message,
-			int btnStyle) {
-		final CustomDialog customDialog = new CustomDialog(context,
-				R.style.CustomDialog);
-		customDialog.title.setVisibility(View.VISIBLE);
-		customDialog.title.setText(title);
-		customDialog.message.setText(message);
-		customDialog.btnCancel.setVisibility(View.GONE);
-		customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-//		customDialog.btnOk.setBackgroundResource(btnStyle != 0 ? btnStyle
-//				: R.drawable.red_button);
-		customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				customDialog.dismiss();
-			}
-		});
-		customDialog.show();
-	}
-
-	public static void alertDialog(Context context, int title, int message,
-			int btnStyle) {
-		final CustomDialog customDialog = new CustomDialog(context,
-				R.style.CustomDialog);
-		customDialog.title.setVisibility(View.VISIBLE);
-		customDialog.title.setText(title);
-		customDialog.message.setText(message);
-		customDialog.btnCancel.setVisibility(View.GONE);
-		customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-//		customDialog.btnOk.setBackgroundResource(btnStyle != 0 ? btnStyle
-//				: R.drawable.red_button);
-		customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				customDialog.dismiss();
-			}
-		});
-		customDialog.show();
 	}
 
 	public static List<ReasonGroups.ReasonDetail> loadReasonFromWs(Context c,
@@ -388,31 +345,56 @@ public class IOrderUtility {
 					new UpdateShopDataFromWs(context, globalVar)
 							.execute(GlobalVar.FULL_URL);
 				} else if (shopId == -1) {
-					IOrderUtility.alertDialog(context,
-							R.string.global_dialog_title_error,
-							R.string.text_comp_setting_not_valid, 0);
+					new AlertDialog.Builder(context)
+					.setTitle(R.string.error)
+					.setMessage(R.string.invalid_computer_setting)
+					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+						}
+					})
+					.show();
 					IOrderUtility.progress.dismiss();
 				} else {
-					IOrderUtility.alertDialog(context,
-							R.string.global_dialog_title_error,
-							R.string.device_not_register, 0);
+					new AlertDialog.Builder(context)
+					.setTitle(R.string.error)
+					.setMessage(R.string.device_not_register)
+					.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+						}
+					})
+					.show();
 					IOrderUtility.progress.dismiss();
 				}
 			} catch (NumberFormatException e) {
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 				IOrderUtility.progress.dismiss();
-				IOrderUtility.alertDialog(context,
-						R.string.global_dialog_title_error, result, 0);
 			}
 		}
 
 		@Override
 		protected void onPreExecute() {
-			tvProgress.setText(R.string.checking_device);
-			IOrderUtility.progress.setMessage(tvProgress.getText());
-			IOrderUtility.progress.show();
-			// progress.setMessage(tvProgress.getText().toString());
-			// progress.show();
 			progress.dismiss();
+			IOrderUtility.progress.setMessage(context.getString(R.string.check_device));
+			IOrderUtility.progress.show();
 		}
 	}
 
@@ -427,8 +409,7 @@ public class IOrderUtility {
 		@Override
 		protected void onPreExecute() {
 			progress.dismiss();
-			tvProgress.setText(R.string.update_shop_progress);
-			IOrderUtility.progress.setMessage(tvProgress.getText());
+			IOrderUtility.progress.setMessage(context.getString(R.string.sync_shop));
 		}
 
 		@Override
@@ -469,21 +450,18 @@ public class IOrderUtility {
 				syn.pos.mobile.util.Log.appendLog(context,
 						"Update shop data fail => " + result);
 
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title.setText(R.string.global_dialog_title_error);
-				customDialog.message.setText(result);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
 					@Override
-					public void onClick(View v) {
-						customDialog.dismiss();
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
 					}
-				});
-				customDialog.show();
+				})
+				.show();
 			}
 		}
 	}
@@ -493,14 +471,12 @@ public class IOrderUtility {
 
 		public UpdateProductDataFromWs(Context c, GlobalVar gb) {
 			super(c, gb, webMethod);
-
-			tvProgress.setText(R.string.update_product_progress);
 		}
 
 		@Override
 		protected void onPreExecute() {
 			progress.dismiss();
-			IOrderUtility.progress.setMessage(tvProgress.getText());
+			IOrderUtility.progress.setMessage(context.getString(R.string.sync_product));
 		}
 
 		@Override
@@ -544,24 +520,18 @@ public class IOrderUtility {
 						.execute(GlobalVar.FULL_URL);
 			} catch (Exception e) {
 				IOrderUtility.progress.dismiss();
-				syn.pos.mobile.util.Log.appendLog(context,
-						"Update product data fail => " + e.getMessage());
-
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title.setText(R.string.global_dialog_title_error);
-				customDialog.message.setText(result);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
 					@Override
-					public void onClick(View v) {
-						customDialog.dismiss();
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
 					}
-				});
-				customDialog.show();
+				})
+				.show();
 			}
 		}
 	}
@@ -571,14 +541,12 @@ public class IOrderUtility {
 
 		public UpdateMenuDataFromWs(Context c, GlobalVar gb) {
 			super(c, gb, webMethod);
-
-			tvProgress.setText(R.string.update_menu_progress);
 		}
 
 		@Override
 		protected void onPreExecute() {
 			progress.dismiss();
-			IOrderUtility.progress.setMessage(tvProgress.getText());
+			IOrderUtility.progress.setMessage(context.getString(R.string.sync_menu));
 		}
 
 		@Override
@@ -612,24 +580,18 @@ public class IOrderUtility {
 						.execute(GlobalVar.FULL_URL);
 			} catch (Exception e) {
 				IOrderUtility.progress.dismiss();
-				syn.pos.mobile.util.Log.appendLog(context,
-						"Update menu data fail => " + result);
-
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title.setText(R.string.global_dialog_title_error);
-				customDialog.message.setText(result);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
 					@Override
-					public void onClick(View v) {
-						customDialog.dismiss();
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
 					}
-				});
-				customDialog.show();
+				})
+				.show();
 			}
 		}
 	}
@@ -666,24 +628,18 @@ public class IOrderUtility {
 				new UpdateSaleDateTask(context, globalVar).execute(GlobalVar.FULL_URL);
 			} catch (Exception e) {
 				IOrderUtility.progress.dismiss();
-				syn.pos.mobile.util.Log.appendLog(context,
-						"Update reason data fail => " + result);
-
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title.setText(R.string.global_dialog_title_error);
-				customDialog.message.setText(result);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
 					@Override
-					public void onClick(View v) {
-						customDialog.dismiss();
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
 					}
-				});
-				customDialog.show();
+				})
+				.show();
 			}
 		}
 	}
@@ -745,39 +701,34 @@ public class IOrderUtility {
 				SyncDataLog syncLog = new SyncDataLog(context);
 				syncLog.stampTime(1, "", wsResult.getSzResultData());
 				
-				// already success
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title.setText(R.string.update_data_title);
-				customDialog.message.setText(R.string.sync_data_success);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-//				customDialog.btnOk
-//						.setBackgroundResource(R.drawable.green_button);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
+				new AlertDialog.Builder(context)
+				.setMessage(R.string.success)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
 					@Override
-					public void onClick(View v) {
-						// call back 
-						try {
-							
-							// update out of product
-							new CheckOutOfProductTask(context,
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						new CheckOutOfProductTask(context,
 									globalVar).execute(GlobalVar.FULL_URL);
 							
 							webServiceStateListener.onSuccess();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						customDialog.dismiss();
 					}
-				});
-				customDialog.show();
+				})
+				.show();
 				
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 			}
 		}
 		
@@ -859,8 +810,18 @@ public class IOrderUtility {
 					}
 				});
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(context,
-						R.string.global_dialog_title_error, result, 0);
+				new AlertDialog.Builder(context)
+				.setTitle(R.string.error)
+				.setMessage(result)
+				.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.show();
 			}
 		}
 

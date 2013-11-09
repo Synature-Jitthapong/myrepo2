@@ -37,12 +37,12 @@ public class CurrOrderAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		OrderSendData.OrderDetail order = currOrder.xListOrderDetail.get(position);
-		convertView = inflater.inflate(R.layout.order_list_template, null);
-		TextView tvMenuQty = (TextView) convertView.findViewById(R.id.textViewMenuQty);
-		TextView tvMenuName = (TextView) convertView.findViewById(R.id.textViewMenuName);
-		
-		tvMenuQty.setText("x" + globalVar.qtyFormat.format(order.getfItemQty()));
-		tvMenuName.setText(order.getSzProductName());
+//		convertView = inflater.inflate(R.layout.order_list_template, null);
+//		TextView tvMenuQty = (TextView) convertView.findViewById(R.id.textViewMenuQty);
+//		TextView tvMenuName = (TextView) convertView.findViewById(R.id.textViewMenuName);
+//		
+//		tvMenuQty.setText("x" + globalVar.qtyFormat.format(order.getfItemQty()));
+//		tvMenuName.setText(order.getSzProductName());
 		return convertView;
 	}
 
