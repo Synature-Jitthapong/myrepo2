@@ -1,0 +1,42 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="SectionHead" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:drawableBottom">@drawable/section_head</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:textColor">@color/light_blue</item>
+    </style>
+    <style name="EditText" parent="@android:style/Widget.EditText">
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    <style name="ButtonTextWhite" parent="ButtonText">
+	    <item name="android:textColor" >#ffffff</item>
+    </style>
+    <style name="ButtonText">
+        <item name="android:layout_width" >wrap_content</item>
+	    <item name="android:layout_height" >wrap_content</item>
+	    <item name="android:gravity" >center</item>
+	    <item name="android:textStyle">normal</item>
+	    <item name="android:layout_marginLeft" >1dp</item>
+	    <item name="android:layout_marginTop" >1dp</item>
+	    <item name="android:layout_marginRight" >1dp</item>
+	    <item name="android:layout_marginBottom" >1dp</item>
+	    <item name="android:minHeight">48dip</item>
+	    <item name="android:minWidth">64dip</item>
+    </style>
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowBackground">@color/light_gray</item>
+       <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+    </style>  
+     <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/actionbar_background</item>
+    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+    </style>
+</resources>

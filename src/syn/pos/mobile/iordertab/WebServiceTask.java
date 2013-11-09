@@ -10,7 +10,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -25,7 +24,6 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	protected Context context;
 	protected GlobalVar globalVar;
 	protected ProgressDialog progress;
-	protected TextView tvProgress;
 
 	public WebServiceTask(Context c, GlobalVar gb, String method) {
 		context = c;
@@ -47,15 +45,13 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		soapRequest.addProperty(property);
 
 		progress = new ProgressDialog(c);
-		//progress.setCanceledOnTouchOutside(false);
+		progress.setCanceledOnTouchOutside(false);
 		progress.setCancelable(false);
-		tvProgress = new TextView(c);
-		tvProgress.setText(R.string.loading_progress);
 	}
 
 	@Override
 	protected void onPreExecute() {
-		progress.setMessage(tvProgress.getText().toString());
+		progress.setMessage(context.getString(R.string.loading_progress));
 		progress.show();
 	}
 
