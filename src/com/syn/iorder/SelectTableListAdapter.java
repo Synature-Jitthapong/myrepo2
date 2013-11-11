@@ -2,7 +2,6 @@ package com.syn.iorder;
 
 import java.util.List;
 import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.mobile.iordertab.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;

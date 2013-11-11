@@ -5,7 +5,6 @@ import java.util.List;
 import syn.pos.data.model.MenuGroups;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.MenuGroups.MenuComment;
-import syn.pos.mobile.iordertab.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

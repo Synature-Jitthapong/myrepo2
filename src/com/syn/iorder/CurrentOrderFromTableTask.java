@@ -4,7 +4,6 @@ import org.ksoap2.serialization.PropertyInfo;
 
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.OrderSendData;
-import syn.pos.mobile.iordertab.R;
 import android.content.Context;
 import android.widget.ListView;
 

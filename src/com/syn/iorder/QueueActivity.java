@@ -2,9 +2,7 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ksoap2.serialization.PropertyInfo;
-
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.QueueInfo;
@@ -12,8 +10,6 @@ import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;

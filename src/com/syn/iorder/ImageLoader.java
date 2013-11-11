@@ -13,10 +13,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import syn.pos.mobile.iordertab.R;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -1,28 +1,21 @@
 package com.syn.iorder;
 
 import java.util.List;
-import java.util.Locale;
-
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ShowMenuColumnName;
 import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.SyncDataLogModel;
-import syn.pos.mobile.iordertab.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;

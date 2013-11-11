@@ -4,9 +4,7 @@ package com.syn.iorder;
  */
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ksoap2.serialization.PropertyInfo;
-
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
@@ -16,26 +14,16 @@ import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
-import syn.pos.mobile.util.Log;
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -44,7 +32,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
 
 public class CheckBillActivity extends Activity {
 	private Spinner spinnerTableZone;

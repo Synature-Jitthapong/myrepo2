@@ -5,25 +5,19 @@ import org.ksoap2.serialization.PropertyInfo;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.Members;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SearchMemberActivity extends Activity {
 	protected GlobalVar globalVar;

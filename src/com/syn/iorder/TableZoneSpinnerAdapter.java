@@ -3,7 +3,6 @@ package com.syn.iorder;
 import java.util.List;
 
 import syn.pos.data.model.TableInfo.TableZone;
-import syn.pos.mobile.iordertab.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

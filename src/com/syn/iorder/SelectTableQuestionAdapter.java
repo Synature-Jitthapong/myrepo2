@@ -4,9 +4,6 @@ import java.util.List;
 
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.model.ProductGroups;
-import syn.pos.data.model.ProductGroups.QuestionDetail;
-import syn.pos.mobile.iordertab.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

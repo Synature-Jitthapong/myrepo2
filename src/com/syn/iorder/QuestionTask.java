@@ -3,15 +3,10 @@ package com.syn.iorder;
 import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
-
 import com.google.gson.Gson;
-
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
-import syn.pos.mobile.util.Log;
-
 import android.content.Context;
 
 public class QuestionTask extends WebServiceTask {

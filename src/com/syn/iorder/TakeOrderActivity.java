@@ -25,7 +25,6 @@ import syn.pos.data.model.ShopData.StaffPermission;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;

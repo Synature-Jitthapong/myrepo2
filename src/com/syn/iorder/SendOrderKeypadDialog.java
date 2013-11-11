@@ -1,6 +1,5 @@
 package com.syn.iorder;
 
-import syn.pos.mobile.iordertab.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;

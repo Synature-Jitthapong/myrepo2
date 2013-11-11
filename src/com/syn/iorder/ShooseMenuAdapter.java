@@ -1,10 +1,8 @@
 package com.syn.iorder;
 
 import java.util.List;
-
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.model.OrderSendData;
-import syn.pos.mobile.iordertab.R;
 import syn.pos.mobile.util.Log;
 import android.content.Context;
 import android.graphics.Color;

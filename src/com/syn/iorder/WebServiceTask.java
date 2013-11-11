@@ -1,8 +1,6 @@
 package com.syn.iorder;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -10,13 +8,9 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
-
-import syn.pos.mobile.iordertab.R;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.TextView;
 
 public abstract class WebServiceTask extends AsyncTask<String, String, String> {

@@ -1,6 +1,5 @@
 package com.syn.iorder;
 
-import syn.pos.mobile.iordertab.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;

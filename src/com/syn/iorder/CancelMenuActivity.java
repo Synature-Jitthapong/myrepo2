@@ -5,11 +5,8 @@ package com.syn.iorder;
  */
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ksoap2.serialization.PropertyInfo;
-
 import com.google.gson.Gson;
-
 import syn.pos.data.dao.MenuUtil;
 import syn.pos.data.dao.Reason;
 import syn.pos.data.json.GsonDeserialze;
@@ -20,7 +17,6 @@ import syn.pos.data.model.WebServiceResult;
 import syn.pos.data.model.ReasonGroups.ReasonDetail;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
-import syn.pos.mobile.iordertab.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -31,11 +27,9 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;

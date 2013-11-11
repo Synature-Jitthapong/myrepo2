@@ -5,8 +5,6 @@ import org.ksoap2.serialization.PropertyInfo;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.mobile.iordertab.R;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;

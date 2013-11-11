@@ -1,7 +1,6 @@
 package com.syn.iorder;
 
 import syn.pos.data.dao.DataBaseHelper;
-import syn.pos.mobile.iordertab.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;

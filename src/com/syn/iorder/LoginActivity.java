@@ -1,13 +1,10 @@
 package com.syn.iorder;
 
 import java.util.List;
-import java.util.Locale;
-
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.ShopData.StaffPermission;
-import syn.pos.mobile.iordertab.R;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
@@ -15,8 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;

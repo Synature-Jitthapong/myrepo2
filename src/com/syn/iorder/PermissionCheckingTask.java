@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import syn.pos.data.model.ShopData;
-import syn.pos.mobile.iordertab.R;
 
 import android.content.Context;
 

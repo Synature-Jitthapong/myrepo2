@@ -4,7 +4,6 @@ import java.util.List;
 
 import syn.pos.data.dao.MenuItem;
 import syn.pos.data.model.POSData_OrderTransInfo;
-import syn.pos.mobile.iordertab.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,7 +1,6 @@
 package com.syn.iorder;
 
 import syn.pos.data.model.SummaryTransaction;
-import syn.pos.mobile.iordertab.R;
 import syn.pos.mobile.util.Log;
 import android.content.Context;
 import android.graphics.Color;

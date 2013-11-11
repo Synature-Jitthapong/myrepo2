@@ -5,15 +5,12 @@ import java.util.List;
 import syn.pos.data.dao.MenuUtil;
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.model.OrderSendData;
-import syn.pos.mobile.iordertab.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SelectOrderAdapter extends BaseAdapter {
