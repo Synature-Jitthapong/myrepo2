@@ -2,9 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/white_button"
-    android:minHeight="64dip" >
+    android:layout_height="100dp"
+    android:background="@drawable/menu_selector"
+    android:gravity="center_vertical"
+    android:minHeight="100dp"
+    android:padding="4dp" >
+
+    <ImageButton
+        android:id="@+id/imageButtonSpeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/menuitem_img"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_lock_silent_mode_off"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/menuitem_img"
@@ -16,55 +27,42 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_list_nofood" />
 
-    <ImageButton
-        android:id="@+id/imageButtonSpeak"
+    <TextView
+        android:id="@+id/tvMenuCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/menuitem_img"
         android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_lock_silent_mode_off"
-        android:visibility="gone" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/menuitem_img"
+        android:text="Code"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
-    <LinearLayout
-        android:id="@+id/LinearLayout1"
+    <TextView
+        android:id="@+id/menuitem_tvMenuName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
+        android:layout_below="@+id/tvMenuCode"
         android:layout_toRightOf="@+id/menuitem_img"
-        android:orientation="vertical" >
+        android:gravity="left"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="4"
+        android:text="menu name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/tvMenuCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Code"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/menuitem_tvMenuName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="4"
-            android:text="menu name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewMenuItemOutOfStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:shadowColor="#ffffff"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="@string/text_outof_stock"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/holo_red_light"
-            android:textStyle="bold|italic" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewMenuItemOutOfStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:shadowColor="#ffffff"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="@string/text_outof_stock"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/light_red"
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>

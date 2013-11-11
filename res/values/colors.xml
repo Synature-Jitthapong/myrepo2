@@ -16,4 +16,5 @@
 	<color name="light_red_end">#EE423F</color>
     <color name="grey_stroke">#FFA5A5A5</color>
     <color name="disabled">#E2E2E2</color>
+    <color name="light_red">#FFFF0000</color>
 </resources>
