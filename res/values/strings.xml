@@ -412,7 +412,7 @@
     <string name="button_edit_question">Edit question</string>
     <string name="edit_question_title">Edit question</string>
     <string name="edit_question_success">Successfully</string>
-    <string name="generald_setting">Generald</string>
+    <string name="generald_setting">General</string>
     <string name="display_menu_image">Display menu image</string>
     <string name="title_activity_register">iOrder Registration</string>
     <string name="text_product_code">ProductCode:</string>
