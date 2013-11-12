@@ -2,7 +2,6 @@ package com.syn.iorder;
 
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ChildOrderLinkType7ViewHolder {
@@ -12,7 +11,6 @@ public class ChildOrderLinkType7ViewHolder {
 	TextView tvMenuComment;
 	TextView tvMenuQty;
 	TextView tvMenuPrice;
-	LinearLayout layoutComment;
 	Button btnMinus;
 	Button btnPlus;
 	Button btnDelete;

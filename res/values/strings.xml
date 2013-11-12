@@ -452,5 +452,12 @@
     <string name="software_about">55/165 M.Banklangmuang, Soi Ladprao 88, Ladprao Rd. Wangthonglang, Bangkok, Thailand. 10310
 Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</string>
     <string name="software_copy_right">© 2013 All Rights Reserved. \nSynature Technology Co., Ltd.</string>
+    <string name="select_course">Select course</string>
+    <string name="title_activity_comment_transaction">Comment Table</string>
+    <string name="reason">Reason</string>
+    <string name="comment_trans">Comment Table</string>
+    <string name="select_seat">Select Seat</string>
+    <string name="sort">Sort</string>
+    <string name="seat">Seat</string>
 
 </resources>

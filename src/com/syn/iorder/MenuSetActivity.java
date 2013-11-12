@@ -653,8 +653,6 @@ public class MenuSetActivity extends Activity {
 						.findViewById(R.id.tvChildOrderLinkType7Qty);
 				holder.tvMenuPrice = (TextView) convertView
 						.findViewById(R.id.tvChildOrderLinkType7Price);
-				holder.layoutComment = (LinearLayout) convertView
-						.findViewById(R.id.LinearLayout3);
 
 				holder.btnMinus = (Button) convertView
 						.findViewById(R.id.btnChildOrderLinkType7Minus);
@@ -708,7 +706,7 @@ public class MenuSetActivity extends Activity {
 			// order comment
 			String menuComment = "";
 			if (pcs.menuCommentList != null && pcs.menuCommentList.size() > 0) {
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvMenuComment.setVisibility(View.VISIBLE);
 				for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
 					menuComment += mc.getMenuCommentName_0() + " ";
 
@@ -729,14 +727,14 @@ public class MenuSetActivity extends Activity {
 				}
 				holder.tvMenuComment.setText(menuComment);
 			} else {
-				holder.layoutComment.setVisibility(View.GONE);
+				holder.tvMenuComment.setVisibility(View.GONE);
 			}
 
 			if (!pcs.getOrderComment().equals("")) {
 				menuComment += pcs.getOrderComment();
 
 				holder.tvMenuComment.setText(menuComment);
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvMenuComment.setVisibility(View.VISIBLE);
 			}
 
 			holder.btnMinus.setOnClickListener(new View.OnClickListener() {
@@ -923,8 +921,10 @@ public class MenuSetActivity extends Activity {
 					View v = factory.inflate(R.layout.menu_comment_layout2, null);
 					
 					TextView tvTitle = (TextView) v.findViewById(R.id.textViewMenuCommentTitle);
-					TableRow tbRowSaleMode = (TableRow) v.findViewById(R.id.tableRowSaleMode);
-					tbRowSaleMode.setVisibility(View.GONE);
+					TextView tvSaleMode = (TextView) v.findViewById(R.id.tvSaleMode);
+					LinearLayout saleModeContent = (LinearLayout) v.findViewById(R.id.saleModeModSwLayout);
+					tvSaleMode.setVisibility(View.GONE);
+					saleModeContent.setVisibility(View.GONE);
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					final ListView menuCommentListView = (ListView) v.findViewById(R.id.menuCommentListView);
 					final ListView selectedMenuCommentListView = (ListView) v.findViewById(R.id.listViewCommentSelected);
@@ -1068,7 +1068,7 @@ public class MenuSetActivity extends Activity {
 					dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
-							WindowManager.LayoutParams.WRAP_CONTENT);
+							WindowManager.LayoutParams.MATCH_PARENT);
 					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN |
 							WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 					dialog.show();

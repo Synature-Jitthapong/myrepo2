@@ -43,7 +43,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		soapRequest.addProperty(property);
 
 		progress = new ProgressDialog(c);
-		//progress.setCanceledOnTouchOutside(false);
+		// progress.setCanceledOnTouchOutside(false);
 		progress.setCancelable(false);
 		tvProgress = new TextView(c);
 		tvProgress.setText(R.string.loading_progress);
@@ -59,17 +59,17 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	protected String doInBackground(String... uri) {
 		String result = "";
 		String url = uri[0];
-		
-		SoapSerializationEnvelope envelope = 
-				new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
 
 		envelope.dotNet = true;
 		envelope.setOutputSoapObject(soapRequest);
-		
+
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
 
+		String soapAction = nameSpace + webMethod;
 		try {
-			String soapAction = nameSpace + webMethod;
 			androidHttpTransport.call(soapAction, envelope);
 			try {
 				result = envelope.getResponse().toString();
@@ -77,12 +77,21 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				result = e.getMessage();
 				e.printStackTrace();
 			}
-		}catch (IOException e) {
+		} catch (IOException e) {
 			result = e.getMessage();
 			e.printStackTrace();
-		}catch (XmlPullParserException e) {
+		} catch (XmlPullParserException e) {
 			result = e.getMessage();
 			e.printStackTrace();
+		}
+
+		if (result == null || result.equals("")) {
+			try {
+				result = ((SoapObject) envelope.bodyIn).toString();
+			} catch (Exception e) {
+				result = e.getMessage();
+				e.printStackTrace();
+			}
 		}
 		return result;
 	}

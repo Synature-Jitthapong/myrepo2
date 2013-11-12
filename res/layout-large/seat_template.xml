@@ -1,46 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="8dp" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="4dp"
-        android:gravity="center"
-        android:text="Select Seat"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32sp"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <GridView
-        android:id="@+id/gridView1"
+        <Button
+            android:id="@+id/btnClose"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+            android:gravity="center"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button1"
+            android:layout_alignBottom="@+id/button1"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="4dp"
+            android:layout_toLeftOf="@+id/btnClose"
+            android:gravity="center"
+            android:text="@string/select_seat"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:horizontalSpacing="4dp"
-        android:numColumns="8"
-        android:verticalSpacing="4dp" >
+        android:layout_margin="4dp"
+        android:gravity="center_vertical" >
 
-    </GridView>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/select_course"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/gridView1"
-        android:layout_alignTop="@+id/textView1"
-        android:background="@drawable/light_grey_button"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView2" >
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <GridView
+            android:id="@+id/gridView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:horizontalSpacing="4dp"
+            android:numColumns="8"
+            android:verticalSpacing="4dp" >
+
+        </GridView>
+
+    </RelativeLayout>
+
+</LinearLayout>

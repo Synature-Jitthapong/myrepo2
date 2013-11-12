@@ -3,6 +3,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,8 @@ public class ResizeImage extends Dialog implements OnTouchListener {
 
 	private static final float MIN_ZOOM = 1.0f;
 	private static final float MAX_ZOOM = 5.0f;
+	
+	private Context mContext;
 
 	// These matrices will be used to move and zoom image
 	Matrix matrix = new Matrix();
@@ -31,8 +34,11 @@ public class ResizeImage extends Dialog implements OnTouchListener {
 	PointF mid = new PointF();
 	float oldDist = 1f;
 	
+	
+	
 	public ResizeImage(Context context, int theme) {
 		super(context, theme);
+		mContext = context;
 	}
 
 	@Override

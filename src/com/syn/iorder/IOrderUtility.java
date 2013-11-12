@@ -176,6 +176,25 @@ public class IOrderUtility {
 		customDialog.show();
 	}
 
+	public static void alertDialog(Context context, int message,
+			int btnStyle) {
+		final CustomDialog customDialog = new CustomDialog(context,
+				R.style.CustomDialog);
+		customDialog.message.setText(message);
+		customDialog.btnCancel.setVisibility(View.GONE);
+		customDialog.btnOk.setText(R.string.global_close_dialog_btn);
+//		customDialog.btnOk.setBackgroundResource(btnStyle != 0 ? btnStyle
+//				: R.drawable.red_button);
+		customDialog.btnOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				customDialog.dismiss();
+			}
+		});
+		customDialog.show();
+	}
+	
 	public static void alertDialog(Context context, int title, int message,
 			int btnStyle) {
 		final CustomDialog customDialog = new CustomDialog(context,

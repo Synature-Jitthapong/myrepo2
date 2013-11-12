@@ -288,16 +288,16 @@ public class MoveMenuActivity extends Activity {
 				List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(7);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(7); 
 				if(FROM_TABLE_ID == 0){
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_source_table, 0);
+					IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
 				}else if(TO_TABLE_ID == 0){
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_destination_table, 0);
+					IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
 				}else if(menuData2 == null){
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_move, 0);
+					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
 				}else if(movedMenuListView.getCount()==0){
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_move, 0);
+					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
 				}else if((allReasonLst != null && allReasonLst.size() > 0) && 
 						(reasonLst != null && reasonLst.size() == 0)){
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
+					IOrderUtility.alertDialog(context, R.string.select_reason, 0);
 				}else{
 					final CustomDialog cfDialog = new CustomDialog(MoveMenuActivity.this, R.style.CustomDialog);
 					cfDialog.title.setVisibility(View.VISIBLE);

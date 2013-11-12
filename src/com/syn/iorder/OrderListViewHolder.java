@@ -2,7 +2,6 @@ package com.syn.iorder;
 
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class OrderListViewHolder {
@@ -14,7 +13,6 @@ public class OrderListViewHolder {
 	TextView tvOrderListMenuComment;
 	TextView tvOrderListMenuPrice;
 	TextView tvOrderListMenuQty;
-	LinearLayout layoutComment;
 	Button btnPlus;
 	Button btnMinus;
 	Button btnComment;

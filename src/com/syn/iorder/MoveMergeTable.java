@@ -114,12 +114,12 @@ public class MoveMergeTable extends Activity {
 					List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(reasonGroupId);
 					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(reasonGroupId); 
 					if(FROM_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_source_table, 0);
+						IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
 					}else if(TO_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_destination_table, 0);
+						IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
 					}else if((allReasonLst != null && allReasonLst.size() > 0) && 
 							(reasonLst != null && reasonLst.size() == 0)){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
+						IOrderUtility.alertDialog(context, R.string.select_reason, 0);
 					}else{
 						confirmOperation(R.string.cf_move_table_title, R.string.cf_move_table_msg);
 					}
@@ -145,12 +145,12 @@ public class MoveMergeTable extends Activity {
 					List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(reasonGroupId);
 					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(reasonGroupId); 
 					if(FROM_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_source_table, 0);
+						IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
 					}else if(TO_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_destination_table, 0);
+						IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
 					}else if((allReasonLst != null && allReasonLst.size() > 0) && 
 							(reasonLst != null && reasonLst.size() == 0)){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
+						IOrderUtility.alertDialog(context, R.string.select_reason, 0);
 					}else{
 						confirmOperation(R.string.cf_merge_table_title, R.string.cf_merge_table_msg);
 					}	

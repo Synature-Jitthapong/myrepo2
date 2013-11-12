@@ -1,7 +1,6 @@
 package com.syn.iorder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.ksoap2.serialization.PropertyInfo;
 import com.google.gson.Gson;
@@ -21,7 +20,6 @@ import syn.pos.data.model.QueueInfo;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.ShopData.SeatNo;
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.ShopData.StaffPermission;
 import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
@@ -60,10 +58,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.RadioGroup.LayoutParams;
+import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
 public class TakeOrderActivity extends Activity{
@@ -84,12 +84,12 @@ public class TakeOrderActivity extends Activity{
 	private TextView textViewNotification;
 	private TextView textViewNotification2;
 	private LinearLayout pluLayout;
-	private ImageButton btnToggleMaxMin;
+	private Button btnToggleMax;
 	private LinearLayout menuItemLayout;
 	private LinearLayout saleModeSwLayout;
 	private Button btnPlu;
 	private Button btnSeat;
-	private TextView mTvSaleMode;
+	RelativeLayout saleModeTextLayout;
 
 	private List<syn.pos.data.model.MenuDataItem> ORDER_LIST;
 	private OrderListExpandableAdapter ORDER_LIST_ADAPTER;
@@ -187,13 +187,13 @@ public class TakeOrderActivity extends Activity{
 		btnSendByQueue = (Button) findViewById(R.id.buttonSendByQueue);
 		btnCheckDummyBill = (Button) findViewById(R.id.buttonCheckDummbyBill);
 		btnSetmember = (Button) findViewById(R.id.buttonSetMember);
-		btnToggleMaxMin = (ImageButton) findViewById(R.id.imageButtonToggleMaxMin);
+		btnToggleMax = (Button) findViewById(R.id.btnToggleMax);
 		menuItemLayout = (LinearLayout) findViewById(R.id.MenuItemLayout);
 		btnPlu = (Button) findViewById(R.id.btnPlu);
 		pluLayout = (LinearLayout) findViewById(R.id.PLULayout); 
 		saleModeSwLayout = (LinearLayout) findViewById(R.id.layoutSwSaleMode);
 		btnSeat = (Button) findViewById(R.id.buttonSeat);
-		mTvSaleMode = (TextView) findViewById(R.id.tvSaleMode);
+		saleModeTextLayout = (RelativeLayout) findViewById(R.id.saleModeTextLayout);
 		
 		btnSeat.setOnClickListener(new OnClickListener(){
 
@@ -228,18 +228,18 @@ public class TakeOrderActivity extends Activity{
 
 		});
 		
-		btnToggleMaxMin.setOnClickListener(new OnClickListener() {
+		btnToggleMax.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				if (isMaximize == false) {
 					menuItemLayout.setVisibility(View.GONE);
 					pluLayout.setVisibility(View.GONE);
-					btnToggleMaxMin.setImageResource(R.drawable.ic_find_previous_holo_light);
+					btnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_previous_holo_light, 0, 0, 0);
 					isMaximize = true;
 				} else {
 					menuItemLayout.setVisibility(View.VISIBLE);
-					btnToggleMaxMin.setImageResource(R.drawable.ic_find_next_holo_light);
+					btnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_next_holo_light, 0, 0, 0);
 					isMaximize = false;
 				}
 			}
@@ -390,21 +390,17 @@ public class TakeOrderActivity extends Activity{
 				Button btnPluClear = (Button) findViewById(R.id.btnPluClear);
 				Button btnPluDelete = (Button) findViewById(R.id.btnPluDel);
 
-//				txtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
-//				    @Override
-//				    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//				        boolean handled = false;
-//				        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//
-//							if (!txtPluCode.getText().toString().equals("")) {
-//								new PluSearchTask().execute("");
-//							}
-//							
-//				            handled = true;
-//				        }
-//				        return handled;
-//				    }
-//				});
+				txtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
+				    @Override
+				    public boolean onEditorAction(TextView v, int keyId, KeyEvent event) {
+				       if(keyId == EditorInfo.IME_ACTION_SEARCH){
+							new PluSearchTask().execute("");
+							return true;
+				       }
+				       return false;
+				    }
+				});
+				
 				btnPlu0.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -1146,6 +1142,12 @@ public class TakeOrderActivity extends Activity{
 			overridePendingTransition(R.animator.slide_in_up,
 					R.animator.slide_in_out);
 			return true;
+		case R.id.action_comment_trans:
+			intent = new Intent(TakeOrderActivity.this, CommentTransactionActivity.class);
+			startActivity(intent);
+			overridePendingTransition(R.animator.slide_in_up,
+					R.animator.slide_in_out);
+			return true;
 		case R.id.action_move_menu:
 			// moveMenu();
 			intent = new Intent(TakeOrderActivity.this, MoveMenuActivity.class);
@@ -1804,7 +1806,7 @@ public class TakeOrderActivity extends Activity{
 		SALE_MODE_POS_PREFIX = s.getPositionPrefix();
 		SALE_MODE_TEXT = s.getSaleModeName();
 
-		mTvSaleMode.setText(s.getSaleModeName());
+		showSaleModeText(s.getSaleModeName());
 		
 		Button btnEatIn = (Button) saleModeSwLayout.findViewById(1);
 		Button btnTakeAway = (Button) saleModeSwLayout.findViewById(2);
@@ -1835,6 +1837,9 @@ public class TakeOrderActivity extends Activity{
 			if(btnTakeAway != null){
 				btnTakeAway.setEnabled(true);
 				btnTakeAway.setSelected(false);
+			}
+			if(!mIsEnableSalemode){
+				hideSaleModeText();
 			}
 		}
 		refreshMenu();
@@ -2196,8 +2201,6 @@ public class TakeOrderActivity extends Activity{
 						.findViewById(R.id.tvChildOrderLinkType7Qty);
 				holder.tvMenuPrice = (TextView) convertView
 						.findViewById(R.id.tvChildOrderLinkType7Price);
-				holder.layoutComment = (LinearLayout) convertView
-						.findViewById(R.id.LinearLayout3);
 
 				holder.btnMinus = (Button) convertView
 						.findViewById(R.id.btnChildOrderLinkType7Minus);
@@ -2244,18 +2247,18 @@ public class TakeOrderActivity extends Activity{
 			holder.tvMenuPrice.setText(pcs.getPricePerUnit() != 0 ? 
 					globalVar.decimalFormat.format(pcs.getPricePerUnit()) : "");
 
-			LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-			layoutParam.setMargins(0, 0, 30, 0);
-			holder.tvMenuQty.setLayoutParams(layoutParam);
+//			LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(
+//					android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+//					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+//			layoutParam.setMargins(0, 0, 30, 0);
+//			holder.tvMenuQty.setLayoutParams(layoutParam);
 			holder.tvMenuQty.setText(globalVar.qtyFormat.format(pcs
 					.getProductQty()));
 
 			// order comment
 			String menuComment = "";
 			if (pcs.menuCommentList != null && pcs.menuCommentList.size() > 0) {
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvMenuComment.setVisibility(View.VISIBLE);
 				for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
 					menuComment += mc.getMenuCommentName_0() + " ";
 
@@ -2276,14 +2279,14 @@ public class TakeOrderActivity extends Activity{
 				}
 				holder.tvMenuComment.setText(menuComment);
 			} else {
-				holder.layoutComment.setVisibility(View.GONE);
+				holder.tvMenuComment.setVisibility(View.GONE);
 			}
 
 			if (!pcs.getOrderComment().equals("")) {
 				menuComment += pcs.getOrderComment();
 
 				holder.tvMenuComment.setText(menuComment);
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvMenuComment.setVisibility(View.VISIBLE);
 			}
 
 			holder.btnMinus.setVisibility(View.GONE);
@@ -2337,8 +2340,6 @@ public class TakeOrderActivity extends Activity{
 						.findViewById(R.id.tvOrderListMenuPrice);
 				holder.tvOrderListMenuComment = (TextView) convertView
 						.findViewById(R.id.tvOrderListMenuComment);
-				holder.layoutComment = (LinearLayout) convertView
-						.findViewById(R.id.LinearLayout3);
 				holder.btnMinus = (Button) convertView
 						.findViewById(R.id.btnOrderMinus);
 				holder.btnPlus = (Button) convertView
@@ -2403,7 +2404,7 @@ public class TakeOrderActivity extends Activity{
 
 			String menuComment = "";
 			if (mi.menuCommentList != null && mi.menuCommentList.size() > 0) {
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvOrderListMenuComment.setVisibility(View.VISIBLE);
 				for (MenuGroups.MenuComment mc : mi.menuCommentList) {
 					menuComment += mc.getMenuCommentName_0() + " ";
 
@@ -2424,14 +2425,14 @@ public class TakeOrderActivity extends Activity{
 				}
 				holder.tvOrderListMenuComment.setText(menuComment);
 			} else {
-				holder.layoutComment.setVisibility(View.GONE);
+				holder.tvOrderListMenuComment.setVisibility(View.GONE);
 			}
 
 			if (!mi.getOrderComment().equals("")) {
 				menuComment += mi.getOrderComment();
 
 				holder.tvOrderListMenuComment.setText(menuComment);
-				holder.layoutComment.setVisibility(View.VISIBLE);
+				holder.tvOrderListMenuComment.setVisibility(View.VISIBLE);
 			}
 
 			holder.position = groupPosition;
@@ -2555,7 +2556,7 @@ public class TakeOrderActivity extends Activity{
 					View v = factory.inflate(R.layout.menu_comment_layout2, null);
 
 					TextView tvTitle = (TextView) v.findViewById(R.id.textViewMenuCommentTitle);
-					TableRow seatLayout = (TableRow) v.findViewById(R.id.tableRowSeat);
+					LinearLayout seatLayout = (LinearLayout) v.findViewById(R.id.seatContent);
 					final Spinner spMcg = (Spinner) v.findViewById(R.id.spinnerMcg);
 					Button btnCancel = (Button) v.findViewById(R.id.buttonCancelComment);
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
@@ -2574,7 +2575,7 @@ public class TakeOrderActivity extends Activity{
 								LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 								v = inflater.inflate(R.layout.seat_template, null);
 								final GridView gvSeat = (GridView) v.findViewById(R.id.gridView1);
-								final ImageButton btnClose = (ImageButton) v.findViewById(R.id.imageButton1);
+								final Button btnClose = (Button) v.findViewById(R.id.btnClose);
 										
 								final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
 								d.setContentView(v);
@@ -2629,8 +2630,7 @@ public class TakeOrderActivity extends Activity{
 						// sale mode mod layout
 						final LinearLayout saleModeModSwLayout = (LinearLayout) v.findViewById(R.id.saleModeModSwLayout);
 						for(final ProductGroups.SaleMode s : saleModeLst){
-							View saleModeView = factory.inflate(R.layout.button_sale_mode, null);
-							Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
+							Button btnSwSaleMode = (Button) factory.inflate(R.layout.button_sale_mode, null);
 							btnSwSaleMode.setId(s.getSaleModeID());
 							
 							if(s.getSaleModeID() == 1)
@@ -2666,14 +2666,12 @@ public class TakeOrderActivity extends Activity{
 							
 							if(s.getSaleModeID() == 1){
 								btnSwSaleMode.setText("DI");
-								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
 							}
 							else if(s.getSaleModeID() == 2){
 								btnSwSaleMode.setText("TW");
-								btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
 							}
 							
-							saleModeModSwLayout.addView(saleModeView);
+							saleModeModSwLayout.addView(btnSwSaleMode);
 						}
 
 						Button btnEatIn = (Button) saleModeModSwLayout.findViewById(1);
@@ -2856,7 +2854,7 @@ public class TakeOrderActivity extends Activity{
 									WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 					dialog.getWindow().setLayout(
 							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+							android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 					dialog.show();
 
 					btnOk.setOnClickListener(new OnClickListener() {
@@ -5698,6 +5696,16 @@ public class TakeOrderActivity extends Activity{
 		notificationLayout.setVisibility(View.GONE);
 	}
 
+	private void hideSaleModeText(){
+		saleModeTextLayout.setVisibility(View.GONE);
+	}
+	
+	private void showSaleModeText(String saleModeText){
+		saleModeTextLayout.setVisibility(View.VISIBLE);
+		TextView tvSaleMode = (TextView) findViewById(R.id.tvSaleModeText);
+		tvSaleMode.setText(saleModeText);
+	}
+	
 	private void createSwSaleMode(){
 		SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
 		int[] saleModeId = {1,2}; 
@@ -5706,8 +5714,7 @@ public class TakeOrderActivity extends Activity{
 		if(saleModeLst != null && saleModeLst.size() > 0){
 			for(final ProductGroups.SaleMode s : saleModeLst){
 				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
-				View saleModeView = inflater.inflate(R.layout.button_sale_mode, null);
-				final Button btnSwSaleMode = (Button) saleModeView.findViewById(R.id.button1);
+				final Button btnSwSaleMode = (Button)inflater.inflate(R.layout.button_sale_mode, null);
 				btnSwSaleMode.setId(s.getSaleModeID());
 				
 				// default Eat In
@@ -5715,7 +5722,9 @@ public class TakeOrderActivity extends Activity{
 					btnSwSaleMode.setSelected(true);
 
 					if(mIsEnableSalemode){
-						mTvSaleMode.setText(s.getSaleModeName());
+						showSaleModeText(s.getSaleModeName());
+					}else{
+						hideSaleModeText();
 					}
 				}
 				
@@ -5735,13 +5744,11 @@ public class TakeOrderActivity extends Activity{
 				});
 				if(s.getSaleModeID() == 1){
 					btnSwSaleMode.setText("DI");
-					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_left);
 				}
 				else if(s.getSaleModeID() == 2){
 					btnSwSaleMode.setText("TW");
-					btnSwSaleMode.setBackgroundResource(R.drawable.light_grey_button_right);
 				}
-				saleModeSwLayout.addView(saleModeView);
+				saleModeSwLayout.addView(btnSwSaleMode);
 			}
 			
 			if(saleModeLst.size() == 1){
@@ -5762,10 +5769,12 @@ public class TakeOrderActivity extends Activity{
 		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 		final View v = inflater.inflate(R.layout.seat_template, null);
 		final GridView gvSeat = (GridView) v.findViewById(R.id.gridView1);
-		final ImageButton btnClose = (ImageButton) v.findViewById(R.id.imageButton1);
+		final Button btnClose = (Button) v.findViewById(R.id.btnClose);
 				
 		final Dialog d = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
 		d.setContentView(v);
+		d.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 
+				WindowManager.LayoutParams.WRAP_CONTENT);
 		d.show();
 		
 		btnClose.setOnClickListener(new OnClickListener(){

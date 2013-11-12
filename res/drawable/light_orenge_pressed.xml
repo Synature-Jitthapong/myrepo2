@@ -3,15 +3,10 @@
 	<gradient
 	    android:startColor="@color/light_blue_start"
 	    android:endColor="@color/light_blue_end"
-	    android:angle="270"></gradient>
-	
+	    android:angle="270"></gradient>	
 	<stroke 
 	    android:width="1px"
 	    android:color="@color/grey_stroke"/>
-	
-	<corners
-	    android:radius="3dp"></corners>
-	
 	<padding 
 	    android:left="8dp"
 	    android:top="8dp"
