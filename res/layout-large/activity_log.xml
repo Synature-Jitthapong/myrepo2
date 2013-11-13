@@ -22,7 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textViewQueueListTitle"
-        android:background="@drawable/radius_bg" >
+        android:background="@drawable/white_layer" >
 
         <LinearLayout
             android:layout_width="match_parent"

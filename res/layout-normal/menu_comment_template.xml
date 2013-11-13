@@ -49,7 +49,7 @@
         android:layout_alignBottom="@+id/btnMenuCommentPlus"
         android:layout_alignTop="@+id/btnMenuCommentPlus"
         android:layout_toLeftOf="@+id/btnMenuCommentPlus"
-        android:background="@drawable/radius_bg"
+        android:background="@drawable/white_layer"
         android:gravity="center"
         android:minWidth="32dp"
         android:text="1"

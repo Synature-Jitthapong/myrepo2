@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="3dp"
         android:layout_marginTop="1dp"
-        android:layout_toLeftOf="@+id/btnOrderMinus"
+        android:layout_toLeftOf="@+id/linearLayout1"
         android:layout_toRightOf="@+id/imageViewMenuPic"
         android:focusable="false"
         android:text="Menu name"
@@ -30,93 +30,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/btnOrderMinus"
+        android:layout_below="@+id/linearLayout1"
         android:layout_marginTop="4dp"
         android:focusable="false"
         android:textStyle="italic" />
-
-    <Button
-        android:id="@+id/buttonOrderEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/btnOrderDelete"
-        android:background="@drawable/light_grey_button"
-        android:drawableLeft="@drawable/ic_action_edit_light"
-        android:focusable="false"
-        android:paddingLeft="15dp" />
-
-    <Button
-        android:id="@+id/btnOrderDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/light_grey_button"
-        android:drawableLeft="@drawable/ic_action_delete_light"
-        android:focusable="false"
-        android:paddingLeft="15dp" />
-
-    <Button
-        android:id="@+id/btnOrderComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttonOrderEdit"
-        android:background="@drawable/light_grey_button"
-        android:drawableLeft="@drawable/ic_action_modify_light"
-        android:focusable="false"
-        android:paddingLeft="15dp" />
-
-    <Button
-        android:id="@+id/btnOrderPlus"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@+id/btnOrderComment"
-        android:background="@drawable/light_grey_button"
-        android:focusable="false"
-        android:padding="0dp"
-        android:text="@string/btn_order_plus"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/tvOrderListMenuQty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnOrderPlus"
-        android:layout_alignTop="@+id/btnOrderPlus"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_toLeftOf="@+id/btnOrderPlus"
-        android:background="@drawable/radius_bg"
-        android:focusable="false"
-        android:gravity="center"
-        android:minWidth="48dp"
-        android:padding="4dp"
-        android:text="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32sp" />
-
-    <Button
-        android:id="@+id/btnOrderMinus"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tvOrderListMenuQty"
-        android:background="@drawable/light_grey_button"
-        android:focusable="false"
-        android:padding="0dp"
-        android:text="@string/btn_order_minus"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tvOrderNo"
         style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnOrderDelete"
+        android:layout_alignBottom="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="4dp"
@@ -130,7 +54,7 @@
         android:id="@+id/imageViewMenuPic"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignBottom="@+id/tvOrderNo"
+        android:layout_alignBottom="@+id/linearLayout1"
         android:layout_alignParentTop="true"
         android:layout_margin="4dp"
         android:layout_toRightOf="@+id/tvOrderNo"
@@ -141,10 +65,83 @@
         style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/linearLayout1"
         android:layout_below="@+id/tvOrderListMenuName"
         android:layout_toRightOf="@+id/imageViewMenuPic"
         android:focusable="false"
         android:text="1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btnOrderMinus"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/light_grey_button"
+            android:focusable="false"
+            android:padding="0dp"
+            android:text="@string/btn_order_minus"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvOrderListMenuQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/white_layer"
+            android:focusable="false"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:padding="4dp"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/btnOrderPlus"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/light_grey_button"
+            android:focusable="false"
+            android:padding="0dp"
+            android:text="@string/btn_order_plus"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/btnOrderComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/light_grey_button"
+            android:drawableLeft="@drawable/ic_action_modify_light"
+            android:focusable="false"
+            android:paddingLeft="15dp" />
+
+        <Button
+            android:id="@+id/buttonOrderEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/light_grey_button"
+            android:drawableLeft="@drawable/ic_action_edit_light"
+            android:focusable="false"
+            android:paddingLeft="15dp" />
+
+        <Button
+            android:id="@+id/btnOrderDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/light_grey_button"
+            android:drawableLeft="@drawable/ic_action_delete_light"
+            android:focusable="false"
+            android:paddingLeft="15dp" />
+    </LinearLayout>
 
 </RelativeLayout>

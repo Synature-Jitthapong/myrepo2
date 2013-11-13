@@ -16,6 +16,7 @@
         style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="20dp"
         android:text="---"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -27,7 +28,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/radius_background_dropshadow"
+        android:background="@drawable/white_layer"
         android:orientation="vertical"
         android:padding="8dp" >
 
@@ -73,8 +74,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginRight="23dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/light_grey_button"
         android:text="@string/btn_login" />
 

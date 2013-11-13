@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:background="@drawable/radius_background_dropshadow"
+                android:background="@drawable/white_layer"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:background="@drawable/radius_bg"
+                        android:background="@drawable/white_layer"
                         android:gravity="center"
                         android:minWidth="24dp"
                         android:text="1"
@@ -279,7 +279,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/radius_background_dropshadow"
+            android:background="@drawable/white_layer"
             android:padding="4dp" >
 
             <ListView

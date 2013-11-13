@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="grey_light">#EBEBEB</color>
-    <color name="smoke_white">#FDFDFD</color>
-    <color name="light_blue_start">#ACE0FF</color>
-    <color name="light_blue_end">#70C0F1</color>
-    <color name="light_grey_start">#EBEBEB</color>
-    <color name="light_grey_end">#CCCCCC</color>
-    <color name="light_green_start">#58FD60</color>
-    <color name="light_green_end">#4ACD50</color>
-    <color name="light_lemon_start">#DAF753</color>
-    <color name="light_lemon_end">#BCD643</color>
-    <color name="light_orenge_start">#FFD877</color>
-    <color name="light_orenge_end">#FFD365</color>
-	<color name="light_red_start">#FF8B88</color>
-	<color name="light_red_end">#EE423F</color>
-    <color name="grey_stroke">#FFA5A5A5</color>
-    <color name="disabled">#E2E2E2</color>
+    <color name="grey_light">#FFEBEBEB</color>
+    <color name="smoke_white">#FFFDFDFD</color>
+    <color name="light_blue_start">#FFACE0FF</color>
+    <color name="light_blue_end">#FF70C0F1</color>
+    <color name="light_grey_start">#FFEBEBEB</color>
+    <color name="light_grey_end">#FFCACACA</color>
+    <color name="light_green_start">#FF58FD60</color>
+    <color name="light_green_end">#FF4ACD50</color>
+    <color name="light_lemon_start">#FFDAF753</color>
+    <color name="light_lemon_end">#FFBCD643</color>
+    <color name="light_orenge_start">#FFFFD877</color>
+    <color name="light_orenge_end">#FFFFD365</color>
+	<color name="light_red_start">#FFFF8B88</color>
+	<color name="light_red_end">#FFEE423F</color>
+    <color name="grey_stroke">#FFC7C7C7</color>
+    <color name="disabled">#FFE2E2E2</color>
     <color name="light_red">#FFFF0000</color>
+    <color name="dark_gray">#FFBBBBBB</color>
+    <color name="blue_light">#FF1D78B2</color>
+    <color name="dark_orange">#FFE54500</color>
 </resources>

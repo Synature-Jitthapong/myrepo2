@@ -6,45 +6,23 @@
     android:orientation="vertical"
     android:padding="2dp" >
 
-    <ImageView
-        android:id="@+id/menuItemMordetailImg"
+    <TextView
+        android:id="@+id/textViewMenuDetailTitle"
+        style="@style/text_medium"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_weight="1"
-        android:scaleType="center"
-        android:src="@drawable/ic_list_nofood" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/menuItemMordetailImg"
-        android:layout_alignParentTop="true"
-        android:layout_margin="4dp"
         android:layout_toLeftOf="@+id/buttonClose"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp" >
-
-        <TextView
-            android:id="@+id/textViewMenuDetailTitle"
-            style="@style/text_medium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </LinearLayout>
+        android:gravity="center_horizontal"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/menuItemMordetailImg"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/menuItemMordetailImg"
         android:gravity="center_vertical" >
 
         <Button
@@ -62,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/radius_bg"
+            android:background="@drawable/white_layer"
             android:gravity="center"
             android:minWidth="24dp"
             android:padding="4dp"
@@ -80,58 +58,49 @@
             android:padding="0dp"
             android:text="@string/btn_order_plus" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewAdsign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:text="x"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical" >
+            android:background="@drawable/white_layer"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="4dp"
+            android:text="100"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/textViewAdsign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:padding="4dp"
-                android:text="x"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+        <TextView
+            android:id="@+id/textViewEqual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="="
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/textViewPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/radius_bg"
-                android:gravity="center_vertical"
-                android:paddingBottom="4dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="4dp"
-                android:text="100"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textViewEqual"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="="
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textViewTotalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/radius_bg"
-                android:gravity="center_vertical"
-                android:padding="4dp"
-                android:text="1000"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/textViewTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/white_layer"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:text="1000"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <Button
@@ -149,10 +118,23 @@
         style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_alignBottom="@+id/menuItemMordetailImg"
+        android:layout_alignParentBottom="false"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/menuItemMordetailImg"
         android:layout_margin="3dp"
         android:background="@drawable/blue_button"
         android:text="@string/btn_order" />
+
+    <ImageView
+        android:id="@+id/menuItemMordetailImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonClose"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
+        android:layout_weight="1"
+        android:minHeight="200dp"
+        android:minWidth="200dp"
+        android:src="@drawable/ic_list_nofood" />
 
 </RelativeLayout>

@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/radius_bg"
+                android:background="@drawable/white_layer"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="4dp" >
 
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="8dp"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center"
                     android:minWidth="32dp"
                     android:text="-"
@@ -81,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginRight="4dp"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center"
                     android:minWidth="32dp"
                     android:text="1"
@@ -168,7 +168,7 @@
                     android:id="@+id/tableList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/list_background_no_radius"
+                    android:background="@drawable/white_layer"
                     android:choiceMode="singleChoice"
                     android:listSelector="@drawable/list_selector" >
 

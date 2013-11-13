@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="@drawable/radius_bg"
+        android:background="@drawable/white_layer"
         android:ems="10"
         android:gravity="right|center_vertical"
         android:inputType="numberDecimal"

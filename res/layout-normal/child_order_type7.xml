@@ -72,7 +72,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/radius_bg"
+            android:background="@drawable/white_layer"
             android:gravity="center"
             android:minWidth="24dp"
             android:padding="4dp"

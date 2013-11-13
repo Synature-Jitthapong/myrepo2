@@ -3,6 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_light"
     android:orientation="vertical"
     android:paddingBottom="4dp" >
 
@@ -73,8 +74,9 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/light_grey_button"
+                android:drawableLeft="@drawable/ic_action_seat"
                 android:minWidth="48dp"
-                android:padding="4dp"
+                android:paddingLeft="0dp"
                 android:text="@string/seat"
                 android:textSize="12sp" />
 
@@ -123,8 +125,10 @@
             android:id="@+id/menuCommentListView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
             android:layout_weight="1"
-            android:background="@drawable/list_background" >
+            android:background="@drawable/white_layer" >
+
         </ListView>
 
         <ListView
@@ -132,7 +136,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.7"
-            android:background="@drawable/list_background" >
+            android:background="@drawable/white_layer" >
         </ListView>
     </LinearLayout>
 
@@ -140,22 +144,22 @@
         android:id="@+id/txt_label_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
         android:text="@string/label_menu_comment"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
         android:id="@+id/txt_menu_comment"
+        style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@drawable/edittext_selector"
         android:ems="10"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:lines="2" >
+        android:hint="@string/enter_comment"
+        android:inputType="textMultiLine" >
+
     </EditText>
 
     <LinearLayout

@@ -24,9 +24,9 @@
 
         <ImageButton
             android:id="@+id/imageButtonCloseOrderDialog"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/light_grey_button"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     </LinearLayout>
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/list_background" >
+        android:background="@drawable/white_layer" >
 
         <ProgressBar
             android:id="@+id/progressBarOrderOfTable"

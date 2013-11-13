@@ -3,12 +3,12 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/listview_header"
     android:orientation="vertical"
     android:padding="4dp" >
 
     <Button
         android:id="@+id/buttonDeleteAll"
+        style="@style/button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -19,14 +19,12 @@
 
     <TextView
         android:id="@+id/textViewOrderGroupName"
-        style="@style/text_generald"
+        style="@style/SectionHead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonDeleteAll"
-        android:layout_alignBottom="@+id/buttonDeleteAll"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toLeftOf="@+id/buttonDeleteAll"
+        android:layout_below="@+id/buttonDeleteAll"
+        android:layout_marginTop="-32dp"
         android:gravity="center_vertical"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />

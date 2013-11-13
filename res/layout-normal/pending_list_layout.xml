@@ -44,7 +44,7 @@
         android:id="@+id/listViewPending"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/list_background" >
+        android:background="@drawable/white_layer" >
     </ListView>
 
 </LinearLayout>

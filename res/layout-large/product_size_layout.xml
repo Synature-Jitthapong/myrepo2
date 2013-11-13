@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButtonCloseSize"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:layout_toLeftOf="@+id/imageButtonCloseSize"
         android:gravity="center"
         android:text="Size"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -22,14 +22,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewQueueListTitle" >
+        android:layout_below="@+id/textViewQueueListTitle"
+        android:layout_marginTop="4dp" >
 
         <ListView
             android:id="@+id/listViewProductSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:background="@drawable/radius_bg" >
+            android:background="@drawable/white_layer" >
 
         </ListView>
 
@@ -37,12 +38,12 @@
 
     <ImageButton
         android:id="@+id/imageButtonCloseSize"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="2dp"
-        android:background="@drawable/light_grey_button"
         android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>

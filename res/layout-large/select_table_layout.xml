@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center"
                     android:minWidth="48dp"
                     android:text="1"
@@ -184,7 +184,7 @@
                     android:id="@+id/tableList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:choiceMode="singleChoice"
                     android:listSelector="@drawable/list_selector" >
 

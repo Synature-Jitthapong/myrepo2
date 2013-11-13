@@ -90,7 +90,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="25dp"
-            android:background="@drawable/radius_bg"
+            android:background="@drawable/white_layer"
             android:orientation="vertical"
             android:padding="20dp" >
 

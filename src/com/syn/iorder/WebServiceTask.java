@@ -84,15 +84,6 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 			result = e.getMessage();
 			e.printStackTrace();
 		}
-
-		if (result == null || result.equals("")) {
-			try {
-				result = ((SoapObject) envelope.bodyIn).toString();
-			} catch (Exception e) {
-				result = e.getMessage();
-				e.printStackTrace();
-			}
-		}
 		return result;
 	}
 

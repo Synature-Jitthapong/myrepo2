@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
 
             </ListView>
@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="multipleChoice"
                 android:padding="4dp" >
 
@@ -85,13 +85,15 @@
 
             <EditText
                 android:id="@+id/txtCancelMenuReason"
+                style="@style/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/editbox_background"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/edittext_selector"
                 android:ems="10"
                 android:gravity="top"
-                android:inputType="textMultiLine"
-                android:lines="3" >
+                android:inputType="textMultiLine" >
 
                 <requestFocus />
             </EditText>
@@ -101,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="multipleChoice"
                 android:listSelector="@drawable/list_selector" >
 

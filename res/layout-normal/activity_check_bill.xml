@@ -44,7 +44,7 @@
                 android:id="@+id/listViewTableName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice"
                 android:listSelector="@drawable/list_selector" >
 
@@ -133,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/radius_bg" >
+                android:background="@drawable/white_layer" >
 
             </ListView>
 

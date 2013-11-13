@@ -7,10 +7,11 @@
 
     <Button
         android:id="@+id/buttonClose"
+        style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="@drawable/light_grey_button"
+        android:background="@drawable/blue_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
         android:text="@string/global_btn_close"

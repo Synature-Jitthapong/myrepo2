@@ -107,7 +107,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -160,7 +162,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:background="@drawable/light_grey_button"
+                    android:drawableLeft="@drawable/ic_action_seat"
                     android:minWidth="0dp"
+                    android:paddingLeft="0dp"
                     android:text="@string/seat"
                     android:textSize="12sp" />
 
@@ -190,7 +194,7 @@
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_lemon_button"
-                    android:minWidth="0dp"
+                    android:minWidth="48dp"
                     android:text="@string/button_select_queue" />
 
                 <Button
@@ -200,7 +204,7 @@
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_green_button"
-                    android:minWidth="0dp"
+                    android:minWidth="48dp"
                     android:text="@string/btn_sendorder" />
 
             </LinearLayout>
@@ -247,7 +251,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginTop="2dp"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -267,10 +271,12 @@
                 android:id="@+id/layoutSwSaleMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/layoutSummary"
-                android:layout_alignTop="@+id/layoutSummary"
+                android:layout_alignBottom="@+id/linearLayout2"
+                android:layout_alignTop="@+id/linearLayout2"
                 android:layout_centerHorizontal="true"
-                android:layout_toLeftOf="@+id/layoutSummary"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_toLeftOf="@+id/sendContent"
                 android:layout_toRightOf="@+id/linearLayout2"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -294,7 +300,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:gravity="center_vertical" >
+            android:gravity="bottom" >
 
             <Spinner
                 android:id="@+id/spinnerMenuGroup"

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_light"
     android:orientation="vertical"
     android:padding="8dp" >
 
@@ -44,7 +45,7 @@
                     android:id="@+id/tvTbFrom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="70dp"
                     android:minWidth="70dp"
@@ -59,7 +60,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
             </ListView>
 
@@ -67,7 +68,7 @@
                 android:id="@+id/moveMenuBtnChooseMenu"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_margin="4dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/light_grey_button"
                 android:enabled="false"
                 android:text="@string/move_menu_btn_choose_menu" />
@@ -86,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background" >
+                android:background="@drawable/white_layer" >
             </ListView>
         </LinearLayout>
 
@@ -113,7 +114,7 @@
                     android:id="@+id/tvTbTo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="70dp"
                     android:minWidth="70dp"
@@ -143,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
             </ListView>
 
@@ -157,20 +158,23 @@
 
             <EditText
                 android:id="@+id/moveMenuTxtReason"
+                style="@style/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/editbox_background"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/edittext_selector"
                 android:ems="10"
                 android:gravity="top"
-                android:inputType="textMultiLine"
-                android:lines="3" />
+                android:hint="@string/enter_reason"
+                android:inputType="textMultiLine" />
 
             <ListView
                 android:id="@+id/moveMenuListViewReason"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="multipleChoice"
                 android:listSelector="@drawable/list_selector" >
             </ListView>

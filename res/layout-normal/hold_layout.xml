@@ -110,7 +110,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:background="@drawable/radius_bg"
+            android:background="@drawable/white_layer"
             android:gravity="center"
             android:minWidth="32dp"
             android:text="1"

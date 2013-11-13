@@ -63,7 +63,7 @@
             android:id="@+id/textViewQuestQty"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/radius_bg"
+            android:background="@drawable/white_layer"
             android:gravity="center"
             android:minWidth="48dp"
             android:text="0"

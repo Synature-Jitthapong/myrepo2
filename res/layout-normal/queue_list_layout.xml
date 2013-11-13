@@ -50,7 +50,7 @@
         android:layout_height="match_parent"
         android:layout_margin="2dp"
         android:layout_weight="1"
-        android:background="@drawable/radius_background_dropshadow"
+        android:background="@drawable/white_layer"
         android:minHeight="400dp"
         android:padding="4dp" >
 

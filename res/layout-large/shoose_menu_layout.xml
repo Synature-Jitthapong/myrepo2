@@ -51,7 +51,7 @@
                     android:id="@+id/shooseMenuDialogTvFromTableName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="70dp"
                     android:minWidth="70dp"
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice"
                 android:listSelector="@drawable/list_selector" >
 
@@ -103,7 +103,7 @@
                     android:id="@+id/shooseMenuDialogTvToTableName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="70dp"
                     android:minWidth="70dp"
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice"
                 android:listSelector="@drawable/list_selector" >
 

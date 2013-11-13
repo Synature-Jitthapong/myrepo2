@@ -1,59 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="8dp" >
+    android:paddingBottom="@dimen/activity_vertical_margin" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <Button
+        android:id="@+id/btnClose"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:padding="0dp" />
 
-        <Button
-            android:id="@+id/btnClose"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
-            android:padding="0dp" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="4dp"
+        android:layout_toLeftOf="@+id/btnClose"
+        android:gravity="center"
+        android:text="@string/select_seat"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="4dp"
-            android:layout_toLeftOf="@+id/btnClose"
-            android:gravity="center"
-            android:text="@string/select_seat"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/courseContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnClose"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_marginTop="6dp"
             android:text="@string/select_course"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView2" >
+            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,32 +73,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Button" />
-
             </LinearLayout>
         </HorizontalScrollView>
+    </LinearLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
+    <GridView
+        android:id="@+id/gridView1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/courseContent"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/grey_light_bg"
+        android:gravity="center"
+        android:horizontalSpacing="4dp"
+        android:numColumns="4"
+        android:padding="4dp"
+        android:verticalSpacing="4dp" >
 
-        <GridView
-            android:id="@+id/gridView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:horizontalSpacing="4dp"
-            android:numColumns="5"
-            android:verticalSpacing="4dp" >
+    </GridView>
 
-        </GridView>
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

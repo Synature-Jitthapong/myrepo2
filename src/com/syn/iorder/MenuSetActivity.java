@@ -196,14 +196,6 @@ public class MenuSetActivity extends Activity {
 
 				}
 
-				if (i == 0){
-					v.callOnClick();
-					v.setBackgroundResource(R.drawable.blue_button_left);
-				}else if (i == pcgLst.size() - 1){
-					v.setBackgroundResource(R.drawable.blue_button_right);
-				}else{
-					v.setBackgroundResource(R.drawable.blue_button_center);
-				}
 				LayoutParams layoutParam = new LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,
 						1f);

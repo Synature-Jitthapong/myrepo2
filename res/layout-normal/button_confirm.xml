@@ -6,10 +6,11 @@
 
     <Button
         android:id="@+id/buttonClear"
+        style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="@drawable/light_grey_button"
+        android:background="@drawable/blue_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
         android:text="@string/button_clear"
@@ -18,10 +19,11 @@
 
     <Button
         android:id="@+id/buttonConfirmCancel"
+        style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="@drawable/light_grey_button"
+        android:background="@drawable/blue_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
         android:text="@string/global_btn_cancel"
@@ -29,10 +31,11 @@
 
     <Button
         android:id="@+id/buttonConfirmOk"
+        style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="@drawable/light_grey_button"
+        android:background="@drawable/blue_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
         android:text="@string/global_btn_ok"

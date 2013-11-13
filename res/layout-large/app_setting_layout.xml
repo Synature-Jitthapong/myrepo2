@@ -9,10 +9,10 @@
 
     <TextView
         android:id="@+id/textViewMessage"
-        style="@style/text_medium"
+        style="@style/SectionHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/app_setting_message"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/radius_background_dropshadow"
+        android:background="@drawable/white_layer"
         android:orientation="vertical"
         android:padding="8dp" >
 
@@ -58,9 +58,10 @@
 
     <TextView
         android:id="@+id/textView3"
+        style="@style/SectionHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/generald_setting"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
@@ -69,7 +70,7 @@
         android:id="@+id/LinearLayout01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/radius_background_dropshadow"
+        android:background="@drawable/white_layer"
         android:orientation="vertical"
         android:padding="8dp" >
 

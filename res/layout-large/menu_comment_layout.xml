@@ -28,7 +28,7 @@
             android:id="@+id/menuCommentListView"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:background="@drawable/list_background" >
+            android:background="@drawable/white_layer" >
 
         </ListView>
 

@@ -52,7 +52,7 @@
                     android:id="@+id/tvTbFrom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="48dp"
                     android:minWidth="48dp"
@@ -65,7 +65,7 @@
                 android:id="@+id/listViewSorceTableName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
 
             </ListView>
@@ -95,7 +95,7 @@
                     android:id="@+id/tvTbTo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/radius_bg"
+                    android:background="@drawable/white_layer"
                     android:gravity="center_vertical|center_horizontal"
                     android:minHeight="48dp"
                     android:minWidth="48dp"
@@ -132,7 +132,7 @@
                 android:id="@+id/listViewDestTableName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/list_background"
+                android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
             </ListView>
         </LinearLayout>
@@ -155,18 +155,21 @@
 
         <EditText
             android:id="@+id/moveMergeTableTxtReason"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/edittext_selector"
             android:ems="10"
-            android:gravity="top"
+            android:hint="@string/enter_reason"
             android:inputType="textMultiLine" />
 
         <ListView
             android:id="@+id/moveMergeTableReasonListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/list_background_no_radius" >
+            android:background="@drawable/white_layer" >
 
         </ListView>
 

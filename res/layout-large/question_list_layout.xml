@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_weight="1"
-        android:background="@drawable/radius_bg"
+        android:background="@drawable/white_layer"
         android:choiceMode="singleChoice"
         android:listSelector="@drawable/list_selector"
         android:padding="2dp" >

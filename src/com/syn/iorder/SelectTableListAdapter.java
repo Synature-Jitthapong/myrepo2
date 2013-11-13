@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -62,7 +63,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 		int customerQty;
 		String tableName;
 		ImageView imgStatus;
-		ImageView btnImgTbInfo;
+		Button btnTbInfo;
 		TextView tvStatus;
 		TextView tvTableName;
 		TextView tvTableCapacity;
@@ -82,7 +83,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.imgStatus = (ImageView) convertView.findViewById(R.id.imageViewStatus);
 			holder.tvTableName = (TextView) convertView.findViewById(R.id.selecttable_tvname);
 			holder.tvTableCapacity = (TextView) convertView.findViewById(R.id.selecttable_tvcapacity);
-			holder.btnImgTbInfo = (ImageView) convertView.findViewById(R.id.imageViewTableDetail);
+			holder.btnTbInfo = (Button) convertView.findViewById(R.id.button1);
 			convertView.setTag(holder);
 			
 		}
@@ -105,21 +106,21 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.tvTableName.setTextColor(Color.RED);
 			holder.imgStatus.setImageResource(R.drawable.hasorder);
 			
-			holder.btnImgTbInfo.setVisibility(View.VISIBLE);
+			holder.btnTbInfo.setVisibility(View.VISIBLE);
 			
 			if(tbName.getTableID() == 0)
-				holder.btnImgTbInfo.setVisibility(View.GONE);
+				holder.btnTbInfo.setVisibility(View.GONE);
 			
 			// already checkbill
 			if(tbName.getSTATUS() == 3){
 				// show dolla
 				holder.imgStatus.setImageResource(R.drawable.dollar);
-				holder.btnImgTbInfo.setVisibility(View.INVISIBLE);
+				holder.btnTbInfo.setVisibility(View.INVISIBLE);
 			}else{
-				holder.btnImgTbInfo.setVisibility(View.VISIBLE);
+				holder.btnTbInfo.setVisibility(View.VISIBLE);
 			}
 
-			holder.btnImgTbInfo.setOnClickListener(new OnClickListener(){
+			holder.btnTbInfo.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
@@ -169,7 +170,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			else
 				holder.imgStatus.setVisibility(View.VISIBLE);
 			
-			holder.btnImgTbInfo.setVisibility(View.INVISIBLE);
+			holder.btnTbInfo.setVisibility(View.INVISIBLE);
 		}
 		holder.tvTableName.setText(tbName.getTableName());
 		return convertView;
