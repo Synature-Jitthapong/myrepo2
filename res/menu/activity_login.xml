@@ -9,9 +9,7 @@
     <item android:id="@+id/item_other" android:icon="@drawable/ic_menu_moreoverflow_normal_holo_light" android:showAsAction="always">
         <menu>
             <!-- <item android:id="@+id/log" android:title="@string/login_menu_log"></item> -->
-    <item
-        android:id="@+id/login_menu_exit"
-        android:title="@string/login_menu_exit"/><item android:id="@+id/itemAbout" android:title="About"></item></menu>
+    <item android:id="@+id/itemAbout" android:title="About"></item><item android:id="@+id/login_menu_exit" android:title="@string/login_menu_exit" /></menu>
     </item>
     
     

@@ -94,7 +94,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="7"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -105,7 +105,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="8"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -116,7 +116,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="9"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -127,7 +127,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:drawableLeft="@android:drawable/ic_input_delete"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
         </TableRow>
@@ -146,7 +146,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="4"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -157,7 +157,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="5"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -168,7 +168,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="6"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -179,7 +179,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="C"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
         </TableRow>
@@ -198,7 +198,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -209,7 +209,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="2"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -220,7 +220,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="3"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -231,7 +231,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="-"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
 
@@ -249,7 +249,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/light_grey_button"
                 android:text="0"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <Button
@@ -261,7 +261,7 @@
                 android:background="@drawable/light_grey_button"
                 android:drawableLeft="@android:drawable/ic_menu_search"
                 android:text="@string/btn_plu_enter"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
         </TableRow>

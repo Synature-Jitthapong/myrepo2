@@ -196,8 +196,6 @@ public class LoginActivity extends Activity {
 					
 					if(!shopProperty.chkAccessPocketPermission()){
 						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
-						dialog.title.setVisibility(View.VISIBLE);
-						dialog.title.setText(R.string.title_info);
 						dialog.message.setText(R.string.not_access_pocket);
 						dialog.btnCancel.setVisibility(View.GONE);
 						dialog.btnOk.setOnClickListener(new OnClickListener(){
@@ -226,8 +224,6 @@ public class LoginActivity extends Activity {
 							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
 					if(!shopProperty.chkAccessPocketPermission()){
 						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
-						dialog.title.setVisibility(View.VISIBLE);
-						dialog.title.setText(R.string.title_info);
 						dialog.message.setText(R.string.not_access_pocket);
 						dialog.btnCancel.setVisibility(View.GONE);
 						dialog.btnOk.setOnClickListener(new OnClickListener(){

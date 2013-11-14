@@ -33,7 +33,6 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 	private ListView mLvTable;
 	private Spinner mSpTableZone;
 	private ListView mLvReason;
-	private EditText mTxtReason;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 		mLvTable = (ListView) findViewById(R.id.listView1);
 		mLvReason = (ListView) findViewById(R.id.listView2);
 		mSpTableZone = (Spinner) findViewById(R.id.spinner1);
-		mTxtReason = (EditText) findViewById(R.id.editText1);
 		
 		mGlobalVar = new GlobalVar(CommentTransactionActivity.this);
 		mLvTable.setOnItemClickListener(this);
@@ -142,8 +140,6 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 		
 		mReason = new Reason(CommentTransactionActivity.this);
 		mReason.createSelectedReasonTmp();	
-		
-		mTxtReason.setText(null);
 	}
 	
 	@Override

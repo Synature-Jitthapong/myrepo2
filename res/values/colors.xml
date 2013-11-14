@@ -7,7 +7,7 @@
     <color name="light_grey_start">#FFEBEBEB</color>
     <color name="light_grey_end">#FFCACACA</color>
     <color name="light_green_start">#FF58FD60</color>
-    <color name="light_green_end">#FF4ACD50</color>
+    <color name="light_green_end">#FF2FA35D</color>
     <color name="light_lemon_start">#FFDAF753</color>
     <color name="light_lemon_end">#FFBCD643</color>
     <color name="light_orenge_start">#FFFFD877</color>
@@ -19,5 +19,5 @@
     <color name="light_red">#FFFF0000</color>
     <color name="dark_gray">#FFBBBBBB</color>
     <color name="blue_light">#FF1D78B2</color>
-    <color name="dark_orange">#FFE54500</color>
+    <color name="dark_orange">#FFE45A00</color>
 </resources>

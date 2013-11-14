@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/menu_selector"
     android:gravity="center_vertical"
     android:minHeight="48dip"
@@ -20,45 +20,23 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tvMenuCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/menuitem_img"
-        android:text="code"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/menuitem_tvMenuName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvMenuCode"
-        android:layout_toRightOf="@+id/menuitem_img"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewMenuItemOutOfStock"
+        android:lines="2"
         android:marqueeRepeatLimit="marquee_forever"
-        android:maxLines="3"
         android:text="name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="12sp" />
-
-    <ImageView
-        android:id="@+id/menuitem_img"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="4dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_list_nofood" />
 
     <TextView
         android:id="@+id/textViewMenuItemOutOfStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="14dp"
+        android:layout_below="@+id/tvMenuCode"
         android:shadowColor="#ffffff"
         android:shadowDx="1"
         android:shadowDy="1"
@@ -68,5 +46,25 @@
         android:textColor="@color/light_red"
         android:textSize="12sp"
         android:textStyle="bold|italic" />
+
+    <ImageView
+        android:id="@+id/menuitem_img"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_list_nofood" />
+
+    <TextView
+        android:id="@+id/tvMenuCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/menuitem_img"
+        android:text="code"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

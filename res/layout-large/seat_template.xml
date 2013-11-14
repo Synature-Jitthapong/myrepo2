@@ -24,77 +24,97 @@
         android:layout_marginTop="4dp"
         android:layout_toLeftOf="@+id/btnClose"
         android:gravity="center"
-        android:text="@string/select_seat"
+        android:text="@string/seat"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="32sp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/courseContent"
-        android:layout_width="match_parent"
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/btnClose"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/courseContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/SectionHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/select_course"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_light"
+                android:padding="8dp" >
+
+                <LinearLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
+            style="@style/SectionHead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/select_course"
+            android:layout_marginBottom="4dp"
+            android:text="@string/select_seat"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView1"
-            android:layout_width="wrap_content"
+        <GridView
+            android:id="@+id/gridView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@color/grey_light"
+            android:gravity="center"
+            android:horizontalSpacing="4dp"
+            android:numColumns="5"
+            android:padding="8dp"
+            android:verticalSpacing="4dp" >
+
+        </GridView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" >
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/light_grey_button"
+                android:text="@android:string/cancel" />
 
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/light_grey_button"
+                android:text="@android:string/ok" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
-
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
-            </LinearLayout>
-        </HorizontalScrollView>
     </LinearLayout>
-
-    <GridView
-        android:id="@+id/gridView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/courseContent"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
-        android:background="@color/grey_light"
-        android:gravity="center"
-        android:horizontalSpacing="4dp"
-        android:numColumns="5"
-        android:padding="8dp"
-        android:verticalSpacing="4dp" >
-
-    </GridView>
 
 </RelativeLayout>
