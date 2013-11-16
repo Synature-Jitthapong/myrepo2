@@ -46,7 +46,7 @@ public class MenuCommentGroupAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = inflater.inflate(R.layout.spinner_item, null);
 			holder = new ViewHolder();
-			holder.tvCommentGroupName = (TextView) convertView.findViewById(R.id.textView1);
+			holder.tvCommentGroupName = (TextView) convertView;
 			
 			convertView.setTag(holder);
 		}else{

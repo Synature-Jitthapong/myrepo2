@@ -348,7 +348,7 @@ public class AppConfigLayoutActivity extends Activity {
 			if(convertView == null){
 				convertView = inflater.inflate(R.layout.spinner_item, null);
 				holder = new ViewHolder();
-				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
+				holder.textView1 = (TextView) convertView;
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();
@@ -393,7 +393,7 @@ public class AppConfigLayoutActivity extends Activity {
 			if(convertView == null){
 				holder = new ViewHolder();
 				convertView = inflater.inflate(R.layout.spinner_item, null);
-				holder.textView1 = (TextView) convertView.findViewById(R.id.textView1);
+				holder.textView1 = (TextView) convertView;
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();

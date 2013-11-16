@@ -9,12 +9,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.LinearLayout.LayoutParams;
-
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.model.ShopData;
-import syn.pos.data.model.ShopData.CourseInfo;
 
 public class Course {
 
@@ -71,10 +67,7 @@ public class Course {
 				@Override
 				public void onClick(View v) {
 					if (course.getCourseID() == mLastBtnId) {
-						if(btnCourse.isActivated())
-							btnCourse.setActivated(false);
-						else
-							btnCourse.setActivated(true);
+						btnCourse.setActivated(true);
 					} else {
 						btnCourse.setActivated(true);
 						try {

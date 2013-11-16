@@ -1707,7 +1707,7 @@ public class TakeOrderActivity extends Activity{
 			if(convertView == null){
 				convertView = inflater.inflate(R.layout.spinner_item, null);
 				holder = new ViewHolder();
-				holder.tvDeptName = (TextView) convertView.findViewById(R.id.textView1);
+				holder.tvDeptName = (TextView) convertView;
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();
@@ -1753,7 +1753,7 @@ public class TakeOrderActivity extends Activity{
 			if(convertView == null){
 				convertView = inflater.inflate(R.layout.spinner_item, null);
 				holder = new ViewHolder();
-				holder.tvGroupName = (TextView) convertView.findViewById(R.id.textView1);
+				holder.tvGroupName = (TextView) convertView;
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag(); 
@@ -2601,6 +2601,8 @@ public class TakeOrderActivity extends Activity{
 						}else{
 							if(modSeatId != 0)
 								extra = modSeatName;
+							if(modCourseId != 0)
+								extra = modCourseName;
 						}
 						
 						btnModSeat.setText(extra);
@@ -2668,16 +2670,18 @@ public class TakeOrderActivity extends Activity{
 
 										String extra = "...";
 										if(modSeatId != 0 && modCourseId != 0){
-											extra = modSeatName + "-" + modCourseName;
+											extra = modCourseName + "-" + modSeatName;
 										}else{
 											if(modSeatId != 0)
 												extra = modSeatName;
+											if(modCourseId != 0)
+												extra = modCourseName;
 										}
 										btnModSeat.setText(extra);
 										
 										// reset main seat
-										mSeatId = modSeatId;
-										mBtnSeat.setText(extra);
+//										mSeatId = 0;
+//										mBtnSeat.setText("All");
 										
 										d.dismiss();
 									}
@@ -2728,6 +2732,7 @@ public class TakeOrderActivity extends Activity{
 						for(final ProductGroups.SaleMode s : saleModeLst){
 							Button btnSwSaleMode = (Button) factory.inflate(R.layout.button_sale_mode, null);
 							btnSwSaleMode.setId(s.getSaleModeID());
+							btnSwSaleMode.setText(s.getSaleModeName());
 							
 							if(s.getSaleModeID() == 1)
 								btnSwSaleMode.setSelected(true);
@@ -2760,12 +2765,12 @@ public class TakeOrderActivity extends Activity{
 								
 							});
 							
-							if(s.getSaleModeID() == 1){
-								btnSwSaleMode.setText("DI");
-							}
-							else if(s.getSaleModeID() == 2){
-								btnSwSaleMode.setText("TW");
-							}
+//							if(s.getSaleModeID() == 1){
+//								btnSwSaleMode.setText("DI");
+//							}
+//							else if(s.getSaleModeID() == 2){
+//								btnSwSaleMode.setText("TW");
+//							}
 							
 							saleModeModSwLayout.addView(btnSwSaleMode);
 						}
@@ -2976,6 +2981,7 @@ public class TakeOrderActivity extends Activity{
 							
 							listAllOrder();
 							mOrderListView.setSelection(groupPosition);
+							mOrderListView.setItemChecked(groupPosition, true);
 
 							//summaryTotalSalePrice();
 
@@ -5957,7 +5963,7 @@ public class TakeOrderActivity extends Activity{
 				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 				final Button btnSwSaleMode = (Button)inflater.inflate(R.layout.button_sale_mode, null);
 				btnSwSaleMode.setId(s.getSaleModeID());
-				
+				btnSwSaleMode.setText(s.getSaleModeName());
 				// default Eat In
 				if(s.getSaleModeID() == 1){
 					btnSwSaleMode.setSelected(true);
@@ -5983,12 +5989,12 @@ public class TakeOrderActivity extends Activity{
 					}
 					
 				});
-				if(s.getSaleModeID() == 1){
-					btnSwSaleMode.setText("DI");
-				}
-				else if(s.getSaleModeID() == 2){
-					btnSwSaleMode.setText("TW");
-				}
+//				if(s.getSaleModeID() == 1){
+//					btnSwSaleMode.setText("DI");
+//				}
+//				else if(s.getSaleModeID() == 2){
+//					btnSwSaleMode.setText("TW");
+//				}
 				mSaleModeSwLayout.addView(btnSwSaleMode);
 			}
 			
@@ -6077,6 +6083,8 @@ public class TakeOrderActivity extends Activity{
 				}else{
 					if(mSeatId != 0)
 						extra = mSeatName;
+					if(mCourseId != 0)
+						extra = mCourseName;
 				}
 				
 				mBtnSeat.setText(extra);
@@ -6163,10 +6171,7 @@ public class TakeOrderActivity extends Activity{
 				@Override
 				public void onClick(View arg0) {
 					if(getItemId(position) == lastBtnId){
-						if(btnSeat.isActivated())
-							btnSeat.setActivated(false);
-						else
-							btnSeat.setActivated(true);
+						btnSeat.setActivated(true);
 					}else{
 						btnSeat.setActivated(true);
 						try {

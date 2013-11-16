@@ -41,6 +41,7 @@ import syn.pos.data.dao.SaleMode;
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.SyncDataLog;
+import syn.pos.data.dao.TransactionComment;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.MenuGroups;
 import syn.pos.data.model.OrderSendData;
@@ -554,6 +555,15 @@ public class IOrderUtility {
 				qg.insertQuestionGroups(pgs);
 				qg.insertQuestionDetail(pgs);
 				qg.insertAnswerOption(pgs);
+				
+				try {
+					TransactionComment tc = new TransactionComment(context);
+					tc.insertCommentTransDept(pgs);
+					tc.insertCommentTransItem(pgs);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				new UpdateMenuDataFromWs(context, globalVar)
 						.execute(GlobalVar.FULL_URL);

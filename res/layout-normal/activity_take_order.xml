@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.8"
         android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
@@ -94,25 +94,6 @@
         </ExpandableListView>
 
         <RelativeLayout
-            android:id="@+id/saleModeTextLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/notibar"
-            android:gravity="center"
-            android:visibility="gone" >
-
-            <TextView
-                android:id="@+id/tvSaleModeText"
-                style="@style/text_generald"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/RelativeLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,7 +147,8 @@
                     android:minWidth="0dp"
                     android:paddingLeft="0dp"
                     android:text="@string/seat"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -279,6 +261,24 @@
                 android:orientation="horizontal" >
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/saleModeTextLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/layoutSummary"
+                android:layout_alignTop="@+id/layoutSummary"
+                android:layout_toLeftOf="@+id/layoutSummary"
+                android:layout_toRightOf="@+id/btnToggleMax"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/tvSaleModeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
     </LinearLayout>

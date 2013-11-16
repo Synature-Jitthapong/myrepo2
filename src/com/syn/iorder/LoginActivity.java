@@ -17,10 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
@@ -45,16 +47,7 @@ public class LoginActivity extends Activity {
 		IOrderUtility.switchLanguage(context, lang.getLangCode());
 		
 		setContentView(R.layout.activity_login);
-
-		//
-		// getWindow().getDecorView().setSystemUiVisibility
-		// (View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		//
-		//
-		// getWindow().getDecorView().setSystemUiVisibility
-		// (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-		//
-
+		
 		globalVar = new GlobalVar(context);
 
 		tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
@@ -67,61 +60,79 @@ public class LoginActivity extends Activity {
 		txtPassWord = (EditText) findViewById(R.id.txtPassword);
 		txtUserName.setSelectAllOnFocus(true);
 		txtPassWord.setSelectAllOnFocus(true);
-
 		txtUserName.clearFocus();
 		txtPassWord.clearFocus();
+		txtUserName.setText("nipon");
+		txtPassWord.setText("pospwnet");
+		txtPassWord.setOnEditorActionListener(new OnEditorActionListener(){
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					doLogin();
+					return true;
+				}
+				return false;
+			}
+			
+		});
 		
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		btnLogin.setOnClickListener(new Button.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				new IOrderUtility.CompareSaleDateTask(LoginActivity.this, globalVar, 
-						new WebServiceStateListener() {
+				doLogin();
+			}
+		});
+	}
+	
+	private void doLogin(){
+		new IOrderUtility.CompareSaleDateTask(LoginActivity.this, globalVar, 
+				new WebServiceStateListener() {
+			
+			@Override
+			public void onSuccess() {
+				updateWebserviceVersion();
+				
+				btnLogin.setEnabled(false);
+				
+				syn.pos.data.dao.Staffs staff = new syn.pos.data.dao.Staffs(
+						context, txtUserName.getText().toString(),
+						txtPassWord.getText().toString());
+
+				syn.pos.data.model.ShopData.Staff staffObj = staff
+						.checkLogin();
+
+				takeLogin(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
+			}
+
+			@Override
+			public void onNotSuccess() {
+				IOrderUtility util = new IOrderUtility();
+				util.syncDataWebService(context, globalVar, new WebServiceStateListener() {
 					
 					@Override
 					public void onSuccess() {
 						updateWebserviceVersion();
 						
-						btnLogin.setEnabled(false);
-						
 						syn.pos.data.dao.Staffs staff = new syn.pos.data.dao.Staffs(
-								context, txtUserName.getText().toString(),
-								txtPassWord.getText().toString());
+							context, txtUserName.getText().toString(),
+							txtPassWord.getText().toString());
 
 						syn.pos.data.model.ShopData.Staff staffObj = staff
-								.checkLogin();
-
+							.checkLogin();
 						takeLogin(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
 					}
 
 					@Override
 					public void onNotSuccess() {
-						IOrderUtility util = new IOrderUtility();
-						util.syncDataWebService(context, globalVar, new WebServiceStateListener() {
-							
-							@Override
-							public void onSuccess() {
-								updateWebserviceVersion();
-								
-								syn.pos.data.dao.Staffs staff = new syn.pos.data.dao.Staffs(
-									context, txtUserName.getText().toString(),
-									txtPassWord.getText().toString());
-	
-								syn.pos.data.model.ShopData.Staff staffObj = staff
-									.checkLogin();
-								takeLogin(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
-							}
-
-							@Override
-							public void onNotSuccess() {
-								
-							}
-						});
+						
 					}
-				}).execute(GlobalVar.FULL_URL);
+				});
 			}
-		});
+		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void updateWebserviceVersion(){

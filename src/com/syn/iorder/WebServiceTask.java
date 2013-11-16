@@ -84,6 +84,10 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 			result = e.getMessage();
 			e.printStackTrace();
 		}
+		
+		if(result == null || result.equals("")){
+			result = context.getString(R.string.network_error);
+		}
 		return result;
 	}
 

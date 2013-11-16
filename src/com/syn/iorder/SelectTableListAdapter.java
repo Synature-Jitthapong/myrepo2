@@ -135,7 +135,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 					
 					ProgressBar progress = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
 					//tvTableName.setText()
-					tvTableName.setText(tbName.getTableName());
+					tvTableName.setText(context.getString(R.string.text_table) + ":" + tbName.getTableName());
 					
 					//new CurrentOrderFromTableTask(context, globalVar, tbName.getTableID(), lvOrder).execute(globalVar.FULL_URL);
 					new LoadBillDetailTask(context, globalVar, tbName.getTableID(), 

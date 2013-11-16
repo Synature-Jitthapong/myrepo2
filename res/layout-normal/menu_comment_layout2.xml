@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
                 android:gravity="right"
-                android:text="@string/select_seat" />
+                android:text="@string/seat" />
 
             <Button
                 android:id="@+id/buttonModSeat"

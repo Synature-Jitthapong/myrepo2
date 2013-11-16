@@ -561,6 +561,7 @@ public class MoveMenuActivity extends Activity {
 		tvTbTo.setText("");
 		
 		// clear to tableid
+		FROM_TABLE_ID = 0;
 		TO_TABLE_ID = 0;
 		btnShooseMenu.setEnabled(false);
 		

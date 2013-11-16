@@ -14,10 +14,10 @@
     <color name="light_orenge_end">#FFFFD365</color>
 	<color name="light_red_start">#FFFF8B88</color>
 	<color name="light_red_end">#FFEE423F</color>
-    <color name="grey_stroke">#FFC7C7C7</color>
+    <color name="grey_stroke">@android:color/transparent</color><!-- #FFC7C7C7 -->
     <color name="disabled">#FFE2E2E2</color>
     <color name="light_red">#FFFF0000</color>
     <color name="dark_gray">#FFBBBBBB</color>
-    <color name="blue_light">#FF1D78B2</color>
+    <color name="blue_light">#FF2F599D</color>
     <color name="dark_orange">#FFE45A00</color>
 </resources>

@@ -61,7 +61,7 @@
             <ListView
                 android:id="@+id/listViewSorceTableName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
@@ -92,8 +92,8 @@
             <ListView
                 android:id="@+id/moveMenuListViewMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:background="@drawable/white_layer" >
 
             </ListView>
@@ -157,7 +157,7 @@
             <ListView
                 android:id="@+id/listViewDestTableName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/white_layer"
                 android:choiceMode="singleChoice" >
@@ -188,8 +188,8 @@
             <ListView
                 android:id="@+id/moveMenuListViewReason"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:background="@drawable/white_layer" >
 
             </ListView>

@@ -20,6 +20,7 @@
         android:layout_toLeftOf="@+id/linearLayout1"
         android:layout_toRightOf="@+id/imageViewMenuPic"
         android:focusable="false"
+        android:maxLines="2"
         android:text="Menu name"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

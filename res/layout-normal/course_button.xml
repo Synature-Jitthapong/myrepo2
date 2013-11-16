@@ -6,6 +6,7 @@
     android:layout_alignParentTop="true"
     android:background="@drawable/menu_selector"
     android:padding="4dp"
-    android:text="A" >
+    android:text="A"
+    android:textSize="12sp" >
 
 </Button>

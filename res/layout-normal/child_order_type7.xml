@@ -140,6 +140,7 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/controlContent"
         android:layout_toRightOf="@+id/imageViewMenuPic"
+        android:maxLines="2"
         android:text="Menu name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="10sp" />
