@@ -1081,10 +1081,10 @@ public class TakeOrderActivity extends Activity{
 					}
 					break;
 				case 7:
-					if(feature.getFeatureValue() == 1){
-						mIsEnableSalemode = true;
-					}else{
+					if(feature.getFeatureValue() == 1){ // 1 show, 0 hide
 						mIsEnableSalemode = false;
+					}else{
+						mIsEnableSalemode = true;
 					}
 					break;
 				case 8:

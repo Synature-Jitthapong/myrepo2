@@ -62,8 +62,8 @@ public class LoginActivity extends Activity {
 		txtPassWord.setSelectAllOnFocus(true);
 		txtUserName.clearFocus();
 		txtPassWord.clearFocus();
-		txtUserName.setText("nipon");
-		txtPassWord.setText("pospwnet");
+//		txtUserName.setText("nipon");
+//		txtPassWord.setText("pospwnet");
 		txtPassWord.setOnEditorActionListener(new OnEditorActionListener(){
 
 			@Override
