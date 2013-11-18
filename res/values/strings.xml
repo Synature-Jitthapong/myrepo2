@@ -299,7 +299,7 @@
     <string name="no_order_msg">No order to send.</string>
     <string name="call_checkbill_setmember_barcode">Bar Code</string>
     <string name="call_checkbill_setmember_qrcode">QR Code</string>
-    <string name="network_error">Network error!</string>
+    <string name="network_error">Cannot connect to server please try again.</string>
     <string name="out_of_stock">Out of stock.</string>
     <string name="action_bill_summary">Bill summary</string>
     <string name="button_clear">Clear</string>

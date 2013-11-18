@@ -300,7 +300,7 @@
     <string name="no_order_msg">ไม่มีรายการที่จะส่ง</string>
     <string name="call_checkbill_setmember_barcode">Bar Code</string>
     <string name="call_checkbill_setmember_qrcode">QR Code</string>
-    <string name="network_error">ไม่สามารถเชื่อมต่อไปยัง Server กรุณาตรวจสอบการเชื่อมต่อ wifi หรือสถานะของ Server</string>
+    <string name="network_error">ไม่สามารถเชื่อมต่อไปยัง Server กรุณาลองอีกครั้ง</string>
     <string name="out_of_stock">สินค้าหมด</string>
     <string name="action_bill_summary">Bill Summary</string>
     <string name="button_clear">Clear</string>
