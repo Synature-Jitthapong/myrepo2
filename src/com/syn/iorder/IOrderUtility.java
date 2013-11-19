@@ -2,7 +2,6 @@ package com.syn.iorder;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -12,14 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-
-import org.ksoap2.serialization.PropertyInfo;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
 import syn.pos.data.dao.AppConfig;
 import syn.pos.data.dao.ComputerProperty;
 import syn.pos.data.dao.GlobalProperty;

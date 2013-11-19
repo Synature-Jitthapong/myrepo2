@@ -147,7 +147,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_lemon_button"
-                    android:text="@string/button_select_queue" />
+                    android:text="@string/button_select_queue"
+                    android:textColor="@color/smoke_white" />
 
                 <Button
                     android:id="@+id/btnSendOrder"
@@ -155,7 +156,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_green_button"
-                    android:text="@string/btn_sendorder" />
+                    android:text="@string/btn_sendorder"
+                    android:textColor="@color/smoke_white" />
+
             </LinearLayout>
 
             <Button

@@ -236,8 +236,6 @@ public class LoginActivity extends Activity {
 						Intent intent = new Intent(LoginActivity.this,
 								TakeOrderActivity.class);
 						LoginActivity.this.startActivity(intent);
-			//			overridePendingTransition(R.animator.slide_left_in,
-			//					R.animator.slide_left_out);
 						LoginActivity.this.finish();
 					}
 				}

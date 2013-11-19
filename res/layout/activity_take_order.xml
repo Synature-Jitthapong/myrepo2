@@ -160,6 +160,7 @@
                     android:background="@drawable/light_lemon_button"
                     android:minWidth="48dp"
                     android:text="@string/button_select_queue"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp" />
 
                 <Button
@@ -170,6 +171,7 @@
                     android:background="@drawable/light_green_button"
                     android:minWidth="48dp"
                     android:text="@string/btn_sendorder"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp" />
 
             </LinearLayout>

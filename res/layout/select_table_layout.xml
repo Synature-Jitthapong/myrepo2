@@ -206,6 +206,7 @@
             android:layout_weight="1"
             android:background="@drawable/light_red_button"
             android:text="@string/button_clear"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp"
             android:visibility="gone" />
 
@@ -216,6 +217,7 @@
             android:layout_weight="1"
             android:background="@drawable/light_red_button"
             android:text="@string/button_cancel_queue"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp"
             android:visibility="gone" />
 

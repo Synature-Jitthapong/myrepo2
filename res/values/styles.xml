@@ -15,6 +15,7 @@
     </style>
     <style name="CustomDialog" parent="android:style/Theme.DeviceDefault.Light.Dialog">
    		<item name="android:windowNoTitle">true</item>
+   		<item name="android:windowBackground">@color/grey_light</item>
 	</style>
   	<style name="AppTheme" parent="AppBaseTheme">
   	    <item name="android:windowBackground">@color/grey_light</item>

@@ -138,6 +138,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="3dp"
         android:background="@drawable/blue_button"
-        android:text="@string/btn_order" />
+        android:text="@string/btn_order"
+        android:textColor="@color/smoke_white" />
 
 </RelativeLayout>
