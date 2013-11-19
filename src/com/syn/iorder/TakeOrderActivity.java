@@ -67,7 +67,7 @@ import android.widget.RadioGroup.LayoutParams;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
-public class TakeOrderActivity extends Activity{
+public class TakeOrderActivity extends Activity implements OnClickListener{
 	private Spinner mMenuGroupSpinner;
 	private Spinner mMenuDeptSpinner;
 	private GridView mMenuItemGridView;
@@ -148,9 +148,6 @@ public class TakeOrderActivity extends Activity{
 					// check feature
 					checkProgramFeature();
 
-					// check permissiom
-					permissionChecking();
-					
 					// list menu
 					listAllMenuItem();
 
@@ -203,14 +200,7 @@ public class TakeOrderActivity extends Activity{
 		mBtnSeat = (Button) findViewById(R.id.buttonSeat);
 		mSaleModeTextLayout = (RelativeLayout) findViewById(R.id.saleModeTextLayout);
 		
-		mBtnSeat.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				popupSeat();
-			}
-			
-		});
+		mBtnSeat.setOnClickListener(this);
 
 		mOrderListView.setGroupIndicator(null);
 		mOrderListView.setOnGroupClickListener(new OnGroupClickListener() {
@@ -236,38 +226,8 @@ public class TakeOrderActivity extends Activity{
 
 		});
 		
-		mBtnToggleMax.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mIsMaximize == false) {
-					mMenuItemLayout.setVisibility(View.GONE);
-					mPluLayout.setVisibility(View.GONE);
-					mBtnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_previous_holo_light, 0, 0, 0);
-					mIsMaximize = true;
-				} else {
-					mMenuItemLayout.setVisibility(View.VISIBLE);
-					mBtnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_next_holo_light, 0, 0, 0);
-					mIsMaximize = false;
-				}
-			}
-
-		});
-
-		mBtnSetmember.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(TakeOrderActivity.this,
-						SetMemberFromMain.class);
-				intent.putExtra("TO_TRANSACTION_ID", mGlobalVar.TRANSACTION_ID);
-				intent.putExtra("TO_COMPUTER_ID", mGlobalVar.COMPUTER_ID);
-				TakeOrderActivity.this.startActivity(intent);
-				overridePendingTransition(R.animator.slide_in_up,
-						R.animator.slide_in_out);
-			}
-
-		});
+		mBtnToggleMax.setOnClickListener(this);
+		mBtnSetmember.setOnClickListener(this);
 
 		// shoptype fassfood
 		if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
@@ -2680,8 +2640,8 @@ public class TakeOrderActivity extends Activity{
 										btnModSeat.setText(extra);
 										
 										// reset main seat
-//										mSeatId = 0;
-//										mBtnSeat.setText("All");
+										mSeatId = 0;
+										mBtnSeat.setText(mCourseName.equals("") ? "..." : mCourseName);
 										
 										d.dismiss();
 									}
@@ -6007,8 +5967,8 @@ public class TakeOrderActivity extends Activity{
 	
 	private void clearSeat(){
 		mSeatId = 0;
-		mSeatName = "All";
-		mBtnSeat.setText(mSeatName);
+		mSeatName = "...";
+		mBtnSeat.setText(mCourseName.equals("") ? mSeatName : mCourseName);
 		mTvTotalSeat.setText("");
 	}
 
@@ -6201,8 +6161,34 @@ public class TakeOrderActivity extends Activity{
 	public interface OnSeatClickListener{
 		public void onClick(int id, String name);
 	}
-	
-	private void permissionChecking(){
-		// some permission ??
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.buttonSeat:
+			popupSeat();
+			break;
+		case R.id.btnToggleMax:
+			if (mIsMaximize == false) {
+				mMenuItemLayout.setVisibility(View.GONE);
+				mPluLayout.setVisibility(View.GONE);
+				mBtnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_previous_holo_light, 0, 0, 0);
+				mIsMaximize = true;
+			} else {
+				mMenuItemLayout.setVisibility(View.VISIBLE);
+				mBtnToggleMax.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_find_next_holo_light, 0, 0, 0);
+				mIsMaximize = false;
+			}
+			break;
+		case R.id.buttonSetMember:
+			Intent intent = new Intent(TakeOrderActivity.this,
+					SetMemberFromMain.class);
+			intent.putExtra("TO_TRANSACTION_ID", mGlobalVar.TRANSACTION_ID);
+			intent.putExtra("TO_COMPUTER_ID", mGlobalVar.COMPUTER_ID);
+			TakeOrderActivity.this.startActivity(intent);
+			overridePendingTransition(R.animator.slide_in_up,
+					R.animator.slide_in_out);
+			break;
+		}
 	}
 }

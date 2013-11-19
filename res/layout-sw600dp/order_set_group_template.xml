@@ -8,14 +8,14 @@
 
     <Button
         android:id="@+id/buttonDeleteAll"
-        style="@style/button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="2dp"
         android:background="@drawable/light_red_button"
-        android:text="@string/btn_order_set_delete_all" />
+        android:text="@string/btn_order_set_delete_all"
+        android:textColor="@color/smoke_white" />
 
     <TextView
         android:id="@+id/textViewOrderGroupName"

@@ -17,10 +17,10 @@
 
         <LinearLayout
             android:id="@+id/LinearLeft"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="2dp"
-            android:layout_weight="1"
+            android:layout_weight="0.7"
             android:orientation="vertical" >
 
             <Spinner
@@ -41,9 +41,9 @@
 
         <LinearLayout
             android:id="@+id/LinearRight"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TextView

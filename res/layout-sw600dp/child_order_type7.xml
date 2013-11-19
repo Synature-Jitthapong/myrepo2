@@ -10,7 +10,6 @@
 
     <TextView
         android:id="@+id/tvChildOrderLinkType7No"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/controlContent"
@@ -23,7 +22,6 @@
 
     <TextView
         android:id="@+id/tvChildOrderLinkType7Comment"
-        style="@style/text_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -34,7 +32,6 @@
 
     <TextView
         android:id="@+id/tvChildOrderLinkType7MenuName"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -46,7 +43,6 @@
 
     <TextView
         android:id="@+id/tvChildOrderLinkType7Price"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvChildOrderLinkType7No"
@@ -85,7 +81,6 @@
 
         <TextView
             android:id="@+id/tvChildOrderLinkType7Qty"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"

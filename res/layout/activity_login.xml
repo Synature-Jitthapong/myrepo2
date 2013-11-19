@@ -13,7 +13,6 @@
 
     <TextView
         android:id="@+id/textViewShopName"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -91,7 +90,6 @@
 
         <TextView
             android:id="@+id/textViewLastUpdate"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/last_update_label"
@@ -99,7 +97,6 @@
 
         <TextView
             android:id="@+id/textViewUpdateLog"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
@@ -114,14 +111,12 @@
 
         <TextView
             android:id="@+id/textViewDevice"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Device code:" />
 
         <TextView
             android:id="@+id/textViewDeviceCode"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
@@ -136,14 +131,12 @@
 
         <TextView
             android:id="@+id/textViewComputerLabel"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/computer_label" />
 
         <TextView
             android:id="@+id/textViewComputer"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"

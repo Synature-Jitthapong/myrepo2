@@ -53,7 +53,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.select_order_template, null);
 			
 			holder.checkBox1 = (CheckBox) convertView.findViewById(R.id.checkBox1);
-			holder.tvSeatName = (TextView) convertView.findViewById(R.id.textViewSeatName);
+			holder.tvExtra = (TextView) convertView.findViewById(R.id.tvExtra);
 			holder.tvOrderName = (TextView) convertView.findViewById(R.id.tvSelectOrderOrderName);
 			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.tvSelectOrderQty);
 			
@@ -69,13 +69,32 @@ public class SelectOrderAdapter extends BaseAdapter {
 		else
 			holder.checkBox1.setChecked(false);
 		
-		if(detail.getiSeatID() != 0){
+		String extra = "";
+		
+		if(detail.getiSeatID() != 0 && detail.getiCourseID() != 0){
 			syn.pos.data.model.ShopData.SeatNo seat = 
 					shopProperty.getSeatNo(detail.getiSeatID());
+			syn.pos.data.model.ShopData.CourseInfo course = 
+					shopProperty.getCourse(detail.getiCourseID());
 			
-			holder.tvSeatName.setText(seat.getSeatName());
+			extra = course.getCourseShortName() + "-" + seat.getSeatName();
+		}else{
+			if(detail.getiSeatID() != 0){
+				syn.pos.data.model.ShopData.SeatNo seat = 
+						shopProperty.getSeatNo(detail.getiSeatID());
+				
+				extra = seat.getSeatName();
+			}
+			
+			if(detail.getiCourseID() != 0){
+				syn.pos.data.model.ShopData.CourseInfo course = 
+						shopProperty.getCourse(detail.getiCourseID());
+				
+				extra = course.getCourseShortName();
+			}
 		}
-		
+
+		holder.tvExtra.setText(extra);
 		holder.tvOrderName.setText(detail.getSzProductName());
 		holder.tvOrderQty.setText("x" + globalVar.qtyFormat.format(detail.getfItemQty()));
 		
@@ -84,7 +103,7 @@ public class SelectOrderAdapter extends BaseAdapter {
 
 	protected static class SelectOrderViewHolder{
 		CheckBox checkBox1;
-		TextView tvSeatName;
+		TextView tvExtra;
 		TextView tvOrderName;
 		TextView tvOrderQty;
 	}

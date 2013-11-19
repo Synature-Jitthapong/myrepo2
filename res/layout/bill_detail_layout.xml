@@ -23,6 +23,15 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/tvExtra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/textViewOrderName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

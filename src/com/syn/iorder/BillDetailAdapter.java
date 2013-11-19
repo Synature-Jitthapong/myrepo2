@@ -51,6 +51,7 @@ public class BillDetailAdapter extends BaseAdapter{
 			convertView = inflater.inflate(R.layout.bill_detail_layout, null);
 			holder = new ViewHolder();
 			holder.imgWaitPrint = (ImageView) convertView.findViewById(R.id.imageViewWaitPrint);
+			holder.tvExtra = (TextView) convertView.findViewById(R.id.tvExtra);
 			holder.tvOrderName = (TextView) convertView.findViewById(R.id.textViewOrderName);
 			holder.tvOrderQty = (TextView) convertView.findViewById(R.id.textViewOrderQty);
 			holder.tvOrderTotalPrice = (TextView) convertView.findViewById(R.id.textViewOrderTotalPrice);
@@ -70,7 +71,21 @@ public class BillDetailAdapter extends BaseAdapter{
 				param.setMargins(0, 0, 0, 0);
 			}
 			
+			String extra = "";
+			if(!order.szSeatNo.equals("") && !order.szGroupNoShortName.equals("")){
+				extra = order.szGroupNoShortName + "-" + order.szSeatNo;
+			}else{
+				if(!order.szSeatNo.equals("")){
+					extra = order.szSeatNo;
+				}
+				
+				if(!order.szGroupNoShortName.equals("")){
+					extra = order.szGroupNoShortName;
+				}
+			}
+			
 			holder.tvOrderQty.setLayoutParams(param);
+			holder.tvExtra.setText(extra);
 			holder.tvOrderName.setText(order.szProductName);
 			holder.tvOrderQty.setText(globalVar.qtyFormat.format(order.fAmount) + "x");
 			holder.tvOrderTotalPrice.setText(globalVar.decimalFormat.format(order.fTotalPrice));
@@ -109,6 +124,7 @@ public class BillDetailAdapter extends BaseAdapter{
 	
 	private class ViewHolder{
 		public ImageView imgWaitPrint;
+		public TextView tvExtra;
 		public TextView tvOrderName;
 		public TextView tvOrderQty;
 		public TextView tvOrderTotalPrice;

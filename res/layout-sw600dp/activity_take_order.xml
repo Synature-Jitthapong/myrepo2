@@ -47,7 +47,6 @@
 
                 <TextView
                     android:id="@+id/textViewNotification"
-                    style="@style/text_generald"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -68,7 +67,6 @@
 
                 <TextView
                     android:id="@+id/textViewNotification2"
-                    style="@style/text_generald"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -103,7 +101,6 @@
 
                 <Button
                     android:id="@+id/buttonSetQueue"
-                    style="@style/button_text_no_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/light_grey_button"
@@ -113,7 +110,6 @@
 
                 <Button
                     android:id="@+id/buttonSetTable"
-                    style="@style/button_text_no_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/light_grey_button"
@@ -122,7 +118,6 @@
 
                 <Button
                     android:id="@+id/buttonSetMember"
-                    style="@style/button_text_no_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/light_grey_button"
@@ -135,7 +130,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/light_grey_button"
                     android:drawableLeft="@drawable/ic_action_seat"
-                    android:text="@string/seat" />
+                    android:text="@string/seat"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -156,7 +152,6 @@
 
                 <Button
                     android:id="@+id/buttonSendByQueue"
-                    style="@style/button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
@@ -165,7 +160,6 @@
 
                 <Button
                     android:id="@+id/btnSendOrder"
-                    style="@style/button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
@@ -296,7 +290,6 @@
 
             <Button
                 android:id="@+id/btnPlu"
-                style="@style/ButtonTextSmallNoMargin"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/light_grey_button"

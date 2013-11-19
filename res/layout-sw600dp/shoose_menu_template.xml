@@ -13,28 +13,24 @@
     android:paddingTop="10dp" >
 
     <TextView
-        android:id="@+id/textViewSeatName"
+        android:id="@+id/tvExtra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="2dp"
+        android:layout_marginRight="4dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/shooseMenuTvMenuName"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Menu name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/shooseMenuTvMenuQty"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

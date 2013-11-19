@@ -85,6 +85,8 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 			e.printStackTrace();
 		}
 		
+		androidHttpTransport.reset();
+		
 		if(result == null || result.equals("")){
 			result = context.getString(R.string.network_error);
 		}

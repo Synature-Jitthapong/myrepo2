@@ -46,7 +46,6 @@
 
                 <TextView
                     android:id="@+id/textViewNotification"
-                    style="@style/text_generald"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -68,7 +67,6 @@
 
                 <TextView
                     android:id="@+id/textViewNotification2"
-                    style="@style/text_generald"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -109,7 +107,6 @@
 
                 <Button
                     android:id="@+id/buttonSetQueue"
-                    style="@style/ButtonTextSmallNoMargin"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:background="@drawable/light_grey_button"
@@ -120,7 +117,6 @@
 
                 <Button
                     android:id="@+id/buttonSetTable"
-                    style="@style/ButtonTextSmallNoMargin"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:background="@drawable/light_grey_button"
@@ -130,7 +126,6 @@
 
                 <Button
                     android:id="@+id/buttonSetMember"
-                    style="@style/ButtonTextSmallNoMargin"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:background="@drawable/light_grey_button"
@@ -171,23 +166,25 @@
 
                 <Button
                     android:id="@+id/buttonSendByQueue"
-                    style="@style/ButtonTextSmallNoMargin"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_lemon_button"
                     android:minWidth="48dp"
-                    android:text="@string/button_select_queue" />
+                    android:text="@string/button_select_queue"
+                    android:textColor="@color/smoke_white"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btnSendOrder"
-                    style="@style/ButtonTextSmallNoMargin"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_green_button"
                     android:minWidth="48dp"
-                    android:text="@string/btn_sendorder" />
+                    android:text="@string/btn_sendorder"
+                    android:textColor="@color/smoke_white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

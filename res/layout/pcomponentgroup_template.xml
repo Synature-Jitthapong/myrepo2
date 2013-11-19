@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/blue_button"
     android:gravity="center"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/pCompGroupImg"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_list_nofood"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/tvMenuSetName"
-        style="@style/button_text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvMenuSetReqAmount"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvMenuSetReqAmount"
+        android:layout_toRightOf="@+id/pCompGroupImg"
         android:layout_weight="1"
-        android:gravity="left"
+        android:gravity="left|center_vertical"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="2"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/smoke_white"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tvMenuSetReqAmount"
-        style="@style/button_text_medium"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:gravity="right"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/smoke_white" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/pCompGroupImg"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_list_nofood" />
+
+</RelativeLayout>

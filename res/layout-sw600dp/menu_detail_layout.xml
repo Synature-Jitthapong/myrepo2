@@ -21,7 +21,6 @@
 
     <TextView
         android:id="@+id/textViewMenuDetailTitle"
-        style="@style/text_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -133,13 +132,13 @@
 
     <Button
         android:id="@+id/buttonDetailOrder"
-        style="@style/button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="3dp"
         android:background="@drawable/blue_button"
-        android:text="@string/btn_order" />
+        android:text="@string/btn_order"
+        android:textColor="@color/smoke_white" />
 
 </RelativeLayout>
