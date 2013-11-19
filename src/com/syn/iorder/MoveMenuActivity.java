@@ -39,53 +39,52 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MoveMenuActivity extends Activity {
 
-	private GlobalVar globalVar;
-	private Context context;
-	private Button btnConfirm;
-	private Button btnClose;
-	private Button btnClear;
-	private Button btnShooseMenu;
-	private ListView movedMenuListView;
+	private GlobalVar mGlobalVar;
+	private Context mContext;
+	private Button mBtnConfirm;
+	private Button mBtnClose;
+	private Button mBtnClear;
+	private Button mBtnShooseMenu;
+	private ListView mMovedMenuListView;
 
-	private MenuUtil util;
-	private ShooseMenuAdapter adapter1;
-	private ShooseMenuAdapter adapter2;
-	private List<OrderSendData.OrderDetail> menuData;
-	private List<OrderSendData.OrderDetail> menuData2;
-	private int FROM_TABLE_ID;
-	private int TO_TABLE_ID;
-	private String FROM_TABLE_NAME;
-	private String TO_TABLE_NAME;
+	private MenuUtil mMenuUtil;
+	private ShooseMenuAdapter mAdapter1;
+	private ShooseMenuAdapter mAdapter2;
+	private List<OrderSendData.OrderDetail> mMenuData;
+	private List<OrderSendData.OrderDetail> mMenuData2;
+	private int mFromTableId;
+	private int mToTableId;
+	private String mFromTableName;
+	private String mToTableName;
 	
-	private EditText txtMoveMenuReason;
-	private ListView menuFromListView;
-	private ListView menuToListView;
-	private ListView listViewSourceTbName;
-	private ListView listViewDestTbName;
-	private Spinner spinnerMoveTbZone;
-	private Spinner spinnerMoveTbZoneTo;
+	private EditText mTxtMoveMenuReason;
+	private ListView mMenuFromListView;
+	private ListView mMenuToListView;
+	private ListView mLvSourceTbName;
+	private ListView mLvDestTbName;
+	private Spinner mSpMoveTbZone;
+	private Spinner mSpMoveTbZoneTo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		context = this;
+		mContext = this;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.move_menu_layout);
 		
-		movedMenuListView = (ListView) findViewById(R.id.moveMenuListViewMenu);
-		txtMoveMenuReason = (EditText) findViewById(R.id.moveMenuTxtReason);
-		btnShooseMenu = (Button) findViewById(R.id.moveMenuBtnChooseMenu);
+		mMovedMenuListView = (ListView) findViewById(R.id.moveMenuListViewMenu);
+		mTxtMoveMenuReason = (EditText) findViewById(R.id.moveMenuTxtReason);
+		mBtnShooseMenu = (Button) findViewById(R.id.moveMenuBtnChooseMenu);
+		mSpMoveTbZone = (Spinner) findViewById(R.id.spinnerSourceTableZone);
+		mSpMoveTbZoneTo = (Spinner) findViewById(R.id.spinnerDestTableZone);
 
-		globalVar = new GlobalVar(context);
+		mGlobalVar = new GlobalVar(mContext);
 
-		spinnerMoveTbZone = (Spinner) findViewById(R.id.spinnerSourceTableZone);
-		spinnerMoveTbZoneTo = (Spinner) findViewById(R.id.spinnerDestTableZone);
-		
-		new LoadTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+		new LoadTableTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 
-		btnShooseMenu.setOnClickListener(new View.OnClickListener() {
+		mBtnShooseMenu.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LayoutInflater factory = LayoutInflater.from(context);
+				LayoutInflater factory = LayoutInflater.from(mContext);
 				View shooseMenuLayout = factory.inflate(
 						R.layout.shoose_menu_layout, null);
 
@@ -94,25 +93,25 @@ public class MoveMenuActivity extends Activity {
 				TextView tvToTableName = (TextView) shooseMenuLayout
 						.findViewById(R.id.shooseMenuDialogTvToTableName);
 
-				tvFromTableName.setText(FROM_TABLE_NAME);
-				tvToTableName.setText(TO_TABLE_NAME);
+				tvFromTableName.setText(mFromTableName);
+				tvToTableName.setText(mToTableName);
 
-				menuFromListView = (ListView) shooseMenuLayout
+				mMenuFromListView = (ListView) shooseMenuLayout
 						.findViewById(R.id.shooseMenuDialogMenuFromListView);
-				menuToListView = (ListView) shooseMenuLayout
+				mMenuToListView = (ListView) shooseMenuLayout
 						.findViewById(R.id.shooseMenuDialogMenuToListView);
 
 				// check moved menu
-				util = new MenuUtil(context);
-				if (util.listMovedMenu().size() == 0) {
-					new CurrentOrderTask(context, globalVar).execute(GlobalVar.FULL_URL);
+				mMenuUtil = new MenuUtil(mContext);
+				if (mMenuUtil.listMovedMenu().size() == 0) {
+					new CurrentOrderTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 				} else {
 					refreshSourceList();
 
 					refreshDestList();
 				}
 
-				menuFromListView
+				mMenuFromListView
 						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 							@Override
@@ -121,7 +120,7 @@ public class MoveMenuActivity extends Activity {
 								OrderSendData.OrderDetail detail = (OrderSendData.OrderDetail) parent
 										.getItemAtPosition(position);
 								
-								util.moveMenu(detail.getiOrderID(),
+								mMenuUtil.moveMenu(detail.getiOrderID(),
 										detail.getiOrderStatusID(),
 										detail.getiProductID(),
 										detail.getSzProductName(),
@@ -129,11 +128,11 @@ public class MoveMenuActivity extends Activity {
 										detail.getiSeatID());
 
 								int orderId = detail.getiOrderID();
-								detail = util.listMenuToMove(orderId);
+								detail = mMenuUtil.listMenuToMove(orderId);
 								if(detail.getiOrderID() != 0){
 									if(detail.getiOrderStatusID() == 1 || detail.getiOrderStatusID() == 2){
-										menuData.set(position, detail);
-										adapter1.notifyDataSetChanged();
+										mMenuData.set(position, detail);
+										mAdapter1.notifyDataSetChanged();
 									}
 								}else{
 									refreshSourceList();
@@ -145,7 +144,7 @@ public class MoveMenuActivity extends Activity {
 						});
 				
 
-				menuToListView
+				mMenuToListView
 						.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 							@Override
@@ -155,7 +154,7 @@ public class MoveMenuActivity extends Activity {
 									long id) {
 								OrderSendData.OrderDetail detail = (OrderSendData.OrderDetail) parent
 										.getItemAtPosition(position);
-								util.reMoveMenu(
+								mMenuUtil.reMoveMenu(
 										detail.getiOrderID(),
 										detail.getiOrderStatusID(),
 										detail.getiProductID(),
@@ -164,10 +163,10 @@ public class MoveMenuActivity extends Activity {
 										detail.getiSeatID());
 
 								int orderId = detail.getiOrderID();
-								detail = util.listMovedMenu(orderId);
+								detail = mMenuUtil.listMovedMenu(orderId);
 								if(detail.getiOrderID() > 0){
-									menuData2.set(position, detail);
-									adapter2.notifyDataSetChanged();
+									mMenuData2.set(position, detail);
+									mAdapter2.notifyDataSetChanged();
 								}else{
 									refreshDestList();
 								}
@@ -183,9 +182,8 @@ public class MoveMenuActivity extends Activity {
 				btnOk.setText(R.string.dialog_select_menu_ok);
 				btnCancel.setText(R.string.dialog_select_menu_cancel);
 				
-				final Dialog dialog = new Dialog(context, R.style.CustomDialogBottomRadius);
+				final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
 				dialog.setContentView(shooseMenuLayout);
-				dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 				dialog.getWindow().setGravity(Gravity.TOP);
 				dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 				dialog.show();
@@ -194,9 +192,9 @@ public class MoveMenuActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						movedMenuListView.setAdapter(adapter2);
-						if(adapter2.getCount() > 0)
-							btnShooseMenu.setText(R.string.move_menu_btn_edit_menu);
+						mMovedMenuListView.setAdapter(mAdapter2);
+						if(mAdapter2.getCount() > 0)
+							mBtnShooseMenu.setText(R.string.move_menu_btn_edit_menu);
 							
 						lockSelectedTable();
 						
@@ -207,8 +205,8 @@ public class MoveMenuActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						util = new MenuUtil(context);
-						util.createMoveMenuTemp();
+						mMenuUtil = new MenuUtil(mContext);
+						mMenuUtil.createMoveMenuTemp();
 						
 						clearMoveList();
 						dialog.dismiss();
@@ -220,7 +218,7 @@ public class MoveMenuActivity extends Activity {
 
 		// load reason
 		final List<ReasonGroups.ReasonDetail> reasonDetailLst = IOrderUtility
-				.loadReasonFromWs(context, globalVar, 7);
+				.loadReasonFromWs(mContext, mGlobalVar, 7);
 		
 		final ReasonAdapter reasonAdapter = 
 				new ReasonAdapter(MoveMenuActivity.this, reasonDetailLst);
@@ -228,7 +226,7 @@ public class MoveMenuActivity extends Activity {
 		ListView reasonListView = (ListView) findViewById(R.id.moveMenuListViewReason);
 		reasonListView.setAdapter(reasonAdapter);
 
-		final Reason reason = new Reason(context);
+		final Reason reason = new Reason(mContext);
 		reason.createSelectedReasonTmp();
 
 		reasonListView.setOnItemClickListener(new OnItemClickListener() {
@@ -254,21 +252,21 @@ public class MoveMenuActivity extends Activity {
 	}
 
 	private void clearLockSelectedTable(){
-		listViewSourceTbName.setEnabled(true);
-		listViewDestTbName.setEnabled(true);
-		listViewSourceTbName.clearChoices();
-		listViewDestTbName.clearChoices();
+		mLvSourceTbName.setEnabled(true);
+		mLvDestTbName.setEnabled(true);
+		mLvSourceTbName.clearChoices();
+		mLvDestTbName.clearChoices();
 		
 		clear();
 		
-		btnClear.setVisibility(View.GONE);
+		mBtnClear.setVisibility(View.GONE);
 	}
 	
 	private void lockSelectedTable(){
-		listViewSourceTbName.setEnabled(false);
-		listViewDestTbName.setEnabled(false);
+		mLvSourceTbName.setEnabled(false);
+		mLvDestTbName.setEnabled(false);
 		
-		btnClear.setVisibility(View.VISIBLE);
+		mBtnClear.setVisibility(View.VISIBLE);
 	}
 	
 	@Override
@@ -276,28 +274,26 @@ public class MoveMenuActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_move_menu, menu);
 		View v = menu.findItem(R.id.item_confirm).getActionView();
 
-		btnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
-		btnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
-		btnClear = (Button) v.findViewById(R.id.buttonClear);
+		mBtnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
+		mBtnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
+		mBtnClear = (Button) v.findViewById(R.id.buttonClear);
 		
-		btnConfirm.setOnClickListener(new OnClickListener(){
+		mBtnConfirm.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				Reason reason = new Reason(MoveMenuActivity.this);
-				List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(7);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(7); 
-				if(FROM_TABLE_ID == 0){
-					IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
-				}else if(TO_TABLE_ID == 0){
-					IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
-				}else if(menuData2 == null){
-					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
-				}else if(movedMenuListView.getCount()==0){
-					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
-				}else if((allReasonLst != null && allReasonLst.size() > 0) && 
-						(reasonLst != null && reasonLst.size() == 0)){
-					IOrderUtility.alertDialog(context, R.string.select_reason, 0);
+				if(mFromTableId == 0){
+					IOrderUtility.alertDialog(mContext, R.string.select_source_table, 0);
+				}else if(mToTableId == 0){
+					IOrderUtility.alertDialog(mContext, R.string.select_destination_table, 0);
+				}else if(mMenuData2 == null){
+					IOrderUtility.alertDialog(mContext, R.string.select_menu_to_move, 0);
+				}else if(mMovedMenuListView.getCount()==0){
+					IOrderUtility.alertDialog(mContext, R.string.select_menu_to_move, 0);
+				}else if((reasonLst != null && reasonLst.size() == 0) && mTxtMoveMenuReason.getText().toString().isEmpty()){
+					IOrderUtility.alertDialog(mContext, R.string.select_reason, 0);
 				}else{
 					final CustomDialog cfDialog = new CustomDialog(MoveMenuActivity.this, R.style.CustomDialog);
 					cfDialog.title.setVisibility(View.VISIBLE);
@@ -317,7 +313,7 @@ public class MoveMenuActivity extends Activity {
 						@Override
 						public void onClick(View v) {
 							cfDialog.dismiss();
-							new MoveMenuTask(context, globalVar).execute(GlobalVar.FULL_URL);		
+							new MoveMenuTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);		
 						}
 						
 					});
@@ -327,10 +323,10 @@ public class MoveMenuActivity extends Activity {
 				}
 
 				//reset btnShoose text
-				btnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
+				mBtnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
 			}
 		});
-		btnClose.setOnClickListener(new OnClickListener(){
+		mBtnClose.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
@@ -338,7 +334,7 @@ public class MoveMenuActivity extends Activity {
 			}
 		});	
 		
-		btnClear.setOnClickListener(new OnClickListener(){
+		mBtnClear.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
@@ -351,28 +347,28 @@ public class MoveMenuActivity extends Activity {
 	}
 
 	private void clearMoveList() {
-		menuData2 = new ArrayList<OrderSendData.OrderDetail>();
+		mMenuData2 = new ArrayList<OrderSendData.OrderDetail>();
 
-		ShooseMenuAdapter adapter = new ShooseMenuAdapter(context, globalVar,
-				menuData2);
-		movedMenuListView.setAdapter(adapter);
+		ShooseMenuAdapter adapter = new ShooseMenuAdapter(mContext, mGlobalVar,
+				mMenuData2);
+		mMovedMenuListView.setAdapter(adapter);
 	}
 
 	private void refreshDestList() {
-		menuData2 = util.listMovedMenu();
+		mMenuData2 = mMenuUtil.listMovedMenu();
 
-		adapter2 = new ShooseMenuAdapter(context, globalVar,
-				menuData2);
-		menuToListView.setAdapter(adapter2);
+		mAdapter2 = new ShooseMenuAdapter(mContext, mGlobalVar,
+				mMenuData2);
+		mMenuToListView.setAdapter(mAdapter2);
 	}
 
 	private void refreshSourceList() {
-		menuData = util.listMenuToMove();
+		mMenuData = mMenuUtil.listMenuToMove();
 
 		// set adapter
-		adapter1 = new ShooseMenuAdapter(context, globalVar,
-				menuData);
-		menuFromListView.setAdapter(adapter1);
+		mAdapter1 = new ShooseMenuAdapter(mContext, mGlobalVar,
+				mMenuData);
+		mMenuFromListView.setAdapter(mAdapter1);
 	}
 
 	private class MoveMenuTask extends WebServiceTask{
@@ -395,13 +391,13 @@ public class MoveMenuActivity extends Activity {
 
 			property = new PropertyInfo();
 			property.setName("iFromTableID");
-			property.setValue(FROM_TABLE_ID);
+			property.setValue(mFromTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			property = new PropertyInfo();
 			property.setName("iToTableID");
-			property.setValue(TO_TABLE_ID);
+			property.setValue(mToTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
@@ -432,7 +428,7 @@ public class MoveMenuActivity extends Activity {
 
 				property = new PropertyInfo();
 				property.setName("szReasonText");
-				property.setValue(txtMoveMenuReason.getText().toString());
+				property.setValue(mTxtMoveMenuReason.getText().toString());
 				property.setType(String.class);
 				soapRequest.addProperty(property);
 				
@@ -549,8 +545,8 @@ public class MoveMenuActivity extends Activity {
 	
 	private void clear(){
 		// create temptable for move menu
-		util = new MenuUtil(context);
-		util.createMoveMenuTemp();
+		mMenuUtil = new MenuUtil(mContext);
+		mMenuUtil.createMoveMenuTemp();
 		
 		//clear menu to move
 		clearMoveList();
@@ -561,12 +557,12 @@ public class MoveMenuActivity extends Activity {
 		tvTbTo.setText("");
 		
 		// clear to tableid
-		FROM_TABLE_ID = 0;
-		TO_TABLE_ID = 0;
-		btnShooseMenu.setEnabled(false);
+		mFromTableId = 0;
+		mToTableId = 0;
+		mBtnShooseMenu.setEnabled(false);
 		
 		//reset btnShoose text
-		btnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
+		mBtnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
 	}
 	
 	private class LoadTableTask extends WebServiceTask{
@@ -586,10 +582,10 @@ public class MoveMenuActivity extends Activity {
 			try {
 				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
 				TableZoneSpinnerAdapter tbZoneAdapter = IOrderUtility.createTableZoneAdapter(context, tbInfo);
-				spinnerMoveTbZone.setAdapter(tbZoneAdapter);
-				spinnerMoveTbZoneTo.setAdapter(tbZoneAdapter);
+				mSpMoveTbZone.setAdapter(tbZoneAdapter);
+				mSpMoveTbZoneTo.setAdapter(tbZoneAdapter);
 
-				spinnerMoveTbZone
+				mSpMoveTbZone
 						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
 							@Override
@@ -599,9 +595,9 @@ public class MoveMenuActivity extends Activity {
 								final TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(pos);
 								final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
 
-								listViewSourceTbName = (ListView) findViewById(R.id.listViewSorceTableName);
-								listViewSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
-								listViewSourceTbName
+								mLvSourceTbName = (ListView) findViewById(R.id.listViewSorceTableName);
+								mLvSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
+								mLvSourceTbName
 										.setOnItemClickListener(new OnItemClickListener() {
 											@Override
 											public void onItemClick(
@@ -611,16 +607,16 @@ public class MoveMenuActivity extends Activity {
 												
 												TableName tbName = (TableName) parent
 														.getItemAtPosition(pos);
-												FROM_TABLE_ID = tbName
+												mFromTableId = tbName
 														.getTableID();
-												FROM_TABLE_NAME = tbName
+												mFromTableName = tbName
 														.getTableName();
 
 												TextView tvTbFrom = (TextView) findViewById(R.id.tvTbFrom);
-												tvTbFrom.setText(FROM_TABLE_NAME);
+												tvTbFrom.setText(mFromTableName);
 												
 												//reset btnShoose text
-												btnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
+												mBtnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
 												ListView listViewDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
 												List<TableName> tbNameLstTo = IOrderUtility.filterTableName(tbInfo, tbZone, tbName.getTableID());
 												listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLstTo));
@@ -636,7 +632,7 @@ public class MoveMenuActivity extends Activity {
 
 						});
 
-				spinnerMoveTbZoneTo
+				mSpMoveTbZoneTo
 						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
 							@Override
@@ -644,12 +640,12 @@ public class MoveMenuActivity extends Activity {
 									int pos, long id) {
 
 								TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(pos);
-								final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableName(tbInfo, tbZone, FROM_TABLE_ID);
+								final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableName(tbInfo, tbZone, mFromTableId);
 
-								listViewDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
-								listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
+								mLvDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
+								mLvDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
 
-								listViewDestTbName
+								mLvDestTbName
 										.setOnItemClickListener(new OnItemClickListener() {
 											@Override
 											public void onItemClick(
@@ -657,14 +653,14 @@ public class MoveMenuActivity extends Activity {
 													int pos, long id) {
 												TableName tbName = (TableName) parent
 														.getItemAtPosition(pos);
-												TO_TABLE_ID = tbName
+												mToTableId = tbName
 														.getTableID();
-												TO_TABLE_NAME = tbName
+												mToTableName = tbName
 														.getTableName();
 
 												TextView tvTbTo = (TextView) findViewById(R.id.tvTbTo);
 												tvTbTo.setText(tbName.getTableName());
-												btnShooseMenu.setEnabled(true);
+												mBtnShooseMenu.setEnabled(true);
 											}
 
 										});
@@ -708,7 +704,7 @@ public class MoveMenuActivity extends Activity {
 
 			PropertyInfo property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(FROM_TABLE_ID);
+			property.setValue(mFromTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}
@@ -730,9 +726,9 @@ public class MoveMenuActivity extends Activity {
 //					if (orderData.xListOrderDetail != null
 //							&& orderData.xListOrderDetail.size() > 0) {
 						// add menu to temptable
-						util = new MenuUtil(context);
-						util.createMoveMenuTemp();
-						util.prepareMenuForMove(orderData);
+						mMenuUtil = new MenuUtil(context);
+						mMenuUtil.createMoveMenuTemp();
+						mMenuUtil.prepareMenuForMove(orderData);
 
 						refreshSourceList();
 //					}

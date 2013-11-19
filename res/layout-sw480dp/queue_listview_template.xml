@@ -11,7 +11,6 @@
 
     <TextView
         android:id="@+id/textViewQueue"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="A1"
@@ -27,7 +26,6 @@
 
     <TextView
         android:id="@+id/textViewCustomerName"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -38,7 +36,6 @@
 
     <TextView
         android:id="@+id/textViewCustWait"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wait"
@@ -48,8 +45,7 @@
     <LinearLayout
         android:id="@+id/layoutQueueCtrl"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:visibility="gone" >
+        android:layout_height="match_parent" >
 
         <Button
             android:id="@+id/buttonPreOrder"
@@ -88,7 +84,9 @@
             android:minWidth="0dp"
             android:text="@string/queue_btn_cancel"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp" />
+
     </LinearLayout>
 
 </LinearLayout>

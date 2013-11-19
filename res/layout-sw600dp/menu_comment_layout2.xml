@@ -50,36 +50,6 @@
             android:orientation="horizontal" >
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/seatContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/saleModeModSwLayout"
-            android:layout_alignTop="@+id/saleModeModSwLayout"
-            android:layout_toRightOf="@+id/saleModeModSwLayout"
-            android:gravity="center_vertical"
-            android:visibility="gone" >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:gravity="right"
-                android:text="@string/seat"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <Button
-                android:id="@+id/buttonModSeat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/light_grey_button"
-                android:drawableLeft="@drawable/ic_action_seat"
-                android:text="@string/seat"
-                android:textAppearance="?android:attr/textAppearanceMediumInverse" />
-
-        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout

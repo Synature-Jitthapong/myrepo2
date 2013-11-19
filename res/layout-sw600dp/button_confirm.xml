@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal" >
+    android:layout_height="match_parent" >
 
     <Button
         android:id="@+id/buttonClear"
-        style="@style/button_text"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonConfirmCancel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_margin="2dp"
-        android:background="@drawable/blue_button"
+        android:background="@drawable/light_grey_button"
         android:text="@string/button_clear"
         android:visibility="gone" />
 
     <Button
         android:id="@+id/buttonConfirmCancel"
-        style="@style/button_text"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_margin="2dp"
-        android:background="@drawable/blue_button"
+        android:layout_toRightOf="@+id/buttonClear"
+        android:background="@drawable/light_grey_button"
         android:text="@string/global_btn_cancel" />
 
     <Button
         android:id="@+id/buttonConfirmOk"
-        style="@style/button_text"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonConfirmCancel"
+        android:layout_alignParentTop="true"
         android:layout_margin="2dp"
-        android:background="@drawable/blue_button"
+        android:layout_toRightOf="@+id/buttonConfirmCancel"
+        android:background="@drawable/light_grey_button"
         android:text="@string/global_btn_ok" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -35,57 +35,57 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 public class CancelMenuActivity extends Activity {
-	private Context context;
-	private GlobalVar globalVar;
+	private Context mContext;
+	private GlobalVar mGlobalVar;
 	
-	private Spinner spinnerTableZone;
-	private ListView listViewTableName;
-	private ListView listViewMenu;
-	private ListView reasonListView;
-	private EditText txtCancelMenuReason;
-	private Button btnConfirm;
-	private Button btnCancel;
-	private ProgressBar progressBar;
-	OrderSendData detail;
-	SelectOrderAdapter menuAdapter;
-	private List<OrderSendData.OrderDetail> orderDetailLst;
+	private Spinner mSpTableZone;
+	private ListView mLvTableName;
+	private ListView mLvMenu;
+	private ListView mLvReason;
+	private EditText mTxtReason;
+	private Button mBtnConfirm;
+	private Button mBtnCancel;
+	private ProgressBar mProgress;
+	OrderSendData mOrderData;
+	SelectOrderAdapter mMenuAdapter;
+	private List<OrderSendData.OrderDetail> mOrderLst;
 	
-	private int TABLE_ID;
-	private String CANCEL_MENU_REASON;
+	private int mTableId;
+	private String mReason;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		context = this;
-		globalVar = new GlobalVar(context);
+		mContext = this;
+		mGlobalVar = new GlobalVar(mContext);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cancel_menu);
 		
-		spinnerTableZone = (Spinner) findViewById(R.id.spinnerCancelMenuTableZone);
-		listViewTableName = (ListView) findViewById(R.id.listViewCancelMenuTableName);
-		listViewMenu = (ListView) findViewById(R.id.listViewCancelMenu);
-		reasonListView = (ListView) findViewById(R.id.listViewCancelMenuReason);
+		mSpTableZone = (Spinner) findViewById(R.id.spinnerCancelMenuTableZone);
+		mLvTableName = (ListView) findViewById(R.id.listViewCancelMenuTableName);
+		mLvMenu = (ListView) findViewById(R.id.listViewCancelMenu);
+		mLvReason = (ListView) findViewById(R.id.listViewCancelMenuReason);
 //		btnConfirm = (Button) findViewById(R.id.buttonConfirm);
 //		btnCancel = (Button) findViewById(R.id.buttonConfirmCancel);
 		
 		
-		progressBar = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
-		txtCancelMenuReason = (EditText) findViewById(R.id.txtCancelMenuReason);
+		mProgress = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
+		mTxtReason = (EditText) findViewById(R.id.txtCancelMenuReason);
 		
-		new LoadTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+		new LoadTableTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 
 		// load reason
 		final List<ReasonGroups.ReasonDetail> reasonDetailLst = IOrderUtility
-				.loadReasonFromWs(context, globalVar, 2);
+				.loadReasonFromWs(mContext, mGlobalVar, 2);
 		
 		final ReasonAdapter reasonAdapter = new ReasonAdapter(CancelMenuActivity.this, reasonDetailLst);
 
-		reasonListView = (ListView) findViewById(R.id.listViewCancelMenuReason);
-		reasonListView.setAdapter(reasonAdapter);
+		mLvReason = (ListView) findViewById(R.id.listViewCancelMenuReason);
+		mLvReason.setAdapter(reasonAdapter);
 
-		final Reason reason = new Reason(context);
+		final Reason reason = new Reason(mContext);
 		reason.createSelectedReasonTmp();
 
-		reasonListView.setOnItemClickListener(new OnItemClickListener() {
+		mLvReason.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int pos,
@@ -111,30 +111,28 @@ public class CancelMenuActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_cancel_menu, menu);
 		View v = menu.findItem(R.id.item_confirm).getActionView();
-		btnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
-		btnCancel = (Button) v.findViewById(R.id.buttonConfirmCancel);
+		mBtnConfirm = (Button) v.findViewById(R.id.buttonConfirmOk);
+		mBtnCancel = (Button) v.findViewById(R.id.buttonConfirmCancel);
 		
-		btnConfirm.setOnClickListener(new OnClickListener(){
+		mBtnConfirm.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				Reason reason = new Reason(CancelMenuActivity.this);
-				List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(2);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(2); 
-				if(TABLE_ID != 0){
-					MenuUtil menuUtil = new MenuUtil(context);
-					orderDetailLst = menuUtil
+				if(mTableId != 0){
+					MenuUtil menuUtil = new MenuUtil(mContext);
+					mOrderLst = menuUtil
 							.listMenuToCancel();
 					
-					 if(orderDetailLst == null){
-						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
-					 }else if(orderDetailLst != null && orderDetailLst.size() == 0){
-						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
-					 }else if((allReasonLst != null && allReasonLst.size() > 0) && 
-							 (reasonLst != null && reasonLst.size() == 0)){
-						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
+					 if(mOrderLst == null){
+						IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
+					 }else if(mOrderLst != null && mOrderLst.size() == 0){
+						 IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
+					 }else if((reasonLst != null && reasonLst.size() == 0) && mTxtReason.getText().toString().isEmpty()){
+						 IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, R.string.select_reason, 0);
 					 }else{
-						CANCEL_MENU_REASON = txtCancelMenuReason.getText().toString();
+						mReason = mTxtReason.getText().toString();
 						
 						final CustomDialog cfDialog = new CustomDialog(CancelMenuActivity.this, R.style.CustomDialog);
 						cfDialog.title.setVisibility(View.VISIBLE);
@@ -153,18 +151,18 @@ public class CancelMenuActivity extends Activity {
 							@Override
 							public void onClick(View v) {
 								cfDialog.dismiss();
-								new CancelMenuTask(context, globalVar).execute(GlobalVar.FULL_URL);
+								new CancelMenuTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 							}
 							
 						});	
 						cfDialog.show();
 					 }
 				}else{
-					IOrderUtility.alertDialog(context,R.string.global_dialog_title_error, R.string.select_source_table, 0);
+					IOrderUtility.alertDialog(mContext,R.string.global_dialog_title_error, R.string.select_source_table, 0);
 				}
 			}
 		});	
-		btnCancel.setOnClickListener(new OnClickListener(){
+		mBtnCancel.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
@@ -194,20 +192,20 @@ public class CancelMenuActivity extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			property = new PropertyInfo();
 			property.setName("szReasonDelete");
-			property.setValue(CANCEL_MENU_REASON);
+			property.setValue(mReason);
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 
 			//List<CancelOrder> orderIdLst = new ArrayList<CancelOrder>();
 			List<Integer> orderIdLst = new ArrayList<Integer>();
-			if (orderDetailLst.size() > 0) {
-				for (OrderSendData.OrderDetail detail : orderDetailLst) {
+			if (mOrderLst.size() > 0) {
+				for (OrderSendData.OrderDetail detail : mOrderLst) {
 //					CancelOrder cancelOrder = new CancelOrder();
 //					cancelOrder.setiOrderID(detail.getiOrderID());
 //					orderIdLst.add(cancelOrder);
@@ -343,8 +341,8 @@ public class CancelMenuActivity extends Activity {
 
 			try {
 				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
-				spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbInfo));
-				spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
+				mSpTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbInfo));
+				mSpTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 					@Override
 					public void onItemSelected(AdapterView<?> parent, View v,
@@ -352,20 +350,20 @@ public class CancelMenuActivity extends Activity {
 						TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(position);
 						final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
 
-						listViewTableName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
-						listViewTableName.setOnItemClickListener(new OnItemClickListener(){
+						mLvTableName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
+						mLvTableName.setOnItemClickListener(new OnItemClickListener(){
 
 							@Override
 							public void onItemClick(AdapterView<?> parent, View v,
 									int position, long id) {
 								TableName tbName = (TableName) parent.getItemAtPosition(position);
 										
-								TABLE_ID = tbName.getTableID();
+								mTableId = tbName.getTableID();
 
-								detail = new OrderSendData();
-								detail.xListOrderDetail = new ArrayList<OrderSendData.OrderDetail>();
-								menuAdapter = new SelectOrderAdapter(context, globalVar, detail.xListOrderDetail);
-								menuAdapter.notifyDataSetChanged();
+								mOrderData = new OrderSendData();
+								mOrderData.xListOrderDetail = new ArrayList<OrderSendData.OrderDetail>();
+								mMenuAdapter = new SelectOrderAdapter(context, globalVar, mOrderData.xListOrderDetail);
+								mMenuAdapter.notifyDataSetChanged();
 								
 								// create menu temptable
 								MenuUtil menuUtil = new MenuUtil(context);
@@ -417,27 +415,27 @@ public class CancelMenuActivity extends Activity {
 
 			PropertyInfo property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}
 		@Override
 		protected void onPreExecute() {
 			tvProgress.setText(R.string.load_current_order_progress);
-			progressBar.setVisibility(View.VISIBLE);
+			mProgress.setVisibility(View.VISIBLE);
 		}
 		@Override
 		protected void onPostExecute(String result) {
-			progressBar.setVisibility(View.GONE);
+			mProgress.setVisibility(View.GONE);
 			
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
-				detail = gdz.deserializeOrderSendDataJSON(result);
-				List<OrderSendData.OrderDetail> orderFilter = IOrderUtility.filterProductType(detail.xListOrderDetail);
-				menuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
-				listViewMenu.setAdapter(menuAdapter);
+				mOrderData = gdz.deserializeOrderSendDataJSON(result);
+				List<OrderSendData.OrderDetail> orderFilter = IOrderUtility.filterProductType(mOrderData.xListOrderDetail);
+				mMenuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
+				mLvMenu.setAdapter(mMenuAdapter);
 				
-				listViewMenu.setOnItemClickListener(new OnItemClickListener(){
+				mLvMenu.setOnItemClickListener(new OnItemClickListener(){
 					
 					@Override
 					public void onItemClick(

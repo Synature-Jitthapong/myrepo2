@@ -260,12 +260,12 @@ public class CheckBillActivity extends Activity {
 									// popup
 									LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
 									View questView = inflater.inflate(R.layout.question_list_layout, null);
-									TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
+									TextView tvQestionTitle = (TextView) questView.findViewById(R.id.tvTitle);
 									tvQestionTitle.setText(tvTableName.getText());
-									Button btnOk = (Button) questView.findViewById(R.id.button1);
-									Button btnCancel = (Button) questView.findViewById(R.id.button2);
-									final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
-									final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
+									Button btnOk = (Button) questView.findViewById(R.id.btnOk);
+									Button btnCancel = (Button) questView.findViewById(R.id.btnCancel);
+									final TextView tvRequire = (TextView) questView.findViewById(R.id.tvRequire);
+									final ListView lvQuestion = (ListView) questView.findViewById(R.id.lvQuestion);
 									lvQuestion.setEnabled(false);
 									
 									// question adapter
@@ -424,8 +424,7 @@ public class CheckBillActivity extends Activity {
 				Intent intent = new Intent(CheckBillActivity.this, SearchMemberActivity.class);
 				intent.putExtra("TO_TRANSACTION_ID", CURR_TRANSACTION_ID);
 				intent.putExtra("TO_COMPUTER_ID", CURR_COMPUTER_ID);
-				CheckBillActivity.this.startActivity(intent);
-				overridePendingTransition(R.animator.slide_in_up, R.animator.slide_in_out);		
+				CheckBillActivity.this.startActivity(intent);	
 			}
 		});
 		 new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);

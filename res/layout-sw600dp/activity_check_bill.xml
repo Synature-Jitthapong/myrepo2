@@ -64,7 +64,6 @@
 
             <TextView
                 android:id="@+id/tvBillHeader"
-                style="@style/text_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -78,7 +77,6 @@
 
                 <TextView
                     android:id="@+id/tvTableName"
-                    style="@style/text_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -86,7 +84,6 @@
 
                 <TextView
                     android:id="@+id/textViewBillCustNo"
-                    style="@style/text_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -145,7 +142,6 @@
 
                     <TextView
                         android:id="@+id/textViewSummaryDisplay"
-                        style="@style/text_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -153,7 +149,6 @@
 
                     <TextView
                         android:id="@+id/textViewPriceValue"
-                        style="@style/text_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"

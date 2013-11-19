@@ -13,84 +13,9 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
     </style>
-	<style name="DialogFromBottomAnimation">
-	    <item name="android:windowEnterAnimation">@animator/slide_in_up</item>
-	    <item name="android:windowExitAnimation">@animator/slide_down_out</item>
-	</style>
-	<style name="DialogAnimation">
-	    <item name="android:windowEnterAnimation">@animator/slide_down_in</item>
-	    <item name="android:windowExitAnimation">@animator/slide_down_up</item>
-	</style>
-	<style name="FullScreenDialog" parent="android:style/Theme.Holo.Light.NoActionBar">
-   		<item name="android:windowNoTitle">true</item>
-   		<item name="android:windowBackground">@drawable/dialog_bg</item>
-	</style>
-	
-    <style name="CustomDialogTopRadius" parent="CustomDialog">
-   		<item name="android:windowBackground">@drawable/dialog_top_radius_bg</item>
-	</style>
-    <style name="CustomDialogBottomRadius" parent="CustomDialog">
-   		<item name="android:windowBackground">@drawable/dialog_bottom_radius_bg</item>
-	</style>
     <style name="CustomDialog" parent="android:style/Theme.DeviceDefault.Light.Dialog">
    		<item name="android:windowNoTitle">true</item>
 	</style>
-    <style name="text_generald" >
-	    <item name="android:layout_width" >wrap_content</item>
-	    <item name="android:layout_height" >wrap_content</item>
-	    <item name="android:textColor" >#f0f0f0</item>
-	    <item name="android:shadowColor" >#000000</item>
-	    <item name="android:shadowDx" >0</item>
-	    <item name="android:shadowDy" >-1</item>
-	    <item name="android:shadowRadius" >1</item>
-  	</style>
-  	<style name="ButtonTextSmallNoMargin" parent="button_text_no_margin">
-	    <item name="android:textSize">12sp</item>
-  	</style>
-    <style name="text_medium" >
-	    <item name="android:layout_width" >wrap_content</item>
-	    <item name="android:layout_height" >wrap_content</item>
-	    <item name="android:shadowColor" >#f0f0f0</item>
-	    <item name="android:shadowDx" >0</item>
-	    <item name="android:shadowDy" >-1</item>
-	    <item name="android:shadowRadius" >1</item>
-  	</style>
-    <style name="button_text_medium" >
-	    <item name="android:layout_width" >wrap_content</item>
-	    <item name="android:layout_height" >wrap_content</item>
-	    <item name="android:textColor" >#f0f0f0</item>
-	    <item name="android:gravity" >center</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_margin" >3dp</item>
-	    <item name="android:shadowColor" >#000000</item>
-	    <item name="android:shadowDx" >0</item>
-	    <item name="android:shadowDy" >-1</item>
-	    <item name="android:shadowRadius" >1</item>
-  	</style>
-  	
-	<style name="button_text" >
-	    <item name="android:layout_width" >wrap_content</item>
-	    <item name="android:layout_height" >wrap_content</item>
-	    <item name="android:textColor" >#ffffff</item>
-	    <item name="android:gravity" >center</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_margin" >3dp</item>
-	    <item name="android:shadowColor" >#000000</item>
-	    <item name="android:shadowDx" >0</item>
-	    <item name="android:shadowDy" >-1</item>
-	    <item name="android:shadowRadius" >1</item>
-  	</style>
-  	<style name="button_text_no_margin" >
-	    <item name="android:layout_width" >wrap_content</item>
-	    <item name="android:layout_height" >wrap_content</item>
-	    <item name="android:textColor" >#f0f0f0</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:gravity" >center</item>
-	    <item name="android:shadowColor" >#000000</item>
-	    <item name="android:shadowDx" >0</item>
-	    <item name="android:shadowDy" >-1</item>
-	    <item name="android:shadowRadius" >1</item>
-  	</style>
   	<style name="AppTheme" parent="AppBaseTheme">
   	    <item name="android:windowBackground">@color/grey_light</item>
        <item name="android:actionBarStyle">@style/ActionBarStyle</item>

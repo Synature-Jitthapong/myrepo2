@@ -500,7 +500,7 @@ public class QueueActivity extends Activity {
 						lvOrderPre.setAdapter(adapter);
 
 						final Dialog dialog = new Dialog(context,
-								R.style.CustomDialogBottomRadius);
+								R.style.CustomDialog);
 						dialog.setContentView(orderView);
 						dialog.getWindow().setGravity(Gravity.TOP);
 						dialog.getWindow().setLayout(
@@ -659,7 +659,7 @@ public class QueueActivity extends Activity {
 		private void popupDialogKeyPad(){
 			final SendOrderKeypadDialog dialog = new SendOrderKeypadDialog(
 					globalVar, QueueActivity.this,
-					R.style.CustomDialogBottomRadius);
+					R.style.CustomDialog);
 			
 			dialog.ffSendCustLayout.setVisibility(View.GONE);
 			dialog.tvDialogTitle.setText(R.string.checkin_queue_title);
@@ -722,8 +722,6 @@ public class QueueActivity extends Activity {
 			dialog.getWindow().setLayout(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-			dialog.getWindow().setWindowAnimations(
-					R.style.DialogAnimation);
 
 			dialog.show();
 		}
@@ -1293,11 +1291,10 @@ public class QueueActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			final Dialog dialog = new Dialog(context, R.style.FullScreenDialog);
+			final Dialog dialog = new Dialog(context, R.style.CustomDialog);
 			//tvTitle.setTextSize(48);
 			tvTitle.setText("Queue : " + queueName);
 			dialog.setContentView(view);
-			dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 			dialog.show();
 
 			btnConfirm.setOnClickListener(new OnClickListener() {

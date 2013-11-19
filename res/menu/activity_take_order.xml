@@ -4,8 +4,7 @@
             <item android:id="@+id/action_moveTable" android:showAsAction="always|withText" android:title="@string/action_movetable">
             </item>
             <item android:id="@+id/action_mergeTable" android:showAsAction="always|withText" android:title="@string/action_mergetable">
-            </item>
-            <item android:id="@+id/action_comment_trans" android:title="@string/comment_trans" android:showAsAction="always|withText" /><item android:id="@+id/action_kds" android:title="@string/action_kds" android:showAsAction="always|withText" />
+            </item><item android:id="@+id/action_kds" android:title="@string/action_kds" android:showAsAction="always|withText" />
             
         </menu>
     </item><item android:id="@+id/menu_util" android:title="@string/action_menu_menu_util" android:showAsAction="always|withText" android:icon="@drawable/ic_action_menu_utility">

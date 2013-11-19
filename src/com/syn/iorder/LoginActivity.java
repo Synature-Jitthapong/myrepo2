@@ -41,20 +41,33 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		context = this;
 		super.onCreate(savedInstanceState);
-
-		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-		ShopData.Language lang = shopProp.getLanguage();
-		IOrderUtility.switchLanguage(context, lang.getLangCode());
-		
 		setContentView(R.layout.activity_login);
 		
 		globalVar = new GlobalVar(context);
-
 		tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
 		tvComputer = (TextView) findViewById(R.id.textViewComputer);
 		tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
 		tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
-		loadDeviceData();
+		
+		// check register
+		// if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		// check config
+		if (IOrderUtility.checkConfig(this)) {
+			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+			ShopData.Language lang = shopProp.getLanguage();
+			IOrderUtility.switchLanguage(context, lang.getLangCode());
+			
+			loadDeviceData();
+		} else {
+			Intent intent = new Intent(this, AppConfigLayoutActivity.class);
+			startActivity(intent);
+		}
+		// } else {
+		// Intent intent = new Intent(TakeOrderActivity.this,
+		// RegisterActivity.class);
+		// TakeOrderActivity.this.startActivity(intent);
+		// TakeOrderActivity.this.finish();
+		// }
 		
 		txtUserName = (EditText) findViewById(R.id.txtUserName);
 		txtPassWord = (EditText) findViewById(R.id.txtPassword);

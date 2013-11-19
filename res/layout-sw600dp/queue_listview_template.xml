@@ -11,7 +11,6 @@
 
     <TextView
         android:id="@+id/textViewQueue"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="A1"
@@ -33,7 +32,6 @@
 
         <TextView
             android:id="@+id/textViewCustomerName"
-            style="@style/text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -43,7 +41,6 @@
 
     <TextView
         android:id="@+id/textViewCustWait"
-        style="@style/text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -79,7 +76,8 @@
             android:layout_margin="2dp"
             android:background="@drawable/light_red_button"
             android:focusable="false"
-            android:text="@string/queue_btn_cancel" />
+            android:text="@string/queue_btn_cancel"
+            android:textColor="@color/smoke_white" />
 
     </LinearLayout>
 

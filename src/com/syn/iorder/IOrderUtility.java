@@ -41,7 +41,6 @@ import syn.pos.data.dao.SaleMode;
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.SyncDataLog;
-import syn.pos.data.dao.TransactionComment;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.MenuGroups;
 import syn.pos.data.model.OrderSendData;
@@ -458,16 +457,16 @@ public class IOrderUtility {
 				sp.insertStaffData(sd);
 				sp.insertLanguage(sd);
 				
-				try {
-					sp.insertStaffPermissionData(sd);
-					sp.insertSeatNo(sd);
-					sp.insertCourse(sd);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, e.getMessage(), 0);
-				}
+//				try {
+//					sp.insertStaffPermissionData(sd);
+//					sp.insertSeatNo(sd);
+//					sp.insertCourse(sd);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					
+//					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, e.getMessage(), 0);
+//				}
 
 				ComputerProperty cp = new ComputerProperty(context);
 				cp.insertComputerProperty(sd);
@@ -556,14 +555,14 @@ public class IOrderUtility {
 				qg.insertQuestionDetail(pgs);
 				qg.insertAnswerOption(pgs);
 				
-				try {
-					TransactionComment tc = new TransactionComment(context);
-					tc.insertCommentTransDept(pgs);
-					tc.insertCommentTransItem(pgs);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					TransactionComment tc = new TransactionComment(context);
+//					tc.insertCommentTransDept(pgs);
+//					tc.insertCommentTransItem(pgs);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				
 				new UpdateMenuDataFromWs(context, globalVar)
 						.execute(GlobalVar.FULL_URL);

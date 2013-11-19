@@ -22,7 +22,6 @@
 
     <Button
         android:id="@+id/buttonDeleteAll"
-        style="@style/ButtonTextSmallNoMargin"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
@@ -32,6 +31,8 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:text="@string/btn_order_set_delete_all"
+        android:textColor="@color/smoke_white"
+        android:textColorHint="@color/smoke_white"
         android:textSize="12sp" />
 
 </RelativeLayout>

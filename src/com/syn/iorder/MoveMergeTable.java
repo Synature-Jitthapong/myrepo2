@@ -32,36 +32,35 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 public class MoveMergeTable extends Activity {
-	private Context context;
-	private GlobalVar globalVar;
-	private int func;
-	private int reasonGroupId;
+	private Context mContext;
+	private GlobalVar mGlobalVar;
+	private int mFunc;
+	private int mReasonGroupId;
 	
-	private EditText moveMergeTableTxtReason;
-	private Spinner spinnerMoveTbZone;
-	private Spinner spinnerMoveTbZoneTo;
-	private Button btnMoveMerge;
-	private Button btnClose;
-	private int FROM_TABLE_ID;
-	private int TO_TABLE_ID;
+	private EditText mTxtReason;
+	private Spinner mSpMoveTbZone;
+	private Spinner mSpMoveTbZoneTo;
+	private Button mBtnOk;
+	private Button mBtnClose;
+	private int mFromTableId;
+	private int mToTableId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		context = this;
-		globalVar = new GlobalVar(context);
+		mContext = this;
+		mGlobalVar = new GlobalVar(mContext);
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.move_table_layout);
 
 		Intent intent = getIntent();
-		func = intent.getIntExtra("func", 1); // 1=move;2=merge
+		mFunc = intent.getIntExtra("func", 1); // 1=move;2=merge
 		
-		moveMergeTableTxtReason = (EditText) findViewById(R.id.moveMergeTableTxtReason);
-		spinnerMoveTbZone = (Spinner) findViewById(R.id.spinnerSourceTableZone);
-		spinnerMoveTbZoneTo = (Spinner) findViewById(R.id.spinnerDestTableZone);
+		mTxtReason = (EditText) findViewById(R.id.moveMergeTableTxtReason);
+		mSpMoveTbZone = (Spinner) findViewById(R.id.spinnerSourceTableZone);
+		mSpMoveTbZoneTo = (Spinner) findViewById(R.id.spinnerDestTableZone);
 		
-
-		new LoadTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+		new LoadTableTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void confirmOperation(int title, int msg){
@@ -82,10 +81,10 @@ public class MoveMergeTable extends Activity {
 			@Override
 			public void onClick(View v) {
 				cfDialog.dismiss();
-				if(func == 1)
-					new MoveTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+				if(mFunc == 1)
+					new MoveTableTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 				else
-					new MergeTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+					new MergeTableTask(mContext, mGlobalVar).execute(GlobalVar.FULL_URL);
 			}
 			
 		});	
@@ -97,86 +96,82 @@ public class MoveMergeTable extends Activity {
 		getMenuInflater().inflate(R.menu.activity_move_merge_table, menu);
 		View v = menu.findItem(R.id.item_confirm).getActionView();
 		
-		btnMoveMerge = (Button) v.findViewById(R.id.buttonConfirmOk);
-		btnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
+		mBtnOk = (Button) v.findViewById(R.id.buttonConfirmOk);
+		mBtnClose = (Button) v.findViewById(R.id.buttonConfirmCancel);
 		
 		ImageView imgSign2 = (ImageView) findViewById(R.id.imageViewMvMrgSign);
-		if(func == 1){
+		if(mFunc == 1){
 			setTitle(R.string.move_table_activity_title);
-			btnMoveMerge.setText(R.string.btn_move_table);
-			btnClose.setText(R.string.btn_cancel_move_table);
+			mBtnOk.setText(R.string.btn_move_table);
+			mBtnClose.setText(R.string.btn_cancel_move_table);
 			
-			btnMoveMerge.setOnClickListener(new OnClickListener(){
+			mBtnOk.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
 					Reason reason = new Reason(MoveMergeTable.this);
-					List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(reasonGroupId);
-					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(reasonGroupId); 
-					if(FROM_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
-					}else if(TO_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
-					}else if((allReasonLst != null && allReasonLst.size() > 0) && 
-							(reasonLst != null && reasonLst.size() == 0)){
-						IOrderUtility.alertDialog(context, R.string.select_reason, 0);
+					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(mReasonGroupId); 
+					if(mFromTableId == 0){
+						IOrderUtility.alertDialog(mContext, R.string.select_source_table, 0);
+					}else if(mToTableId == 0){
+						IOrderUtility.alertDialog(mContext, R.string.select_destination_table, 0);
+					}else if((reasonLst != null && reasonLst.size() == 0) && mTxtReason.getText().toString().isEmpty()){
+						IOrderUtility.alertDialog(mContext, R.string.select_reason, 0);
 					}else{
 						confirmOperation(R.string.cf_move_table_title, R.string.cf_move_table_msg);
 					}
 				}
 			});
-			btnClose.setOnClickListener(new OnClickListener(){
+			mBtnClose.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
 					MoveMergeTable.this.finish();
 				}
 			});
-			reasonGroupId = 5;
+			mReasonGroupId = 5;
 		}else{
 			setTitle(R.string.merge_table_activity_title);
-			btnMoveMerge.setText(R.string.btn_merge_table);
-			btnClose.setText(R.string.btn_cancel_merge_table);			
-			btnMoveMerge.setOnClickListener(new OnClickListener(){
+			mBtnOk.setText(R.string.btn_merge_table);
+			mBtnClose.setText(R.string.btn_cancel_merge_table);			
+			mBtnOk.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
 					Reason reason = new Reason(MoveMergeTable.this);
-					List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(reasonGroupId);
-					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(reasonGroupId); 
-					if(FROM_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
-					}else if(TO_TABLE_ID == 0){
-						IOrderUtility.alertDialog(context, R.string.select_destination_table, 0);
-					}else if((allReasonLst != null && allReasonLst.size() > 0) && 
-							(reasonLst != null && reasonLst.size() == 0)){
-						IOrderUtility.alertDialog(context, R.string.select_reason, 0);
+					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(mReasonGroupId); 
+					if(mFromTableId == 0){
+						IOrderUtility.alertDialog(mContext, R.string.select_source_table, 0);
+					}else if(mToTableId == 0){
+						IOrderUtility.alertDialog(mContext, R.string.select_destination_table, 0);
+					}else if((reasonLst != null && reasonLst.size() == 0) && mTxtReason.getText().toString().isEmpty()){
+						IOrderUtility.alertDialog(mContext, R.string.select_reason, 0);
 					}else{
 						confirmOperation(R.string.cf_merge_table_title, R.string.cf_merge_table_msg);
 					}	
 				}
 			});
-			btnClose.setOnClickListener(new OnClickListener(){
+			mBtnClose.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
 					MoveMergeTable.this.finish();
 				}
 			});
-			reasonGroupId = 6;
+			mReasonGroupId = 6;
 			imgSign2.setImageResource(R.drawable.ic_action_plus);
 		}
 		
 		// load reason
 		final List<ReasonGroups.ReasonDetail> reasonDetailLst = 
-				IOrderUtility.loadReasonFromWs(context, globalVar, reasonGroupId);
+				IOrderUtility.loadReasonFromWs(mContext, mGlobalVar, mReasonGroupId);
 		final ReasonAdapter reasonAdapter = 
 				new ReasonAdapter(MoveMergeTable.this, reasonDetailLst);
 		
 		ListView reasonListView = (ListView) findViewById(R.id.moveMergeTableReasonListView);
 		reasonListView.setAdapter(reasonAdapter);
 
-		final Reason reason = new Reason(context);
+		final Reason reason = new Reason(mContext);
 		reason.createSelectedReasonTmp();
 		
 		reasonListView.setOnItemClickListener(new OnItemClickListener(){
@@ -222,20 +217,20 @@ public class MoveMergeTable extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iCurTableID");
-			property.setValue(FROM_TABLE_ID);
+			property.setValue(mFromTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			property = new PropertyInfo();
 			property.setName("iMergeToTableID");
-			property.setValue(TO_TABLE_ID);
+			property.setValue(mToTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			Reason reason = new Reason(context);
 			List<ReasonDetail> reasonDetailLst;
 			List<Integer> reasonIdLst;
-			reasonDetailLst = reason.listSelectedReasonDetail(reasonGroupId);
+			reasonDetailLst = reason.listSelectedReasonDetail(mReasonGroupId);
 //			ReasonGroups reasonGroups = new ReasonGroups();
 //			reasonGroups.ReasonDetail = reasonDetailLst;
 			reasonIdLst = new ArrayList<Integer>();
@@ -253,7 +248,7 @@ public class MoveMergeTable extends Activity {
 
 			property = new PropertyInfo();
 			property.setName("szReasonMoveTable");
-			property.setValue(moveMergeTableTxtReason.getText().toString());
+			property.setValue(mTxtReason.getText().toString());
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -366,20 +361,20 @@ public class MoveMergeTable extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iCurTableID");
-			property.setValue(FROM_TABLE_ID);
+			property.setValue(mFromTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			property = new PropertyInfo();
 			property.setName("iMoveToTableID");
-			property.setValue(TO_TABLE_ID);
+			property.setValue(mToTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
 			Reason reason = new Reason(context);
 			List<ReasonDetail> reasonDetailLst;
 			List<Integer> reasonIdLst;
-			reasonDetailLst = reason.listSelectedReasonDetail(reasonGroupId);
+			reasonDetailLst = reason.listSelectedReasonDetail(mReasonGroupId);
 //			ReasonGroups reasonGroups = new ReasonGroups();
 //			reasonGroups.ReasonDetail = reasonDetailLst;
 			reasonIdLst = new ArrayList<Integer>();
@@ -397,7 +392,7 @@ public class MoveMergeTable extends Activity {
 
 			property = new PropertyInfo();
 			property.setName("szReasonMoveTable");
-			property.setValue(moveMergeTableTxtReason.getText().toString());
+			property.setValue(mTxtReason.getText().toString());
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -508,10 +503,10 @@ public class MoveMergeTable extends Activity {
 			try {
 				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
 				TableZoneSpinnerAdapter tbZoneAdapter =IOrderUtility.createTableZoneAdapter(context, tbInfo); 
-				spinnerMoveTbZone.setAdapter(tbZoneAdapter);
-				spinnerMoveTbZoneTo.setAdapter(tbZoneAdapter);
+				mSpMoveTbZone.setAdapter(tbZoneAdapter);
+				mSpMoveTbZoneTo.setAdapter(tbZoneAdapter);
 
-				spinnerMoveTbZone
+				mSpMoveTbZone
 						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
 							@Override
@@ -532,9 +527,9 @@ public class MoveMergeTable extends Activity {
 
 												TableName tbName = (TableName) parent
 														.getItemAtPosition(pos);
-												FROM_TABLE_ID = tbName
+												mFromTableId = tbName
 														.getTableID();
-												TO_TABLE_ID = 0;
+												mToTableId = 0;
 												
 												TextView tvTableFrom = (TextView) findViewById(R.id.tvTbFrom);
 												tvTableFrom.setText(tbName.getTableName());
@@ -556,7 +551,7 @@ public class MoveMergeTable extends Activity {
 
 						});
 
-				spinnerMoveTbZoneTo
+				mSpMoveTbZoneTo
 						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
 							@Override
@@ -565,7 +560,7 @@ public class MoveMergeTable extends Activity {
 
 								TableZone tbZone = (TableZone) parent
 										.getItemAtPosition(pos);
-								final List<TableName> tbNameLst = IOrderUtility.filterTableName(tbInfo, tbZone, FROM_TABLE_ID);
+								final List<TableName> tbNameLst = IOrderUtility.filterTableName(tbInfo, tbZone, mFromTableId);
 
 								ListView listViewDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
 								listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
@@ -579,7 +574,7 @@ public class MoveMergeTable extends Activity {
 													int pos, long id) {
 												TableName tbName = (TableName) parent
 														.getItemAtPosition(pos);
-												TO_TABLE_ID = tbName
+												mToTableId = tbName
 														.getTableID();
 												
 												TextView tvTableTo = (TextView) findViewById(R.id.tvTbTo);
