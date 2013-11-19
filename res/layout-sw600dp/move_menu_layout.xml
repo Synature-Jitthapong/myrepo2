@@ -50,7 +50,8 @@
                     android:minHeight="70dp"
                     android:minWidth="70dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="32sp" />
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

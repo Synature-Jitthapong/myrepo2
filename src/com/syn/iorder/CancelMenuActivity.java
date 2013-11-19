@@ -119,7 +119,6 @@ public class CancelMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Reason reason = new Reason(CancelMenuActivity.this);
-				List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(2);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(2); 
 				if(TABLE_ID != 0){
 					MenuUtil menuUtil = new MenuUtil(context);
@@ -130,8 +129,7 @@ public class CancelMenuActivity extends Activity {
 						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
 					 }else if(orderDetailLst != null && orderDetailLst.size() == 0){
 						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
-					 }else if((allReasonLst != null && allReasonLst.size() > 0) && 
-							 (reasonLst != null && reasonLst.size() == 0)){
+					 }else if((reasonLst != null && reasonLst.size() == 0) && txtCancelMenuReason.getText().toString().isEmpty()){
 						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
 					 }else{
 						CANCEL_MENU_REASON = txtCancelMenuReason.getText().toString();

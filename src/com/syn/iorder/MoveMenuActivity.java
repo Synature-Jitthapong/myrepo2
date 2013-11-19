@@ -285,7 +285,6 @@ public class MoveMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Reason reason = new Reason(MoveMenuActivity.this);
-				List<ReasonDetail> allReasonLst = reason.listAllReasonDetail(7);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(7); 
 				if(FROM_TABLE_ID == 0){
 					IOrderUtility.alertDialog(context, R.string.select_source_table, 0);
@@ -295,8 +294,7 @@ public class MoveMenuActivity extends Activity {
 					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
 				}else if(movedMenuListView.getCount()==0){
 					IOrderUtility.alertDialog(context, R.string.select_menu_to_move, 0);
-				}else if((allReasonLst != null && allReasonLst.size() > 0) && 
-						(reasonLst != null && reasonLst.size() == 0)){
+				}else if((reasonLst != null && reasonLst.size() == 0) && txtMoveMenuReason.getText().toString().isEmpty()){
 					IOrderUtility.alertDialog(context, R.string.select_reason, 0);
 				}else{
 					final CustomDialog cfDialog = new CustomDialog(MoveMenuActivity.this, R.style.CustomDialog);

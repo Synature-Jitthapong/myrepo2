@@ -1879,9 +1879,9 @@ public class TakeOrderActivity extends Activity{
 						MenuGroups.MenuGroup mg = (MenuGroups.MenuGroup) parent
 								.getItemAtPosition(position);
 						syn.pos.data.dao.MenuDept md = new syn.pos.data.dao.MenuDept(
-								TakeOrderActivity.this, mg.getMenuGroupID());
+								TakeOrderActivity.this);
 
-						mMenuDeptLst = md.listMenuDept();
+						mMenuDeptLst = md.listMenuDept(mg.getMenuGroupID());
 						mMenuDeptAdapter = new MenuDeptAdapter();
 
 						mMenuDeptSpinner.setAdapter(mMenuDeptAdapter);
