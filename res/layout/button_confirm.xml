@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="2dp" >
 
     <Button
         android:id="@+id/buttonClear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonConfirmCancel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_margin="1dp"
         android:background="@drawable/light_grey_button"
         android:minHeight="0dp"
@@ -20,7 +26,9 @@
         android:id="@+id/buttonConfirmCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_margin="1dp"
+        android:layout_toRightOf="@+id/buttonClear"
         android:background="@drawable/light_grey_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
@@ -31,11 +39,14 @@
         android:id="@+id/buttonConfirmOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonConfirmCancel"
+        android:layout_alignParentTop="true"
         android:layout_margin="1dp"
+        android:layout_toRightOf="@+id/buttonConfirmCancel"
         android:background="@drawable/light_grey_button"
         android:minHeight="0dp"
         android:minWidth="48dp"
         android:text="@string/global_btn_ok"
         android:textSize="12sp" />
 
-</LinearLayout>
+</RelativeLayout>

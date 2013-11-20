@@ -303,7 +303,6 @@
     <string name="network_error">ไม่สามารถเชื่อมต่อไปยัง Server กรุณาตรวจสอบการเชื่อมต่อ wifi หรือสถานะของ Server</string>
     <string name="out_of_stock">สินค้าหมด</string>
     <string name="action_bill_summary">Bill Summary</string>
-    <string name="button_clear">Clear</string>
     <string name="cf_move_menu_title">ยืนยันย้ายรายการ</string>
     <string name="cf_move_menu_msg">ต้องการย้ายรายการนี้?</string>
     <string name="cf_move_table_title">ยืนยันย้ายโต๊ะ</string>
