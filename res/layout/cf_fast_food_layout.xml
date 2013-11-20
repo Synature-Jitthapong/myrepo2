@@ -89,10 +89,11 @@
 
         <EditText
             android:id="@+id/editTextFFRef"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:ems="15"
             android:hint="@string/text_send_fastfood_ref"
             android:inputType="textMultiLine"

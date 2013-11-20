@@ -100,8 +100,8 @@ public class AppConfigLayoutActivity extends Activity {
 			public void onClick(View v) {
 				//if(IOrderUtility.checkRegister(AppConfigLayoutActivity.this)){
 					Intent intent = new Intent(AppConfigLayoutActivity.this, LoginActivity.class);
-					AppConfigLayoutActivity.this.startActivity(intent);
-					AppConfigLayoutActivity.this.finish();
+					startActivity(intent);
+					finish();
 //				}else{
 //					Intent intent = new Intent(AppConfigLayoutActivity.this, RegisterActivity.class);
 //					AppConfigLayoutActivity.this.startActivity(intent);

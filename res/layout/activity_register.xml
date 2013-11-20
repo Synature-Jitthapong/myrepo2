@@ -48,13 +48,15 @@
 
                     <EditText
                         android:id="@+id/editTextProductCode"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -77,10 +79,11 @@
 
                     <EditText
                         android:id="@+id/EditTextKeyCode"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
+                        android:background="@drawable/edittext_bg"
                         android:ems="10" />
 
                 </LinearLayout>
@@ -105,10 +108,11 @@
 
                     <EditText
                         android:id="@+id/EditTextDeviceCode"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false"
@@ -137,10 +141,11 @@
 
                     <EditText
                         android:id="@+id/EditTextRegisterCode"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
+                        android:background="@drawable/edittext_bg"
                         android:ems="10" />
 
                 </LinearLayout>
@@ -175,10 +180,11 @@
 
                     <EditText
                         android:id="@+id/EditTextUUID"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" >
@@ -207,13 +213,15 @@
 
                     <EditText
                         android:id="@+id/EditTextModel"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -236,13 +244,15 @@
 
                     <EditText
                         android:id="@+id/EditTextMenuFecture"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -265,13 +275,15 @@
 
                     <EditText
                         android:id="@+id/EditTextDevice"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -294,13 +306,15 @@
 
                     <EditText
                         android:id="@+id/EditTextProduct"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -323,13 +337,15 @@
 
                     <EditText
                         android:id="@+id/EditTextBrand"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -352,13 +368,15 @@
 
                     <EditText
                         android:id="@+id/EditTextCPUHardware"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
 
                 <ImageView
@@ -381,13 +399,15 @@
 
                     <EditText
                         android:id="@+id/EditTextCPUAbi"
+                        style="@style/EditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+                        android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
+
                 </LinearLayout>
             </LinearLayout>
 

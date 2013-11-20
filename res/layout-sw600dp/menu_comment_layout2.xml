@@ -153,7 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:background="@drawable/edittext_selector"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
         android:hint="@string/enter_comment"
         android:inputType="textMultiLine" >

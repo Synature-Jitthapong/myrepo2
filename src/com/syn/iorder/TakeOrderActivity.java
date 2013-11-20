@@ -90,7 +90,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	private LinearLayout mSaleModeSwLayout;
 	private Button mBtnPlu;
 	private Button mBtnSeat;
-	RelativeLayout mSaleModeTextLayout;
+	private RelativeLayout mSaleModeTextLayout;
+	private EditText mTxtPluCode;
 
 	private List<syn.pos.data.model.MenuDataItem> mOrderLst;
 	private OrderListExpandableAdapter mOrderLstAdapter;
@@ -106,7 +107,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 	private int mCurrQueueId = 0;
 	private String mCurrQueueName = "";
-
 	private int mTransSaleMode = 1;
 	private int mSaleMode = 1; // default Eat In
 	private int mSeatId = 0;
@@ -135,46 +135,32 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		setTitle("");
 		
 		mGlobalVar = new GlobalVar(this);
-		// check register
-		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
-			// check config
-			if (IOrderUtility.checkConfig(TakeOrderActivity.this)) {
+		
+		// check login
+		if (GlobalVar.STAFF_ID != 0) {
+			// initial component
+			initComponent();
 
-				// check login
-				if (GlobalVar.STAFF_ID != 0) {
-					// initial component
-					initComponent();
+			// check feature
+			checkProgramFeature();
 
-					// check feature
-					checkProgramFeature();
+			// list menu
+			listAllMenuItem();
 
-					// list menu
-					listAllMenuItem();
+			// load salemode
+			createSwSaleMode();
 
-					// load salemode
-					createSwSaleMode();
-
-				} else {
-					Intent intent = new Intent(TakeOrderActivity.this,
-							LoginActivity.class);
-					TakeOrderActivity.this.startActivity(intent);
-					TakeOrderActivity.this.finish();
-				}
-			} else {
-				Intent intent = new Intent(TakeOrderActivity.this,
-						AppConfigLayoutActivity.class);
-				TakeOrderActivity.this.startActivity(intent);
-				TakeOrderActivity.this.finish();
-			}
-//		} else {
-//			Intent intent = new Intent(TakeOrderActivity.this,
-//					RegisterActivity.class);
-//			TakeOrderActivity.this.startActivity(intent);
-//			TakeOrderActivity.this.finish();
-//		}
+		} else {
+			gotoLogin();
+		}
 	}
 
-	@SuppressLint("NewApi")
+	private void gotoLogin(){
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+		finish();
+	}
+	
 	private void initComponent(){
 		mMenuGroupSpinner = (Spinner) findViewById(R.id.spinnerMenuGroup);
 		mMenuDeptSpinner = (Spinner) findViewById(R.id.spinnerMenuDept);
@@ -200,8 +186,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		mBtnSeat = (Button) findViewById(R.id.buttonSeat);
 		mSaleModeTextLayout = (RelativeLayout) findViewById(R.id.saleModeTextLayout);
 		
-		mBtnSeat.setOnClickListener(this);
-
+		// shoptype fassfood
+		if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
+			mBtnSetTable.setVisibility(View.GONE);
+			mBtnSetQueue.setVisibility(View.GONE);
+			mBtnSendByQueue.setVisibility(View.GONE);
+			mBtnSeat.setVisibility(View.GONE);
+		} else {
+			mBtnSeat.setVisibility(View.VISIBLE);
+			mBtnCheckDummyBill.setVisibility(View.GONE);
+		}
+				
 		mOrderListView.setGroupIndicator(null);
 		mOrderListView.setOnGroupClickListener(new OnGroupClickListener() {
 
@@ -226,716 +221,21 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 		});
 		
+		mBtnSeat.setOnClickListener(this);
 		mBtnToggleMax.setOnClickListener(this);
-		mBtnSetmember.setOnClickListener(this);
-
-		// shoptype fassfood
-		if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
-			mBtnSetTable.setVisibility(View.GONE);
-			mBtnSetQueue.setVisibility(View.GONE);
-			mBtnSendByQueue.setVisibility(View.GONE);
-			mBtnSeat.setVisibility(View.GONE);
-		} else {
-			mBtnSeat.setVisibility(View.VISIBLE);
-			mBtnCheckDummyBill.setVisibility(View.GONE);
-		}
-		
-		mBtnSetQueue.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mCurrTableId != 0) {
-					final CustomDialog cusDialog = new CustomDialog(
-							TakeOrderActivity.this, R.style.CustomDialog);
-					cusDialog.title.setVisibility(View.VISIBLE);
-					cusDialog.title
-							.setText(R.string.global_dialog_title_warning);
-					TextView tvMsg1 = new TextView(TakeOrderActivity.this);
-					tvMsg1.setText(R.string.msg_already_set_table);
-					TextView tvMsg2 = new TextView(TakeOrderActivity.this);
-					tvMsg2.setText(mCurrTableName);
-					TextView tvMsg3 = new TextView(TakeOrderActivity.this);
-					tvMsg3.setText(R.string.cf_change_queue);
-					cusDialog.message.setText(tvMsg1.getText().toString() + " "
-							+ tvMsg2.getText().toString() + "\n"
-							+ tvMsg3.getText().toString());
-					cusDialog.btnCancel
-							.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									cusDialog.dismiss();
-								}
-
-							});
-					cusDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							cusDialog.dismiss();
-							new SetQueueTask(TakeOrderActivity.this, mGlobalVar)
-									.execute(GlobalVar.FULL_URL);
-						}
-
-					});
-					cusDialog.show();
-				} else {
-					new SetQueueTask(TakeOrderActivity.this, mGlobalVar)
-							.execute(GlobalVar.FULL_URL);
-				}
-			}
-
-		});
-		
-		mBtnSetTable.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mCurrQueueId != 0) {
-					final CustomDialog cusDialog = new CustomDialog(
-							TakeOrderActivity.this, R.style.CustomDialog);
-					
-					cusDialog.title.setVisibility(View.VISIBLE);
-					cusDialog.title
-							.setText(R.string.global_dialog_title_warning);
-					TextView tvMsg1 = new TextView(TakeOrderActivity.this);
-					tvMsg1.setText(R.string.msg_already_set_queue);
-					TextView tvMsg2 = new TextView(TakeOrderActivity.this);
-					tvMsg2.setText(mCurrQueueName);
-					TextView tvMsg3 = new TextView(TakeOrderActivity.this);
-					tvMsg3.setText(R.string.cf_change_table);
-					cusDialog.message.setText(tvMsg1.getText().toString() + " "
-							+ tvMsg2.getText().toString() + "\n"
-							+ tvMsg3.getText().toString());
-					cusDialog.btnCancel
-							.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									cusDialog.dismiss();
-								}
-
-							});
-					cusDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							cusDialog.dismiss();
-							new SelectTableTask(TakeOrderActivity.this,
-									mGlobalVar).execute(GlobalVar.FULL_URL);
-						}
-
-					});
-					cusDialog.show();
-				} else {
-					new SelectTableTask(TakeOrderActivity.this, mGlobalVar)
-							.execute(GlobalVar.FULL_URL);
-				}
-			}
-
-		});
-
-		mBtnPlu.setOnClickListener(new Button.OnClickListener() {
-			EditText txtPluCode;
-
-			@Override
-			public void onClick(View v) {
-				txtPluCode = (EditText) findViewById(R.id.txtPluCode);
-				txtPluCode.setImeOptions (EditorInfo.IME_ACTION_SEARCH);
-				ImageButton btnClose = (ImageButton) findViewById(R.id.imageButtonPluClose);
-				Button btnPlu0 = (Button) findViewById(R.id.btnPlu0);
-				Button btnPlu1 = (Button) findViewById(R.id.btnPlu1);
-				Button btnPlu2 = (Button) findViewById(R.id.btnPlu2);
-				Button btnPlu3 = (Button) findViewById(R.id.btnPlu3);
-				Button btnPlu4 = (Button) findViewById(R.id.btnPlu4);
-				Button btnPlu5 = (Button) findViewById(R.id.btnPlu5);
-				Button btnPlu6 = (Button) findViewById(R.id.btnPlu6);
-				Button btnPlu7 = (Button) findViewById(R.id.btnPlu7);
-				Button btnPlu8 = (Button) findViewById(R.id.btnPlu8);
-				Button btnPlu9 = (Button) findViewById(R.id.btnPlu9);
-				Button btnPluEnter = (Button) findViewById(R.id.btnPluEnter);
-				Button btnPluDash = (Button) findViewById(R.id.btnPluDash);
-				Button btnPluClear = (Button) findViewById(R.id.btnPluClear);
-				Button btnPluDelete = (Button) findViewById(R.id.btnPluDel);
-
-				txtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
-				    @Override
-				    public boolean onEditorAction(TextView v, int keyId, KeyEvent event) {
-				       if(keyId == EditorInfo.IME_ACTION_SEARCH){
-							new PluSearchTask().execute("");
-							return true;
-				       }
-				       return false;
-				    }
-				});
-				
-				btnPlu0.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("0");
-					}
-				});
-				btnPlu1.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("1");
-					}
-				});
-				btnPlu2.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("2");
-					}
-				});
-				btnPlu3.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("3");
-					}
-				});
-				btnPlu4.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("4");
-					}
-				});
-				btnPlu5.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("5");
-					}
-				});
-				btnPlu6.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("6");
-					}
-				});
-				btnPlu7.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("7");
-					}
-				});
-				btnPlu8.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("8");
-					}
-				});
-				btnPlu9.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("9");
-					}
-				});
-				btnPluEnter.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						if (!txtPluCode.getText().toString().equals("")) {
-							new PluSearchTask().execute("");
-						}
-					}
-				});
-				btnPluDelete.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						String pluCode = txtPluCode.getText().toString();
-						if (pluCode.length() > 0) {
-							pluCode = pluCode.substring(0, pluCode.length() - 1);
-							txtPluCode.setTextKeepState(pluCode);
-						}
-					}
-				});
-				btnPluClear.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.setText("");
-					}
-				});
-				btnPluDash.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						txtPluCode.append("-");
-					}
-				});
-
-				btnClose.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						mPluLayout.setVisibility(View.GONE);
-						mMenuItemLayout.setVisibility(View.VISIBLE);
-					}
-
-				});
-
-				mPluLayout.setVisibility(View.VISIBLE);
-				mMenuItemLayout.setVisibility(View.GONE);
-			}
-		});
-
-		mBtnCheckDummyBill.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mOrderLst.size() > 0) {
-					final Dialog detailDialog = new Dialog(
-							TakeOrderActivity.this,
-							R.style.CustomDialogBottomRadius);
-					LayoutInflater inflater = LayoutInflater
-							.from(TakeOrderActivity.this);
-					View orderView = inflater.inflate(
-							R.layout.order_list_layout, null);
-					ListView lvOrder = (ListView) orderView
-							.findViewById(R.id.listViewOrder);
-					TextView tvTitle = (TextView) orderView
-							.findViewById(R.id.textViewOrderListTitle);
-					TextView tvSumText = (TextView) orderView
-							.findViewById(R.id.textViewSumText);
-					TextView tvSumPrice = (TextView) orderView
-							.findViewById(R.id.textViewSumPrice);
-					ImageButton btnClose = (ImageButton) orderView
-							.findViewById(R.id.imageButtonCloseOrderDialog);
-					Button btnSendOrderFromSumm = (Button) orderView
-							.findViewById(R.id.buttonSendFromSummary);
-					btnSendOrderFromSumm.setVisibility(View.VISIBLE);
-
-					ProgressBar progress = (ProgressBar) orderView
-							.findViewById(R.id.progressBarOrderOfTable);
-
-					new CheckSummaryBillDummyTask(TakeOrderActivity.this,
-							mGlobalVar, lvOrder, tvSumText, tvSumPrice, progress)
-							.execute(mGlobalVar.FULL_URL);
-					tvTitle.setText(R.string.button_check_price);
-					detailDialog.setContentView(orderView);
-					detailDialog.getWindow().setGravity(Gravity.TOP);
-					detailDialog.getWindow().setLayout(
-							WindowManager.LayoutParams.MATCH_PARENT,
-							WindowManager.LayoutParams.WRAP_CONTENT);
-					detailDialog.getWindow().setWindowAnimations(
-							R.style.DialogAnimation);
-
-					btnClose.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							detailDialog.dismiss();
-						}
-
-					});
-
-					btnSendOrderFromSumm
-							.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-									mBtnSendOrder.callOnClick();
-									detailDialog.dismiss();
-								}
-
-							});
-
-					detailDialog.show();
-				} else {
-					IOrderUtility.alertDialog(TakeOrderActivity.this,
-							R.string.global_dialog_title_warning,
-							R.string.no_order_msg, 0);
-				}
-			}
-
-		});
-
-		mBtnSendOrder.setOnClickListener(new Button.OnClickListener() {
-			private void send(){
-				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-				if (ml.size() > 0) {
-					/*
-					 * check shop type shop type = 1 table shop type = 2 fast
-					 * food
-					 */
-					if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
-						final SendOrderKeypadDialog dialog = new SendOrderKeypadDialog(
-								mGlobalVar, TakeOrderActivity.this,
-								R.style.CustomDialogBottomRadius);
-
-						dialog.btnConfirm
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										if (!dialog.txtFastRef.getText()
-												.toString().equals("")) {
-											dialog.dismiss();
-											if (mGlobalVar.MEMBER_ID == 0) {
-												new SubmitSendOrder(
-														TakeOrderActivity.this,
-														mGlobalVar,
-														"WSiOrder_JSON_SendFastFoodOrderTransactionData",
-														dialog.txtFastRef
-																.getText()
-																.toString(),
-														Integer.parseInt(dialog.tvCustQty
-																.getText()
-																.toString()))
-														.execute(GlobalVar.FULL_URL);
-											} else {
-												new SubmitSendOrder(
-														TakeOrderActivity.this,
-														mGlobalVar,
-														"WSiOrder_JSON_SendFastFoodOrderTransactionDataWithMemberID",
-														dialog.txtFastRef
-																.getText()
-																.toString(),
-														Integer.parseInt(dialog.tvCustQty
-																.getText()
-																.toString()))
-														.execute(GlobalVar.FULL_URL);
-											}
-										} else {
-											final CustomDialog customDialog = new CustomDialog(
-													TakeOrderActivity.this,
-													R.style.CustomDialog);
-											customDialog.title
-													.setVisibility(View.VISIBLE);
-											customDialog.title
-													.setText(R.string.global_dialog_title_error);
-											customDialog.message
-													.setText(R.string.cf_fastfood_title);
-											customDialog.btnCancel
-													.setVisibility(View.GONE);
-											customDialog.btnOk
-													.setText(R.string.global_close_dialog_btn);
-											customDialog.btnOk
-													.setOnClickListener(new OnClickListener() {
-
-														@Override
-														public void onClick(
-																View v) {
-															customDialog
-																	.dismiss();
-														}
-													});
-											customDialog.show();
-										}
-									}
-
-								});
-						dialog.btnCancel
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-										imm.hideSoftInputFromWindow(
-												dialog.txtFastRef
-														.getWindowToken(), 0);
-
-										dialog.dismiss();
-									}
-
-								});
-
-						dialog.getWindow().setGravity(Gravity.TOP);
-						// dialog.getWindow()
-						// .setSoftInputMode(
-						// WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-						dialog.getWindow()
-								.setLayout(
-										android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-										android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-						dialog.getWindow().setWindowAnimations(
-								R.style.DialogAnimation);
-
-						dialog.show();
-					}else if(mTransSaleMode != 1){
-						final Dialog smDialog = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
-						LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
-						View v = inflater.inflate(R.layout.send_sale_mode, null);
-						TextView title = (TextView) v.findViewById(R.id.textView1);
-						final EditText txtRef = (EditText) v.findViewById(R.id.editTextRef);
-						final EditText txtMobile = (EditText) v.findViewById(R.id.editTextMobile);
-						final TextView tvCustQty = (TextView) v.findViewById(R.id.textViewSaleModeCust);
-						Button btnMinus = (Button) v.findViewById(R.id.buttonSaleModeMinus);
-						Button btnPlus = (Button) v.findViewById(R.id.buttonSaleModePlus);
-						Button btnCancel = (Button) v.findViewById(R.id.buttonSaleModeCancel);
-						Button btnOk = (Button) v.findViewById(R.id.buttonSaleModeOk);
-						
-						title.setText(mSaleModeText);
-						txtRef.requestFocus();
-						
-						btnMinus.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								int qty = Integer.parseInt(tvCustQty.getText().toString());
-								if(--qty > 0){
-									tvCustQty.setText(Integer.toString(qty));
-									mCustomerQty = qty;
-								}
-							}
-							
-						});
-
-						btnPlus.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								int qty = Integer.parseInt(tvCustQty.getText().toString());
-								tvCustQty.setText(Integer.toString(++qty));
-								mCustomerQty = qty;
-							}
-							
-						});
-						
-						btnCancel.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								smDialog.dismiss();
-							}
-							
-						});
-						
-						btnOk.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								mCustomerQty = 1;
-								String ref = txtRef.getText().toString();
-								String mobile = txtMobile.getText().toString();
-								
-								if(!mobile.isEmpty())
-									ref += ":" + mobile;
-								
-								new SubmitSendOrder(TakeOrderActivity.this, mGlobalVar, "WSiOrder_JSON_SendSaleModeOrderTransactionData", 
-										mTransSaleMode, ref, mCustomerQty).execute(GlobalVar.FULL_URL);
-								smDialog.dismiss();
-							}
-							
-						});
-						
-						smDialog.setContentView(v);
-						smDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
-								WindowManager.LayoutParams.WRAP_CONTENT);
-						smDialog.show();
-					}else {
-						if (mCurrQueueId != 0) {
-							final CustomDialog cusDialog = new CustomDialog(
-									TakeOrderActivity.this,
-									R.style.CustomDialog);
-							cusDialog.title.setVisibility(View.VISIBLE);
-							cusDialog.title
-									.setText(R.string.global_dialog_title_warning);
-							TextView tvMsg1 = new TextView(
-									TakeOrderActivity.this);
-							tvMsg1.setText(R.string.msg_already_set_queue);
-							TextView tvMsg2 = new TextView(
-									TakeOrderActivity.this);
-							tvMsg2.setText(mCurrQueueName);
-							TextView tvMsg3 = new TextView(
-									TakeOrderActivity.this);
-							tvMsg3.setText(R.string.cf_change_table);
-							cusDialog.message.setText(tvMsg1.getText()
-									.toString()
-									+ " "
-									+ tvMsg2.getText().toString()
-									+ "\n"
-									+ tvMsg3.getText().toString());
-							cusDialog.btnCancel
-									.setOnClickListener(new OnClickListener() {
-
-										@Override
-										public void onClick(View v) {
-											cusDialog.dismiss();
-										}
-
-									});
-							cusDialog.btnOk
-									.setOnClickListener(new OnClickListener() {
-
-										@Override
-										public void onClick(View v) {
-											cusDialog.dismiss();
-											new LoadTableTaskQuestion(
-													TakeOrderActivity.this,
-													mGlobalVar)
-													.execute(GlobalVar.FULL_URL);
-										}
-
-									});
-							cusDialog.show();
-						} else {
-							new LoadTableTaskQuestion(TakeOrderActivity.this, mGlobalVar).execute(GlobalVar.FULL_URL);
-						}
-					}
-				} else {
-					IOrderUtility.alertDialog(TakeOrderActivity.this,
-							R.string.global_dialog_title_warning,
-							R.string.no_order_msg, 0);
-				}
-
-				// update IsOutOfStock
-				new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
-						mGlobalVar).execute(GlobalVar.FULL_URL);
-			}
-			
-			@Override
-			public void onClick(View v) {
-				new IOrderUtility.CompareSaleDateTask(TakeOrderActivity.this,
-						mGlobalVar, new WebServiceStateListener() {
-
-							@Override
-							public void onSuccess() {
-								send();
-							}
-
-							@Override
-							public void onNotSuccess() {
-								final CustomDialog cusDialog = new CustomDialog(TakeOrderActivity.this, R.style.CustomDialog);
-								cusDialog.title.setVisibility(View.VISIBLE);
-								cusDialog.title.setText(R.string.global_dialog_title_warning);
-								cusDialog.message.setText(R.string.session_expire);
-								cusDialog.btnCancel.setVisibility(View.GONE);
-								//cusDialog.btnOk.setBackgroundResource(R.drawable.green_button);
-								cusDialog.btnOk.setOnClickListener(new OnClickListener(){
-
-									@Override
-									public void onClick(View v) {
-										cusDialog.dismiss();
-										Intent intent = new Intent(
-												TakeOrderActivity.this,
-												LoginActivity.class);
-										TakeOrderActivity.this
-												.startActivity(intent);
-										TakeOrderActivity.this.finish();
-									}});
-								cusDialog.show();
-								
-							}
-						}).execute(GlobalVar.FULL_URL);
-			}
-		});
-
-		mBtnSendByQueue.setOnClickListener(new Button.OnClickListener() {
-			private void send(){
-				POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-				List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-						GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-				if (ml.size() > 0) {
-					if (mCurrTableId != 0) {
-						final CustomDialog cusDialog = new CustomDialog(
-								TakeOrderActivity.this, R.style.CustomDialog);
-						cusDialog.title.setVisibility(View.VISIBLE);
-						cusDialog.title
-								.setText(R.string.global_dialog_title_warning);
-						TextView tvMsg1 = new TextView(TakeOrderActivity.this);
-						tvMsg1.setText(R.string.msg_already_set_table);
-						TextView tvMsg2 = new TextView(TakeOrderActivity.this);
-						tvMsg2.setText(mCurrTableName);
-						tvMsg2.setTextSize(42);
-						TextView tvMsg3 = new TextView(TakeOrderActivity.this);
-						tvMsg3.setText(R.string.cf_change_queue);
-						cusDialog.message.setText(tvMsg1.getText().toString()
-								+ " " + tvMsg2.getText().toString() + "\n"
-								+ tvMsg3.getText().toString());
-						cusDialog.btnCancel
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										cusDialog.dismiss();
-									}
-
-								});
-						cusDialog.btnOk
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										cusDialog.dismiss();
-										new LoadQueueTask(
-												TakeOrderActivity.this,
-												mGlobalVar)
-												.execute(GlobalVar.FULL_URL);
-									}
-
-								});
-						cusDialog.show();
-					} else {
-						new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
-								.execute(GlobalVar.FULL_URL);
-					}
-				} else {
-					IOrderUtility.alertDialog(TakeOrderActivity.this,
-							R.string.global_dialog_title_warning,
-							R.string.no_order_msg, 0);
-				}
-
-				// update IsOutOfStock
-				new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
-						mGlobalVar).execute(GlobalVar.FULL_URL);
-				
-			}
-			
-			@Override
-			public void onClick(View v) {
-				new IOrderUtility.CompareSaleDateTask(TakeOrderActivity.this,
-						mGlobalVar, new WebServiceStateListener() {
-
-							@Override
-							public void onSuccess() {
-								send();
-							}
-
-							@Override
-							public void onNotSuccess() {
-								final CustomDialog cusDialog = new CustomDialog(TakeOrderActivity.this, R.style.CustomDialog);
-								cusDialog.title.setVisibility(View.VISIBLE);
-								cusDialog.title.setText(R.string.global_dialog_title_warning);
-								cusDialog.message.setText(R.string.session_expire);
-								cusDialog.btnCancel.setVisibility(View.GONE);
-								//cusDialog.btnOk.setBackgroundResource(R.drawable.green_button);
-								cusDialog.btnOk.setOnClickListener(new OnClickListener(){
-
-									@Override
-									public void onClick(View v) {
-										cusDialog.dismiss();
-										Intent intent = new Intent(
-												TakeOrderActivity.this,
-												LoginActivity.class);
-										TakeOrderActivity.this
-												.startActivity(intent);
-										TakeOrderActivity.this.finish();
-									}});
-								cusDialog.show();
-								
-							}
-						}).execute(GlobalVar.FULL_URL);
-			}
-		});
+		mBtnSetmember.setOnClickListener(this);		
+		mBtnSetQueue.setOnClickListener(this);
+		mBtnSetTable.setOnClickListener(this);
+		mBtnPlu.setOnClickListener(this);
+		mBtnCheckDummyBill.setOnClickListener(this);
+		mBtnSendOrder.setOnClickListener(this);
+		mBtnSendByQueue.setOnClickListener(this);
 	}
 	
 	@Override
 	protected void onResume() {
+		super.onResume();
+		
 		iOrderInit();
 		countHoldOrder();
 		
@@ -959,12 +259,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		intent.removeExtra("CUSTOMER_QTY");
 
 		// set member name to button setmember
-		if (mGlobalVar.MEMBER_NAME != "") {
+		if (GlobalVar.MEMBER_NAME != "") {
 			setSelectedMember();
 		} else {
 			clearSelectedMember();
 		}
-		super.onResume();
 	}
 
 	@Override
@@ -1107,42 +406,30 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			intent = new Intent(TakeOrderActivity.this, MoveMergeTable.class);
 			intent.putExtra("func", 1); // 1=move
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_mergeTable:
 			intent = new Intent(TakeOrderActivity.this, MoveMergeTable.class);
 			intent.putExtra("func", 2); // 1=merge
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_comment_trans:
 			intent = new Intent(TakeOrderActivity.this, CommentTransactionActivity.class);
 			startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_move_menu:
 			// moveMenu();
 			intent = new Intent(TakeOrderActivity.this, MoveMenuActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_cancel_menu:
 			intent = new Intent(TakeOrderActivity.this,
 					CancelMenuActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_reprint:
 			intent = new Intent(TakeOrderActivity.this,
 					ReprintMenuActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.menu_logout:
 			logOut();
@@ -1150,20 +437,14 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		case R.id.checkbill:
 			intent = new Intent(TakeOrderActivity.this, CheckBillActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.menu_manage_queue:
 			intent = new Intent(TakeOrderActivity.this, QueueActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.action_kds:
 			intent = new Intent(TakeOrderActivity.this, KdsInfoActivity.class);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
 			return true;
 		case R.id.hold_order:
 			holdOrder();
@@ -1302,10 +583,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				
 				GlobalVar.STAFF_ID = 0;
 				
-				Intent intent = new Intent(TakeOrderActivity.this,
-						LoginActivity.class);
-				TakeOrderActivity.this.startActivity(intent);
-				TakeOrderActivity.this.finish();
+				gotoLogin();
 			}
 			
 			@Override
@@ -1422,6 +700,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								GlobalVar.COMPUTER_ID, GlobalVar.STAFF_ID, "");
 
 						clearSeat();
+						clearCourse();
 						listAllOrder();
 						countHoldOrder();
 					}
@@ -1480,10 +759,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		List<OrderHold> holdLst = pos.listHoldOrder();
 
 		final Dialog orderHoldDialog = new Dialog(TakeOrderActivity.this,
-				R.style.CustomDialogBottomRadius);
+				R.style.CustomDialog);
 		orderHoldDialog.setContentView(v);
-		orderHoldDialog.getWindow()
-				.setWindowAnimations(R.style.DialogAnimation);
 		orderHoldDialog.getWindow().setGravity(Gravity.TOP);
 		orderHoldDialog.getWindow().setLayout(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -1535,7 +812,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	public void listAllOrder() {
 		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 		mOrderLst = posOrder.listAllOrder(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, mSeatId);
+				GlobalVar.COMPUTER_ID, mSeatId, mCourseId);
 
 		mOrderLstAdapter = new OrderListExpandableAdapter();
 		mOrderListView.setAdapter(mOrderLstAdapter);
@@ -2440,7 +1717,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 						MenuDataItem menuItem = posOrder.listOrder(
 								GlobalVar.TRANSACTION_ID,
-								GlobalVar.COMPUTER_ID, mi.getOrderDetailId(), mSeatId);
+								GlobalVar.COMPUTER_ID, mi.getOrderDetailId(), mSeatId, mCourseId);
 
 						mOrderLst.set(groupPosition, menuItem);
 						mOrderLstAdapter.notifyDataSetChanged();
@@ -2466,7 +1743,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 					MenuDataItem menuItem = posOrder.listOrder(
 							GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID,
-							mi.getOrderDetailId(), mSeatId);
+							mi.getOrderDetailId(), mSeatId, mCourseId);
 
 					mOrderLst.set(groupPosition, menuItem);
 					mOrderLstAdapter.notifyDataSetChanged();
@@ -2628,7 +1905,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 												mi.getOrderDetailId(), modSeatId, modSeatName, 
 												modCourseId, modCourseName);
 
-										String extra = "...";
+										String extra = "";
 										if(modSeatId != 0 && modCourseId != 0){
 											extra = modCourseName + "-" + modSeatName;
 										}else{
@@ -2640,8 +1917,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 										btnModSeat.setText(extra);
 										
 										// reset main seat
-										mSeatId = 0;
-										mBtnSeat.setText(mCourseName.equals("") ? "..." : mCourseName);
+										clearSeat();
+										clearCourse();
 										
 										d.dismiss();
 									}
@@ -2903,11 +2180,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 					txtComment.append(mi.getOrderComment());
 					// List dialog menucomment
 					final Dialog dialog = new Dialog(TakeOrderActivity.this,
-							R.style.CustomDialogBottomRadius);
+							R.style.CustomDialog);
 					// .setTitle(R.string.title_menu_comment)
 					dialog.setContentView(v);
-					dialog.getWindow().setWindowAnimations(
-							R.style.DialogAnimation);
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow()
 							.setSoftInputMode(
@@ -3022,8 +2297,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 					intent.putExtra("productId", mi.getProductID());
 					intent.putExtra("commentType", mCommentType);
 					TakeOrderActivity.this.startActivity(intent);
-					overridePendingTransition(R.animator.slide_left_in,
-							R.animator.slide_left_out);
 				}
 			});
 
@@ -3616,7 +2889,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								0, 0, 0, mSeatId, mSeatName, mCourseId, mCourseName);
 					
 						MenuDataItem menuDataItem = posOrder.listOrder(GlobalVar.TRANSACTION_ID,
-										GlobalVar.COMPUTER_ID, orderId, mSeatId);
+										GlobalVar.COMPUTER_ID, orderId, mSeatId, mCourseId);
 						mOrderLst.add(menuDataItem);
 						mOrderLstAdapter.notifyDataSetChanged();
 
@@ -3699,7 +2972,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								
 							MenuDataItem menuDataItem = 
 									posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
-											orderId, mSeatId);
+											orderId, mSeatId, mCourseId);
 							mOrderLst.add(menuDataItem);
 							mOrderLstAdapter.notifyDataSetChanged();
 	
@@ -3751,7 +3024,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			
 			MenuDataItem menuDataItem = 
 					posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
-							orderId, mSeatId);
+							orderId, mSeatId, mCourseId);
 			mOrderLst.add(menuDataItem);
 			mOrderLstAdapter.notifyDataSetChanged();
 	
@@ -3806,9 +3079,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			tvHoldQueueName.setText(mCurrQueueName);
 			
 			final Dialog holdDialog = new Dialog(TakeOrderActivity.this,
-					R.style.CustomDialogBottomRadius);
+					R.style.CustomDialog);
 			holdDialog.setContentView(holdView);
-			holdDialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 			holdDialog.getWindow().setLayout(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -3887,7 +3159,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
-			if (globalVar.MEMBER_ID != 0) {
+			if (GlobalVar.MEMBER_ID != 0) {
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
@@ -4009,7 +3281,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
-			if (globalVar.MEMBER_ID != 0) {
+			if (GlobalVar.MEMBER_ID != 0) {
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
@@ -4138,7 +3410,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
-			if (globalVar.MEMBER_ID != 0) {
+			if (GlobalVar.MEMBER_ID != 0) {
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
@@ -4248,7 +3520,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
-			if (globalVar.MEMBER_ID != 0) {
+			if (GlobalVar.MEMBER_ID != 0) {
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
@@ -4372,7 +3644,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
-			if (globalVar.MEMBER_ID != 0) {
+			if (GlobalVar.MEMBER_ID != 0) {
 				property = new PropertyInfo();
 				property.setName("iMemberID");
 				property.setValue(GlobalVar.MEMBER_ID);
@@ -4523,6 +3795,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			clearSetTable();
 			clearSetQueue();
 			clearSeat();
+			clearCourse();
 
 			iOrderInit();	
 		}
@@ -5194,12 +4467,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 			});
 			dialog = new Dialog(TakeOrderActivity.this,
-					R.style.CustomDialogBottomRadius);
+					R.style.CustomDialog);
 			dialog.setContentView(queueView);
 			dialog.getWindow().setLayout(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-			dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 			dialog.show();
 
 			PropertyInfo property = new PropertyInfo();
@@ -5304,13 +4576,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			}
 			
 			dialogSelectTable = new Dialog(TakeOrderActivity.this,
-					R.style.CustomDialogBottomRadius);
+					R.style.CustomDialog);
 			tvTitle.setText(R.string.dialog_title_sendorder);
 			dialogSelectTable.setContentView(view);
 			dialogSelectTable.getWindow().setLayout(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-			dialogSelectTable.getWindow().setWindowAnimations(R.style.DialogAnimation);
 
 			tbName = new TableInfo.TableName();
 			if (mCurrTableId != 0) {
@@ -5788,8 +5059,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		if(mCurrQueueName.equals("") && mCurrTableName.equals(""))
 			mNotificationLayout.setVisibility(View.GONE);
 
-		mGlobalVar.MEMBER_ID = 0;
-		mGlobalVar.MEMBER_NAME = "";
+		GlobalVar.MEMBER_ID = 0;
+		GlobalVar.MEMBER_NAME = "";
 		mTvNotification2.setText("");
 		mBtnSetmember.setSelected(false);
 		ImageView imgIcMember = (ImageView) findViewById(R.id.imageViewIcMember);
@@ -5797,7 +5068,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	}
 	
 	private void setSelectedMember(){
-		mTvNotification2.setText(mGlobalVar.MEMBER_NAME);
+		mTvNotification2.setText(GlobalVar.MEMBER_NAME);
 
 		ImageView imgIcMember = (ImageView) findViewById(R.id.imageViewIcMember);
 		imgIcMember.setVisibility(View.VISIBLE);
@@ -5965,10 +5236,15 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+	private void clearCourse(){
+		mCourseId = 0;
+		mCourseName = "";
+	}
+	
 	private void clearSeat(){
 		mSeatId = 0;
-		mSeatName = "...";
-		mBtnSeat.setText(mCourseName.equals("") ? mSeatName : mCourseName);
+		mSeatName = "";
+		mBtnSeat.setText("All");
 		mTvTotalSeat.setText("");
 	}
 
@@ -6031,7 +5307,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 			@Override
 			public void onClick(View v) {
-				String extra = "...";
+				String extra = "All";
 				
 				mSeatId = mCurrSeatId;
 				mSeatName = mCurrSeatName;
@@ -6162,6 +5438,625 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		public void onClick(int id, String name);
 	}
 
+	private void setQueue(){
+		if (mCurrTableId != 0) {
+			final CustomDialog cusDialog = new CustomDialog(
+					TakeOrderActivity.this, R.style.CustomDialog);
+			cusDialog.title.setVisibility(View.VISIBLE);
+			cusDialog.title
+					.setText(R.string.global_dialog_title_warning);
+			TextView tvMsg1 = new TextView(TakeOrderActivity.this);
+			tvMsg1.setText(R.string.msg_already_set_table);
+			TextView tvMsg2 = new TextView(TakeOrderActivity.this);
+			tvMsg2.setText(mCurrTableName);
+			TextView tvMsg3 = new TextView(TakeOrderActivity.this);
+			tvMsg3.setText(R.string.cf_change_queue);
+			cusDialog.message.setText(tvMsg1.getText().toString() + " "
+					+ tvMsg2.getText().toString() + "\n"
+					+ tvMsg3.getText().toString());
+			cusDialog.btnCancel
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							cusDialog.dismiss();
+						}
+
+					});
+			cusDialog.btnOk.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					cusDialog.dismiss();
+					new SetQueueTask(TakeOrderActivity.this, mGlobalVar)
+							.execute(GlobalVar.FULL_URL);
+				}
+
+			});
+			cusDialog.show();
+		} else {
+			new SetQueueTask(TakeOrderActivity.this, mGlobalVar)
+					.execute(GlobalVar.FULL_URL);
+		}	
+	}
+	
+	private void setTable(){
+		if (mCurrQueueId != 0) {
+			final CustomDialog cusDialog = new CustomDialog(
+					TakeOrderActivity.this, R.style.CustomDialog);
+			
+			cusDialog.title.setVisibility(View.VISIBLE);
+			cusDialog.title
+					.setText(R.string.global_dialog_title_warning);
+			TextView tvMsg1 = new TextView(TakeOrderActivity.this);
+			tvMsg1.setText(R.string.msg_already_set_queue);
+			TextView tvMsg2 = new TextView(TakeOrderActivity.this);
+			tvMsg2.setText(mCurrQueueName);
+			TextView tvMsg3 = new TextView(TakeOrderActivity.this);
+			tvMsg3.setText(R.string.cf_change_table);
+			cusDialog.message.setText(tvMsg1.getText().toString() + " "
+					+ tvMsg2.getText().toString() + "\n"
+					+ tvMsg3.getText().toString());
+			cusDialog.btnCancel
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							cusDialog.dismiss();
+						}
+
+					});
+			cusDialog.btnOk.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					cusDialog.dismiss();
+					new SelectTableTask(TakeOrderActivity.this,
+							mGlobalVar).execute(GlobalVar.FULL_URL);
+				}
+
+			});
+			cusDialog.show();
+		} else {
+			new SelectTableTask(TakeOrderActivity.this, mGlobalVar)
+					.execute(GlobalVar.FULL_URL);
+		}	
+	}
+	
+	private void pluModeSearch(){
+		mTxtPluCode = (EditText) findViewById(R.id.txtPluCode);
+		mTxtPluCode.setImeOptions (EditorInfo.IME_ACTION_SEARCH);
+		ImageButton btnClose = (ImageButton) findViewById(R.id.imageButtonPluClose);
+		Button btnPlu0 = (Button) findViewById(R.id.btnPlu0);
+		Button btnPlu1 = (Button) findViewById(R.id.btnPlu1);
+		Button btnPlu2 = (Button) findViewById(R.id.btnPlu2);
+		Button btnPlu3 = (Button) findViewById(R.id.btnPlu3);
+		Button btnPlu4 = (Button) findViewById(R.id.btnPlu4);
+		Button btnPlu5 = (Button) findViewById(R.id.btnPlu5);
+		Button btnPlu6 = (Button) findViewById(R.id.btnPlu6);
+		Button btnPlu7 = (Button) findViewById(R.id.btnPlu7);
+		Button btnPlu8 = (Button) findViewById(R.id.btnPlu8);
+		Button btnPlu9 = (Button) findViewById(R.id.btnPlu9);
+		Button btnPluEnter = (Button) findViewById(R.id.btnPluEnter);
+		Button btnPluDash = (Button) findViewById(R.id.btnPluDash);
+		Button btnPluClear = (Button) findViewById(R.id.btnPluClear);
+		Button btnPluDelete = (Button) findViewById(R.id.btnPluDel);
+
+		mTxtPluCode.setOnEditorActionListener(new OnEditorActionListener() {
+		    @Override
+		    public boolean onEditorAction(TextView v, int keyId, KeyEvent event) {
+		       if(keyId == EditorInfo.IME_ACTION_SEARCH){
+					new PluSearchTask().execute("");
+					return true;
+		       }
+		       return false;
+		    }
+		});
+		
+		btnPlu0.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("0");
+			}
+		});
+		btnPlu1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("1");
+			}
+		});
+		btnPlu2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("2");
+			}
+		});
+		btnPlu3.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("3");
+			}
+		});
+		btnPlu4.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("4");
+			}
+		});
+		btnPlu5.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("5");
+			}
+		});
+		btnPlu6.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("6");
+			}
+		});
+		btnPlu7.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("7");
+			}
+		});
+		btnPlu8.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("8");
+			}
+		});
+		btnPlu9.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("9");
+			}
+		});
+		btnPluEnter.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!mTxtPluCode.getText().toString().equals("")) {
+					new PluSearchTask().execute("");
+				}
+			}
+		});
+		btnPluDelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String pluCode = mTxtPluCode.getText().toString();
+				if (pluCode.length() > 0) {
+					pluCode = pluCode.substring(0, pluCode.length() - 1);
+					mTxtPluCode.setTextKeepState(pluCode);
+				}
+			}
+		});
+		btnPluClear.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.setText("");
+			}
+		});
+		btnPluDash.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mTxtPluCode.append("-");
+			}
+		});
+
+		btnClose.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mPluLayout.setVisibility(View.GONE);
+				mMenuItemLayout.setVisibility(View.VISIBLE);
+			}
+
+		});
+
+		mPluLayout.setVisibility(View.VISIBLE);
+		mMenuItemLayout.setVisibility(View.GONE);	
+	}
+	
+	@SuppressLint("NewApi")
+	private void loadDummyBill(){
+		if (mOrderLst.size() > 0) {
+			final Dialog detailDialog = new Dialog(
+					TakeOrderActivity.this,
+					R.style.CustomDialog);
+			LayoutInflater inflater = LayoutInflater
+					.from(TakeOrderActivity.this);
+			View orderView = inflater.inflate(
+					R.layout.order_list_layout, null);
+			ListView lvOrder = (ListView) orderView
+					.findViewById(R.id.listViewOrder);
+			TextView tvTitle = (TextView) orderView
+					.findViewById(R.id.textViewOrderListTitle);
+			TextView tvSumText = (TextView) orderView
+					.findViewById(R.id.textViewSumText);
+			TextView tvSumPrice = (TextView) orderView
+					.findViewById(R.id.textViewSumPrice);
+			ImageButton btnClose = (ImageButton) orderView
+					.findViewById(R.id.imageButtonCloseOrderDialog);
+			Button btnSendOrderFromSumm = (Button) orderView
+					.findViewById(R.id.buttonSendFromSummary);
+			btnSendOrderFromSumm.setVisibility(View.VISIBLE);
+
+			ProgressBar progress = (ProgressBar) orderView
+					.findViewById(R.id.progressBarOrderOfTable);
+
+			new CheckSummaryBillDummyTask(TakeOrderActivity.this,
+					mGlobalVar, lvOrder, tvSumText, tvSumPrice, progress)
+					.execute(GlobalVar.FULL_URL);
+			tvTitle.setText(R.string.button_check_price);
+			detailDialog.setContentView(orderView);
+			detailDialog.getWindow().setGravity(Gravity.TOP);
+			detailDialog.getWindow().setLayout(
+					WindowManager.LayoutParams.MATCH_PARENT,
+					WindowManager.LayoutParams.WRAP_CONTENT);
+
+			btnClose.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					detailDialog.dismiss();
+				}
+
+			});
+
+			btnSendOrderFromSumm
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							mBtnSendOrder.callOnClick();
+							detailDialog.dismiss();
+						}
+
+					});
+
+			detailDialog.show();
+		} else {
+			IOrderUtility.alertDialog(TakeOrderActivity.this,
+					R.string.global_dialog_title_warning,
+					R.string.no_order_msg, 0);
+		}
+	}
+	
+	private void sendOrder() {
+		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+		List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
+				GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+
+		if (ml.size() > 0) {
+			/*
+			 * check shop type shop type = 1 table shop type = 2 fast food
+			 */
+			if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
+				final SendOrderKeypadDialog dialog = new SendOrderKeypadDialog(
+						mGlobalVar, TakeOrderActivity.this,
+						R.style.CustomDialog);
+
+				dialog.btnConfirm.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (!dialog.txtFastRef.getText().toString().equals("")) {
+							dialog.dismiss();
+							if (mGlobalVar.MEMBER_ID == 0) {
+								new SubmitSendOrder(
+										TakeOrderActivity.this,
+										mGlobalVar,
+										"WSiOrder_JSON_SendFastFoodOrderTransactionData",
+										dialog.txtFastRef.getText().toString(),
+										Integer.parseInt(dialog.tvCustQty
+												.getText().toString()))
+										.execute(GlobalVar.FULL_URL);
+							} else {
+								new SubmitSendOrder(
+										TakeOrderActivity.this,
+										mGlobalVar,
+										"WSiOrder_JSON_SendFastFoodOrderTransactionDataWithMemberID",
+										dialog.txtFastRef.getText().toString(),
+										Integer.parseInt(dialog.tvCustQty
+												.getText().toString()))
+										.execute(GlobalVar.FULL_URL);
+							}
+						} else {
+							final CustomDialog customDialog = new CustomDialog(
+									TakeOrderActivity.this,
+									R.style.CustomDialog);
+							customDialog.title.setVisibility(View.VISIBLE);
+							customDialog.title
+									.setText(R.string.global_dialog_title_error);
+							customDialog.message
+									.setText(R.string.cf_fastfood_title);
+							customDialog.btnCancel.setVisibility(View.GONE);
+							customDialog.btnOk
+									.setText(R.string.global_close_dialog_btn);
+							customDialog.btnOk
+									.setOnClickListener(new OnClickListener() {
+
+										@Override
+										public void onClick(View v) {
+											customDialog.dismiss();
+										}
+									});
+							customDialog.show();
+						}
+					}
+
+				});
+				dialog.btnCancel.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+						imm.hideSoftInputFromWindow(
+								dialog.txtFastRef.getWindowToken(), 0);
+
+						dialog.dismiss();
+					}
+
+				});
+
+				dialog.getWindow().setGravity(Gravity.TOP);
+				// dialog.getWindow()
+				// .setSoftInputMode(
+				// WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+				dialog.getWindow().setLayout(
+						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+						android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+
+				dialog.show();
+			} else if (mTransSaleMode != 1) {
+				final Dialog smDialog = new Dialog(TakeOrderActivity.this,
+						R.style.CustomDialog);
+				LayoutInflater inflater = LayoutInflater
+						.from(TakeOrderActivity.this);
+				View v = inflater.inflate(R.layout.send_sale_mode, null);
+				TextView title = (TextView) v.findViewById(R.id.textView1);
+				final EditText txtRef = (EditText) v
+						.findViewById(R.id.editTextRef);
+				final EditText txtMobile = (EditText) v
+						.findViewById(R.id.editTextMobile);
+				final TextView tvCustQty = (TextView) v
+						.findViewById(R.id.textViewSaleModeCust);
+				Button btnMinus = (Button) v
+						.findViewById(R.id.buttonSaleModeMinus);
+				Button btnPlus = (Button) v
+						.findViewById(R.id.buttonSaleModePlus);
+				Button btnCancel = (Button) v
+						.findViewById(R.id.buttonSaleModeCancel);
+				Button btnOk = (Button) v.findViewById(R.id.buttonSaleModeOk);
+
+				title.setText(mSaleModeText);
+				txtRef.requestFocus();
+
+				btnMinus.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						int qty = Integer.parseInt(tvCustQty.getText()
+								.toString());
+						if (--qty > 0) {
+							tvCustQty.setText(Integer.toString(qty));
+							mCustomerQty = qty;
+						}
+					}
+
+				});
+
+				btnPlus.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						int qty = Integer.parseInt(tvCustQty.getText()
+								.toString());
+						tvCustQty.setText(Integer.toString(++qty));
+						mCustomerQty = qty;
+					}
+
+				});
+
+				btnCancel.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						smDialog.dismiss();
+					}
+
+				});
+
+				btnOk.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						mCustomerQty = 1;
+						String ref = txtRef.getText().toString();
+						String mobile = txtMobile.getText().toString();
+
+						if (!mobile.isEmpty())
+							ref += ":" + mobile;
+
+						new SubmitSendOrder(
+								TakeOrderActivity.this,
+								mGlobalVar,
+								"WSiOrder_JSON_SendSaleModeOrderTransactionData",
+								mTransSaleMode, ref, mCustomerQty)
+								.execute(GlobalVar.FULL_URL);
+						smDialog.dismiss();
+					}
+
+				});
+
+				smDialog.setContentView(v);
+				smDialog.getWindow().setLayout(
+						WindowManager.LayoutParams.MATCH_PARENT,
+						WindowManager.LayoutParams.WRAP_CONTENT);
+				smDialog.show();
+			} else {
+				if (mCurrQueueId != 0) {
+					final CustomDialog cusDialog = new CustomDialog(
+							TakeOrderActivity.this, R.style.CustomDialog);
+					cusDialog.title.setVisibility(View.VISIBLE);
+					cusDialog.title
+							.setText(R.string.global_dialog_title_warning);
+					TextView tvMsg1 = new TextView(TakeOrderActivity.this);
+					tvMsg1.setText(R.string.msg_already_set_queue);
+					TextView tvMsg2 = new TextView(TakeOrderActivity.this);
+					tvMsg2.setText(mCurrQueueName);
+					TextView tvMsg3 = new TextView(TakeOrderActivity.this);
+					tvMsg3.setText(R.string.cf_change_table);
+					cusDialog.message.setText(tvMsg1.getText().toString() + " "
+							+ tvMsg2.getText().toString() + "\n"
+							+ tvMsg3.getText().toString());
+					cusDialog.btnCancel
+							.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									cusDialog.dismiss();
+								}
+
+							});
+					cusDialog.btnOk.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							cusDialog.dismiss();
+							new LoadTableTaskQuestion(TakeOrderActivity.this,
+									mGlobalVar).execute(GlobalVar.FULL_URL);
+						}
+
+					});
+					cusDialog.show();
+				} else {
+					new LoadTableTaskQuestion(TakeOrderActivity.this,
+							mGlobalVar).execute(GlobalVar.FULL_URL);
+				}
+			}
+		} else {
+			IOrderUtility.alertDialog(TakeOrderActivity.this,
+					R.string.global_dialog_title_warning,
+					R.string.no_order_msg, 0);
+		}
+
+		// update IsOutOfStock
+		new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
+				mGlobalVar).execute(GlobalVar.FULL_URL);
+	}
+	
+	private void sendQueueOrder(){
+		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+		List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
+				GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
+
+		if (ml.size() > 0) {
+			if (mCurrTableId != 0) {
+				final CustomDialog cusDialog = new CustomDialog(
+						TakeOrderActivity.this, R.style.CustomDialog);
+				cusDialog.title.setVisibility(View.VISIBLE);
+				cusDialog.title
+						.setText(R.string.global_dialog_title_warning);
+				TextView tvMsg1 = new TextView(TakeOrderActivity.this);
+				tvMsg1.setText(R.string.msg_already_set_table);
+				TextView tvMsg2 = new TextView(TakeOrderActivity.this);
+				tvMsg2.setText(mCurrTableName);
+				tvMsg2.setTextSize(42);
+				TextView tvMsg3 = new TextView(TakeOrderActivity.this);
+				tvMsg3.setText(R.string.cf_change_queue);
+				cusDialog.message.setText(tvMsg1.getText().toString()
+						+ " " + tvMsg2.getText().toString() + "\n"
+						+ tvMsg3.getText().toString());
+				cusDialog.btnCancel
+						.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								cusDialog.dismiss();
+							}
+
+						});
+				cusDialog.btnOk
+						.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								cusDialog.dismiss();
+								new LoadQueueTask(
+										TakeOrderActivity.this,
+										mGlobalVar)
+										.execute(GlobalVar.FULL_URL);
+							}
+
+						});
+				cusDialog.show();
+			} else {
+				new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
+						.execute(GlobalVar.FULL_URL);
+			}
+		} else {
+			IOrderUtility.alertDialog(TakeOrderActivity.this,
+					R.string.global_dialog_title_warning,
+					R.string.no_order_msg, 0);
+		}
+
+		// update IsOutOfStock
+		new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
+				mGlobalVar).execute(GlobalVar.FULL_URL);
+	}
+	
+	private void compareSaleDate(final int id){
+		new IOrderUtility.CompareSaleDateTask(TakeOrderActivity.this,
+				mGlobalVar, new WebServiceStateListener() {
+
+					@Override
+					public void onSuccess() {
+						if(id == R.id.btnSendOrder) sendOrder();
+						else if (id == R.id.buttonSendByQueue) sendQueueOrder();
+					}
+
+					@Override
+					public void onNotSuccess() {
+						final CustomDialog cusDialog = new CustomDialog(TakeOrderActivity.this, R.style.CustomDialog);
+						cusDialog.title.setVisibility(View.VISIBLE);
+						cusDialog.title.setText(R.string.global_dialog_title_warning);
+						cusDialog.message.setText(R.string.session_expire);
+						cusDialog.btnCancel.setVisibility(View.GONE);
+						//cusDialog.btnOk.setBackgroundResource(R.drawable.green_button);
+						cusDialog.btnOk.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								cusDialog.dismiss();
+								Intent intent = new Intent(
+										TakeOrderActivity.this,
+										LoginActivity.class);
+								TakeOrderActivity.this
+										.startActivity(intent);
+								TakeOrderActivity.this.finish();
+							}});
+						cusDialog.show();
+						
+					}
+				}).execute(GlobalVar.FULL_URL);	
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
@@ -6183,11 +6078,27 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		case R.id.buttonSetMember:
 			Intent intent = new Intent(TakeOrderActivity.this,
 					SetMemberFromMain.class);
-			intent.putExtra("TO_TRANSACTION_ID", mGlobalVar.TRANSACTION_ID);
-			intent.putExtra("TO_COMPUTER_ID", mGlobalVar.COMPUTER_ID);
+			intent.putExtra("TO_TRANSACTION_ID", GlobalVar.TRANSACTION_ID);
+			intent.putExtra("TO_COMPUTER_ID", GlobalVar.COMPUTER_ID);
 			TakeOrderActivity.this.startActivity(intent);
-			overridePendingTransition(R.animator.slide_in_up,
-					R.animator.slide_in_out);
+			break;
+		case R.id.buttonSetQueue:
+			setQueue();
+			break;
+		case R.id.buttonSetTable:
+			setTable();
+			break;
+		case R.id.btnPlu:
+			pluModeSearch();
+			break;
+		case R.id.buttonCheckDummbyBill:
+			loadDummyBill();
+			break;
+		case R.id.btnSendOrder:
+			compareSaleDate(R.id.btnSendOrder);
+			break;
+		case R.id.buttonSendByQueue:
+			compareSaleDate(R.id.buttonSendByQueue);
 			break;
 		}
 	}

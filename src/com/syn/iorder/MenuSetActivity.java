@@ -1055,9 +1055,8 @@ public class MenuSetActivity extends Activity {
 							});
 
 					final Dialog dialog = new Dialog(CONTEXT,
-							R.style.CustomDialogBottomRadius);
+							R.style.CustomDialog);
 					dialog.setContentView(v);
-					dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 					dialog.getWindow().setGravity(Gravity.TOP);
 					dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
 							WindowManager.LayoutParams.MATCH_PARENT);

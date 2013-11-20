@@ -13,6 +13,10 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
     </style>
+     <style name="CustomDialog" parent="android:style/Theme.DeviceDefault.Light.Dialog">
+   		<item name="android:windowNoTitle">true</item>
+   		<item name="android:windowBackground">@color/grey_light</item>
+	</style>
   	<style name="AppTheme" parent="AppBaseTheme">
   	    <item name="android:windowBackground">@color/grey_light</item>
        <item name="android:actionBarStyle">@style/ActionBarStyle</item>

@@ -185,9 +185,8 @@ public class MoveMenuActivity extends Activity {
 				btnOk.setText(R.string.dialog_select_menu_ok);
 				btnCancel.setText(R.string.dialog_select_menu_cancel);
 				
-				final Dialog dialog = new Dialog(context, R.style.CustomDialogBottomRadius);
+				final Dialog dialog = new Dialog(context, R.style.CustomDialog);
 				dialog.setContentView(shooseMenuLayout);
-				dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 				dialog.getWindow().setGravity(Gravity.TOP);
 				dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 				dialog.show();

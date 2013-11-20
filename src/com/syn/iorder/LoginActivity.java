@@ -38,56 +38,71 @@ public class LoginActivity extends Activity {
 	private String deviceCode;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState){
 		context = this;
 		super.onCreate(savedInstanceState);
-
-		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-		ShopData.Language lang = shopProp.getLanguage();
-		IOrderUtility.switchLanguage(context, lang.getLangCode());
 		
-		setContentView(R.layout.activity_login);
-		
-		globalVar = new GlobalVar(context);
+		// check register
+		// if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		// check config
+		if (IOrderUtility.checkConfig(this)) {
+			globalVar = new GlobalVar(context);
 
-		tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
-		tvComputer = (TextView) findViewById(R.id.textViewComputer);
-		tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
-		tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
-		loadDeviceData();
-		
-		txtUserName = (EditText) findViewById(R.id.txtUserName);
-		txtPassWord = (EditText) findViewById(R.id.txtPassword);
-		txtUserName.setSelectAllOnFocus(true);
-		txtPassWord.setSelectAllOnFocus(true);
-		txtUserName.clearFocus();
-		txtPassWord.clearFocus();
-//		txtUserName.setText("nipon");
-//		txtPassWord.setText("pospwnet");
-		txtPassWord.setOnEditorActionListener(new OnEditorActionListener(){
+			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+			ShopData.Language lang = shopProp.getLanguage();
+			IOrderUtility.switchLanguage(context, lang.getLangCode());
+			
+			setContentView(R.layout.activity_login);
+			tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
+			tvComputer = (TextView) findViewById(R.id.textViewComputer);
+			tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
+			tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
+			btnLogin = (Button) findViewById(R.id.btnLogin);
+			txtUserName = (EditText) findViewById(R.id.txtUserName);
+			txtPassWord = (EditText) findViewById(R.id.txtPassword);
+			
+			txtUserName.setSelectAllOnFocus(true);
+			txtPassWord.setSelectAllOnFocus(true);
+			txtUserName.clearFocus();
+			txtPassWord.clearFocus();
+			// txtUserName.setText("nipon");
+			// txtPassWord.setText("pospwnet");
 
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				if(actionId == EditorInfo.IME_ACTION_DONE){
-					doLogin();
-					return true;
+			loadDeviceData();
+			txtPassWord.setOnEditorActionListener(new OnEditorActionListener() {
+
+				@Override
+				public boolean onEditorAction(TextView v, int actionId,
+						KeyEvent event) {
+					if (actionId == EditorInfo.IME_ACTION_DONE) {
+						doLogin();
+						return true;
+					}
+					return false;
 				}
-				return false;
-			}
-			
-		});
-		
-		btnLogin = (Button) findViewById(R.id.btnLogin);
-		btnLogin.setOnClickListener(new Button.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				doLogin();
-			}
-		});
+
+			});
+
+			btnLogin.setOnClickListener(new Button.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					doLogin();
+				}
+			});
+		} else {
+			Intent intent = new Intent(this, AppConfigLayoutActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		// } else {
+		// Intent intent = new Intent(TakeOrderActivity.this,
+		// RegisterActivity.class);
+		// TakeOrderActivity.this.startActivity(intent);
+		// TakeOrderActivity.this.finish();
+		// }
 	}
-	
+
 	private void doLogin(){
 		new IOrderUtility.CompareSaleDateTask(LoginActivity.this, globalVar, 
 				new WebServiceStateListener() {
@@ -105,7 +120,7 @@ public class LoginActivity extends Activity {
 				syn.pos.data.model.ShopData.Staff staffObj = staff
 						.checkLogin();
 
-				takeLogin(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
+				checkPermission(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
 			}
 
 			@Override
@@ -123,7 +138,7 @@ public class LoginActivity extends Activity {
 
 						syn.pos.data.model.ShopData.Staff staffObj = staff
 							.checkLogin();
-						takeLogin(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
+						checkPermission(staffObj.getStaffID(), staffObj.getStaffCode(), staffObj.getStaffName());
 					}
 
 					@Override
@@ -186,7 +201,7 @@ public class LoginActivity extends Activity {
 		tvWsVersion.setText(syncData.getWebServiceVersion());
 	}
 	
-	private void takeLogin(int staffId, String staffCode, String staffName){
+	private void checkPermission(int staffId, String staffCode, String staffName){
 		if (staffId != 0) {
 			GlobalVar.STAFF_ID = staffId;
 			GlobalVar.STAFF_NAME = staffCode + ":"
@@ -222,10 +237,8 @@ public class LoginActivity extends Activity {
 					}else{
 						Intent intent = new Intent(LoginActivity.this,
 								TakeOrderActivity.class);
-						LoginActivity.this.startActivity(intent);
-			//			overridePendingTransition(R.animator.slide_left_in,
-			//					R.animator.slide_left_out);
-						LoginActivity.this.finish();
+						startActivity(intent);
+						finish();
 					}
 				}
 				
@@ -250,8 +263,8 @@ public class LoginActivity extends Activity {
 					}else{
 						Intent intent = new Intent(LoginActivity.this,
 								TakeOrderActivity.class);
-						LoginActivity.this.startActivity(intent);
-						LoginActivity.this.finish();
+						startActivity(intent);
+						finish();
 					}
 				}
 			}).execute(globalVar.FULL_URL);
@@ -275,11 +288,10 @@ public class LoginActivity extends Activity {
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			LoginActivity.this.finish();
-
 			intent = new Intent(LoginActivity.this,
 					AppConfigLayoutActivity.class);
-			LoginActivity.this.startActivity(intent);
+			startActivity(intent);
+			finish();
 			return true;
 		case R.id.login_menu_exit:
 			exitApplication();

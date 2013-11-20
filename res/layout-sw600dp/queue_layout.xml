@@ -73,7 +73,7 @@
                 android:id="@+id/editTextCustomerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_bg_white"
+            	android:background="@drawable/edittext_bg"
                 android:ems="10"
                 android:hint="@string/queue_customer_name_label"
                 android:textAppearance="?android:attr/textAppearanceLargeInverse" />
@@ -94,7 +94,7 @@
                 android:id="@+id/editTextCustomerMobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_bg_white"
+            	android:background="@drawable/edittext_bg"
                 android:ems="10"
                 android:hint="@string/queue_customer_tel_label"
                 android:inputType="number" />

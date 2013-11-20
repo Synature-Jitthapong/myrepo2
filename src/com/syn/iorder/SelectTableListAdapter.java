@@ -125,7 +125,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					final Dialog detailDialog = new Dialog(context, R.style.CustomDialogBottomRadius);
+					final Dialog detailDialog = new Dialog(context, R.style.CustomDialog);
 					LayoutInflater inflater = LayoutInflater.from(context);
 					View orderView = inflater.inflate(R.layout.order_list_layout, null);
 					ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
@@ -145,7 +145,6 @@ public class SelectTableListAdapter extends BaseAdapter {
 					detailDialog.getWindow().setGravity(Gravity.TOP);
 					detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
 							WindowManager.LayoutParams.WRAP_CONTENT);
-					detailDialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
 
 					btnClose.setOnClickListener(new OnClickListener(){
 

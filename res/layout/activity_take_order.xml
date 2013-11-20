@@ -49,8 +49,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,8 +73,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -113,7 +117,8 @@
                     android:drawableLeft="@drawable/ic_action_queue_light"
                     android:minWidth="0dp"
                     android:padding="0dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/buttonSetTable"
@@ -122,7 +127,8 @@
                     android:background="@drawable/light_grey_button"
                     android:drawableLeft="@drawable/ic_action_table_utility"
                     android:minWidth="0dp"
-                    android:padding="0dp" />
+                    android:padding="0dp"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/buttonSetMember"
@@ -131,16 +137,15 @@
                     android:background="@drawable/light_grey_button"
                     android:drawableLeft="@drawable/ic_action_member_light"
                     android:minWidth="0dp"
-                    android:padding="0dp" />
+                    android:padding="0dp"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/buttonSeat"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:background="@drawable/light_grey_button"
-                    android:drawableLeft="@drawable/ic_action_seat"
                     android:minWidth="0dp"
-                    android:paddingLeft="0dp"
                     android:text="@string/seat"
                     android:textSize="12sp"
                     android:textStyle="bold" />

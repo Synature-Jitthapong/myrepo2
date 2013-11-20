@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:ems="10"
             android:hint="Reference"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" >
@@ -44,7 +44,7 @@
             android:id="@+id/editTextMobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:ems="10"
             android:hint="@string/mobile"
             android:inputType="phone"

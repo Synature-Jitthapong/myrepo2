@@ -17,14 +17,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:drawableLeft="@android:drawable/ic_menu_search"
             android:ems="10"
             android:enabled="true"
             android:hint="@string/txt_plu_hint"
             android:imeOptions="actionSearch|actionDone"
             android:lines="1"
-            android:padding="1dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 

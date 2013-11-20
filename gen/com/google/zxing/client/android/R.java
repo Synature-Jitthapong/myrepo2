@@ -28,9 +28,9 @@ public final class R {
 		public static final int standard_padding = 0x7f080000;
 	}
 	public static final class drawable {
-		public static final int launcher_icon = 0x7f020047;
-		public static final int share_via_barcode = 0x7f02005e;
-		public static final int shopper_icon = 0x7f02005f;
+		public static final int launcher_icon = 0x7f020045;
+		public static final int share_via_barcode = 0x7f020052;
+		public static final int shopper_icon = 0x7f020053;
 	}
 	public static final class id {
 		public static final int back_button = 0x7f0900e0;

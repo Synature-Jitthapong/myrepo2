@@ -28,9 +28,10 @@
 
         <EditText
             android:id="@+id/txtServerIp"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:ems="10"
             android:hint="SERVER IP"
             android:inputType="text"
@@ -47,9 +48,10 @@
 
         <EditText
             android:id="@+id/txtWsName"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/input_bg_white"
+            android:background="@drawable/edittext_bg"
             android:ems="10"
             android:hint="WEBSERVICE"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />

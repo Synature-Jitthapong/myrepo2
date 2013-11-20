@@ -425,7 +425,6 @@ public class CheckBillActivity extends Activity {
 				intent.putExtra("TO_TRANSACTION_ID", CURR_TRANSACTION_ID);
 				intent.putExtra("TO_COMPUTER_ID", CURR_COMPUTER_ID);
 				CheckBillActivity.this.startActivity(intent);
-				overridePendingTransition(R.animator.slide_in_up, R.animator.slide_in_out);		
 			}
 		});
 		 new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);

@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false"
@@ -185,7 +185,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" >
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -248,7 +248,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -308,7 +308,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -338,7 +338,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -368,7 +368,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
@@ -398,7 +398,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
+            			android:background="@drawable/edittext_bg"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false" />
