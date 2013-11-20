@@ -243,6 +243,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_toLeftOf="@+id/sendContent"
                 android:layout_toRightOf="@+id/linearLayout2"
+                android:gravity="center"
                 android:orientation="horizontal" >
 
             </LinearLayout>

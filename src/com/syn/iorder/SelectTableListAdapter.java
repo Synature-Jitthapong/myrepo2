@@ -108,9 +108,6 @@ public class SelectTableListAdapter extends BaseAdapter {
 			
 			holder.btnTbInfo.setVisibility(View.VISIBLE);
 			
-			if(tbName.getTableID() == 0)
-				holder.btnTbInfo.setVisibility(View.GONE);
-			
 			// already checkbill
 			if(tbName.getSTATUS() == 3){
 				// show dolla
@@ -120,6 +117,9 @@ public class SelectTableListAdapter extends BaseAdapter {
 				holder.btnTbInfo.setVisibility(View.VISIBLE);
 			}
 
+			if(tbName.getTableID() == 0)
+				holder.btnTbInfo.setVisibility(View.GONE);
+			
 			holder.btnTbInfo.setOnClickListener(new OnClickListener(){
 
 				@Override

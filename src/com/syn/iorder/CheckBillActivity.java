@@ -343,6 +343,8 @@ public class CheckBillActivity extends Activity {
 																public void onSuccess() {
 																	IOrderUtility.alertDialog(CheckBillActivity.this, 
 																			R.string.edit_question_title, R.string.edit_question_success, 0);
+																
+																	new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
 																}
 								
 																@Override

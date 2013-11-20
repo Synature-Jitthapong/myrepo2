@@ -86,7 +86,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private LinearLayout mSaleModeSwLayout;
 	private Button mBtnPlu;
 	private EditText mTxtPluCode;
-	RelativeLayout mSaleModeTextLayout;
+	private RelativeLayout mSaleModeTextLayout;
+	private MenuItem mItemListHold;
 
 	private List<syn.pos.data.model.MenuDataItem> mOrderLst;
 	private OrderListExpandableAdapter mOrderLstAdapter;
@@ -136,7 +137,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			createSwSaleMode();
 
 		} else {
-			finish();
+			gotoLogin();
 		}
 	}
 
@@ -208,8 +209,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	
 	@Override
 	protected void onResume() {
+		super.onResume();
+		
 		iOrderInit();
-		countHoldOrder();
 		
 		// param from QueueActivity
 		Intent intent = getIntent();
@@ -236,7 +238,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		} else {
 			clearSelectedMember();
 		}
-		super.onResume();
 	}
 
 	@Override
@@ -307,6 +308,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_take_order, menu);
 
+		mItemListHold = menu.findItem(R.id.order_hold);
+		countHoldOrder();
+		
 		SubMenu sub = menu.findItem(R.id.item_other).getSubMenu();
 		SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
 		int[] saleModeId = {1,2};
@@ -496,6 +500,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		});
 	}
 
+	private void gotoLogin(){
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+		finish();
+	}
+
 	private void logOut() {
 		LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 		View v = inflater.inflate(R.layout.custom_dialog, null);
@@ -524,10 +534,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 				
 				GlobalVar.STAFF_ID = 0;
 				
-				Intent intent = new Intent(TakeOrderActivity.this,
-						LoginActivity.class);
-				TakeOrderActivity.this.startActivity(intent);
-				TakeOrderActivity.this.finish();
+				gotoLogin();
 			}
 			
 			@Override
@@ -604,12 +611,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 				holder = new ViewHolder();
 				v = inflater.inflate(R.layout.pending_list_template, null);
 
-				holder.tvExtraRemark = (TextView) v
-						.findViewById(R.id.textViewExtraRemark);
 				holder.tvPendingNo = (TextView) v
 						.findViewById(R.id.textViewPendingNo);
-				holder.tvPendingDate = (TextView) v
-						.findViewById(R.id.textViewPendingDate);
 				holder.tvPendingOrderQty = (TextView) v
 						.findViewById(R.id.textViewPendingOrderQty);
 				holder.tvPendingRemark = (TextView) v
@@ -660,28 +663,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			});
 
 			holder.tvPendingNo.setText(position + 1 + ".");
-			holder.tvPendingDate.setText(hold.getUpdateDate());
 			holder.tvPendingRemark.setText(hold.getTransactionNote());
 			holder.tvPendingOrderQty.setText(mGlobalVar.qtyDecimalFormat.format(hold
 					.getHoldQty()));
 
-			if (!hold.getQueueName().equals("")) {
-				holder.tvExtraRemark.setVisibility(View.VISIBLE);
-				holder.tvExtraRemark.setText("Queue:" + hold.getQueueName());
-			}
-			if (!hold.getTableName().equals("")) {
-				holder.tvExtraRemark.setVisibility(View.VISIBLE);
-				holder.tvExtraRemark.setText("Table:" + hold.getTableName());
-			}
 			return v;
 		}
 
 		private class ViewHolder {
 			TextView tvPendingNo;
-			TextView tvPendingDate;
 			TextView tvPendingOrderQty;
 			TextView tvPendingRemark;
-			TextView tvExtraRemark;
 
 			Button btnPendingEdit;
 			Button btnPendingSend;
@@ -736,6 +728,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private void countHoldOrder() {
 		POSOrdering pos = new POSOrdering(TakeOrderActivity.this);
 		int totalHold = pos.countHoldOrder(GlobalVar.COMPUTER_ID);
+		if(totalHold > 0)
+			mItemListHold.setTitle(this.getString(R.string.btn_display_holdorder) + "(" + totalHold + ")");
 	}
 
 	protected void iOrderInit() {
@@ -754,7 +748,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	public void listAllOrder() {
 		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 		mOrderLst = posOrder.listAllOrder(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, 0);
+				GlobalVar.COMPUTER_ID, 0, 0);
 
 		mOrderLstAdapter = new OrderListExpandableAdapter();
 		mOrderListView.setAdapter(mOrderLstAdapter);
@@ -1644,7 +1638,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 						MenuDataItem menuItem = posOrder.listOrder(
 								GlobalVar.TRANSACTION_ID,
-								GlobalVar.COMPUTER_ID, mi.getOrderDetailId(), 0);
+								GlobalVar.COMPUTER_ID, mi.getOrderDetailId(), 0, 0);
 
 						mOrderLst.set(groupPosition, menuItem);
 						mOrderLstAdapter.notifyDataSetChanged();
@@ -1670,7 +1664,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 					MenuDataItem menuItem = posOrder.listOrder(
 							GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID,
-							mi.getOrderDetailId(), 0);
+							mi.getOrderDetailId(), 0, 0);
 
 					mOrderLst.set(groupPosition, menuItem);
 					mOrderLstAdapter.notifyDataSetChanged();
@@ -2546,7 +2540,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 								0, 0, 0, 0, "", 0, "");
 					
 						MenuDataItem menuDataItem = posOrder.listOrder(GlobalVar.TRANSACTION_ID,
-										GlobalVar.COMPUTER_ID, orderId, 0);
+										GlobalVar.COMPUTER_ID, orderId, 0, 0);
 						mOrderLst.add(menuDataItem);
 						mOrderLstAdapter.notifyDataSetChanged();
 
@@ -2629,7 +2623,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 								
 							MenuDataItem menuDataItem = 
 									posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
-											orderId, 0);
+											orderId, 0, 0);
 							mOrderLst.add(menuDataItem);
 							mOrderLstAdapter.notifyDataSetChanged();
 	
@@ -2681,7 +2675,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			
 			MenuDataItem menuDataItem = 
 					posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
-							orderId, 0);
+							orderId, 0, 0);
 			mOrderLst.add(menuDataItem);
 			mOrderLstAdapter.notifyDataSetChanged();
 	
@@ -2699,41 +2693,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 			final EditText txtRemark = (EditText) holdView
 					.findViewById(R.id.editTextHoldRemark);
-			final TextView tvCustQty = (TextView) holdView
-					.findViewById(R.id.textViewHoldCustQty);
-			final TextView tvHoldTableName = (TextView) holdView
-					.findViewById(R.id.textViewHoldTable);
-			final TextView tvHoldQueueName = (TextView) holdView
-					.findViewById(R.id.textViewHoldQueue);
-			Button btnMinus = (Button) holdView
-					.findViewById(R.id.buttonHoldCustMinus);
-			Button btnPlus = (Button) holdView
-					.findViewById(R.id.buttonHoldCustPlus);
-			LinearLayout holdTableLayout = (LinearLayout) holdView
-					.findViewById(R.id.linearLayout2);
-			LinearLayout holdQueueLayout = (LinearLayout) holdView
-					.findViewById(R.id.linearLayout1);
 			Button btnClose = (Button) holdView.findViewById(R.id.buttonClose);
 			Button btnYes = (Button) holdView.findViewById(R.id.buttonOk);
-
-			if (mCustomerQty > 0)
-				tvCustQty.setText(mGlobalVar.qtyFormat.format(mCustomerQty));
-
-			IOrderUtility.touchQty(mGlobalVar, btnMinus, btnPlus, tvCustQty);
-
-			if(mCurrTableId != 0){
-				holdTableLayout.setVisibility(View.VISIBLE);
-			}else{
-				holdTableLayout.setVisibility(View.GONE);
-			}
-			
-			if(mCurrQueueId != 0){
-				holdQueueLayout.setVisibility(View.VISIBLE);
-			}else{
-				holdQueueLayout.setVisibility(View.GONE);
-			}
-			tvHoldTableName.setText(mCurrTableName);
-			tvHoldQueueName.setText(mCurrQueueName);
 			
 			final Dialog holdDialog = new Dialog(TakeOrderActivity.this,
 					R.style.CustomDialog);
@@ -2769,9 +2730,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					pos.holdTransaction(GlobalVar.TRANSACTION_ID,
 							GlobalVar.COMPUTER_ID, GlobalVar.STAFF_ID,
 							mCurrTableId, mCurrTableName, mCurrQueueId,
-							mCurrQueueName,
-							Integer.parseInt(tvCustQty.getText().toString()),
-							txtRemark.getText().toString());
+							mCurrQueueName, mCustomerQty, txtRemark.getText().toString());
 
 					countHoldOrder();
 
@@ -5182,12 +5141,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 							@Override
 							public void onClick(View v) {
 								cusDialog.dismiss();
-								Intent intent = new Intent(
-										TakeOrderActivity.this,
-										LoginActivity.class);
-								TakeOrderActivity.this
-										.startActivity(intent);
-								TakeOrderActivity.this.finish();
+								gotoLogin();
 							}});
 						cusDialog.show();
 						

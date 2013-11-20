@@ -41,26 +41,28 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		context = this;
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
 		
-		globalVar = new GlobalVar(context);
-		tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
-		tvComputer = (TextView) findViewById(R.id.textViewComputer);
-		tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
-		tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
+		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+		ShopData.Language lang = shopProp.getLanguage();
+		IOrderUtility.switchLanguage(context, lang.getLangCode());
+		
+		setContentView(R.layout.activity_login);
 		
 		// check register
 		// if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
 		// check config
 		if (IOrderUtility.checkConfig(this)) {
-			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-			ShopData.Language lang = shopProp.getLanguage();
-			IOrderUtility.switchLanguage(context, lang.getLangCode());
+			tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
+			tvComputer = (TextView) findViewById(R.id.textViewComputer);
+			tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
+			tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
 			
+			globalVar = new GlobalVar(context);
 			loadDeviceData();
 		} else {
 			Intent intent = new Intent(this, AppConfigLayoutActivity.class);
 			startActivity(intent);
+			finish();
 		}
 		// } else {
 		// Intent intent = new Intent(TakeOrderActivity.this,
@@ -209,63 +211,68 @@ public class LoginActivity extends Activity {
 			imm.hideSoftInputFromWindow(
 					txtPassWord.getWindowToken(), 0);
 			
+			Intent intent = new Intent(LoginActivity.this,
+					TakeOrderActivity.class);
+			LoginActivity.this.startActivity(intent);
+			LoginActivity.this.finish();
 			
-			new PermissionCheckingTask(LoginActivity.this, globalVar, new PermissionCheckingTask.IPermissionChecking() {
-				
-				@Override
-				public void onSuccess(List<StaffPermission> permissionLst) {
-					syn.pos.data.dao.ShopProperty shopProperty = 
-							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
-					shopProperty.insertStaffPermissionData(permissionLst);
-					
-					if(!shopProperty.chkAccessPocketPermission()){
-						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
-						dialog.message.setText(R.string.not_access_pocket);
-						dialog.btnCancel.setVisibility(View.GONE);
-						dialog.btnOk.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View arg0) {
-								btnLogin.setEnabled(true);
-								dialog.dismiss();
-							}
-							
-						});
-						dialog.show();
-					}else{
-						Intent intent = new Intent(LoginActivity.this,
-								TakeOrderActivity.class);
-						LoginActivity.this.startActivity(intent);
-						LoginActivity.this.finish();
-					}
-				}
-				
-				@Override
-				public void onError(String msg) {
-					syn.pos.data.dao.ShopProperty shopProperty = 
-							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
-					if(!shopProperty.chkAccessPocketPermission()){
-						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
-						dialog.message.setText(R.string.not_access_pocket);
-						dialog.btnCancel.setVisibility(View.GONE);
-						dialog.btnOk.setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View arg0) {
-								btnLogin.setEnabled(true);
-								dialog.dismiss();
-							}
-							
-						});
-						dialog.show();
-					}else{
-						Intent intent = new Intent(LoginActivity.this,
-								TakeOrderActivity.class);
-						LoginActivity.this.startActivity(intent);
-						LoginActivity.this.finish();
-					}
-				}
-			}).execute(globalVar.FULL_URL);
+//			new PermissionCheckingTask(LoginActivity.this, globalVar, new PermissionCheckingTask.IPermissionChecking() {
+//				
+//				@Override
+//				public void onSuccess(List<StaffPermission> permissionLst) {
+//					syn.pos.data.dao.ShopProperty shopProperty = 
+//							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
+//					shopProperty.insertStaffPermissionData(permissionLst);
+//					
+//					if(!shopProperty.chkAccessPocketPermission()){
+//						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
+//						dialog.message.setText(R.string.not_access_pocket);
+//						dialog.btnCancel.setVisibility(View.GONE);
+//						dialog.btnOk.setOnClickListener(new OnClickListener(){
+//
+//							@Override
+//							public void onClick(View arg0) {
+//								btnLogin.setEnabled(true);
+//								dialog.dismiss();
+//							}
+//							
+//						});
+//						dialog.show();
+//					}else{
+//						Intent intent = new Intent(LoginActivity.this,
+//								TakeOrderActivity.class);
+//						LoginActivity.this.startActivity(intent);
+//						LoginActivity.this.finish();
+//					}
+//				}
+//				
+//				@Override
+//				public void onError(String msg) {
+//					syn.pos.data.dao.ShopProperty shopProperty = 
+//							new syn.pos.data.dao.ShopProperty(LoginActivity.this, null);
+//					if(!shopProperty.chkAccessPocketPermission()){
+//						final CustomDialog dialog = new CustomDialog(LoginActivity.this, R.style.CustomDialog);
+//						dialog.message.setText(R.string.not_access_pocket);
+//						dialog.btnCancel.setVisibility(View.GONE);
+//						dialog.btnOk.setOnClickListener(new OnClickListener(){
+//
+//							@Override
+//							public void onClick(View arg0) {
+//								btnLogin.setEnabled(true);
+//								dialog.dismiss();
+//							}
+//							
+//						});
+//						dialog.show();
+//					}else{
+//						Intent intent = new Intent(LoginActivity.this,
+//								TakeOrderActivity.class);
+//						LoginActivity.this.startActivity(intent);
+//						LoginActivity.this.finish();
+//					}
+//				}
+//			}).execute(globalVar.FULL_URL);
+//		
 		} else {
 			btnLogin.setEnabled(true);
 			TextView tvMsg = new TextView(getApplicationContext());
@@ -286,11 +293,10 @@ public class LoginActivity extends Activity {
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			LoginActivity.this.finish();
-
 			intent = new Intent(LoginActivity.this,
 					AppConfigLayoutActivity.class);
 			LoginActivity.this.startActivity(intent);
+			LoginActivity.this.finish();
 			return true;
 		case R.id.login_menu_exit:
 			exitApplication();

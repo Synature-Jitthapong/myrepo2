@@ -452,7 +452,7 @@ public class IOrderUtility {
 				sp.insertLanguage(sd);
 				
 //				try {
-//					sp.insertStaffPermissionData(sd);
+				sp.insertStaffPermissionData(sd);
 //					sp.insertSeatNo(sd);
 //					sp.insertCourse(sd);
 //				} catch (Exception e) {

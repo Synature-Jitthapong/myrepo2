@@ -372,7 +372,7 @@
     <string name="text_err_sale_mode_takealway">You selected Take Away mode but this product is Dine In.</string>
     <string name="text_err_sale_mode_eatin">You selected Dine In mode but this product is Take Away.</string>
     <string name="text_order_of_queue">Last order of this queue</string>
-    <string name="button_check_price">Summary</string>
+    <string name="button_check_price">Summ</string>
     <string name="button_set_member_from_main">Member</string>
     <string name="checkin_queue_title">Checkin</string>
     <string name="checkin_queue_progress">Checkin please wait&#8230;</string>

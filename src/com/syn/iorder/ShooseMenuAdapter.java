@@ -16,13 +16,11 @@ public class ShooseMenuAdapter extends BaseAdapter {
 	private List<OrderSendData.OrderDetail> orderData;
 	private LayoutInflater inflater;
 	private GlobalVar globalVar;
-	private ShopProperty shopProperty;
 	
 	public ShooseMenuAdapter(Context c, GlobalVar gb, List<OrderSendData.OrderDetail> data){
 		orderData = data;
 		globalVar = gb;
 		inflater = LayoutInflater.from(c);
-		shopProperty = new ShopProperty(c, null);
 	}
 	
 	@Override
@@ -49,8 +47,6 @@ public class ShooseMenuAdapter extends BaseAdapter {
 		if(convertView == null){
 			convertView = inflater.inflate(R.layout.shoose_menu_template, null);
 			holder = new MoveMenuHolder();
-			
-			holder.tvSeatName = (TextView) convertView.findViewById(R.id.textViewSeatName);
 			holder.tvMenuName = (TextView) convertView.findViewById(R.id.shooseMenuTvMenuName);
 			holder.tvMenuQty = (TextView) convertView.findViewById(R.id.shooseMenuTvMenuQty);
 			
@@ -59,11 +55,7 @@ public class ShooseMenuAdapter extends BaseAdapter {
 		}else{
 			holder = (MoveMenuHolder) convertView.getTag();
 		}
-		
-		if(data.getiSeatID() != 0){
-			syn.pos.data.model.ShopData.SeatNo seat = shopProperty.getSeatNo(data.getiSeatID());
-			holder.tvSeatName.setText(seat.getSeatName());
-		}
+
 		holder.tvMenuName.setText(data.getSzProductName());
 		holder.tvMenuQty.setText("x" + globalVar.qtyFormat.format(data.getfItemQty()));
 
@@ -71,7 +63,6 @@ public class ShooseMenuAdapter extends BaseAdapter {
 	}
 	
 	public static class MoveMenuHolder{
-		TextView tvSeatName;
 		TextView tvMenuName;
 		TextView tvMenuQty;
 	}

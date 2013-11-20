@@ -125,7 +125,8 @@ public class MoveMenuActivity extends Activity {
 										detail.getiProductID(),
 										detail.getSzProductName(),
 										detail.getfItemQty(), 
-										detail.getiSeatID());
+										detail.getiSeatID(),
+										detail.getiCourseID());
 
 								int orderId = detail.getiOrderID();
 								detail = mMenuUtil.listMenuToMove(orderId);
@@ -160,7 +161,8 @@ public class MoveMenuActivity extends Activity {
 										detail.getiProductID(),
 										detail.getSzProductName(),
 										detail.getfItemQty(),
-										detail.getiSeatID());
+										detail.getiSeatID(),
+										detail.getiCourseID());
 
 								int orderId = detail.getiOrderID();
 								detail = mMenuUtil.listMovedMenu(orderId);
