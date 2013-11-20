@@ -75,7 +75,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/light_grey_button"
-                android:drawableLeft="@drawable/ic_action_seat"
                 android:text="@string/seat"
                 android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 

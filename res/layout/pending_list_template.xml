@@ -4,76 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:padding="4dp" >
 
     <TextView
         android:id="@+id/textViewPendingNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
         android:layout_marginRight="4dp"
         android:text="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textViewPendingRemark"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
         android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:text="@string/text_pendding_date"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textViewPendingDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="--:--"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textViewExtraRemark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:text="@string/text_pending_remark"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textViewPendingRemark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+        android:text="-"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView4"

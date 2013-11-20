@@ -31,11 +31,11 @@
 
         <ImageButton
             android:id="@+id/imageButtonPendingClose"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="2dp"
-            android:background="@drawable/light_grey_button"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     </LinearLayout>
