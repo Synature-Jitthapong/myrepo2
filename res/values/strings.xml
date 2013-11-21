@@ -394,7 +394,6 @@
     <string name="order_by_time">Time</string>
     <string name="order_by_finish">Finished</string>
     <string name="order_by_name">Name</string>
-    <string name="button_clear">Clear</string>
     <string name="clear_queue_title">Clear queue</string>
     <string name="cf_clear_queue">Are you sure you want to clear selected queue?</string>
     <string name="clear_table_title">Clear table</string>
