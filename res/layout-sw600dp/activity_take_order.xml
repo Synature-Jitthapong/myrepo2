@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
@@ -294,6 +294,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="bottom" />
+
+            <Button
+                android:id="@+id/btnRefreshMenu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/light_grey_button"
+                android:drawableLeft="@drawable/ic_action_update"
+                android:padding="8dp" />
 
             <Button
                 android:id="@+id/btnPlu"
