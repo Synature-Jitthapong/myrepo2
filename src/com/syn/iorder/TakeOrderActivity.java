@@ -93,6 +93,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	private RelativeLayout mSaleModeTextLayout;
 	private EditText mTxtPluCode;
 	private MenuItem mItemListHold;
+	private Button mBtnRefreshMenu;
 
 	private List<syn.pos.data.model.MenuDataItem> mOrderLst;
 	private OrderListExpandableAdapter mOrderLstAdapter;
@@ -180,6 +181,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		mSaleModeSwLayout = (LinearLayout) findViewById(R.id.layoutSwSaleMode);
 		mBtnSeat = (Button) findViewById(R.id.buttonSeat);
 		mSaleModeTextLayout = (RelativeLayout) findViewById(R.id.saleModeTextLayout);
+		mBtnRefreshMenu = (Button) findViewById(R.id.btnRefreshMenu);
 		
 		// shoptype fassfood
 		if (mGlobalVar.SHOP_DATA.getShopType() == 2) {
@@ -225,6 +227,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		mBtnCheckDummyBill.setOnClickListener(this);
 		mBtnSendOrder.setOnClickListener(this);
 		mBtnSendByQueue.setOnClickListener(this);
+		mBtnRefreshMenu.setOnClickListener(this);
 	}
 	
 	@Override
@@ -3846,8 +3849,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 	private class SelectTableTask extends LoadTableTaskQuestion {
 
-		public SelectTableTask(Context c, GlobalVar gb) {
-			super(c, gb);
+		public SelectTableTask(Context c) {
+			super(c);
 
 			tvTitle.setText(R.string.select_table_title);
 			
@@ -4498,10 +4501,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		protected TableInfo.TableName tbName;
 		protected int tableId, selectedIdx = -1;
 		
-		public LoadTableTaskQuestion(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
-			
-			selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
+		public LoadTableTaskQuestion(Context c) {
+			super(c, mGlobalVar, webMethod);
 			
 			LayoutInflater inflater = LayoutInflater
 					.from(TakeOrderActivity.this);
@@ -4527,6 +4528,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			// hide layoutTotalCust by question config
 			if(GlobalVar.isEnableTableQuestion){
 				layoutTotalCust.setVisibility(View.GONE);
+				selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
 			}else{
 				layoutTotalCust.setVisibility(View.VISIBLE);
 			}
@@ -4737,9 +4739,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 												tvSelectTableName.setText(tbName
 														.getTableName());
 												tvSelectTableCusNo
-														.setText(globalVar.qtyFormat.format(tbName
-																.getCapacity()));
-												mCustomerQty = tbName.getCapacity();
+														.setText(globalVar.qtyFormat.format(1));
+												mCustomerQty = 1;
 	
 												// popup question
 												if(GlobalVar.isEnableTableQuestion)
@@ -4752,8 +4753,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								tableId = tbName.getTableID();
 								tvSelectTableName.setText(tbName.getTableName());
 								tvSelectTableCusNo.setText(globalVar.qtyFormat
-										.format(tbName.getCapacity()));
-								mCustomerQty = tbName.getCapacity();
+										.format(1));
+								mCustomerQty = 1;
 	
 								// popup question
 								if(GlobalVar.isEnableTableQuestion)
@@ -4913,6 +4914,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 		@Override
 		protected void onPreExecute() {
+			dialogSelectTable.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+					WindowManager.LayoutParams.MATCH_PARENT);
 			dialogSelectTable.show();
 			progressBar.setVisibility(View.VISIBLE);
 		}
@@ -4987,10 +4990,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 	private void setSelectedQueue() {
 		// set tableId to transaction
-		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-		posOrder.setQueueIdToTransaction(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, mCurrQueueId, mCurrQueueName,
-				mCustomerQty);
+//		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+//		posOrder.setQueueIdToTransaction(GlobalVar.TRANSACTION_ID,
+//				GlobalVar.COMPUTER_ID, mCurrQueueId, mCurrQueueName,
+//				mCustomerQty);
 
 		mCurrTableId = 0;
 		mCurrTableName = "";
@@ -5000,10 +5003,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 	private void setSelectedTable() {
 		// set tableId to transaction
-		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-		posOrder.setTableIdToTransaction(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, mCurrTableId, mCurrTableName,
-				mCustomerQty);
+//		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+//		posOrder.setTableIdToTransaction(GlobalVar.TRANSACTION_ID,
+//				GlobalVar.COMPUTER_ID, mCurrTableId, mCurrTableName,
+//				mCustomerQty);
 
 		mCurrQueueId = 0;
 		mCurrQueueName = "";
@@ -5467,15 +5470,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				@Override
 				public void onClick(View v) {
 					cusDialog.dismiss();
-					new SelectTableTask(TakeOrderActivity.this,
-							mGlobalVar).execute(GlobalVar.FULL_URL);
+					new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 				}
 
 			});
 			cusDialog.show();
 		} else {
-			new SelectTableTask(TakeOrderActivity.this, mGlobalVar)
-					.execute(GlobalVar.FULL_URL);
+			new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 		}	
 	}
 	
@@ -5693,6 +5694,65 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+	private void confirmSendOrder(){
+		LayoutInflater inflater = (LayoutInflater)
+				this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		View v = inflater.inflate(R.layout.confirm_table, null);
+		TextView tvTitle = (TextView) v.findViewById(R.id.textView2);
+		Button btnEditTable = (Button) v.findViewById(R.id.button1);
+		Button btnSend = (Button) v.findViewById(R.id.button2);
+		Button btnClose = (Button) v.findViewById(R.id.button3);
+		
+		tvTitle.setText(this.getString(R.string.table) + ":" + mCurrTableName);
+		if(mCustomerQty > 0){
+			 tvTitle.append("(x" + mCustomerQty + ")");
+		}
+		final Dialog d = new Dialog(this, R.style.CustomDialog);
+		d.setContentView(v);
+		d.show();
+		
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+			}
+			
+		});
+		
+		btnEditTable.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+				new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
+			}
+			
+		});
+		
+		btnSend.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+				if (mCurrTableId != 0) {
+					if (GlobalVar.MEMBER_ID == 0) {
+						new SubmitSendOrder(TakeOrderActivity.this,
+								mGlobalVar, "WSiOrder_JSON_SendTableOrderTransactionData")
+								.execute(GlobalVar.FULL_URL);
+					} else {
+						new SubmitSendOrder(TakeOrderActivity.this,
+								mGlobalVar,
+								"WSiOrder_JSON_SendTableOrderTransactionDataWithMemberID")
+								.execute(GlobalVar.FULL_URL);
+					}
+				} 
+			}
+			
+		});
+	}
+	
 	private void sendOrder() {
 		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 		List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
@@ -5895,15 +5955,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						@Override
 						public void onClick(View v) {
 							cusDialog.dismiss();
-							new LoadTableTaskQuestion(TakeOrderActivity.this,
-									mGlobalVar).execute(GlobalVar.FULL_URL);
+							new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 						}
 
 					});
 					cusDialog.show();
 				} else {
-					new LoadTableTaskQuestion(TakeOrderActivity.this,
-							mGlobalVar).execute(GlobalVar.FULL_URL);
+					if(mCurrTableId != 0){
+						confirmSendOrder();
+					}else{
+						new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
+					}
 				}
 			}
 		} else {
@@ -6055,6 +6117,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.buttonSendByQueue:
 			compareSaleDate(R.id.buttonSendByQueue);
+			break;
+		case R.id.btnRefreshMenu:
+			// update IsOutOfStock
+			new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
+					mGlobalVar, new IOrderUtility.CheckOutOfProductTask.OutOfStockUpdate() {
+						
+						@Override
+						public void onUpdated() {
+							listAllMenuItem();
+						}
+					}).execute(GlobalVar.FULL_URL);
 			break;
 		}
 	}

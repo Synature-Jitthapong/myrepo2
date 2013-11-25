@@ -28,13 +28,13 @@
 
         <EditText
             android:id="@+id/txtServerIp"
-            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edittext_bg"
+            android:background="@color/smoke_white"
             android:ems="10"
             android:hint="SERVER IP"
             android:inputType="text"
+            android:padding="8dp"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" >
 
             <requestFocus />
@@ -48,12 +48,12 @@
 
         <EditText
             android:id="@+id/txtWsName"
-            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edittext_bg"
+            android:background="@color/smoke_white"
             android:ems="10"
             android:hint="WEBSERVICE"
+            android:padding="8dp"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
     </LinearLayout>

@@ -25,19 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/white_layer"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="4dp" >
 
         <EditText
             android:id="@+id/txtUserName"
-            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_bg"
+            android:background="@color/smoke_white"
             android:ems="10"
             android:hint="@string/tv_username"
             android:lines="1"
             android:maxLines="1"
             android:nextFocusForward="@+id/txtPassword"
+            android:padding="8dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmallInverse" >
 
@@ -52,15 +53,15 @@
 
         <EditText
             android:id="@+id/txtPassword"
-            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_bg"
+            android:background="@color/smoke_white"
             android:ems="10"
             android:hint="@string/tv_password"
             android:inputType="textPassword"
             android:lines="1"
             android:nextFocusForward="@+id/btnLogin"
+            android:padding="8dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmallInverse" />
 
