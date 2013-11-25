@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
@@ -50,7 +50,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,7 +73,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -152,7 +156,7 @@
 
                 <Button
                     android:id="@+id/btnSendOrder"
-                    android:layout_width="wrap_content"
+                    android:layout_width="97dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_green_button"
@@ -282,6 +286,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="bottom" />
+
+            <Button
+                android:id="@+id/btnRefreshMenu"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/light_grey_button"
+                android:drawableLeft="@drawable/ic_action_update_light" />
 
             <Button
                 android:id="@+id/btnPlu"

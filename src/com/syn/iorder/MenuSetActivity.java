@@ -470,7 +470,7 @@ public class MenuSetActivity extends Activity {
 			final ProductGroups.PComponentSet pcs = pcsLst.get(position);
 
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.menu_item_layout, null);
+				convertView = inflater.inflate(R.layout.menu_item_medium, null);
 
 				holder = new MenuItemViewHolder();
 				holder.menuImg = (ImageView) convertView

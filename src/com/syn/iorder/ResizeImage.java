@@ -5,7 +5,10 @@ import com.imagezoom.ImageAttacher.OnPhotoTapListener;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class ResizeImage extends Dialog {
@@ -16,6 +19,14 @@ public class ResizeImage extends Dialog {
 		mImageView = imageView;
 		
 		usingSimpleImage();
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+				WindowManager.LayoutParams.WRAP_CONTENT);
 	}
 
 	public void usingSimpleImage() {

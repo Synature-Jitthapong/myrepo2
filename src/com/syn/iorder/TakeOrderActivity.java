@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -85,6 +86,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private LinearLayout mMenuItemLayout;
 	private LinearLayout mSaleModeSwLayout;
 	private Button mBtnPlu;
+	private Button mBtnRefreshMenu;
 	private EditText mTxtPluCode;
 	private RelativeLayout mSaleModeTextLayout;
 	private MenuItem mItemListHold;
@@ -160,6 +162,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		mBtnToggleMax = (Button) findViewById(R.id.btnToggleMax);
 		mMenuItemLayout = (LinearLayout) findViewById(R.id.MenuItemLayout);
 		mBtnPlu = (Button) findViewById(R.id.btnPlu);
+		mBtnRefreshMenu = (Button) findViewById(R.id.btnRefreshMenu);
 		mPluLayout = (LinearLayout) findViewById(R.id.PLULayout); 
 		mSaleModeSwLayout = (LinearLayout) findViewById(R.id.layoutSwSaleMode);
 		mSaleModeTextLayout = (RelativeLayout) findViewById(R.id.saleModeTextLayout);
@@ -205,6 +208,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		mBtnCheckDummyBill.setOnClickListener(this);
 		mBtnSendOrder.setOnClickListener(this);
 		mBtnSendByQueue.setOnClickListener(this);
+		mBtnRefreshMenu.setOnClickListener(this);
 	}
 	
 	@Override
@@ -1128,7 +1132,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		pluResultLayout.removeAllViews();
 		if (mdl.size() > 1) {
 			for (final MenuDataItem mi : mdl) {
-				View menuItemView = inflater.inflate(R.layout.menu_item_layout,
+				View menuItemView = inflater.inflate(R.layout.menu_item_medium,
 						null);
 				//menuItemView.setBackgroundResource(R.drawable.dark_blue_button);
 				ImageView imgMenu = (ImageView) menuItemView
@@ -2176,7 +2180,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			MenuItemViewHolder holder;
 			final MenuDataItem mi = menuDataItemLst.get(position);
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.menu_item_layout, null);
+				convertView = inflater.inflate(R.layout.menu_item_medium, null);
 
 				holder = new MenuItemViewHolder();
 				holder.tvMenuCode = (TextView) convertView
@@ -2185,8 +2189,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 						.findViewById(R.id.menuitem_img);
 				holder.tvMenuName = (TextView) convertView
 						.findViewById(R.id.menuitem_tvMenuName);
-				holder.btnSpeak = (ImageButton) convertView
-						.findViewById(R.id.imageButtonSpeak);
 
 				convertView.setTag(holder);
 			} else {
@@ -2229,15 +2231,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			holder.tvMenuCode.setText(mi.getProductBarcode().equals("") ? mi.getProductCode() : mi.getProductBarcode());
 			holder.tvMenuCode.setVisibility(View.GONE);
 			holder.tvMenuName.setText(extraMenuName);
-			holder.btnSpeak.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					SpeakText sp = new SpeakText(TakeOrderActivity.this, mi.getMenuName());
-					sp.speak();
-				}
-				
-			});
 			
 			if (mi.getIsOutOfStock() == 1) {
 				convertView.setEnabled(false);
@@ -3504,8 +3497,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 	private class SelectTableTask extends LoadTableTaskQuestion {
 
-		public SelectTableTask(Context c, GlobalVar gb) {
-			super(c, gb);
+		public SelectTableTask(Context c) {
+			super(c);
 
 			tvTitle.setText(R.string.select_table_title);
 			
@@ -4150,19 +4143,16 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		protected Spinner spinnerTbZone;
 		protected ProgressBar progressBar;
 		protected Dialog dialogSelectTable;
-		protected ProgressBar progressQty;
 		
 		protected List<ProductGroups.QuestionAnswerData> selectedAnswerLst;
 		protected TableInfo.TableName tbName;
 		protected int tableId, selectedIdx = -1;
 		
-		public LoadTableTaskQuestion(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
+		public LoadTableTaskQuestion(Context c) {
+			super(c, mGlobalVar, webMethod);
 			
-			selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
-			
-			LayoutInflater inflater = LayoutInflater
-					.from(TakeOrderActivity.this);
+			LayoutInflater inflater = (LayoutInflater) 
+					TakeOrderActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.select_table_layout_with_qs, null);
 			
 			layoutTotalCust = (LinearLayout) view.findViewById(R.id.LinearLayoutTotalCust);
@@ -4170,20 +4160,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			btnCancel = (Button) view.findViewById(R.id.buttonConfirmCancel);
 			btnConfirm = (Button) view.findViewById(R.id.buttonConfirm);
 			btnClearTable = (Button) view.findViewById(R.id.buttonClearSelectedTable);
-
 			tvSelectTableCusNo = (TextView) view.findViewById(R.id.select_table_txtcusno);
 			tvSelectTableName = (TextView) view.findViewById(R.id.select_table_cusno_tvname);
 			btnSelectTableMinus = (Button) view.findViewById(R.id.select_table_cusno_btnminus);
 			btnSelectTablePlus = (Button) view.findViewById(R.id.select_table_cusno_btnplus);
-			
 			spinnerTbZone = (Spinner) view.findViewById(R.id.spinner_table_zone);
 			tbListView = (ListView) view.findViewById(R.id.tableList);
-
 			progressBar = (ProgressBar) view.findViewById(R.id.loadTableProgress);	
-			progressQty = (ProgressBar) view.findViewById(R.id.progressBar1);
 			
 			// hide layoutTotalCust by question config
 			if(GlobalVar.isEnableTableQuestion){
+				selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
 				layoutTotalCust.setVisibility(View.GONE);
 			}else{
 				layoutTotalCust.setVisibility(View.VISIBLE);
@@ -4193,9 +4180,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					R.style.CustomDialog);
 			tvTitle.setText(R.string.dialog_title_sendorder);
 			dialogSelectTable.setContentView(view);
-			dialogSelectTable.getWindow().setLayout(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT);
 
 			tbName = new TableInfo.TableName();
 			if (mCurrTableId != 0) {
@@ -4397,7 +4381,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 												tvSelectTableCusNo
 														.setText(globalVar.qtyFormat.format(tbName
 																.getCapacity()));
-												mCustomerQty = tbName.getCapacity();
+												mCustomerQty = 1;
 	
 												// popup question
 												if(GlobalVar.isEnableTableQuestion)
@@ -4411,7 +4395,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 								tvSelectTableName.setText(tbName.getTableName());
 								tvSelectTableCusNo.setText(globalVar.qtyFormat
 										.format(tbName.getCapacity()));
-								mCustomerQty = tbName.getCapacity();
+								mCustomerQty = 1;
 	
 								// popup question
 								if(GlobalVar.isEnableTableQuestion)
@@ -4572,6 +4556,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		@Override
 		protected void onPreExecute() {
 			dialogSelectTable.show();
+			dialogSelectTable.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+					WindowManager.LayoutParams.MATCH_PARENT);
 			progressBar.setVisibility(View.VISIBLE);
 		}
 		
@@ -4645,10 +4631,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 	private void setSelectedQueue() {
 		// set tableId to transaction
-		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-		posOrder.setQueueIdToTransaction(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, mCurrQueueId, mCurrQueueName,
-				mCustomerQty);
+//		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+//		posOrder.setQueueIdToTransaction(GlobalVar.TRANSACTION_ID,
+//				GlobalVar.COMPUTER_ID, mCurrQueueId, mCurrQueueName,
+//				mCustomerQty);
 
 		mCurrTableId = 0;
 		mCurrTableName = "";
@@ -4658,10 +4644,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 	private void setSelectedTable() {
 		// set tableId to transaction
-		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-		posOrder.setTableIdToTransaction(GlobalVar.TRANSACTION_ID,
-				GlobalVar.COMPUTER_ID, mCurrTableId, mCurrTableName,
-				mCustomerQty);
+//		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
+//		posOrder.setTableIdToTransaction(GlobalVar.TRANSACTION_ID,
+//				GlobalVar.COMPUTER_ID, mCurrTableId, mCurrTableName,
+//				mCustomerQty);
 
 		mCurrQueueId = 0;
 		mCurrQueueName = "";
@@ -4884,6 +4870,65 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		
 	}
 	
+	private void confirmSendOrder(){
+		LayoutInflater inflater = (LayoutInflater)
+				this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		View v = inflater.inflate(R.layout.confirm_table, null);
+		TextView tvTitle = (TextView) v.findViewById(R.id.textView2);
+		Button btnEditTable = (Button) v.findViewById(R.id.button1);
+		Button btnSend = (Button) v.findViewById(R.id.button2);
+		Button btnClose = (Button) v.findViewById(R.id.button3);
+		
+		tvTitle.setText(this.getString(R.string.table) + ":" + mCurrTableName);
+		if(mCustomerQty > 0){
+			 tvTitle.append("(x" + mCustomerQty + ")");
+		}
+		final Dialog d = new Dialog(this, R.style.CustomDialog);
+		d.setContentView(v);
+		d.show();
+		
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+			}
+			
+		});
+		
+		btnEditTable.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+				new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
+			}
+			
+		});
+		
+		btnSend.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+				if (mCurrTableId != 0) {
+					if (GlobalVar.MEMBER_ID == 0) {
+						new SubmitSendOrder(TakeOrderActivity.this,
+								mGlobalVar, "WSiOrder_JSON_SendTableOrderTransactionData")
+								.execute(GlobalVar.FULL_URL);
+					} else {
+						new SubmitSendOrder(TakeOrderActivity.this,
+								mGlobalVar,
+								"WSiOrder_JSON_SendTableOrderTransactionDataWithMemberID")
+								.execute(GlobalVar.FULL_URL);
+					}
+				} 
+			}
+			
+		});
+	}
+	
 	private void sendOrder(){
 		POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
 		List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
@@ -5096,15 +5141,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 								public void onClick(View v) {
 									cusDialog.dismiss();
 									new LoadTableTaskQuestion(
-											TakeOrderActivity.this,
-											mGlobalVar)
-											.execute(GlobalVar.FULL_URL);
+											TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 								}
 
 							});
 					cusDialog.show();
 				} else {
-					new LoadTableTaskQuestion(TakeOrderActivity.this, mGlobalVar).execute(GlobalVar.FULL_URL);
+					if(mCurrTableId != 0)
+						confirmSendOrder();
+					else
+						new LoadTableTaskQuestion(
+								TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 				}
 			}
 		} else {
@@ -5178,7 +5225,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 			new CheckSummaryBillDummyTask(TakeOrderActivity.this,
 					mGlobalVar, lvOrder, tvSumText, tvSumPrice, progress)
-					.execute(mGlobalVar.FULL_URL);
+					.execute(GlobalVar.FULL_URL);
 			tvTitle.setText(R.string.button_check_price);
 			detailDialog.setContentView(orderView);
 			detailDialog.getWindow().setGravity(Gravity.TOP);
@@ -5394,15 +5441,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 				@Override
 				public void onClick(View v) {
 					cusDialog.dismiss();
-					new SelectTableTask(TakeOrderActivity.this,
-							mGlobalVar).execute(GlobalVar.FULL_URL);
+					new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 				}
 
 			});
 			cusDialog.show();
 		} else {
-			new SelectTableTask(TakeOrderActivity.this, mGlobalVar)
-					.execute(GlobalVar.FULL_URL);
+			new SelectTableTask(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
 		}
 	}
 	
@@ -5487,6 +5532,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			break;
 		case R.id.buttonSendByQueue:
 			compareSaleDate(v.getId());
+			break;
+		case R.id.btnRefreshMenu:
+			// update IsOutOfStock
+			new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
+					mGlobalVar, new IOrderUtility.CheckOutOfProductTask.OutOfStockUpdate() {
+						
+						@Override
+						public void onUpdated() {
+							listAllMenuItem();
+						}
+					}).execute(GlobalVar.FULL_URL);
 			break;
 		}
 		

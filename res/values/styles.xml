@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+	 <style name="ExtraLarge" parent="android:Widget.Holo.Light.TextView">
+	     <item name="android:textSize">48sp</item>
+	 </style>
+	 <style name="BigLarge" parent="android:Widget.Holo.Light.TextView">
+	     <item name="android:textSize">32sp</item>
+	 </style>
 	 <style name="SectionHead" parent="android:Widget.Holo.Light.TextView">
         <item name="android:drawableBottom">@drawable/section_head</item>
         <item name="android:drawablePadding">4dp</item>

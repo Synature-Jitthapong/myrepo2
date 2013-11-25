@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
@@ -49,8 +49,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,8 +73,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/smoke_white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -165,7 +169,7 @@
 
                 <Button
                     android:id="@+id/btnSendOrder"
-                    android:layout_width="wrap_content"
+                    android:layout_width="64dp"
                     android:layout_height="32dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/light_green_button"
@@ -218,7 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginTop="2dp"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -302,10 +306,17 @@
                 android:padding="0dp" />
 
             <Button
+                android:id="@+id/btnRefreshMenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/light_grey_button"
+                android:drawableLeft="@drawable/ic_action_update_light"
+                android:paddingLeft="0dp" />
+
+            <Button
                 android:id="@+id/btnPlu"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginRight="2dp"
                 android:background="@drawable/light_grey_button"
                 android:drawableLeft="@drawable/ic_action_search_light"
                 android:minHeight="0dp"

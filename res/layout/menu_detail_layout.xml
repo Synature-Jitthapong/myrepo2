@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="2dp" >
+    android:padding="@dimen/half_padding" >
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
+
+        <ImageView
+            android:id="@+id/menuItemMordetailImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/ic_list_nofood" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textViewMenuDetailTitle"
@@ -15,7 +31,8 @@
         android:layout_toLeftOf="@+id/buttonClose"
         android:gravity="center_horizontal"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/smoke_white" />
 
     <Button
         android:id="@+id/buttonClose"
@@ -26,27 +43,6 @@
         android:layout_alignParentTop="true"
         android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
         android:padding="0dp" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonDetailOrder"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonClose" >
-
-        <ImageView
-            android:id="@+id/menuItemMordetailImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:minHeight="200dp"
-            android:minWidth="200dp"
-            android:src="@drawable/ic_list_nofood" />
-
-    </FrameLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -70,12 +66,12 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/white_layer"
             android:gravity="center"
             android:minWidth="24dp"
             android:padding="4dp"
             android:text="1"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -96,13 +92,13 @@
             android:padding="4dp"
             android:text="x"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/white_layer"
             android:gravity="center_vertical"
             android:paddingBottom="4dp"
             android:paddingLeft="2dp"
@@ -110,6 +106,7 @@
             android:paddingTop="4dp"
             android:text="100"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp" />
 
         <TextView
@@ -118,19 +115,21 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="="
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/smoke_white" />
 
         <TextView
             android:id="@+id/textViewTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/white_layer"
             android:gravity="center_vertical"
             android:padding="4dp"
             android:text="1000"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/smoke_white"
             android:textSize="12sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <Button
@@ -142,6 +141,7 @@
         android:layout_margin="3dp"
         android:background="@drawable/blue_button"
         android:text="@string/btn_order"
-        android:textColor="@color/smoke_white" />
+        android:textColor="@color/smoke_white"
+        android:textSize="12sp" />
 
 </RelativeLayout>

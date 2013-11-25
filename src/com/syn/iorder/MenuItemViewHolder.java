@@ -8,5 +8,4 @@ public class MenuItemViewHolder {
 	ImageView menuImg;
 	TextView tvMenuCode;
 	TextView tvMenuName;
-	ImageButton btnSpeak;
 }

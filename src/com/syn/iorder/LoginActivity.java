@@ -8,7 +8,9 @@ import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -275,10 +277,24 @@ public class LoginActivity extends Activity {
 //		
 		} else {
 			btnLogin.setEnabled(true);
-			TextView tvMsg = new TextView(getApplicationContext());
-			tvMsg.setText(R.string.login_fail);
-			Toast.makeText(getApplicationContext(),
-					tvMsg.getText(), Toast.LENGTH_SHORT).show();
+//			TextView tvMsg = new TextView(getApplicationContext());
+//			tvMsg.setText(R.string.login_fail);
+//			Toast.makeText(getApplicationContext(),
+//					tvMsg.getText(), Toast.LENGTH_SHORT).show();
+			
+			final CustomDialog d = new CustomDialog(this, R.style.CustomDialog);
+			d.message.setText(R.string.login_fail);
+			d.btnCancel.setVisibility(View.GONE);
+			d.btnOk.setText(R.string.global_btn_close);
+			d.btnOk.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					d.dismiss();
+				}
+				
+			});
+			d.show();
 		}	
 	}
 	
