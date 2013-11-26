@@ -4544,8 +4544,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			tbName = new TableInfo.TableName();
 			if (mCurrTableId != 0) {
 				tvSelectTableName.setText(mCurrTableName);
-				tvSelectTableCusNo.setText(globalVar.qtyFormat
+				
+				if(mCustomerQty > 0)
+					tvSelectTableCusNo.setText(globalVar.qtyFormat
 						.format(mCustomerQty));
+				else
+					tvSelectTableCusNo.setText("1");
 				
 				if(!GlobalVar.isEnableTableQuestion)
 					btnConfirm.setEnabled(true);
@@ -4652,14 +4656,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 						if(tbName.getTableStatus() != 3){
 							
-							if(tbName.getSTATUS() == 0){
-								btnSelectTableMinus.setEnabled(true);
-								btnSelectTablePlus.setEnabled(true);
-							}else{
-								btnSelectTableMinus.setEnabled(false);
-								btnSelectTablePlus.setEnabled(false);
-							}
-							
 							btnSelectTableMinus
 									.setOnClickListener(new OnClickListener() {
 	
@@ -4742,6 +4738,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 														.setText(globalVar.qtyFormat.format(1));
 												mCustomerQty = 1;
 	
+												if(tbName.getSTATUS() != 0){
+													mCustomerQty = 0;
+												}
+												
 												// popup question
 												if(GlobalVar.isEnableTableQuestion)
 													popupQuestion();
@@ -4760,8 +4760,19 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								if(GlobalVar.isEnableTableQuestion)
 									popupQuestion();
 							}
+							
+							if(tbName.getSTATUS() == 0){
+								btnSelectTableMinus.setEnabled(true);
+								btnSelectTablePlus.setEnabled(true);
+							}else{
+								btnSelectTableMinus.setEnabled(false);
+								btnSelectTablePlus.setEnabled(false);
+								mCustomerQty = 0;
+							}
+							
 							if(!GlobalVar.isEnableTableQuestion)
 								btnConfirm.setEnabled(true);
+							
 						}else{
 							btnSelectTableMinus.setEnabled(false);
 							btnSelectTablePlus.setEnabled(false);
