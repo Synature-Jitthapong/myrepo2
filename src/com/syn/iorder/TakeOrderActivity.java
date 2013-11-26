@@ -4184,8 +4184,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			tbName = new TableInfo.TableName();
 			if (mCurrTableId != 0) {
 				tvSelectTableName.setText(mCurrTableName);
-				tvSelectTableCusNo.setText(globalVar.qtyFormat
+				if(mCustomerQty > 0)
+					tvSelectTableCusNo.setText(globalVar.qtyFormat
 						.format(mCustomerQty));
+				else
+					tvSelectTableCusNo.setText("1");
 				
 				if(!GlobalVar.isEnableTableQuestion)
 					btnConfirm.setEnabled(true);
@@ -4292,14 +4295,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 						if(tbName.getTableStatus() != 3){
 							
-							if(tbName.getSTATUS() == 0){
-								btnSelectTableMinus.setEnabled(true);
-								btnSelectTablePlus.setEnabled(true);
-							}else{
-								btnSelectTableMinus.setEnabled(false);
-								btnSelectTablePlus.setEnabled(false);
-							}
-							
 							btnSelectTableMinus
 									.setOnClickListener(new OnClickListener() {
 	
@@ -4372,17 +4367,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	
 											@Override
 											public void onClick(View v) {
-												tbListView.setItemChecked(position,
-														true);
+												tbListView.setItemChecked(position, true);
 												cusDialog.dismiss();
 												tableId = tbName.getTableID();
-												tvSelectTableName.setText(tbName
-														.getTableName());
-												tvSelectTableCusNo
-														.setText(globalVar.qtyFormat.format(tbName
-																.getCapacity()));
+												tvSelectTableName.setText(tbName.getTableName());
+												tvSelectTableCusNo.setText("1");
 												mCustomerQty = 1;
 	
+												if(tbName.getSTATUS() != 0){
+													mCustomerQty = 0;
+												}
+												
 												// popup question
 												if(GlobalVar.isEnableTableQuestion)
 													popupQuestion();
@@ -4393,16 +4388,26 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 							} else {
 								tableId = tbName.getTableID();
 								tvSelectTableName.setText(tbName.getTableName());
-								tvSelectTableCusNo.setText(globalVar.qtyFormat
-										.format(tbName.getCapacity()));
+								tvSelectTableCusNo.setText("1");
 								mCustomerQty = 1;
 	
 								// popup question
 								if(GlobalVar.isEnableTableQuestion)
 									popupQuestion();
 							}
+							
 							if(!GlobalVar.isEnableTableQuestion)
 								btnConfirm.setEnabled(true);
+							
+							if(tbName.getSTATUS() == 0){
+								btnSelectTableMinus.setEnabled(true);
+								btnSelectTablePlus.setEnabled(true);
+							}else{
+								btnSelectTableMinus.setEnabled(false);
+								btnSelectTablePlus.setEnabled(false);
+								mCustomerQty = 0;
+							}
+							
 						}else{
 							btnSelectTableMinus.setEnabled(false);
 							btnSelectTablePlus.setEnabled(false);
@@ -4606,7 +4611,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 		mTvNotification.setText(R.string.button_set_queue);
 		mTvNotification.append(mCurrQueueName);
-		mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty)
+		if(mCustomerQty > 0)
+			mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty)
 				+ ")");
 	}
 
@@ -4626,7 +4632,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		
 		mTvNotification.setText(R.string.button_set_table);
 		mTvNotification.append(mCurrTableName);
-		mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty) + ")");
+		if(mCustomerQty > 0)
+			mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty) + ")");
 	}
 
 	private void setSelectedQueue() {
