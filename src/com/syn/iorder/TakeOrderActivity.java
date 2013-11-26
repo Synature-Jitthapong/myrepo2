@@ -4976,7 +4976,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 		mTvNotification.setText(R.string.button_set_queue);
 		mTvNotification.append(mCurrQueueName);
-		mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty)
+		if(mCustomerQty > 0)
+			mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty)
 				+ ")");
 	}
 
@@ -4996,7 +4997,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 		mTvNotification.setText(R.string.button_set_table);
 		mTvNotification.append(mCurrTableName);
-		mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty) + ")");
+		if(mCustomerQty > 0)
+			mTvNotification.append("(x" + mGlobalVar.qtyFormat.format(mCustomerQty) + ")");
 	}
 
 	private void setSelectedQueue() {
