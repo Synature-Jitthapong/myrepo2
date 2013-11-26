@@ -10,6 +10,8 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
@@ -60,34 +62,43 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		String result = "";
 		String url = uri[0];
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		ConnectivityManager connMgr = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		if (networkInfo != null && networkInfo.isConnected()) {
+			// fetch data
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);
 
-		envelope.dotNet = true;
-		envelope.setOutputSoapObject(soapRequest);
+			envelope.dotNet = true;
+			envelope.setOutputSoapObject(soapRequest);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
 
-		String soapAction = nameSpace + webMethod;
-		try {
-			androidHttpTransport.call(soapAction, envelope);
+			String soapAction = nameSpace + webMethod;
 			try {
-				result = envelope.getResponse().toString();
-			} catch (SoapFault e) {
+				androidHttpTransport.call(soapAction, envelope);
+				try {
+					result = envelope.getResponse().toString();
+				} catch (SoapFault e) {
+					result = e.getMessage();
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				result = e.getMessage();
+				e.printStackTrace();
+			} catch (XmlPullParserException e) {
 				result = e.getMessage();
 				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			result = e.getMessage();
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			result = e.getMessage();
-			e.printStackTrace();
-		}
-		
-		androidHttpTransport.reset();
-		
-		if(result == null || result.equals("")){
+			
+			androidHttpTransport.reset();
+			
+			if(result == null || result.equals("")){
+				result = context.getString(R.string.network_error);
+			}
+		} else {
+			// display error
 			result = context.getString(R.string.network_error);
 		}
 		return result;

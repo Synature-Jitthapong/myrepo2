@@ -892,10 +892,17 @@ public class IOrderUtility {
 	}
 
 	public static class CheckOutOfProductTask extends WebServiceTask {
-
+		
+		private OutOfStockUpdate mCallback;
+		
 		public CheckOutOfProductTask(Context c, GlobalVar gb) {
 			super(c, gb, "WSiOrder_JSON_GetOutOfProduct");
+		}
+		
+		public CheckOutOfProductTask(Context c, GlobalVar gb, OutOfStockUpdate callback) {
+			super(c, gb, "WSiOrder_JSON_GetOutOfProduct");
 
+			mCallback = callback;
 		}
 
 		@Override
@@ -914,12 +921,17 @@ public class IOrderUtility {
 				try {
 					Product p = new Product(context);
 					p.setOutOfStock(proIdLst);
+					mCallback.onUpdated();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		public static interface OutOfStockUpdate{
+			void onUpdated();
 		}
 	}
 
