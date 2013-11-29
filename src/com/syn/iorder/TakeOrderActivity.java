@@ -112,6 +112,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private String mSaleModeText = "";
 	private int mSaleModePrefix = 0;
 	private boolean mIsEnableQueue = false;
+	private boolean mIsEnableChecker = false;
 	private String mSearchColumn = "";
 	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
@@ -303,6 +304,22 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 				case 5:
 					mCommentType = feature.getFeatureValue();
 					break;
+				case 6:
+					// version 1.7
+					break;
+				case 7:
+					// version 1.7
+					break;
+				case 8:
+					// version 1.7
+					break;
+				case 9: // kds
+					if(feature.getFeatureValue() > 0){
+						mIsEnableChecker = true;
+					}else{
+						mIsEnableChecker = false;
+					}
+					break;
 				}
 			}
 		}
@@ -340,6 +357,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
 		}
 
+		if(mIsEnableChecker){
+			menu.findItem(R.id.action_kds).setVisible(true);
+		}else{
+			menu.findItem(R.id.action_kds).setVisible(false);
+		}
+		
 		if (mIsEnableQueue) {
 			menu.findItem(R.id.menu_manage_queue).setVisible(true);
 		}else{
