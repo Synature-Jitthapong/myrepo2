@@ -126,6 +126,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	private boolean mIsEnableSeat = false;
 	private boolean mIsEnableSalemode = false;
 	private boolean mIsEnableCourse = false;
+	private boolean mIsEnableChecker = false;
 	private String mSearchColumn = "";
 	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
@@ -350,6 +351,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						mIsEnableCourse = false;
 					}
 					break;
+				case 9: // kds
+					if(feature.getFeatureValue() > 0){
+						mIsEnableChecker = true;
+					}else{
+						mIsEnableChecker = false;
+					}
+					break;
 				}
 			}
 		}
@@ -387,6 +395,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
 		}
 
+		if(mIsEnableChecker){
+			menu.findItem(R.id.action_kds).setVisible(true);
+		}else{
+			menu.findItem(R.id.action_kds).setVisible(false);
+		}
+		
 		if (mIsEnableQueue) {
 			menu.findItem(R.id.menu_manage_queue).setVisible(true);
 		}else{
