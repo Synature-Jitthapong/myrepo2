@@ -25,7 +25,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -112,6 +111,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private String mSaleModeText = "";
 	private int mSaleModePrefix = 0;
 	private boolean mIsEnableQueue = false;
+	public static boolean mIsEnableChecker = false;
 	private String mSearchColumn = "";
 	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
@@ -302,6 +302,22 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					break;
 				case 5:
 					mCommentType = feature.getFeatureValue();
+					break;
+				case 6:
+					// version 1.7
+					break;
+				case 7:
+					// version 1.7
+					break;
+				case 8:
+					// version 1.7
+					break;
+				case 9: // kds
+					if(feature.getFeatureValue() > 0){
+						mIsEnableChecker = true;
+					}else{
+						mIsEnableChecker = false;
+					}
 					break;
 				}
 			}

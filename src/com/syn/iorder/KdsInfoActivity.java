@@ -449,6 +449,7 @@ public class KdsInfoActivity extends Activity {
 				holder.tvKdsSubmitTime = (TextView) convertView.findViewById(R.id.textViewKdsSubmitTime);
 				holder.tvKdsFinishTime = (TextView) convertView.findViewById(R.id.textViewKdsFinishTime);
 				holder.tvKdsWaitTime = (TextView) convertView.findViewById(R.id.textViewKdsWait);
+				holder.tvSlash = (TextView) convertView.findViewById(R.id.textView1);
 				
 				convertView.setTag(holder);
 			}else{
@@ -460,6 +461,15 @@ public class KdsInfoActivity extends Activity {
 			holder.tvKdsStaff.setText(kdsOrderInfo.getSzStaffOrder());
 			holder.tvKdsSubmitTime.setText(kdsOrderInfo.getSzSubmitOrderDateTime());
 			holder.tvKdsFinishTime.setText(kdsOrderInfo.getSzFinishOrderDateTime());
+			
+			if(TakeOrderActivity.mIsEnableChecker){
+				holder.tvSlash.setVisibility(View.VISIBLE);
+				holder.tvKdsFinishTime.setVisibility(View.VISIBLE);
+			}else{
+				holder.tvSlash.setVisibility(View.GONE);
+				holder.tvKdsFinishTime.setVisibility(View.GONE);
+			}
+			
 			if(kdsOrderInfo.getiWaitMinTime() > -1){
 				holder.tvKdsWaitTime.setText(String.valueOf(kdsOrderInfo.getiWaitMinTime()));
 				holder.tvKdsWaitTime.append("min.");
@@ -476,6 +486,7 @@ public class KdsInfoActivity extends Activity {
 			TextView tvKdsSubmitTime;
 			TextView tvKdsFinishTime;
 			TextView tvKdsWaitTime;
+			TextView tvSlash;
 		}
 		
 	}
