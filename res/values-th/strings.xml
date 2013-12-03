@@ -284,9 +284,9 @@
     <string name="progress_searching_member">กำลังค้นหาข้อมูลสมาชิก รอสักครู่&#8230;</string>
     <string name="btn_search_member_cancel">ยกเลิก</string>
     <string name="btn_search_member_ok">ตกลง</string>
-    <string name="title_activity_kds_info">KDS</string>
+    <string name="title_activity_kds_info">Checker</string>
     <string name="action_settings">ตั้งค่า</string>
-    <string name="action_kds">KDS</string>
+    <string name="action_kds">Checker</string>
     <string name="global_btn_cancel">ยกเลิก</string>
     <string name="global_btn_ok">ตกลง</string>
     <string name="activity_checkbill">Bill summary</string>
@@ -296,7 +296,7 @@
     <string name="activity_setting">ตั้งค่า</string>
     <string name="activity_menu_set">ชุดเมนู</string>
     <string name="activity_queue">คิว</string>
-    <string name="activity_kds">KDS</string>
+    <string name="activity_kds">Checker</string>
     <string name="no_order_msg">ไม่มีรายการที่จะส่ง</string>
     <string name="call_checkbill_setmember_barcode">Bar Code</string>
     <string name="call_checkbill_setmember_qrcode">QR Code</string>

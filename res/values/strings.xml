@@ -283,9 +283,9 @@
     <string name="progress_searching_member">Searching member info please wait&#8230;</string>
     <string name="btn_search_member_cancel">Cancel</string>
     <string name="btn_search_member_ok">Ok</string>
-    <string name="title_activity_kds_info">KdsInfoActivity</string>
+    <string name="title_activity_kds_info">Checker</string>
     <string name="action_settings">Settings</string>
-    <string name="action_kds">KDS</string>
+    <string name="action_kds">Checker</string>
     <string name="global_btn_cancel">Cancel</string>
     <string name="global_btn_ok">Ok</string>
     <string name="activity_checkbill">Bill summary</string>
@@ -295,7 +295,7 @@
     <string name="activity_setting">Setting</string>
     <string name="activity_menu_set">Menu set</string>
     <string name="activity_queue">Queue</string>
-    <string name="activity_kds">KDS</string>
+    <string name="activity_kds">Checker</string>
     <string name="no_order_msg">No order to send.</string>
     <string name="call_checkbill_setmember_barcode">Bar Code</string>
     <string name="call_checkbill_setmember_qrcode">QR Code</string>

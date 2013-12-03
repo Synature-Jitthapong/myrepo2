@@ -126,6 +126,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	private boolean mIsEnableSeat = false;
 	private boolean mIsEnableSalemode = false;
 	private boolean mIsEnableCourse = false;
+	public static boolean mIsEnableChecker = false;
 	private String mSearchColumn = "";
 	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
@@ -348,6 +349,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						mIsEnableCourse = true;
 					}else{
 						mIsEnableCourse = false;
+					}
+					break;
+				case 9: // kds
+					if(feature.getFeatureValue() > 0){
+						mIsEnableChecker = true;
+					}else{
+						mIsEnableChecker = false;
 					}
 					break;
 				}
