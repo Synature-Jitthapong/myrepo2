@@ -16,11 +16,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class WebServiceTask extends AsyncTask<String, String, String> {
-
-	protected int errCount = 0;
 	protected SoapObject soapRequest;
 	private final String nameSpace = "http://tempuri.org/";
 	protected String webMethod;
@@ -72,6 +69,9 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
+			// tell server not keep connection
+			System.setProperty("http.keepAlive", "false");
+			
 			// fetch data
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 					SoapEnvelope.VER11);
@@ -88,29 +88,14 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				try {
 					result = envelope.getResponse().toString();
 				} catch (SoapFault e) {
-					if(errCount < 1){
-						doInBackground(uri);
-					}else{
-						result = mConnErrMsg + "\n" + e.getMessage();
-					}
-					errCount++;
+					result = mConnErrMsg + "\n" + e.getMessage();
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
-				if(errCount < 1){
-					doInBackground(uri);
-				}else{
-					result =  mConnErrMsg + "\n" + e.getMessage();
-				}
-				errCount++;
+				result =  mConnErrMsg + "\n" + e.getMessage();
 				e.printStackTrace();
 			} catch (XmlPullParserException e) {
-				if(errCount < 1){
-					doInBackground(uri);
-				}else{
-					result =  mConnErrMsg + "\n" + e.getMessage();
-				}
-				errCount++;
+				result =  mConnErrMsg + "\n" + e.getMessage();
 				e.printStackTrace();
 			}
 
