@@ -16,8 +16,6 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 
 public abstract class WebServiceTask extends AsyncTask<String, String, String> {
-
-	protected int errCount = 0;
 	protected SoapObject soapRequest;
 	private final String nameSpace = "http://tempuri.org/";
 	protected String webMethod;
@@ -73,7 +71,10 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 			// fetch data
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 					SoapEnvelope.VER11);
-
+			
+			// tell server not keep connection
+			System.setProperty("http.keepAlive", "false");
+			
 			envelope.dotNet = true;
 			envelope.setOutputSoapObject(soapRequest);
 
