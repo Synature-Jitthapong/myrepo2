@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 
+	protected int errCount = 0;
 	protected SoapObject soapRequest;
 	private final String nameSpace = "http://tempuri.org/";
 	protected String webMethod;
@@ -24,12 +25,15 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	protected GlobalVar globalVar;
 	protected ProgressDialog progress;
 	protected TextView tvProgress;
+	protected String mConnErrMsg;
 
 	public WebServiceTask(Context c, GlobalVar gb, String method) {
 		context = c;
 		globalVar = gb;
 		webMethod = method;
 
+		mConnErrMsg = context.getString(R.string.network_error);
+		
 		soapRequest = new SoapObject(nameSpace, webMethod);
 
 		PropertyInfo property = new PropertyInfo();
@@ -81,25 +85,23 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				try {
 					result = envelope.getResponse().toString();
 				} catch (SoapFault e) {
-					result = e.getMessage();
+					result = mConnErrMsg + "\n" + e.getMessage();
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
-				result = e.getMessage();
+				result = mConnErrMsg + "\n" + e.getMessage();
 				e.printStackTrace();
 			} catch (XmlPullParserException e) {
-				result = e.getMessage();
+				result = mConnErrMsg + "\n" + e.getMessage();
 				e.printStackTrace();
 			}
-			
-			androidHttpTransport.reset();
-			
+
 			if(result == null || result.equals("")){
-				result = context.getString(R.string.network_error);
+				result = mConnErrMsg;
 			}
 		} else {
 			// display error
-			result = context.getString(R.string.network_error);
+			result = mConnErrMsg;
 		}
 		return result;
 	}
