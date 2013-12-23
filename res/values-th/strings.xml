@@ -231,7 +231,7 @@
     <string name="dialog_select_menu_cancel">ยกเลิก</string>
     <string name="dialog_select_menu_title">เลือกเมนู</string>
     <string name="move_menu_btn_edit_menu">แก้ไขเมนู</string>
-    <string name="global_dialog_title_error">ผิดพลาด</string>
+    <string name="global_dialog_title_error"></string>
     <string name="app_setting_dialog_title">ตั้งค่า</string>
     <string name="app_setting_input_data">กรุณาใส่ ipaddress และ webservice</string>
     <string name="app_setting_save_success">บันทึกการตั้งค่าสำเร็จ</string>

@@ -1,6 +1,7 @@
 package com.syn.iorder;
 
 import java.io.IOException;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -8,15 +9,18 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 
+	protected int errCount = 0;
 	protected SoapObject soapRequest;
 	private final String nameSpace = "http://tempuri.org/";
 	protected String webMethod;
@@ -24,11 +28,13 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	protected GlobalVar globalVar;
 	protected ProgressDialog progress;
 	protected TextView tvProgress;
+	protected String mConnErrMsg;
 
 	public WebServiceTask(Context c, GlobalVar gb, String method) {
 		context = c;
 		globalVar = gb;
 		webMethod = method;
+		mConnErrMsg = context.getString(R.string.network_error);
 
 		soapRequest = new SoapObject(nameSpace, webMethod);
 
@@ -82,26 +88,38 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				try {
 					result = envelope.getResponse().toString();
 				} catch (SoapFault e) {
-					result = e.getMessage();
+					if(errCount < 1){
+						doInBackground(uri);
+					}else{
+						result = mConnErrMsg + "\n" + e.getMessage();
+					}
+					errCount++;
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
-				result = e.getMessage();
+				if(errCount < 1){
+					doInBackground(uri);
+				}else{
+					result =  mConnErrMsg + "\n" + e.getMessage();
+				}
+				errCount++;
 				e.printStackTrace();
 			} catch (XmlPullParserException e) {
-				result = e.getMessage();
+				if(errCount < 1){
+					doInBackground(uri);
+				}else{
+					result =  mConnErrMsg + "\n" + e.getMessage();
+				}
+				errCount++;
 				e.printStackTrace();
 			}
 
-			androidHttpTransport.reset();
-
 			if (result == null || result.equals("")) {
-				result = context.getString(R.string.network_error);
+				result =  mConnErrMsg;
 			}
 		} else {
-			result = context.getString(R.string.network_error);
+			result = mConnErrMsg;
 		}
 		return result;
 	}
-
 }

@@ -231,7 +231,7 @@
     <string name="dialog_select_menu_cancel">Cancel</string>
     <string name="dialog_select_menu_title">Select menu</string>
     <string name="move_menu_btn_edit_menu">Edit menu</string>
-    <string name="global_dialog_title_error">Error</string>
+    <string name="global_dialog_title_error"></string>
     <string name="app_setting_dialog_title">Setting</string>
     <string name="app_setting_input_data">Please enter Server IP and Webservice name</string>
     <string name="app_setting_save_success">Save successfully.</string>
