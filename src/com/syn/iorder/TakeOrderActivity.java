@@ -356,6 +356,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
 		}
 
+		if(mIsEnableChecker){
+			menu.findItem(R.id.action_kds).setVisible(true);
+		}else{
+			menu.findItem(R.id.action_kds).setVisible(false);
+		}
+		
 		if (mIsEnableQueue) {
 			menu.findItem(R.id.menu_manage_queue).setVisible(true);
 		}else{
