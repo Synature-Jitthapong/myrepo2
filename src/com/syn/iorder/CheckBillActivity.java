@@ -5,6 +5,9 @@ package com.syn.iorder;
 import java.util.ArrayList;
 import java.util.List;
 import org.ksoap2.serialization.PropertyInfo;
+
+import com.syn.iorder.PrinterUtils.Printer;
+
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
@@ -16,8 +19,12 @@ import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -34,6 +42,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class CheckBillActivity extends Activity {
+	private boolean isSearchMember = true;
+	
 	private Spinner spinnerTableZone;
 	private ListView tableNameListView;
 	private ListView orderDetailListView;
@@ -49,9 +59,9 @@ public class CheckBillActivity extends Activity {
 	
 	private Button btnClose;
 	private Button btnCheckbill;
+	private Button btnCalDiscount;
 	private Button btnPrint;
 	private Button btnSetmember;
-	private Button btnClearMember;
 	private Button btnEditQuestion;
 	private GlobalVar globalVar;
 	private Context CONTEXT;
@@ -77,27 +87,30 @@ public class CheckBillActivity extends Activity {
 	
 	@Override
 	protected void onResume() {
+		super.onResume();
+		
 		if(TABLE_ID != 0)
 			new ShowSummaryBillTask(CheckBillActivity.this, 
 					globalVar).execute(globalVar.FULL_URL);
 		
-		super.onResume();
 	}
 
 
 	private void disableButton(){
+		btnCalDiscount.setEnabled(false);
 		btnCheckbill.setEnabled(false);
 		btnPrint.setEnabled(false);
 		btnSetmember.setEnabled(false);
-		btnClearMember.setEnabled(false);
 		btnEditQuestion.setEnabled(false);
 	}
 	
 	private void enableButton(){
-		btnCheckbill.setEnabled(true);
+		if(GlobalVar.sIsCalculateDiscount)
+			btnCalDiscount.setEnabled(true);
+		if(GlobalVar.sIsEnableCallCheckBill ||GlobalVar.sIsEnablePrintLongBill)
+			btnCheckbill.setEnabled(true);
 		btnPrint.setEnabled(true);
 		btnSetmember.setEnabled(true);
-		btnClearMember.setEnabled(true);
 		btnEditQuestion.setEnabled(true);
 	}
 	
@@ -109,8 +122,8 @@ public class CheckBillActivity extends Activity {
 		tableNameListView = (ListView) findViewById(R.id.listViewTableName);
 		btnPrint = (Button) findViewById(R.id.btnPrint);
 		btnCheckbill = (Button) findViewById(R.id.btnCallCheckbill);
+		btnCalDiscount = (Button) findViewById(R.id.btnCalDiscount);
 		btnSetmember = (Button) findViewById(R.id.buttonBillSetMember);
-		btnClearMember = (Button) findViewById(R.id.buttonClearMember);
 		tvBillHeader = (TextView) findViewById(R.id.tvBillHeader);
 		tvTableName = (TextView) findViewById(R.id.tvTableName);
 		orderDetailListView = (ListView) findViewById(R.id.orderDetailListView);
@@ -129,10 +142,25 @@ public class CheckBillActivity extends Activity {
 			enableButton();
 		}
 		
+		if(GlobalVar.sIsCalculateDiscount){
+			btnCalDiscount.setVisibility(View.VISIBLE);
+		}else{
+			btnCalDiscount.setVisibility(View.GONE);
+		}
+		/* change btnCallCheckBill text to Print long bill
+		 * if feature is enabled
+		 */
+		if(GlobalVar.sIsEnablePrintLongBill)
+			btnCheckbill.setText(R.string.print_long_bill);
+		else if(GlobalVar.sIsEnableCallCheckBill)
+			btnCheckbill.setText(R.string.call_checkbill);
+		else
+			btnCheckbill.setVisibility(View.GONE);
+		
 		/* set text button edit question or customer qty.
 		 * and set event by feature
 		 */
-		if(!GlobalVar.isEnableTableQuestion){
+		if(!GlobalVar.sIsEnableTableQuestion){
 			btnEditQuestion.setText(R.string.button_edit_customer_qty);
 			btnEditQuestion.setOnClickListener(new OnClickListener(){
 
@@ -140,21 +168,23 @@ public class CheckBillActivity extends Activity {
 				public void onClick(View view) {
 					LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
 					View v = inflater.inflate(R.layout.customer_qty, null);
-					TextView tvTitle = (TextView) v.findViewById(R.id.textView1);
 					Button btnMinus = (Button) v.findViewById(R.id.button1);
 					Button btnPlus = (Button) v.findViewById(R.id.button2);
-					Button btnCancel = (Button) v.findViewById(R.id.button3);
-					Button btnOk = (Button) v.findViewById(R.id.button4);
 					final TextView tvCustQty = (TextView) v.findViewById(R.id.textView2);
 					tvCustQty.setText(Integer.toString(customerQty));
-					tvTitle.setText(tvTableName.getText());
 					
-					final Dialog d = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
-					d.setContentView(v);
-					d.getWindow().setLayout(
-							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-					d.show();
+					AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+					builder.setTitle(tvTableName.getText());
+					builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+					builder.setPositiveButton(R.string.global_btn_ok, null);
+					builder.setView(v);
+					final AlertDialog dialog = builder.create();
+					dialog.show();
 					
 					btnMinus.setOnClickListener(new OnClickListener(){
 
@@ -192,16 +222,7 @@ public class CheckBillActivity extends Activity {
 						
 					});
 					
-					btnCancel.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View v) {
-							d.dismiss();
-						}
-						
-					});
-					
-					btnOk.setOnClickListener(new OnClickListener(){
+					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
 
 						@Override
 						public void onClick(View v) {
@@ -210,14 +231,14 @@ public class CheckBillActivity extends Activity {
 
 										@Override
 										public void onSuccess() {
-											d.dismiss();
+											dialog.dismiss();
 											new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
 										}
 
 										@Override
 										public void onNotSuccess() {
 
-											d.dismiss();
+											dialog.dismiss();
 										}
 
 										@Override
@@ -370,6 +391,16 @@ public class CheckBillActivity extends Activity {
 			});
 		}
 		
+		btnCalDiscount.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		btnPrint.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -382,38 +413,10 @@ public class CheckBillActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				checkBill();
-			}
-		});
-		
-		btnClearMember.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				final CustomDialog cusDialog =
-						new CustomDialog(CheckBillActivity.this, R.style.CustomDialog);
-				cusDialog.title.setVisibility(View.VISIBLE);
-				cusDialog.title.setText(R.string.clear_member_title);
-				cusDialog.message.setText(R.string.cf_clear_member);
-				cusDialog.btnCancel.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						cusDialog.dismiss();
-					}
-					
-				});
-				cusDialog.btnOk.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						cusDialog.dismiss();
-						new ClearMemberTask(CheckBillActivity.this, globalVar, 
-								CURR_TRANSACTION_ID, CURR_COMPUTER_ID).execute(GlobalVar.FULL_URL);	
-					}
-					
-				});
-				cusDialog.show();
+				if(GlobalVar.sIsEnablePrintLongBill)
+					printLongbill();
+				else if(GlobalVar.sIsEnableCallCheckBill)
+					checkBill();
 			}
 		});
 		
@@ -421,10 +424,39 @@ public class CheckBillActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(CheckBillActivity.this, SearchMemberActivity.class);
-				intent.putExtra("TO_TRANSACTION_ID", CURR_TRANSACTION_ID);
-				intent.putExtra("TO_COMPUTER_ID", CURR_COMPUTER_ID);
-				CheckBillActivity.this.startActivity(intent);
+				if(isSearchMember){
+					Intent intent = new Intent(CheckBillActivity.this, SearchMemberActivity.class);
+					intent.putExtra("TO_TRANSACTION_ID", CURR_TRANSACTION_ID);
+					intent.putExtra("TO_COMPUTER_ID", CURR_COMPUTER_ID);
+					CheckBillActivity.this.startActivity(intent);
+				}else{
+					final CustomDialog cusDialog =
+							new CustomDialog(CheckBillActivity.this, R.style.CustomDialog);
+					cusDialog.title.setVisibility(View.VISIBLE);
+					cusDialog.title.setText(R.string.clear_member_title);
+					cusDialog.message.setText(R.string.cf_clear_member);
+					cusDialog.btnCancel.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							cusDialog.dismiss();
+						}
+						
+					});
+					cusDialog.btnOk.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							btnSetmember.setText(R.string.call_checkbill_setmember);
+							isSearchMember = true;
+							cusDialog.dismiss();
+							new ClearMemberTask(CheckBillActivity.this, globalVar, 
+									CURR_TRANSACTION_ID, CURR_COMPUTER_ID).execute(GlobalVar.FULL_URL);	
+						}
+						
+					});
+					cusDialog.show();
+				}
 			}
 		});
 		 new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
@@ -448,6 +480,173 @@ public class CheckBillActivity extends Activity {
 		return true;
 	}
 
+	private void printLongbill(){
+		final ProgressDialog progress = new ProgressDialog(this);
+		
+		final PrinterUtils.PrintLongbillListener printListener = 
+				new PrinterUtils.PrintLongbillListener() {
+					
+					@Override
+					public void onPre() {
+						progress.setMessage(CheckBillActivity.this.getString(R.string.print_progress));
+						progress.show();
+					}
+					
+					@Override
+					public void onPost() {
+					}
+					
+					@Override
+					public void onError(String msg) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+						builder.setMessage(msg);
+						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						
+						AlertDialog d = builder.create();
+						d.show();
+					}
+					
+					@Override
+					public void onPost(WebServiceResult res, String result) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						String msg = CheckBillActivity.this.getString(R.string.already_print_longbill);
+						
+						if(res.getiResultID() != 0)
+							msg = result;
+						
+						AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+						builder.setMessage(msg);
+						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						
+						AlertDialog d = builder.create();
+						d.show();
+					}
+			};
+				
+		final PrinterUtils.LoadPrinterProgressListener loadPrinterListener = 
+				new PrinterUtils.LoadPrinterProgressListener() {
+					
+					@Override
+					public void onPre() {
+						progress.setMessage(CheckBillActivity.this.getString(R.string.loading_progress));
+						progress.show();
+					}
+					
+					@Override
+					public void onPost() {
+					}
+					
+					@Override
+					public void onError(String msg) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						AlertDialog.Builder builder = 
+								new AlertDialog.Builder(CheckBillActivity.this);
+						builder.setMessage(msg);
+						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						AlertDialog d = builder.create();
+						d.show();
+					}
+					
+					@Override
+					public void onPost(List<Printer> printerLst, String result) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						LayoutInflater inflater = (LayoutInflater)
+								CheckBillActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						View selPrinterView = inflater.inflate(R.layout.select_printer_layout, null);
+						final ListView lvPrinter = (ListView) selPrinterView.findViewById(R.id.lvPrinter);
+
+						final PrinterUtils.Printer printerData = new PrinterUtils.Printer();
+						final PrinterListAdapter printerAdapter = 
+								new PrinterListAdapter(CheckBillActivity.this, printerLst);
+						lvPrinter.setAdapter(printerAdapter);
+						lvPrinter.setOnItemClickListener(new OnItemClickListener(){
+
+							@Override
+							public void onItemClick(AdapterView<?> parent,
+									View v, int position, long id) {
+								PrinterUtils.Printer printer = (PrinterUtils.Printer)
+										parent.getItemAtPosition(position);
+								if(printer.isChecked()){
+									printer.setChecked(false);
+									printerData.setPrinterID(0);
+								}else{
+									printer.setChecked(true);
+									printerData.setPrinterID(printer.getPrinterID());
+								}
+								printerAdapter.notifyDataSetChanged();
+							}
+							
+						});
+					
+						AlertDialog.Builder builder = 
+								new AlertDialog.Builder(CheckBillActivity.this);
+						builder.setTitle(R.string.select_printer);
+						builder.setView(selPrinterView);
+						builder.setNegativeButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						builder.setPositiveButton(R.string.global_btn_ok, null);
+						
+						final AlertDialog d = builder.create();
+						d.show();
+						d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								if(printerData.getPrinterID() != 0){
+									d.dismiss();
+									// print
+									new PrinterUtils.PrintTransToPrinterTask(CheckBillActivity.this, 
+											globalVar, CURR_TRANSACTION_ID, CURR_COMPUTER_ID, 
+											printerData.getPrinterID(), GlobalVar.SHOP_ID, printListener).execute(GlobalVar.FULL_URL);
+								}else{
+									new AlertDialog.Builder(CheckBillActivity.this)
+									.setMessage(R.string.please_select_printer)
+									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+										
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+										}
+									})
+									.show();
+								}
+							}
+							
+						});
+					}
+				};
+				
+		new PrinterUtils.LoadPrinterTask(this, globalVar, 
+				GlobalVar.STAFF_ID, loadPrinterListener).execute(GlobalVar.FULL_URL);
+	}
+	
 	private void checkBill(){
 		if(TABLE_ID != 0)
 			new CheckBillTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
@@ -741,8 +940,6 @@ public class CheckBillActivity extends Activity {
 						tvSummaryDisplay.append(displaySummary.szDisplayName + "\n");
 						tvPriceValue.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
 					}
-					TextView tvCallCheckBill = new TextView(context);
-					tvCallCheckBill.setText(R.string.call_checkbill);
 					
 					// for set member
 					CURR_TRANSACTION_ID = SUMMARY_TRANS.TransactionID;
@@ -753,18 +950,24 @@ public class CheckBillActivity extends Activity {
 					if(!SUMMARY_TRANS.TransacionName.equals("")){
 						tvBillMember.setText(SUMMARY_TRANS.TransacionName);
 						billMemberLayout.setVisibility(View.VISIBLE);
-						btnClearMember.setEnabled(true);
+						btnSetmember.setText(R.string.btn_clear_member);
+						isSearchMember = false;
 					}else{
 						billMemberLayout.setVisibility(View.GONE);
-						btnClearMember.setEnabled(false);
 					}
 					
 					//tvSubmitTime.setText(SUMMARY_TRANS.TransactionSummary);
 					if(SUMMARY_TRANS.CallForCheckBill > 0 && SUMMARY_TRANS.CallForCheckBill != 99){
 						btnCheckbill.setEnabled(true);
-						btnCheckbill.setText(tvCallCheckBill.getText().toString() + "(" + SUMMARY_TRANS.CallForCheckBill + ")");
+						if(GlobalVar.sIsEnablePrintLongBill)
+							btnCheckbill.setText(R.string.print_long_bill);
+						else if(GlobalVar.sIsEnableCallCheckBill)
+							btnCheckbill.setText(CheckBillActivity.this.getString(R.string.call_checkbill) + "(" + SUMMARY_TRANS.CallForCheckBill + ")");
 					}else{
-						btnCheckbill.setText(tvCallCheckBill.getText().toString());
+						if(GlobalVar.sIsEnablePrintLongBill)
+							btnCheckbill.setText(R.string.print_long_bill);
+						else if(GlobalVar.sIsEnableCallCheckBill)
+							btnCheckbill.setText(R.string.call_checkbill);
 					}
 					
 					if(SUMMARY_TRANS.CallForCheckBill == 99){

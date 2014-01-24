@@ -5,21 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/grey_light"
     android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/button_edit_customer_qty"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
+    android:padding="4dp" >
 
     <Button
         android:id="@+id/button2"
@@ -51,34 +37,8 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
         android:layout_toLeftOf="@+id/textView2"
         android:background="@drawable/light_grey_button"
         android:text="-" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="14dp" >
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/light_grey_button"
-            android:text="@string/global_btn_cancel" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/light_grey_button"
-            android:text="@string/global_btn_ok" />
-    </LinearLayout>
 
 </RelativeLayout>

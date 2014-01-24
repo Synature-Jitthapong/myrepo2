@@ -122,13 +122,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 	private String mSaleModeWord = "";
 	private String mSaleModeText = "";
 	private int mSaleModePrefix = 0;
-	private boolean mIsEnableQueue = false;
-	private boolean mIsEnableSeat = false;
-	private boolean mIsEnableSalemode = false;
-	private boolean mIsEnableCourse = false;
-	public static boolean mIsEnableChecker = false;
 	private String mSearchColumn = "";
-	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
 
 	@Override
@@ -286,11 +280,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				// queue feature
 				case 1:
 					if (feature.getFeatureValue() == 1) {
-						mIsEnableQueue = true;
+						GlobalVar.sIsEnableQueue = true;
 						mBtnSetQueue.setVisibility(View.VISIBLE);
 						mBtnSendByQueue.setVisibility(View.VISIBLE);
 					} else {
-						mIsEnableQueue = false;
+						GlobalVar.sIsEnableQueue = false;
 						mBtnSetQueue.setVisibility(View.GONE);
 						mBtnSendByQueue.setVisibility(View.GONE);
 					}
@@ -308,16 +302,16 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				// add every one item 
 				case 3:
 					if(feature.getFeatureValue() == 1){
-						mAddOnlyOneItem = true;
+						GlobalVar.sIsAddOnlyOneItem = true;
 					}else{
-						mAddOnlyOneItem = false;
+						GlobalVar.sIsAddOnlyOneItem = false;
 					}
 					break;
 				case 4:
 					if(feature.getFeatureValue() != 0){
-						GlobalVar.isEnableTableQuestion = true;
+						GlobalVar.sIsEnableTableQuestion = true;
 					}else{
-						GlobalVar.isEnableTableQuestion = false;
+						GlobalVar.sIsEnableTableQuestion = false;
 					}
 					break;
 				case 5:
@@ -328,36 +322,51 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						if(mGlobalVar.SHOP_DATA.getShopType() == 1){
 							mBtnSeat.setVisibility(View.VISIBLE);
 							mTvTotalSeat.setVisibility(View.VISIBLE);
-							mIsEnableSeat = true;
+							GlobalVar.sIsEnableSeat = true;
 							clearSeat();
 						}
 					}else{
-						mIsEnableSeat = false;
+						GlobalVar.sIsEnableSeat = false;
 						mBtnSeat.setVisibility(View.GONE);
 						mTvTotalSeat.setVisibility(View.GONE);
 					}
 					break;
 				case 7:
 					if(feature.getFeatureValue() == 1){ // 1 show, 0 hide
-						mIsEnableSalemode = false;
+						GlobalVar.sIsEnableSaleMode = false;
 					}else{
-						mIsEnableSalemode = true;
+						GlobalVar.sIsEnableSaleMode = true;
 					}
 					break;
 				case 8:
 					if(feature.getFeatureValue() == 1){
-						mIsEnableCourse = true;
+						GlobalVar.sIsEnableCourse = true;
 					}else{
-						mIsEnableCourse = false;
+						GlobalVar.sIsEnableCourse = false;
 					}
 					break;
 				case 9: // kds
 					if(feature.getFeatureValue() > 0){
-						mIsEnableChecker = true;
+						GlobalVar.sIsEnableChecker = true;
 					}else{
-						mIsEnableChecker = false;
+						GlobalVar.sIsEnableChecker = false;
 					}
 					break;
+				case 10: // call checkbill, print long bill
+					if(feature.getFeatureValue() == 0){
+						GlobalVar.sIsEnableCallCheckBill = false;
+					}else if(feature.getFeatureValue() == 1){
+						GlobalVar.sIsEnableCallCheckBill = true;
+					}else if(feature.getFeatureValue() == 2){
+						GlobalVar.sIsEnablePrintLongBill = true;
+					}
+					break;
+				case 11: // calculate discount
+					if(feature.getFeatureValue() == 0){
+						GlobalVar.sIsCalculateDiscount = false;
+					}else if(feature.getFeatureValue() == 1){
+						GlobalVar.sIsCalculateDiscount = true;
+					}
 				}
 			}
 		}
@@ -395,13 +404,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
 		}
 
-		if(mIsEnableChecker){
+		if(GlobalVar.sIsEnableChecker){
 			menu.findItem(R.id.action_kds).setVisible(true);
 		}else{
 			menu.findItem(R.id.action_kds).setVisible(false);
 		}
 		
-		if (mIsEnableQueue) {
+		if (GlobalVar.sIsEnableQueue) {
 			menu.findItem(R.id.menu_manage_queue).setVisible(true);
 		}else{
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
@@ -1070,7 +1079,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		Button btnTakeAway = (Button) mSaleModeSwLayout.findViewById(2);
 
 		if(mTransSaleMode != 1){
-			if(!mIsEnableSalemode){
+			if(!GlobalVar.sIsEnableSaleMode){
 				try {
 					btnEatIn.setEnabled(false);
 					btnTakeAway.setEnabled(false);
@@ -1096,7 +1105,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				btnTakeAway.setEnabled(true);
 				btnTakeAway.setSelected(false);
 			}
-			if(!mIsEnableSalemode){
+			if(!GlobalVar.sIsEnableSaleMode){
 				hideSaleModeText();
 			}
 		}
@@ -1832,7 +1841,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 					Button btnOk = (Button) v.findViewById(R.id.buttonOkComment);
 					final Button btnModSeat = (Button) v.findViewById(R.id.buttonModSeat);
 					
-					if(mIsEnableSeat){
+					if(GlobalVar.sIsEnableSeat){
 						seatLayout.setVisibility(View.VISIBLE);
 						
 						final ShopProperty shopProperty = new ShopProperty(TakeOrderActivity.this, null);
@@ -1862,7 +1871,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								final Button btnCancel = (Button) v.findViewById(R.id.button1);
 								final Button btnOk = (Button) v.findViewById(R.id.button2);
 										
-								if(mIsEnableCourse){
+								if(GlobalVar.sIsEnableCourse){
 									courseContent.setVisibility(View.VISIBLE);
 									HorizontalScrollView hView = (HorizontalScrollView) 
 											courseContent.findViewById(R.id.horizontalScrollView1);
@@ -2324,7 +2333,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				holder.tvOrderListMenuQty.setVisibility(View.VISIBLE);
 				holder.btnEdit.setVisibility(View.GONE);
 				
-				if(mAddOnlyOneItem){
+				if(GlobalVar.sIsAddOnlyOneItem){
 					holder.btnPlus.setVisibility(View.GONE);
 					holder.btnMinus.setVisibility(View.GONE);
 				}else{
@@ -2551,7 +2560,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								btnDetailMinus.setEnabled(true);
 								btnDetailPlus.setEnabled(true);
 								
-								if(mAddOnlyOneItem){
+								if(GlobalVar.sIsAddOnlyOneItem){
 									btnDetailPlus.setEnabled(false);
 									btnDetailMinus.setEnabled(false);
 								}else{
@@ -2692,7 +2701,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 //							btnDetailMinus.setEnabled(true);
 //							btnDetailPlus.setEnabled(true);
 //							
-//							if(mAddOnlyOneItem){
+//							if(GlobalVar.sIsAddOnlyOneItem){
 //								btnDetailPlus.setEnabled(false);
 //								btnDetailMinus.setEnabled(false);
 //							}else{
@@ -3784,7 +3793,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 				if (wsResult.getiResultID() == 0) {
 					
-					if(GlobalVar.isEnableTableQuestion){
+					if(GlobalVar.sIsEnableTableQuestion){
 						if(qsAnsLst != null && qsAnsLst.size() > 0){
 							// send answer question
 							new QuestionTask(TakeOrderActivity.this, globalVar, mCurrTableId, 
@@ -4540,7 +4549,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			progressQty = (ProgressBar) view.findViewById(R.id.progressBar1);
 			
 			// hide layoutTotalCust by question config
-			if(GlobalVar.isEnableTableQuestion){
+			if(GlobalVar.sIsEnableTableQuestion){
 				layoutTotalCust.setVisibility(View.GONE);
 				selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
 			}else{
@@ -4565,7 +4574,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				else
 					tvSelectTableCusNo.setText("1");
 				
-				if(!GlobalVar.isEnableTableQuestion)
+				if(!GlobalVar.sIsEnableTableQuestion)
 					btnConfirm.setEnabled(true);
 			}
 
@@ -4757,7 +4766,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 												}
 												
 												// popup question
-												if(GlobalVar.isEnableTableQuestion)
+												if(GlobalVar.sIsEnableTableQuestion)
 													popupQuestion();
 											}
 	
@@ -4771,7 +4780,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								mCustomerQty = 1;
 	
 								// popup question
-								if(GlobalVar.isEnableTableQuestion)
+								if(GlobalVar.sIsEnableTableQuestion)
 									popupQuestion();
 							}
 							
@@ -4784,7 +4793,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								mCustomerQty = 0;
 							}
 							
-							if(!GlobalVar.isEnableTableQuestion)
+							if(!GlobalVar.sIsEnableTableQuestion)
 								btnConfirm.setEnabled(true);
 							
 						}else{
@@ -5111,7 +5120,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 
 		// enable queue
-		if (mIsEnableQueue) {
+		if (GlobalVar.sIsEnableQueue) {
 			mBtnSetQueue.setVisibility(View.VISIBLE);
 			mBtnSendByQueue.setVisibility(View.VISIBLE);
 		} else {
@@ -5146,7 +5155,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 
 		// enable queue
-		if (mIsEnableQueue) {
+		if (GlobalVar.sIsEnableQueue) {
 			mBtnSetQueue.setVisibility(View.VISIBLE);
 			mBtnSendByQueue.setVisibility(View.VISIBLE);
 		} else {
@@ -5185,7 +5194,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				if(s.getSaleModeID() == 1){
 					btnSwSaleMode.setSelected(true);
 
-					if(mIsEnableSalemode){
+					if(GlobalVar.sIsEnableSaleMode){
 						showSaleModeText(s.getSaleModeName());
 					}else{
 						hideSaleModeText();
@@ -5196,7 +5205,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 					@Override
 					public void onClick(View v) {
-						if(mIsEnableSalemode){
+						if(GlobalVar.sIsEnableSaleMode){
 							switchSaleMode(s.getSaleModeID());
 						}else{
 							setSaleMode(s);
@@ -5243,7 +5252,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		final Button btnCancel = (Button) v.findViewById(R.id.button1);
 		final Button btnOk = (Button) v.findViewById(R.id.button2);
 				
-		if(mIsEnableCourse){
+		if(GlobalVar.sIsEnableCourse){
 			courseContent.setVisibility(View.VISIBLE);
 			HorizontalScrollView hView = (HorizontalScrollView) 
 					courseContent.findViewById(R.id.horizontalScrollView1);

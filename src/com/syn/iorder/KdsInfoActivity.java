@@ -462,7 +462,7 @@ public class KdsInfoActivity extends Activity {
 			holder.tvKdsSubmitTime.setText(kdsOrderInfo.getSzSubmitOrderDateTime());
 			holder.tvKdsFinishTime.setText(kdsOrderInfo.getSzFinishOrderDateTime());
 			
-			if(TakeOrderActivity.mIsEnableChecker){
+			if(GlobalVar.sIsEnableChecker){
 				holder.tvKdsFinishTime.setVisibility(View.VISIBLE);
 				holder.tvSlash.setVisibility(View.VISIBLE);
 			}else{

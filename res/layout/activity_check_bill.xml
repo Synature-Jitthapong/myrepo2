@@ -210,23 +210,23 @@
                     android:layout_height="wrap_content" >
 
                     <Button
+                        android:id="@+id/btnCalDiscount"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/light_grey_button"
+                        android:text="@string/calculate_discount"
+                        android:textSize="12sp" />
+
+                    <Button
                         android:id="@+id/buttonBillSetMember"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="32dp"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
                         android:background="@drawable/light_grey_button"
                         android:text="@string/call_checkbill_setmember"
-                        android:textSize="12sp" />
-
-                    <Button
-                        android:id="@+id/buttonClearMember"
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_margin="1dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/light_grey_button"
-                        android:text="@string/btn_clear_member"
                         android:textSize="12sp" />
 
                 </LinearLayout>
