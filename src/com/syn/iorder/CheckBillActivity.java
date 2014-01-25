@@ -522,7 +522,7 @@ public class CheckBillActivity extends Activity {
 						String msg = CheckBillActivity.this.getString(R.string.already_print_longbill);
 						
 						if(res.getiResultID() != 0)
-							msg = result;
+							msg = res.getSzResultData().equals("") ? result : res.getSzResultData();
 						
 						AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
 						builder.setMessage(msg);
@@ -570,7 +570,7 @@ public class CheckBillActivity extends Activity {
 					}
 					
 					@Override
-					public void onPost(List<Printer> printerLst, String result) {
+					public void onPost(final List<Printer> printerLst, String result) {
 						if(progress.isShowing())
 							progress.dismiss();
 						
@@ -583,6 +583,7 @@ public class CheckBillActivity extends Activity {
 						final PrinterListAdapter printerAdapter = 
 								new PrinterListAdapter(CheckBillActivity.this, printerLst);
 						lvPrinter.setAdapter(printerAdapter);
+						
 						lvPrinter.setOnItemClickListener(new OnItemClickListener(){
 
 							@Override
@@ -596,6 +597,16 @@ public class CheckBillActivity extends Activity {
 								}else{
 									printer.setChecked(true);
 									printerData.setPrinterID(printer.getPrinterID());
+								}
+								
+								try {
+									for(PrinterUtils.Printer p : printerLst){
+										if(p.getPrinterID() != printer.getPrinterID()){
+											p.setChecked(false);
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
 								printerAdapter.notifyDataSetChanged();
 							}
