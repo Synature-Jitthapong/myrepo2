@@ -857,50 +857,11 @@ public class CheckBillActivity extends Activity {
 						if(progress.isShowing())
 							progress.dismiss();
 						
-						LayoutInflater inflater = (LayoutInflater)
-								mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						View selPrinterView = inflater.inflate(R.layout.select_printer_layout, null);
-						final ListView lvPrinter = (ListView) selPrinterView.findViewById(R.id.lvPrinter);
-
-						final PrinterUtils.Printer printerData = new PrinterUtils.Printer();
-						final PrinterListAdapter printerAdapter = 
-								new PrinterListAdapter(mContext, printerLst);
-						lvPrinter.setAdapter(printerAdapter);
-						
-						lvPrinter.setOnItemClickListener(new OnItemClickListener(){
-
-							@Override
-							public void onItemClick(AdapterView<?> parent,
-									View v, int position, long id) {
-								PrinterUtils.Printer printer = (PrinterUtils.Printer)
-										parent.getItemAtPosition(position);
-								if(printer.isChecked()){
-									printer.setChecked(false);
-									printerData.setPrinterID(0);
-								}else{
-									printer.setChecked(true);
-									printerData.setPrinterID(printer.getPrinterID());
-								}
-								
-								try {
-									for(PrinterUtils.Printer p : printerLst){
-										if(p.getPrinterID() != printer.getPrinterID()){
-											p.setChecked(false);
-										}
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								printerAdapter.notifyDataSetChanged();
-							}
-							
-						});
-					
-						AlertDialog.Builder builder = 
-								new AlertDialog.Builder(mContext);
+						final PrinterListBuilder builder = 
+								new PrinterListBuilder(mContext, printerLst);
 						builder.setTitle(R.string.select_printer);
-						builder.setView(selPrinterView);
-						builder.setNegativeButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						builder.setNegativeButton(R.string.global_btn_close, 
+								new DialogInterface.OnClickListener() {
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -914,12 +875,12 @@ public class CheckBillActivity extends Activity {
 
 							@Override
 							public void onClick(View v) {
-								if(printerData.getPrinterID() != 0){
+								if(builder.getPrinterData().getPrinterID() != 0){
 									d.dismiss();
 									// print
 									new PrinterUtils.PrintTransToPrinterTask(mContext, 
 											globalVar, mTransactionId, mComputerId, 
-											printerData.getPrinterID(), GlobalVar.SHOP_ID, printListener).execute(GlobalVar.FULL_URL);
+											builder.getPrinterData().getPrinterID(), GlobalVar.SHOP_ID, printListener).execute(GlobalVar.FULL_URL);
 								}else{
 									new AlertDialog.Builder(mContext)
 									.setMessage(R.string.please_select_printer)

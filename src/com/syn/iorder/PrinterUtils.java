@@ -11,10 +11,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class PrinterUtils {
 
+	
+			
 	public static class PrintTransToPrinterTask extends WebServiceTask{
 		public static final String PRINT_TRANS_METHOD = "WSiOrder_JSON_PrintTransactionBillDetailToPrinter";
 		private PrintLongbillListener mListener;

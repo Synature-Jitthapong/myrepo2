@@ -367,6 +367,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 					}else if(feature.getFeatureValue() == 1){
 						GlobalVar.sIsCalculateDiscount = true;
 					}
+				case 12: // enable gen queue select printer
+					if(feature.getFeatureValue() == 0){
+						GlobalVar.sIsEnableGenQueueWithSelectPrinter = false;
+					}else if(feature.getFeatureValue() == 1){
+						GlobalVar.sIsEnableGenQueueWithSelectPrinter = true;
+					}
+					break;
 				}
 			}
 		}

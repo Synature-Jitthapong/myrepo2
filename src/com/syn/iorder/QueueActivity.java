@@ -214,6 +214,13 @@ public class QueueActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		isRun = false;
+		handler.removeCallbacks(updateQueueList);
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_queue, menu);
 		View v = menu.findItem(R.id.item_close).getActionView();

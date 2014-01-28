@@ -32,6 +32,7 @@ public class GlobalVar {
 	public static boolean sIsEnableCourse = false;
 	public static boolean sIsAddOnlyOneItem = false;
 	public static boolean sIsCalculateDiscount = false;
+	public static boolean sIsEnableGenQueueWithSelectPrinter = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";
