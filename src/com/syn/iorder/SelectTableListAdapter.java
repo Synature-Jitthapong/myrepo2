@@ -1,9 +1,13 @@
 package com.syn.iorder;
 
 import java.util.List;
+
 import syn.pos.data.model.TableInfo.TableName;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -67,6 +71,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 		TextView tvStatus;
 		TextView tvTableName;
 		TextView tvTableCapacity;
+		Button btnCloseTable;
 	}
 	
 	@Override
@@ -84,6 +89,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.tvTableName = (TextView) convertView.findViewById(R.id.selecttable_tvname);
 			holder.tvTableCapacity = (TextView) convertView.findViewById(R.id.selecttable_tvcapacity);
 			holder.btnTbInfo = (Button) convertView.findViewById(R.id.button1);
+			holder.btnCloseTable = (Button) convertView.findViewById(R.id.button2);
 			convertView.setTag(holder);
 			
 		}
@@ -112,10 +118,54 @@ public class SelectTableListAdapter extends BaseAdapter {
 			// already checkbill
 			if(tbName.getSTATUS() == 3){
 				// show dolla
+				holder.tvTableName.setTextColor(Color.GREEN);
 				holder.imgStatus.setImageResource(R.drawable.dollar);
-				holder.btnTbInfo.setVisibility(View.INVISIBLE);
+				holder.btnTbInfo.setVisibility(View.GONE);
+				holder.btnCloseTable.setVisibility(View.VISIBLE);
+				holder.btnCloseTable.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						final ProgressDialog progress = new ProgressDialog(context);
+						progress.setMessage(context.getString(R.string.close_table_progress));
+						new TableUtils.CloseTable(context, globalVar, tbName.getTableID(), 
+								new ProgressListener(){
+
+									@Override
+									public void onPre() {
+										progress.show();
+									}
+
+									@Override
+									public void onPost() {
+										if(progress.isShowing())
+											progress.dismiss();
+										tbName.setSTATUS(0);
+										notifyDataSetChanged();
+									}
+
+									@Override
+									public void onError(String msg) {
+										if(progress.isShowing())
+											progress.dismiss();
+										
+										new AlertDialog.Builder(context)
+										.setMessage(msg)
+										.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										}).show();
+									}
+							
+						}).execute(GlobalVar.FULL_URL);
+					}
+					
+				});
 			}else{
 				holder.btnTbInfo.setVisibility(View.VISIBLE);
+				holder.btnCloseTable.setVisibility(View.GONE);
 			}
 
 			if(tbName.getTableID() == 0)
@@ -159,8 +209,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 				}
 				
 			});
-		}
-		else{
+		}else{
 //			holder.tvStatus.setText(R.string.selecttable_tvtable_empty);
 //			holder.tvStatus.setTextColor(Color.GREEN);
 			holder.tvTableName.setTextColor(Color.GREEN);
@@ -171,6 +220,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 				holder.imgStatus.setVisibility(View.VISIBLE);
 			
 			holder.btnTbInfo.setVisibility(View.INVISIBLE);
+			holder.btnCloseTable.setVisibility(View.GONE);
 		}
 		holder.tvTableName.setText(tbName.getTableName());
 		return convertView;

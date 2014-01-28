@@ -36,6 +36,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
+        android:id="@+id/button2"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:paddingLeft="8dp"
+        android:visibility="gone" />
+
+    <Button
         android:id="@+id/button1"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="48dp"

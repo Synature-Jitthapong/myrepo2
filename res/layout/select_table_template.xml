@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/selecttable_tvname"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="2dp"
@@ -34,6 +34,17 @@
         android:focusable="false"
         android:text="100"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:padding="0dp"
+        android:text="@string/global_btn_close"
+        android:textSize="12sp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/button1"
