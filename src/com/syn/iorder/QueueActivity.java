@@ -2,7 +2,11 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
+
+import com.syn.iorder.PrinterUtils.Printer;
+
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.QueueInfo;
@@ -11,8 +15,11 @@ import syn.pos.data.model.TableInfo.TableName;
 import syn.pos.data.model.TableInfo.TableZone;
 import syn.pos.data.model.WebServiceResult;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -265,10 +272,143 @@ public class QueueActivity extends Activity {
 
 	};
 
+	private void generateQueueWithSelectPrinter(){
+		final ProgressDialog progress = new ProgressDialog(context);
+		final QueueUtils.GetPrinterListener getPrinterListener = 
+				new QueueUtils.GetPrinterListener() {
+					
+					@Override
+					public void onPre() {
+						progress.setMessage(context.getString(R.string.loading_progress));
+						progress.show();
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						AlertDialog.Builder builder = 
+								new AlertDialog.Builder(context);
+						builder.setMessage(msg);
+						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						AlertDialog d = builder.create();
+						d.show();
+					}
+					
+					@Override
+					public void onPost(List<Printer> printerLst) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						final PrinterListBuilder builder = 
+								new PrinterListBuilder(context, printerLst);
+						builder.setTitle(R.string.please_select_printer);
+						builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						builder.setPositiveButton(R.string.global_btn_ok, null);
+						final AlertDialog d = builder.create();
+						d.show();
+						d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								if(builder.getPrinterData().getPrinterID() != 0){
+									d.dismiss();
+									
+									new QueueUtils.GenerateQueue(context, globalVar, queueGroupId, 
+											custQty, custName, builder.getPrinterData().getPrinterID(), 
+											new ProgressListener(){
+
+												@Override
+												public void onPre() {
+													progress.setMessage(context.getString(R.string.generate_new_queue_progress));
+													progress.show();
+												}
+
+												@Override
+												public void onPost() {
+													if(progress.isShowing())
+														progress.dismiss();
+													
+													AlertDialog.Builder builder = 
+															new AlertDialog.Builder(context);
+													builder.setMessage(context.getString(R.string.generate_new_queue_success));
+													builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+														
+														@Override
+														public void onClick(DialogInterface dialog, int which) {
+															clearTextBox();
+															new LoadQueueTask(context, globalVar)
+																	.execute(GlobalVar.FULL_URL);
+														}
+													});
+													AlertDialog d = builder.create();
+													d.show();
+												}
+
+												@Override
+												public void onError(String msg) {
+													if(progress.isShowing())
+														progress.dismiss();
+													
+													AlertDialog.Builder builder = 
+															new AlertDialog.Builder(context);
+													builder.setMessage(msg);
+													builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+														
+														@Override
+														public void onClick(DialogInterface dialog, int which) {
+														}
+													});
+													AlertDialog d = builder.create();
+													d.show();
+												}
+										
+											}).execute(GlobalVar.FULL_URL);
+								}else{
+									new AlertDialog.Builder(context)
+									.setMessage(R.string.please_select_printer)
+									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+										
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+										}
+									})
+									.show();
+								}
+							}
+							
+						});
+					}
+				};
+				
+		new QueueUtils.GetPrinterForPrintQueue(context, globalVar, 
+				getPrinterListener).execute(GlobalVar.FULL_URL);
+	}
+	
 	private void excuteGenerateQueue() {
 		if (!editTextCustomerName.getText().toString().equals("")) {
 			custName = editTextCustomerName.getText().toString();
-			new GenerateNewQueueTask(context, globalVar)
+			if(GlobalVar.sIsEnableGenQueueWithSelectPrinter)
+				generateQueueWithSelectPrinter();
+			else
+				new GenerateNewQueueTask(context, globalVar)
 					.execute(GlobalVar.FULL_URL);
 		} else {
 			IOrderUtility.alertDialog(context,
