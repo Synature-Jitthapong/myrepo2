@@ -37,9 +37,11 @@ public class PrinterListAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		convertView = mInflater.inflate(R.layout.printer_list_template, null);
-		TextView tvNo = (TextView) convertView.findViewById(R.id.tvPrinterNo);
-		CheckedTextView chPrinterName = (CheckedTextView) convertView.findViewById(R.id.chPrinterName);
+		if(convertView == null){
+			convertView = mInflater.inflate(R.layout.list_selected_template, null);
+		}
+		TextView tvNo = (TextView) convertView.findViewById(R.id.tvNo);
+		CheckedTextView chPrinterName = (CheckedTextView) convertView.findViewById(R.id.checkedTextView1);
 		
 		tvNo.setText(String.valueOf(position + 1) + ".");
 		chPrinterName.setText(mPrinterLst.get(position).getPrinterName());

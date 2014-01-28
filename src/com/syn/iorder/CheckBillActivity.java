@@ -4,8 +4,10 @@ package com.syn.iorder;
  */
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
 
+import com.syn.iorder.DiscountUtils.ButtonDiscount;
 import com.syn.iorder.PrinterUtils.Printer;
 
 import syn.pos.data.dao.QuestionGroups;
@@ -22,17 +24,19 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckedTextView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -64,12 +68,12 @@ public class CheckBillActivity extends Activity {
 	private Button btnSetmember;
 	private Button btnEditQuestion;
 	private GlobalVar globalVar;
-	private Context CONTEXT;
+	private Context mContext;
 	
-	private int CURR_TRANSACTION_ID;
-	private int CURR_COMPUTER_ID;
-	private int TABLE_ID;
-	private int customerQty = 1;
+	private int mTransactionId;
+	private int mComputerId;
+	private int mTableId;
+	private int mCustomerQty = 1;
 	
 	private SummaryTransaction SUMMARY_TRANS;
 	
@@ -78,7 +82,7 @@ public class CheckBillActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_check_bill);
 		
-		CONTEXT = this;
+		mContext = this;
 		
 		globalVar = new GlobalVar(this);
 		initComponent();
@@ -89,12 +93,11 @@ public class CheckBillActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
-		if(TABLE_ID != 0)
-			new ShowSummaryBillTask(CheckBillActivity.this, 
+		if(mTableId != 0)
+			new ShowSummaryBillTask(mContext, 
 					globalVar).execute(globalVar.FULL_URL);
 		
 	}
-
 
 	private void disableButton(){
 		btnCalDiscount.setEnabled(false);
@@ -135,7 +138,7 @@ public class CheckBillActivity extends Activity {
 		
 		tvBillHeader.setText(globalVar.SHOP_DATA.getShopName());
 		
-		if(TABLE_ID==0){
+		if(mTableId==0){
 			disableButton();
 		}
 		else{
@@ -166,14 +169,14 @@ public class CheckBillActivity extends Activity {
 
 				@Override
 				public void onClick(View view) {
-					LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
+					LayoutInflater inflater = LayoutInflater.from(mContext);
 					View v = inflater.inflate(R.layout.customer_qty, null);
 					Button btnMinus = (Button) v.findViewById(R.id.button1);
 					Button btnPlus = (Button) v.findViewById(R.id.button2);
 					final TextView tvCustQty = (TextView) v.findViewById(R.id.textView2);
-					tvCustQty.setText(Integer.toString(customerQty));
+					tvCustQty.setText(Integer.toString(mCustomerQty));
 					
-					AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+					AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 					builder.setTitle(tvTableName.getText());
 					builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
 						
@@ -199,7 +202,7 @@ public class CheckBillActivity extends Activity {
 							}
 							if(--qty > 0){
 								tvCustQty.setText(Integer.toString(qty));
-								customerQty = qty;
+								mCustomerQty = qty;
 							}
 						}
 						
@@ -217,7 +220,7 @@ public class CheckBillActivity extends Activity {
 								e.printStackTrace();
 							}
 							tvCustQty.setText(Integer.toString(++qty));
-							customerQty = qty;
+							mCustomerQty = qty;
 						}
 						
 					});
@@ -226,18 +229,17 @@ public class CheckBillActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							new UpdateCustomerTask(CheckBillActivity.this, globalVar, CURR_TRANSACTION_ID,
-									CURR_COMPUTER_ID, customerQty, new WebServiceTaskState(){
+							new UpdateCustomerTask(mContext, globalVar, mTransactionId,
+									mComputerId, mCustomerQty, new WebServiceTaskState(){
 
 										@Override
 										public void onSuccess() {
 											dialog.dismiss();
-											new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
+											new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
 										}
 
 										@Override
 										public void onNotSuccess() {
-
 											dialog.dismiss();
 										}
 
@@ -269,17 +271,17 @@ public class CheckBillActivity extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					new CurrentAnswerQuestionTask(CheckBillActivity.this, globalVar, 
-							TABLE_ID, new CurrentAnswerQuestionTask.ICurrentAnswerListener() {
+					new CurrentAnswerQuestionTask(mContext, globalVar, 
+							mTableId, new CurrentAnswerQuestionTask.ICurrentAnswerListener() {
 								
 								@Override
 								public void listQuestionAnswer(List<QuestionAnswerData> questionLst) {
 									//add answer to temp 
-									final QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
+									final QuestionGroups qsGroup = new QuestionGroups(mContext);
 									qsGroup.insertCurrentAnswerQuestion(questionLst);
 									
 									// popup
-									LayoutInflater inflater = LayoutInflater.from(CheckBillActivity.this);
+									LayoutInflater inflater = LayoutInflater.from(mContext);
 									View questView = inflater.inflate(R.layout.question_list_layout, null);
 									TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
 									tvQestionTitle.setText(tvTableName.getText());
@@ -294,10 +296,10 @@ public class CheckBillActivity extends Activity {
 									
 									if(qsDetailLst != null && qsDetailLst.size() > 0){
 										final SelectTableQuestionAdapter qsAdapter = 
-												new SelectTableQuestionAdapter(CheckBillActivity.this, globalVar, qsDetailLst);
+												new SelectTableQuestionAdapter(mContext, globalVar, qsDetailLst);
 										lvQuestion.setAdapter(qsAdapter);
 										
-										final Dialog dialog = new Dialog(CheckBillActivity.this, R.style.CustomDialog);
+										final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
 										dialog.setContentView(questView);
 										dialog.setCancelable(false);
 										dialog.getWindow().setLayout(
@@ -352,17 +354,17 @@ public class CheckBillActivity extends Activity {
 												if(!requireSelect){
 													dialog.dismiss();
 													
-													QuestionGroups qsGroup = new QuestionGroups(CheckBillActivity.this);
+													QuestionGroups qsGroup = new QuestionGroups(mContext);
 													List<ProductGroups.QuestionAnswerData> selectedAnswerLst = 
 															qsGroup.listAnswerQuestion();
 													
 													// send answer question
-													new QuestionTask(CheckBillActivity.this, globalVar, TABLE_ID, 
+													new QuestionTask(mContext, globalVar, mTableId, 
 															selectedAnswerLst, new WebServiceStateListener(){
 								
 																@Override
 																public void onSuccess() {
-																	IOrderUtility.alertDialog(CheckBillActivity.this, 
+																	IOrderUtility.alertDialog(mContext, 
 																			R.string.edit_question_title, R.string.edit_question_success, 0);
 																}
 								
@@ -395,8 +397,7 @@ public class CheckBillActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				calculateDiscount();
 			}
 			
 		});
@@ -405,7 +406,7 @@ public class CheckBillActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				new PrintTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);		
+				new PrintTask(mContext, globalVar).execute(GlobalVar.FULL_URL);		
 			}
 		});
 		
@@ -425,13 +426,13 @@ public class CheckBillActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(isSearchMember){
-					Intent intent = new Intent(CheckBillActivity.this, SearchMemberActivity.class);
-					intent.putExtra("TO_TRANSACTION_ID", CURR_TRANSACTION_ID);
-					intent.putExtra("TO_COMPUTER_ID", CURR_COMPUTER_ID);
-					CheckBillActivity.this.startActivity(intent);
+					Intent intent = new Intent(mContext, SearchMemberActivity.class);
+					intent.putExtra("TO_TRANSACTION_ID", mTransactionId);
+					intent.putExtra("TO_COMPUTER_ID", mComputerId);
+					mContext.startActivity(intent);
 				}else{
 					final CustomDialog cusDialog =
-							new CustomDialog(CheckBillActivity.this, R.style.CustomDialog);
+							new CustomDialog(mContext, R.style.CustomDialog);
 					cusDialog.title.setVisibility(View.VISIBLE);
 					cusDialog.title.setText(R.string.clear_member_title);
 					cusDialog.message.setText(R.string.cf_clear_member);
@@ -450,8 +451,8 @@ public class CheckBillActivity extends Activity {
 							btnSetmember.setText(R.string.call_checkbill_setmember);
 							isSearchMember = true;
 							cusDialog.dismiss();
-							new ClearMemberTask(CheckBillActivity.this, globalVar, 
-									CURR_TRANSACTION_ID, CURR_COMPUTER_ID).execute(GlobalVar.FULL_URL);	
+							new ClearMemberTask(mContext, globalVar, 
+									mTransactionId, mComputerId).execute(GlobalVar.FULL_URL);	
 						}
 						
 					});
@@ -459,7 +460,7 @@ public class CheckBillActivity extends Activity {
 				}
 			}
 		});
-		 new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
+		 new LoadTableTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
 	}
 
 	@Override
@@ -474,12 +475,293 @@ public class CheckBillActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				CheckBillActivity.this.finish();
+				finish();
 			}
 		});
 		return true;
 	}
 
+	// calculate discount
+	private void calculateDiscount(){
+		final List<DiscountUtils.ButtonDiscount> promotionLst = 
+				new ArrayList<DiscountUtils.ButtonDiscount> ();
+		
+		final LayoutInflater inflater = (LayoutInflater)
+				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View discountView = inflater.inflate(R.layout.bill_summary_with_discount_layout, null);
+		final ListView lvDiscount = (ListView) discountView.findViewById(R.id.lvDiscount);
+		final ProgressBar progress = (ProgressBar) discountView.findViewById(R.id.progressBar1);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setTitle(R.string.select_promotion);
+		builder.setView(discountView);
+		builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		builder.setPositiveButton(R.string.global_btn_ok, null);
+		final AlertDialog d = builder.create();
+		d.show();
+		
+		/// bill summar
+		View orderView = inflater.inflate(R.layout.order_list_layout, null);
+		final ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
+		final TextView tvSumText = (TextView) orderView.findViewById(R.id.textViewSumText);
+		final TextView tvSumPrice = (TextView) orderView.findViewById(R.id.textViewSumPrice);
+		ImageButton btnClose = (ImageButton) orderView.findViewById(R.id.imageButtonCloseOrderDialog);
+		final ProgressBar progressSumm = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
+		
+		final Dialog detailDialog = new Dialog(mContext, R.style.CustomDialog);
+		detailDialog.setContentView(orderView);
+		detailDialog.getWindow().setGravity(Gravity.TOP);
+		detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+				WindowManager.LayoutParams.WRAP_CONTENT);
+
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				detailDialog.dismiss();
+			}
+			
+		});
+		
+		final DiscountUtils.GetSummaryBillWithDiscountListener getSummListener =
+				new DiscountUtils.GetSummaryBillWithDiscountListener() {
+					
+					@Override
+					public void onPre() {
+						progressSumm.setVisibility(View.VISIBLE);
+						detailDialog.show();
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						progressSumm.setVisibility(View.GONE);
+						
+						new AlertDialog.Builder(mContext)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).show();
+					}
+					
+					@Override
+					public void onPost(SummaryTransaction summTrans) {
+						progressSumm.setVisibility(View.GONE);
+						
+						if(summTrans != null){
+							tvSumText.setText(null);
+							tvSumPrice.setText(null);
+							for(syn.pos.data.model.SummaryTransaction.DisplaySummary displaySummary 
+									: summTrans.TransactionSummary.DisplaySummaryList){
+								tvSumText.append(displaySummary.szDisplayName + "\n");
+								tvSumPrice.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
+							}
+						}
+						lvOrder.setAdapter(new BillDetailAdapter(mContext, 
+								globalVar, summTrans));
+					}
+				};
+				
+		Button btnOk = d.getButton(AlertDialog.BUTTON_POSITIVE);
+		btnOk.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(promotionLst.size() != 0){
+					String promotionId = "";
+					String noCoupone = "";
+					for(int i = 0; i < promotionLst.size(); i++){
+						DiscountUtils.ButtonDiscount promotion = 
+								promotionLst.get(i);
+						promotionId += String.valueOf(promotion.getPromotionID());
+						noCoupone += String.valueOf(promotion.getNoCoupone());
+						
+						if(i < promotionLst.size() - 1){
+							promotionId += ",";
+							noCoupone += ",";
+						}
+					}
+					new DiscountUtils.GetSummaryBillWithDiscountTask(mContext, globalVar, 
+							mTableId, promotionId, noCoupone, getSummListener).execute(GlobalVar.FULL_URL);
+				}else{
+					new AlertDialog.Builder(mContext)
+					.setMessage(R.string.select_promotion)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
+
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+						}
+						
+					})
+					.show();
+				}
+			}
+		});
+				
+		DiscountUtils.LoadButtonDiscountListener loadDiscountListener
+			= new DiscountUtils.LoadButtonDiscountListener() {
+				
+				@Override
+				public void onPre() {
+					lvDiscount.setVisibility(View.GONE);
+					progress.setVisibility(View.VISIBLE);
+				}
+				
+				@Override
+				public void onPost() {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onError(String msg) {
+					lvDiscount.setVisibility(View.VISIBLE);
+					progress.setVisibility(View.GONE);
+					
+					new AlertDialog.Builder(mContext)
+					.setMessage(msg)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					}).show();
+				}
+				
+				@Override
+				public void onPost(final List<ButtonDiscount> btnDiscountLst) {
+					lvDiscount.setVisibility(View.VISIBLE);
+					progress.setVisibility(View.GONE);
+					
+					final DiscountButtonListAdapter discountAdapter = 
+							new DiscountButtonListAdapter(mContext, btnDiscountLst);
+					lvDiscount.setOnItemClickListener(new OnItemClickListener(){
+
+						@Override
+						public void onItemClick(AdapterView<?> parent, View v,
+								int position, long id) {
+							final DiscountUtils.ButtonDiscount btnDiscount = 
+									(DiscountUtils.ButtonDiscount) parent.getItemAtPosition(position);
+							
+							// popup for enter number promotion
+							if(btnDiscount.getMaxNumberCanApplied() > 1 && !btnDiscount.isChecked()){
+								AlertDialog.Builder builder = 
+										new AlertDialog.Builder(mContext);
+								View editQtyView = inflater.inflate(R.layout.edit_qty_layout, null);
+								final EditText txtQty = (EditText) editQtyView.findViewById(R.id.txtQty);
+								final Button btnMinus = (Button) editQtyView.findViewById(R.id.btnMinus);
+								final Button btnPlus = (Button) editQtyView.findViewById(R.id.btnPlus);
+								
+								btnPlus.setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										try {
+											int qty = Integer.parseInt(txtQty.getText().toString());
+											if(++qty <= btnDiscount.getMaxNumberCanApplied()){
+												txtQty.setText(String.valueOf(qty));
+												btnDiscount.setNoCoupone(qty);
+											}
+										} catch (NumberFormatException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+									
+								});
+								btnMinus.setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										try {
+											int qty = Integer.parseInt(txtQty.getText().toString());
+											if(--qty > 0){
+												txtQty.setText(String.valueOf(qty));
+												btnDiscount.setNoCoupone(qty);
+											}
+										} catch (NumberFormatException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+									
+								});
+								builder.setTitle(mContext.getString(R.string.enter_amount) + ", " + 
+										mContext.getString(R.string.limit) + " " + 
+										btnDiscount.getMaxNumberCanApplied());
+								builder.setView(editQtyView);
+								builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										promotionLst.remove(btnDiscount);
+										btnDiscount.setChecked(false);
+										discountAdapter.notifyDataSetChanged();
+									}
+								});
+								builder.setPositiveButton(R.string.global_btn_ok, new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if(Integer.parseInt(txtQty.getText().toString()) >
+											btnDiscount.getMaxNumberCanApplied()){
+
+											promotionLst.remove(btnDiscount);
+											btnDiscount.setChecked(false);
+											discountAdapter.notifyDataSetChanged();
+											
+											new AlertDialog.Builder(mContext)
+											.setMessage(mContext.getString(R.string.promotion_limit) +
+													" " + btnDiscount.getMaxNumberCanApplied())
+											.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+												
+												@Override
+												public void onClick(DialogInterface dialog, int which) {
+												}
+											})
+											.show();
+										}else{
+											discountAdapter.notifyDataSetChanged();
+										}
+									}
+								});
+								AlertDialog d = builder.create();
+								d.show(); 
+							}
+							
+							if(btnDiscount.isChecked()){
+								promotionLst.remove(btnDiscount);
+								btnDiscount.setChecked(false);
+							}else{
+								promotionLst.add(btnDiscount);
+								btnDiscount.setChecked(true);
+							}
+							discountAdapter.notifyDataSetChanged();
+						}
+						
+					});
+					lvDiscount.setAdapter(discountAdapter);
+				}
+			};
+			
+		new DiscountUtils.ListButtonDiscountTask(mContext, 
+				globalVar, loadDiscountListener).execute(GlobalVar.FULL_URL);
+	}
+	
 	private void printLongbill(){
 		final ProgressDialog progress = new ProgressDialog(this);
 		
@@ -488,7 +770,7 @@ public class CheckBillActivity extends Activity {
 					
 					@Override
 					public void onPre() {
-						progress.setMessage(CheckBillActivity.this.getString(R.string.print_progress));
+						progress.setMessage(mContext.getString(R.string.print_progress));
 						progress.show();
 					}
 					
@@ -501,7 +783,7 @@ public class CheckBillActivity extends Activity {
 						if(progress.isShowing())
 							progress.dismiss();
 						
-						AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 						builder.setMessage(msg);
 						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 							
@@ -519,17 +801,18 @@ public class CheckBillActivity extends Activity {
 						if(progress.isShowing())
 							progress.dismiss();
 						
-						String msg = CheckBillActivity.this.getString(R.string.already_print_longbill);
+						String msg = mContext.getString(R.string.already_print_longbill);
 						
 						if(res.getiResultID() != 0)
 							msg = res.getSzResultData().equals("") ? result : res.getSzResultData();
 						
-						AlertDialog.Builder builder = new AlertDialog.Builder(CheckBillActivity.this);
+						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 						builder.setMessage(msg);
 						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
+								new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
 							}
 						});
 						
@@ -543,7 +826,7 @@ public class CheckBillActivity extends Activity {
 					
 					@Override
 					public void onPre() {
-						progress.setMessage(CheckBillActivity.this.getString(R.string.loading_progress));
+						progress.setMessage(mContext.getString(R.string.loading_progress));
 						progress.show();
 					}
 					
@@ -557,7 +840,7 @@ public class CheckBillActivity extends Activity {
 							progress.dismiss();
 						
 						AlertDialog.Builder builder = 
-								new AlertDialog.Builder(CheckBillActivity.this);
+								new AlertDialog.Builder(mContext);
 						builder.setMessage(msg);
 						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 							
@@ -575,13 +858,13 @@ public class CheckBillActivity extends Activity {
 							progress.dismiss();
 						
 						LayoutInflater inflater = (LayoutInflater)
-								CheckBillActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+								mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 						View selPrinterView = inflater.inflate(R.layout.select_printer_layout, null);
 						final ListView lvPrinter = (ListView) selPrinterView.findViewById(R.id.lvPrinter);
 
 						final PrinterUtils.Printer printerData = new PrinterUtils.Printer();
 						final PrinterListAdapter printerAdapter = 
-								new PrinterListAdapter(CheckBillActivity.this, printerLst);
+								new PrinterListAdapter(mContext, printerLst);
 						lvPrinter.setAdapter(printerAdapter);
 						
 						lvPrinter.setOnItemClickListener(new OnItemClickListener(){
@@ -614,7 +897,7 @@ public class CheckBillActivity extends Activity {
 						});
 					
 						AlertDialog.Builder builder = 
-								new AlertDialog.Builder(CheckBillActivity.this);
+								new AlertDialog.Builder(mContext);
 						builder.setTitle(R.string.select_printer);
 						builder.setView(selPrinterView);
 						builder.setNegativeButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
@@ -634,11 +917,11 @@ public class CheckBillActivity extends Activity {
 								if(printerData.getPrinterID() != 0){
 									d.dismiss();
 									// print
-									new PrinterUtils.PrintTransToPrinterTask(CheckBillActivity.this, 
-											globalVar, CURR_TRANSACTION_ID, CURR_COMPUTER_ID, 
+									new PrinterUtils.PrintTransToPrinterTask(mContext, 
+											globalVar, mTransactionId, mComputerId, 
 											printerData.getPrinterID(), GlobalVar.SHOP_ID, printListener).execute(GlobalVar.FULL_URL);
 								}else{
-									new AlertDialog.Builder(CheckBillActivity.this)
+									new AlertDialog.Builder(mContext)
 									.setMessage(R.string.please_select_printer)
 									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 										
@@ -659,8 +942,8 @@ public class CheckBillActivity extends Activity {
 	}
 	
 	private void checkBill(){
-		if(TABLE_ID != 0)
-			new CheckBillTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
+		if(mTableId != 0)
+			new CheckBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
 		else{
 //			new AlertDialog.Builder(CONTEXT)
 //			.setTitle(R.string.call_checkbill_dialog_title)
@@ -672,7 +955,7 @@ public class CheckBillActivity extends Activity {
 //					dialog.dismiss();
 //				}
 //			}).show();
-			IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, R.string.please_select_table, 0);
+			IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, R.string.please_select_table, 0);
 		}
 	}
 
@@ -728,15 +1011,15 @@ public class CheckBillActivity extends Activity {
 			try {
 				WebServiceResult wsResult = gdz.deserializeWsResultJSON(result);
 				if(wsResult.getiResultID() == 0){
-					IOrderUtility.alertDialog(CheckBillActivity.this, R.string.clear_member_title, R.string.clear_member_succ, 0);
+					IOrderUtility.alertDialog(mContext, R.string.clear_member_title, R.string.clear_member_succ, 0);
 
-					new ShowSummaryBillTask(CheckBillActivity.this, globalVar).execute(GlobalVar.FULL_URL);
+					new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
 				}else{
-					IOrderUtility.alertDialog(CheckBillActivity.this, R.string.global_dialog_title_error, 
+					IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, 
 							wsResult.getSzResultData().equals("") ? result : wsResult.getSzResultData(), 0);
 				}
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(CheckBillActivity.this, R.string.global_dialog_title_error, result, 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}
 		}
 		
@@ -751,7 +1034,7 @@ public class CheckBillActivity extends Activity {
 
 			PropertyInfo property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}
@@ -787,7 +1070,7 @@ public class CheckBillActivity extends Activity {
 //						}
 //					}).show();
 //					
-					IOrderUtility.alertDialog(CONTEXT, R.string.call_checkbill_dialog_title, R.string.call_chekcbill_success, 0);
+					IOrderUtility.alertDialog(mContext, R.string.call_checkbill_dialog_title, R.string.call_chekcbill_success, 0);
 				}else{
 //					new AlertDialog.Builder(CONTEXT)
 //					.setTitle("Error")
@@ -799,12 +1082,12 @@ public class CheckBillActivity extends Activity {
 //							dialog.dismiss();
 //						}
 //					}).show();
-					IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, wsResult.getSzResultData().equals("") ? 
+					IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, wsResult.getSzResultData().equals("") ? 
 							result : wsResult.getSzResultData(), 0);
 				}
 			} catch (Exception e) {
 
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, e.getMessage(), 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, e.getMessage(), 0);
 			}
 			
 		}
@@ -826,7 +1109,7 @@ public class CheckBillActivity extends Activity {
 			try {
 				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
 
-				spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(CONTEXT, tbInfo));
+				spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(mContext, tbInfo));
 				spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 					@Override
@@ -837,7 +1120,7 @@ public class CheckBillActivity extends Activity {
 						final List<TableInfo.TableName> tbNameLst =
 								IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
 						
-						tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(CONTEXT, globalVar, tbNameLst));
+						tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, tbNameLst));
 						tableNameListView.setOnItemClickListener(new OnItemClickListener(){
 
 							@Override
@@ -845,7 +1128,7 @@ public class CheckBillActivity extends Activity {
 									int position, long id) {
 								TableName tbName = (TableName) parent.getItemAtPosition(position);
 										
-								TABLE_ID = tbName.getTableID();
+								mTableId = tbName.getTableID();
 								tvTableName.setText(R.string.text_table);
 								tvTableName.append(":" +tbName.getTableName());
 								
@@ -865,7 +1148,7 @@ public class CheckBillActivity extends Activity {
 					
 				});
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}
 		}
 
@@ -897,7 +1180,7 @@ public class CheckBillActivity extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 			
@@ -942,7 +1225,7 @@ public class CheckBillActivity extends Activity {
 					enableButton();
 					
 					// set customer qty
-					customerQty = SUMMARY_TRANS.NoCustomer;
+					mCustomerQty = SUMMARY_TRANS.NoCustomer;
 					
 					tvSummaryDisplay.setText(null);
 					tvPriceValue.setText(null);
@@ -953,8 +1236,8 @@ public class CheckBillActivity extends Activity {
 					}
 					
 					// for set member
-					CURR_TRANSACTION_ID = SUMMARY_TRANS.TransactionID;
-					CURR_COMPUTER_ID = SUMMARY_TRANS.ComputerID;
+					mTransactionId = SUMMARY_TRANS.TransactionID;
+					mComputerId = SUMMARY_TRANS.ComputerID;
 					
 					tvBillCustNo.setText("(x" + globalVar.qtyFormat.format(SUMMARY_TRANS.NoCustomer) + ")");
 					
@@ -973,7 +1256,7 @@ public class CheckBillActivity extends Activity {
 						if(GlobalVar.sIsEnablePrintLongBill)
 							btnCheckbill.setText(R.string.print_long_bill);
 						else if(GlobalVar.sIsEnableCallCheckBill)
-							btnCheckbill.setText(CheckBillActivity.this.getString(R.string.call_checkbill) + "(" + SUMMARY_TRANS.CallForCheckBill + ")");
+							btnCheckbill.setText(mContext.getString(R.string.call_checkbill) + "(" + SUMMARY_TRANS.CallForCheckBill + ")");
 					}else{
 						if(GlobalVar.sIsEnablePrintLongBill)
 							btnCheckbill.setText(R.string.print_long_bill);
@@ -985,11 +1268,11 @@ public class CheckBillActivity extends Activity {
 						disableButton();
 					}
 				}
-				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(CheckBillActivity.this, 
+				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(mContext, 
 						globalVar, SUMMARY_TRANS);
 				orderDetailListView.setAdapter(billDetailAdapter);
 			} catch (Exception e) {
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}
 		}
 	}
@@ -1014,7 +1297,7 @@ public class CheckBillActivity extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 			
@@ -1052,7 +1335,7 @@ public class CheckBillActivity extends Activity {
 //						}
 //					}).show();
 
-					IOrderUtility.alertDialog(CONTEXT, R.string.print_dialog_title, R.string.print_success, 0);
+					IOrderUtility.alertDialog(mContext, R.string.print_dialog_title, R.string.print_success, 0);
 				}else{
 //					new AlertDialog.Builder(context)
 //					.setTitle(R.string.print_dialog_title)
@@ -1065,7 +1348,7 @@ public class CheckBillActivity extends Activity {
 //						}
 //					}).show();
 
-					IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, wsResult.getSzResultData().equals("") ? 
+					IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, wsResult.getSzResultData().equals("") ? 
 							result : wsResult.getSzResultData(), 0);
 				}
 			} catch (Exception e) {
@@ -1080,7 +1363,7 @@ public class CheckBillActivity extends Activity {
 //					}
 //				}).show();
 
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}
 		}
 	}
