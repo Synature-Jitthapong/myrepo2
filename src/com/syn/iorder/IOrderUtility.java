@@ -310,23 +310,6 @@ public class IOrderUtility {
 		}
 		return tbNameList;
 	}
-	
-	public static List<TableName> filterCloseTableName(TableInfo tbInfo,
-			TableZone tbZone) {
-		List<TableName> tbNameList = new ArrayList<TableName>();
-		for (TableName tbName : tbInfo.TableName) {
-			if (tbName.getTableStatus() == 3) {
-				if (tbZone.getZoneID() != 0) {
-					if (tbZone.getZoneID() == tbName.getZoneID()) {
-						tbNameList.add(tbName);
-					}
-				} else {
-					tbNameList.add(tbName);
-				}
-			}
-		}
-		return tbNameList;
-	}
 
 	public static List<TableName> filterTableName(TableInfo tbInfo,
 			TableZone tbZone, int tableId) {

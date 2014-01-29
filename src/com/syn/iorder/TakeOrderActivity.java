@@ -544,10 +544,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						
 						TableListBuilder builder = 
 								new TableListBuilder(TakeOrderActivity.this, mGlobalVar, tbInfo);
-						builder.setNeutralButton(R.string.global_btn_close, null);
 						final AlertDialog d = builder.create();
 						d.show();
-						d.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new OnClickListener(){
+						builder.setCloseButton(null, new OnClickListener(){
 
 							@Override
 							public void onClick(View v) {

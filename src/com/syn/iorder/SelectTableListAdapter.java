@@ -6,6 +6,7 @@ import syn.pos.data.model.TableInfo.TableName;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -119,47 +120,68 @@ public class SelectTableListAdapter extends BaseAdapter {
 			if(tbName.getSTATUS() == 3){
 				// show dolla
 				holder.tvTableName.setTextColor(Color.GREEN);
-				holder.imgStatus.setImageResource(R.drawable.dollar);
+				holder.imgStatus.setImageResource(R.drawable.ic_action_dollar);
 				holder.btnTbInfo.setVisibility(View.GONE);
 				holder.btnCloseTable.setVisibility(View.VISIBLE);
 				holder.btnCloseTable.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
-						final ProgressDialog progress = new ProgressDialog(context);
-						progress.setMessage(context.getString(R.string.close_table_progress));
-						new TableUtils.CloseTable(context, globalVar, tbName.getTableID(), 
-								new ProgressListener(){
-
-									@Override
-									public void onPre() {
-										progress.show();
-									}
-
-									@Override
-									public void onPost() {
-										if(progress.isShowing())
-											progress.dismiss();
-										tbName.setSTATUS(0);
-										notifyDataSetChanged();
-									}
-
-									@Override
-									public void onError(String msg) {
-										if(progress.isShowing())
-											progress.dismiss();
-										
-										new AlertDialog.Builder(context)
-										.setMessage(msg)
-										.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-											
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-											}
-										}).show();
-									}
+						AlertDialog.Builder builder = new AlertDialog.Builder(context);
+						builder.setTitle(R.string.close_table);
+						builder.setMessage(R.string.close_table_confirm);
+						builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
 							
-						}).execute(GlobalVar.FULL_URL);
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+						builder.setPositiveButton(R.string.global_btn_ok, null);
+						final AlertDialog d = builder.create();
+						d.show();
+						d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+
+								final ProgressDialog progress = new ProgressDialog(context);
+								progress.setMessage(context.getString(R.string.close_table_progress));
+								new TableUtils.CloseTable(context, globalVar, tbName.getTableID(), 
+										new ProgressListener(){
+
+											@Override
+											public void onPre() {
+												progress.show();
+											}
+
+											@Override
+											public void onPost() {
+												if(progress.isShowing())
+													progress.dismiss();
+												d.dismiss();
+												tbName.setSTATUS(0);
+												notifyDataSetChanged();
+											}
+
+											@Override
+											public void onError(String msg) {
+												if(progress.isShowing())
+													progress.dismiss();
+												
+												new AlertDialog.Builder(context)
+												.setMessage(msg)
+												.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+													
+													@Override
+													public void onClick(DialogInterface dialog, int which) {
+													}
+												}).show();
+											}
+									
+								}).execute(GlobalVar.FULL_URL);
+							}
+							
+						});
 					}
 					
 				});

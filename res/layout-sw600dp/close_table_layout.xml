@@ -27,23 +27,24 @@
     <Button
         android:id="@+id/btnClose"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
-        android:padding="0dp" />
+        android:paddingLeft="8dp" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/spTableZone"
+        android:layout_alignBottom="@+id/btnClose"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="@string/close_table"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="32sp" />
 
 </RelativeLayout>
