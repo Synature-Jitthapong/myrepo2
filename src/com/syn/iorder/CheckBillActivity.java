@@ -741,6 +741,8 @@ public class CheckBillActivity extends Activity {
 								});
 								AlertDialog d = builder.create();
 								d.show(); 
+							}else{ // default noCoupone = 1
+								btnDiscount.setNoCoupone(1);
 							}
 							
 							if(btnDiscount.isChecked()){

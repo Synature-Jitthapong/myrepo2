@@ -2,8 +2,11 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
+
 import com.google.gson.Gson;
+
 import syn.pos.data.dao.MenuComment;
 import syn.pos.data.dao.POSOrdering;
 import syn.pos.data.dao.QuestionGroups;
@@ -27,8 +30,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
@@ -490,11 +496,72 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		case 2: // salemode2
 			switchSaleMode(2);
 			return true;
+		case R.id.action_close_table:
+			closeTable();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	private void closeTable(){
+		final ProgressDialog progress = new ProgressDialog(TakeOrderActivity.this);
+		progress.setMessage(TakeOrderActivity.this.getString(R.string.load_table_progress));
+		
+		final TableUtils.LoadTableProgressListener loadTableListener =
+				new TableUtils.LoadTableProgressListener() {
+					
+					@Override
+					public void onPre() {
+						progress.show();
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						new AlertDialog.Builder(TakeOrderActivity.this)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).show();
+					}
+					
+					@Override
+					public void onPost(TableInfo tbInfo) {
+						if(progress.isShowing())
+							progress.dismiss();
+						
+						TableListBuilder builder = 
+								new TableListBuilder(TakeOrderActivity.this, mGlobalVar, tbInfo);
+						builder.setNeutralButton(R.string.global_btn_close, null);
+						final AlertDialog d = builder.create();
+						d.show();
+						d.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								d.dismiss();
+							}
+							
+						});
+					}
+				};
+		new TableUtils.LoadTable(TakeOrderActivity.this, mGlobalVar, 
+				loadTableListener).execute(GlobalVar.FULL_URL);
+	}
+	
+	
 	private void switchSaleMode(int saleModeId){
 		
 		SaleMode saleMode = new SaleMode(TakeOrderActivity.this);
