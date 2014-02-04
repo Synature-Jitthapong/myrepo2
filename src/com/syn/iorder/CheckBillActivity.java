@@ -95,16 +95,17 @@ public class CheckBillActivity extends Activity {
 		
 		if(mTableId != 0)
 			new ShowSummaryBillTask(mContext, 
-					globalVar).execute(globalVar.FULL_URL);
+					globalVar).execute(GlobalVar.FULL_URL);
 		
 	}
 
 	private void disableButton(){
-		btnCalDiscount.setEnabled(false);
-		btnCheckbill.setEnabled(false);
-		btnPrint.setEnabled(false);
-		btnSetmember.setEnabled(false);
-		btnEditQuestion.setEnabled(false);
+		if(!GlobalVar.sIsCalculateDiscount){
+			btnCheckbill.setEnabled(false);
+			btnPrint.setEnabled(false);
+			btnSetmember.setEnabled(false);
+			btnEditQuestion.setEnabled(false);
+		}
 	}
 	
 	private void enableButton(){
