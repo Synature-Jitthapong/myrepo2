@@ -658,6 +658,8 @@ public class CheckBillActivity extends Activity {
 							final DiscountUtils.ButtonDiscount btnDiscount = 
 									(DiscountUtils.ButtonDiscount) parent.getItemAtPosition(position);
 							
+							btnDiscount.setNoCoupone(1);
+							
 							// popup for enter number promotion
 							if(btnDiscount.getMaxNumberCanApplied() > 1 && !btnDiscount.isChecked()){
 								AlertDialog.Builder builder = 
@@ -742,8 +744,6 @@ public class CheckBillActivity extends Activity {
 								});
 								AlertDialog d = builder.create();
 								d.show(); 
-							}else{ // default noCoupone = 1
-								btnDiscount.setNoCoupone(1);
 							}
 							
 							if(btnDiscount.isChecked()){
