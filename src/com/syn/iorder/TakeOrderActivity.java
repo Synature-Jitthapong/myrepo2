@@ -2,8 +2,11 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
+
 import com.google.gson.Gson;
+
 import syn.pos.data.dao.MenuComment;
 import syn.pos.data.dao.POSOrdering;
 import syn.pos.data.dao.QuestionGroups;
@@ -124,22 +127,29 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		
 		mGlobalVar = new GlobalVar(this);
 
-		// check login
-		if (GlobalVar.STAFF_ID != 0) {
-			// initial component
-			initComponent();
+		if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+			// check login
+			if (GlobalVar.STAFF_ID != 0) {
+				// initial component
+				initComponent();
 
-			// check feature
-			checkProgramFeature();
+				// check feature
+				checkProgramFeature();
 
-			// list menu
-			listAllMenuItem();
+				// list menu
+				listAllMenuItem();
 
-			// load salemode
-			createSwSaleMode();
+				// load salemode
+				createSwSaleMode();
 
+			} else {
+				gotoLogin();
+			}
 		} else {
-			gotoLogin();
+			Intent intent = new Intent(TakeOrderActivity.this,
+					RegisterActivity.class);
+			TakeOrderActivity.this.startActivity(intent);
+			TakeOrderActivity.this.finish();
 		}
 	}
 
