@@ -11,7 +11,7 @@
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" >
+        android:layout_margin="8dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/text_register"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -32,116 +32,177 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/white_layer"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:padding="2dp" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/textView1"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_product_code" />
+                        android:text="@string/text_product_code"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/editTextProductCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView01"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_key_code" />
+                        android:text="@string/licence_code"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/EditTextKeyCode"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/txtLicenceCodeSeq1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:ems="10" />
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtLicenceCodeSeq2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtLicenceCodeSeq3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtLicenceCodeSeq4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/ImageView01"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView02"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_device_code" />
+                        android:text="@string/device_key_code"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/EditTextDeviceCode"
+                        android:id="@+id/txtDeviceCode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/ImageView03"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView03"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_register_code" />
+                        android:text="@string/register_code"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/EditTextRegisterCode"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/txtRegCodeSeq1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:ems="10" />
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtRegCodeSeq2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtRegCodeSeq3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/txtRegCodeSeq4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="4"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -150,7 +211,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/text_device_info"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -159,235 +220,217 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_layer"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:padding="2dp" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView04"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_uuid" />
+                        android:text="@string/text_uuid"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextUUID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" >
+                        android:enabled="false"
+                        android:textSize="12sp" >
 
                         <requestFocus />
                     </EditText>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ImageView04"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView05"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_model" />
+                        android:text="@string/text_model"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextModel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView05"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView06"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_manufacture" />
+                        android:text="@string/text_manufacture"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextMenuFecture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView06"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView07"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_device" />
+                        android:text="@string/text_device"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextDevice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView07"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView08"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_product" />
+                        android:text="@string/text_product"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextProduct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView08"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView09"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_brand" />
+                        android:text="@string/text_brand"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextBrand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView09"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView10"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_cpu_hardware" />
+                        android:text="@string/text_cpu_hardware"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextCPUHardware"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
-                </LinearLayout>
+                        android:enabled="false"
+                        android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ImageView10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/line_split_input" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp" >
+                    android:layout_marginBottom="1dp" >
 
                     <TextView
                         android:id="@+id/TextView11"
-                        android:layout_width="100dp"
+                        android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:text="@string/text_cpu_abi" />
+                        android:text="@string/text_cpu_abi"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/EditTextCPUAbi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/input_bg_white"
                         android:clickable="false"
                         android:ems="10"
-                        android:enabled="false" />
+                        android:enabled="false"
+                        android:textSize="12sp" />
+
                 </LinearLayout>
             </LinearLayout>
 
