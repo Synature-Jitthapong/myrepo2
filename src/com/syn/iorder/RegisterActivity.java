@@ -4,6 +4,8 @@ import syn.pos.data.dao.Register;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
@@ -12,10 +14,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class RegisterActivity extends Activity {
+	private String mDeviceCode;
 	private EditText txtProductCode;
-	private EditText txtKeyCode;
+	private EditText txtLicenceCodeSeq1;
+	private EditText txtLicenceCodeSeq2;
+	private EditText txtLicenceCodeSeq3;
+	private EditText txtLicenceCodeSeq4;
 	private EditText txtDeviceCode;
-	private EditText txtRegisterCode;
+	private EditText txtRegCodeSeq1;
+	private EditText txtRegCodeSeq2;
+	private EditText txtRegCodeSeq3;
+	private EditText txtRegCodeSeq4;
 	private EditText txtUUID;
 	private EditText txtModel;
 	private EditText txtManufacturer;
@@ -31,9 +40,15 @@ public class RegisterActivity extends Activity {
 		setContentView(R.layout.activity_register);
 		
 		txtProductCode = (EditText) findViewById(R.id.editTextProductCode);
-		txtKeyCode = (EditText) findViewById(R.id.EditTextKeyCode);
-		txtDeviceCode = (EditText) findViewById(R.id.EditTextDeviceCode);
-		txtRegisterCode = (EditText) findViewById(R.id.EditTextRegisterCode);
+		txtLicenceCodeSeq1 = (EditText) findViewById(R.id.txtLicenceCodeSeq1);
+		txtLicenceCodeSeq2 = (EditText) findViewById(R.id.txtLicenceCodeSeq2);
+		txtLicenceCodeSeq3 = (EditText) findViewById(R.id.txtLicenceCodeSeq3);
+		txtLicenceCodeSeq4 = (EditText) findViewById(R.id.txtLicenceCodeSeq4);
+		txtDeviceCode = (EditText) findViewById(R.id.txtDeviceCode);
+		txtRegCodeSeq1 = (EditText) findViewById(R.id.txtRegCodeSeq1);
+		txtRegCodeSeq2 = (EditText) findViewById(R.id.txtRegCodeSeq2);
+		txtRegCodeSeq3 = (EditText) findViewById(R.id.txtRegCodeSeq3);
+		txtRegCodeSeq4 = (EditText) findViewById(R.id.txtRegCodeSeq4);
 		txtUUID = (EditText) findViewById(R.id.EditTextUUID);
 		txtModel = (EditText) findViewById(R.id.EditTextModel);
 		txtManufacturer = (EditText) findViewById(R.id.EditTextMenuFecture);
@@ -45,13 +60,16 @@ public class RegisterActivity extends Activity {
 		
 		// get android id
 		String androidId = Secure.getString(this.getContentResolver(),
-				Secure.ANDROID_ID);
+				Secure.ANDROID_ID).toUpperCase();
 		txtUUID.setText(androidId);
 		
 		// convert android id to numberic by synature register algorhythm
-		String deviceCode = com.syn.iorder.util.SynRegisterAlghorhythm.generateDeviceCode(androidId);
+		mDeviceCode = com.syn.iorder.util.SynRegisterAlghorhythm.generateDeviceCode(androidId);
 		try {
-			txtDeviceCode.setText(formatKeyCodeStyle(deviceCode));
+			txtDeviceCode.setText(mDeviceCode.substring(0, 4) + "-" +
+					mDeviceCode.substring(4, 8) + "-" +
+					mDeviceCode.substring(8, 12) + "-" +
+					mDeviceCode.substring(12, 16));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,62 +116,108 @@ public class RegisterActivity extends Activity {
 		return true;
 	}
 
-	private String formatKeyCodeStyle(String deviceCode) throws Exception{
-		StringBuilder code = new StringBuilder();
-		for(int i = 0; i < deviceCode.length(); i++){
-			code.append(deviceCode.charAt(i));
-			if(i == 3)
-				code.append('-');
-			else{
-				if(i > 3){
-					if((i + 1) % 4 == 0){
-						if(i + 1 < deviceCode.length())
-							code.append('-');
-					}
-				}
-			}
-		}
-		return code.toString();
-	}
-	
 	public void getRegisterInfo(){
 		Register register = new Register(RegisterActivity.this);
 		register.getRegisterInfo();
 		try {
-			txtKeyCode.setText(formatKeyCodeStyle(register.getKeyCode()));
-			txtRegisterCode.setText(formatKeyCodeStyle(register.getRegisterCode()));
+			txtLicenceCodeSeq1.setText(register.getKeyCode().substring(0,4));
+			txtLicenceCodeSeq2.setText(register.getKeyCode().substring(4,8));
+			txtLicenceCodeSeq3.setText(register.getKeyCode().substring(8,12));
+			txtLicenceCodeSeq4.setText(register.getKeyCode().substring(12,16));
+			txtRegCodeSeq1.setText(register.getRegisterCode().substring(0,4));
+			txtRegCodeSeq2.setText(register.getRegisterCode().substring(4,8));
+			txtRegCodeSeq3.setText(register.getRegisterCode().substring(8,12));
+			txtRegCodeSeq4.setText(register.getRegisterCode().substring(12,16));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	private boolean checkRegisterCodeDigit(){
+		boolean pass = false;
+		if(!txtRegCodeSeq1.getText().toString().equals("") && 
+				!txtRegCodeSeq2.getText().toString().equals("") &&
+				!txtRegCodeSeq3.getText().toString().equals("") &&
+				!txtRegCodeSeq4.getText().toString().equals("")){
+			if(txtRegCodeSeq1.getText().toString().length() < 4){
+				txtRegCodeSeq1.requestFocus();
+				pass = false;
+			}else if(txtRegCodeSeq2.getText().toString().length() < 4){
+				txtRegCodeSeq2.requestFocus();
+				pass = false;
+			}else if(txtRegCodeSeq3.getText().toString().length() < 4){
+				txtRegCodeSeq3.requestFocus();
+				pass = false;
+			}else if(txtRegCodeSeq4.getText().toString().length() < 4){
+				txtRegCodeSeq4.requestFocus();
+				pass = false;
+			}else{
+				pass = true;
+			}
+		}
+		return pass;
+	}
+	
+	private boolean checkLicenceCodeDigit(){
+		boolean pass = false;
+		if(!txtLicenceCodeSeq1.getText().toString().equals("") && 
+				!txtLicenceCodeSeq2.getText().toString().equals("") &&
+				!txtLicenceCodeSeq3.getText().toString().equals("") &&
+				!txtLicenceCodeSeq4.getText().toString().equals("")){
+			if(txtLicenceCodeSeq1.getText().toString().length() < 4){
+				txtLicenceCodeSeq1.requestFocus();
+				pass = false;
+			}else if(txtLicenceCodeSeq2.getText().toString().length() < 4){
+				txtLicenceCodeSeq2.requestFocus();
+				pass = false;
+			}else if(txtLicenceCodeSeq3.getText().toString().length() < 4){
+				txtLicenceCodeSeq3.requestFocus();
+				pass = false;
+			}else if(txtLicenceCodeSeq4.getText().toString().length() < 4){
+				txtLicenceCodeSeq4.requestFocus();
+				pass = false;
+			}else{
+				pass = true;
+			}
+		}
+		return pass;
+	}
+	
 	public void onRegisterClicked(){
-		String keyCode = txtKeyCode.getText().toString().replace("-", "");
-		String deviceCode = txtDeviceCode.getText().toString().replace("-", "");
-		String regCode = txtRegisterCode.getText().toString().replace("-", "");
+		String licenceCode = txtLicenceCodeSeq1.getText().toString() +
+				txtLicenceCodeSeq2.getText().toString() +
+				txtLicenceCodeSeq3.getText().toString() +
+				txtLicenceCodeSeq4.getText().toString();
 		
-		if(!keyCode.equals("") && !regCode.equals("")){
-			// check product code
-			
-			try {
-				int checkProCode = -1;
-				checkProCode = com.syn.iorder.util.SynRegisterAlghorhythm.checkProductCode(keyCode);
-				if(checkProCode == 0){
+		String regCode = txtRegCodeSeq1.getText().toString() +
+				txtRegCodeSeq2.getText().toString() +
+				txtRegCodeSeq3.getText().toString() +
+				txtRegCodeSeq4.getText().toString();
+		
+		if(!licenceCode.equals("") && !regCode.equals("")){
+			if(checkLicenceCodeDigit()){
+				if(checkRegisterCodeDigit()){
 					try {
-						int compare = -1;
-						compare = com.syn.iorder.util.SynRegisterAlghorhythm.comparison(keyCode,
-								deviceCode, regCode);
+						int checkProCode = -1;
+						checkProCode = com.syn.iorder.util.SynRegisterAlghorhythm.
+								checkProductCode(licenceCode);
+						if(checkProCode == 0){
+							try {
+								int compare = -1;
+								compare = com.syn.iorder.util.SynRegisterAlghorhythm.comparison(licenceCode,
+										mDeviceCode, regCode);
 
-						if(compare == 0){
-							Register register = new Register(RegisterActivity.this);
-							register.insertRegisterInfo(keyCode, deviceCode, regCode);
+								if(compare == 0){
+									Register register = new Register(RegisterActivity.this);
+									register.insertRegisterInfo(licenceCode, mDeviceCode, regCode);
 
-							successPopup("Register", "Register successfully.",
-									new OnClickListener() {
-
+									new AlertDialog.Builder(RegisterActivity.this)
+									.setMessage(R.string.register_success)
+									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+										
 										@Override
-										public void onClick(View arg0) {
+										public void onClick(DialogInterface dialog, int which) {
 											Intent intent = new Intent(
 													RegisterActivity.this,
 													TakeOrderActivity.class);
@@ -161,51 +225,41 @@ public class RegisterActivity extends Activity {
 													.startActivity(intent);
 											RegisterActivity.this.finish();
 										}
-									});
-						}else{
-							errorPopup("Product code is incorrect.");
-						}
-					} catch (Exception e) {
-						errorPopup("Key Code or Register Code is incorrect.");
-					}
+									}).show();
+								}else{
+									alertDialog(R.string.register_code_incorrect);
+								}
+							} catch (Exception e) {
+								alertDialog(R.string.licence_or_register_incorrect);
+							}
 
+						}else{
+							alertDialog(R.string.licence_code_incorrect);
+						}
+					} catch (Exception e1) {
+						alertDialog(R.string.licence_or_register_incorrect);
+					}
 				}else{
-					errorPopup("Product code is incorrect.");
+					alertDialog(R.string.enter_register_code);
 				}
-			} catch (Exception e1) {
-				errorPopup("Key Code or Register Code is incorrect.");
+			}else{
+				alertDialog(R.string.enter_licence_code);
 			}
-			
 		}else{
-			errorPopup(keyCode.equals("") ? "Please enter Key Code." : "Please enter Register Code.");
+			alertDialog(licenceCode.equals("") ? R.string.enter_licence_code : 
+				R.string.enter_register_code);
 		}
 	}
 	
-	private void successPopup(String title, String msg, OnClickListener listener){
-		final CustomDialog d = new CustomDialog(RegisterActivity.this, R.style.CustomDialog);
-		d.title.setVisibility(View.VISIBLE);
-		d.title.setText(title);
-		d.message.setText(msg);
-		d.btnCancel.setVisibility(View.GONE);
-		d.btnOk.setOnClickListener(listener);
-		d.show();
-	}
-	
-	private void errorPopup(String msg){
-		final CustomDialog d = new CustomDialog(RegisterActivity.this, R.style.CustomDialog);
-		d.title.setVisibility(View.VISIBLE);
-		d.title.setText(R.string.global_dialog_title_error);
-		d.message.setText(msg);
-		d.btnCancel.setVisibility(View.GONE);
-		d.btnOk.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				d.dismiss();
-			}
+	private void alertDialog(int msg){
+		new AlertDialog.Builder(RegisterActivity.this)
+		.setMessage(msg)
+		.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 			
-		});
-		d.show();
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		}).show();
 	}
 	
 	public void onCancelClicked(){
