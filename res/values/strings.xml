@@ -416,9 +416,9 @@
     <string name="display_menu_image">Display menu image</string>
     <string name="title_activity_register">iOrder Registration</string>
     <string name="text_product_code">ProductCode:</string>
-    <string name="text_key_code">Key Code:</string>
-    <string name="text_device_code">Device Code:</string>
-    <string name="text_register_code">Register Code:</string>
+    <string name="licence_code">Licence Code:</string>
+    <string name="device_key_code">Device Key Code:</string>
+    <string name="register_code">Register Code:</string>
     <string name="text_uuid">UUID:</string>
     <string name="text_model">Model:</string>
     <string name="text_manufacture">Manufacture:</string>
@@ -479,4 +479,11 @@ Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</
 	<string name="close_table">Close Table</string>
 	<string name="close_table_confirm">Are you sure you want to close this table?</string>
 	<string name="no_table">No table.</string>
+	<string name="register">Register</string>
+	<string name="register_success">Register successfully.</string>
+	<string name="licence_code_incorrect">Licence code is incorrect.</string>
+	<string name="licence_or_register_incorrect">Licence code or Register code is incorrect.</string>
+	<string name="enter_licence_code">Please enter licence code.</string>
+	<string name="enter_register_code">Please enter register code.</string>
+	<string name="register_code_incorrect">Register code is incorrect.</string>
 </resources>

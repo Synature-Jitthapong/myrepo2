@@ -1,7 +1,7 @@
 package com.syn.iorder.util;
 
 public class SynRegisterAlghorhythm {
-	public static final int PRODUCT_CODE = 9301; 
+	public static final int PRODUCT_CODE = 1101; 
 			
 	public static String generateDeviceCode(String uuid){
 		StringBuilder deviceCode = new StringBuilder();
@@ -51,9 +51,9 @@ public class SynRegisterAlghorhythm {
 		return reqCode.compareTo(result);
 	}
 
-	public static int checkProductCode(String keyCode) throws Exception{
-		String codeSet1 = keyCode.substring(0,4);
-		String codeSet2 = keyCode.substring(4,8);
+	public static int checkProductCode(String licenceCode) throws Exception{
+		String codeSet1 = licenceCode.substring(0,4);
+		String codeSet2 = licenceCode.substring(4,8);
 		int value = Integer.parseInt(codeSet1) ^ Integer.parseInt(codeSet2);
 		return value == PRODUCT_CODE ? 0 : -1;
 	}
@@ -75,28 +75,25 @@ public class SynRegisterAlghorhythm {
 	}
 	
 	private static char convertToCharNumber(char ch){
-		char num = '0';
+		char num = ch;
 		switch(ch){
-			case 'a':
+			case 'A':
+				num = '0';
+				break;
+			case 'B':
 				num = '1';
 				break;
-			case 'b':
+			case 'C':
 				num = '2';
 				break;
-			case 'c':
+			case 'D':
 				num = '3';
 				break;
-			case 'd':
+			case 'E':
 				num = '4';
 				break;
-			case 'e':
+			case 'F':
 				num = '5';
-				break;
-			case 'f':
-				num = '6';
-				break;
-			default:
-				num = ch;
 				break;
 		}
 		return num;
