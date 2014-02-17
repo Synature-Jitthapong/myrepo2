@@ -16,8 +16,7 @@ import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.ProductGroups.QuestionAnswerData;
 import syn.pos.data.model.SummaryTransaction;
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
@@ -75,7 +74,7 @@ public class CheckBillActivity extends Activity {
 	private int mTableId;
 	private int mCustomerQty = 1;
 	
-	private SummaryTransaction SUMMARY_TRANS;
+	private SummaryTransaction mSummaryTrans;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -461,7 +460,93 @@ public class CheckBillActivity extends Activity {
 				}
 			}
 		});
-		 new LoadTableTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
+		
+		 new LoadAllTableV1(this, globalVar, new LoadAllTableV1.LoadTableProgress() {
+			
+			@Override
+			public void onPre() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
+			}
+			
+			@Override
+			public void onPost(final TableName tbName) {
+				new LoadAllTableV2(mContext, globalVar, new LoadAllTableV2.LoadTableProgress() {
+					
+					@Override
+					public void onPre() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
+					}
+					
+					@Override
+					public void onPost(final List<TableInfo> tbInfoLst) {
+						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(mContext, tbName));
+						spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+							@Override
+							public void onItemSelected(AdapterView<?> parent, View v,
+									int position, long id) {
+								TableName.TableZone tbZone = (TableName.TableZone) parent.getItemAtPosition(position);
+								
+								final List<TableInfo> newTbInfoLst =
+										IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
+								
+								tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, newTbInfoLst));
+								tableNameListView.setOnItemClickListener(new OnItemClickListener(){
+
+									@Override
+									public void onItemClick(AdapterView<?> parent, View v,
+											int position, long id) {
+										TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);
+												
+										mTableId = tbInfo.getiTableID();
+										String tableName = tbInfo.isbIsCombineTable() ? 
+												tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
+										tvTableName.setText(R.string.text_table);
+										tvTableName.append(":" + tableName);
+										
+										disableButton();
+										
+										new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
+									}
+									
+								});
+							}
+
+							@Override
+							public void onNothingSelected(AdapterView<?> arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+						});
+					}
+				}).execute(GlobalVar.FULL_URL);
+			}
+		}).execute(GlobalVar.FULL_URL);
 	}
 
 	@Override
@@ -1057,73 +1142,6 @@ public class CheckBillActivity extends Activity {
 		}
 	}
 	
-	private class LoadTableTask extends WebServiceTask{
-		private static final String webMethod = "WSmPOS_JSON_LoadAllTableData";
-		
-		public LoadTableTask(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			tableProgress.setVisibility(View.GONE);
-			
-			GsonDeserialze gdz = new GsonDeserialze();
-
-			try {
-				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
-
-				spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(mContext, tbInfo));
-				spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View v,
-							int position, long id) {
-						TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(position);
-						
-						final List<TableInfo.TableName> tbNameLst =
-								IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
-						
-						tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, tbNameLst));
-						tableNameListView.setOnItemClickListener(new OnItemClickListener(){
-
-							@Override
-							public void onItemClick(AdapterView<?> parent, View v,
-									int position, long id) {
-								TableName tbName = (TableName) parent.getItemAtPosition(position);
-										
-								mTableId = tbName.getTableID();
-								tvTableName.setText(R.string.text_table);
-								tvTableName.append(":" +tbName.getTableName());
-								
-								disableButton();
-								
-								new ShowSummaryBillTask(context, globalVar).execute(GlobalVar.FULL_URL);
-							}
-							
-						});
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-				});
-			} catch (Exception e) {
-				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			tvProgress.setText(R.string.load_table_progress);
-			tableProgress.setVisibility(View.VISIBLE);
-		}
-		
-	}
-	
 	private class ShowSummaryBillTask extends WebServiceTask{
 		private static final String webMethod = "WSiOrder_JSON_ShowSummaryBillDetail";
 		
@@ -1168,45 +1186,45 @@ public class CheckBillActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				WebServiceResult wsResult = gdz.deserializeWsResultJSON(result);
-				SUMMARY_TRANS = gdz.deserializeSummaryTransactionJSON(wsResult.getSzResultData());
+				mSummaryTrans = gdz.deserializeSummaryTransactionJSON(wsResult.getSzResultData());
 				
-				if(SUMMARY_TRANS != null){
-					if(SUMMARY_TRANS.OrderList != null){
+				if(mSummaryTrans != null){
+					if(mSummaryTrans.OrderList != null){
 						List<SummaryTransaction.Order> orderList = 
 								new ArrayList<SummaryTransaction.Order>();
 						
-						for(SummaryTransaction.Order order : SUMMARY_TRANS.OrderList){
+						for(SummaryTransaction.Order order : mSummaryTrans.OrderList){
 							int productSetType = order.iProductSetType;
 							//if(productSetType == 0 || productSetType == 15){
 								orderList.add(order);
 							//}
 						}
 						
-						SUMMARY_TRANS.OrderList = orderList;
+						mSummaryTrans.OrderList = orderList;
 					}
 					
 					// enable button
 					enableButton();
 					
 					// set customer qty
-					mCustomerQty = SUMMARY_TRANS.NoCustomer;
+					mCustomerQty = mSummaryTrans.NoCustomer;
 					
 					tvSummaryDisplay.setText(null);
 					tvPriceValue.setText(null);
 					for(syn.pos.data.model.SummaryTransaction.DisplaySummary displaySummary 
-							: SUMMARY_TRANS.TransactionSummary.DisplaySummaryList){
+							: mSummaryTrans.TransactionSummary.DisplaySummaryList){
 						tvSummaryDisplay.append(displaySummary.szDisplayName + "\n");
 						tvPriceValue.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
 					}
 					
 					// for set member
-					mTransactionId = SUMMARY_TRANS.TransactionID;
-					mComputerId = SUMMARY_TRANS.ComputerID;
+					mTransactionId = mSummaryTrans.TransactionID;
+					mComputerId = mSummaryTrans.ComputerID;
 					
-					tvBillCustNo.setText("(x" + globalVar.qtyFormat.format(SUMMARY_TRANS.NoCustomer) + ")");
+					tvBillCustNo.setText("(x" + globalVar.qtyFormat.format(mSummaryTrans.NoCustomer) + ")");
 					
-					if(!SUMMARY_TRANS.TransacionName.equals("")){
-						tvBillMember.setText(SUMMARY_TRANS.TransacionName);
+					if(!mSummaryTrans.TransacionName.equals("")){
+						tvBillMember.setText(mSummaryTrans.TransacionName);
 						billMemberLayout.setVisibility(View.VISIBLE);
 						btnSetmember.setText(R.string.btn_clear_member);
 						isSearchMember = false;
@@ -1215,12 +1233,12 @@ public class CheckBillActivity extends Activity {
 					}
 					
 					//tvSubmitTime.setText(SUMMARY_TRANS.TransactionSummary);
-					if(SUMMARY_TRANS.CallForCheckBill > 0 && SUMMARY_TRANS.CallForCheckBill != 99){
+					if(mSummaryTrans.CallForCheckBill > 0 && mSummaryTrans.CallForCheckBill != 99){
 						btnCheckbill.setEnabled(true);
 						if(GlobalVar.sIsEnablePrintLongBill)
 							btnCheckbill.setText(R.string.print_long_bill);
 						else if(GlobalVar.sIsEnableCallCheckBill)
-							btnCheckbill.setText(mContext.getString(R.string.call_checkbill) + "(" + SUMMARY_TRANS.CallForCheckBill + ")");
+							btnCheckbill.setText(mContext.getString(R.string.call_checkbill) + "(" + mSummaryTrans.CallForCheckBill + ")");
 					}else{
 						if(GlobalVar.sIsEnablePrintLongBill)
 							btnCheckbill.setText(R.string.print_long_bill);
@@ -1228,12 +1246,12 @@ public class CheckBillActivity extends Activity {
 							btnCheckbill.setText(R.string.call_checkbill);
 					}
 					
-					if(SUMMARY_TRANS.CallForCheckBill == 99){
+					if(mSummaryTrans.CallForCheckBill == 99){
 						disableButton();
 					}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(mContext, 
-						globalVar, SUMMARY_TRANS);
+						globalVar, mSummaryTrans);
 				orderDetailListView.setAdapter(billDetailAdapter);
 			} catch (Exception e) {
 				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);

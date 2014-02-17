@@ -1,12 +1,10 @@
 package com.syn.iorder;
 
 import java.util.List;
-
-import syn.pos.data.model.TableInfo.TableName;
+import syn.pos.data.model.TableInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -25,37 +23,39 @@ import android.widget.ImageView;
 import android.widget.BaseAdapter;
 
 public class SelectTableListAdapter extends BaseAdapter {
-	private List<syn.pos.data.model.TableInfo.TableName> tbNameList;
-	private Context context;
-	private LayoutInflater inflater;
-	private GlobalVar globalVar;
-	private boolean showCapacity = true;
+	private List<TableInfo> mTableInfoLst;
+	private Context mContext;
+	private LayoutInflater mInflater;
+	private GlobalVar mGlobalVar;
+	private boolean mIsShowCapacity = true;
 
 	public SelectTableListAdapter(Context context, GlobalVar globalVar,
-			List<syn.pos.data.model.TableInfo.TableName> tbNameList) {
-		this.globalVar = globalVar;
-		this.tbNameList = tbNameList;
-		this.context = context;
-		inflater = LayoutInflater.from(context);
+			List<TableInfo> tbInfoLst) {
+		mGlobalVar = globalVar;
+		mTableInfoLst = tbInfoLst;
+		mContext = context;
+		mInflater = (LayoutInflater) 
+				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	public SelectTableListAdapter(Context context, GlobalVar globalVar,
-			List<syn.pos.data.model.TableInfo.TableName> tbNameList, boolean showCapacity) {
-		this.globalVar = globalVar;
-		this.tbNameList = tbNameList;
-		this.context = context;
-		inflater = LayoutInflater.from(context);
-		this.showCapacity = showCapacity;
+			List<TableInfo> tbInfoLst, boolean iSShowCapacity) {
+		mGlobalVar = globalVar;
+		mTableInfoLst = tbInfoLst;
+		mContext = context;
+		mInflater = (LayoutInflater) 
+				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mIsShowCapacity = iSShowCapacity;
 	}
 
 	@Override
 	public int getCount() {
-		return tbNameList.size();
+		return mTableInfoLst.size();
 	}
 
 	@Override
-	public TableName getItem(int position) {
-		return tbNameList.get(position);
+	public TableInfo getItem(int position) {
+		return mTableInfoLst.get(position);
 	}
 
 	@Override
@@ -77,11 +77,11 @@ public class SelectTableListAdapter extends BaseAdapter {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final syn.pos.data.model.TableInfo.TableName tbName = tbNameList.get(position);
+		final TableInfo tbInfo = mTableInfoLst.get(position);
 		final SelectTableViewHolder holder;
 		
 		if (convertView == null){
-			convertView = inflater
+			convertView = mInflater
 					.inflate(R.layout.select_table_template, null);
 	
 			holder = new SelectTableViewHolder();
@@ -99,17 +99,18 @@ public class SelectTableListAdapter extends BaseAdapter {
 		}
 		
 		holder.lastPosition = position;
-		holder.customerQty = tbName.getCapacity();
-		holder.tableName = tbName.getTableName();
+		holder.customerQty = tbInfo.getiNoOfCustomer();
+		holder.tableName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() : 
+			tbInfo.getSzTableName();
 		
-		if(showCapacity){
+		if(mIsShowCapacity){
 			holder.tvTableCapacity.setVisibility(View.VISIBLE);
 		}else{
 			holder.tvTableCapacity.setVisibility(View.INVISIBLE);
 		}
 		
-		holder.tvTableCapacity.setText(String.valueOf(tbName.getCapacity()));
-		if (tbName.getSTATUS() != 0){
+		holder.tvTableCapacity.setText(String.valueOf(tbInfo.getiTableCapacity()));
+		if (tbInfo.getTableStatus() != 0){
 			holder.tvTableName.setTextColor(Color.RED);
 			holder.imgStatus.setImageResource(R.drawable.hasorder);
 			
@@ -117,7 +118,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			
 			
 			// already checkbill
-			if(tbName.getSTATUS() == 3){
+			if(tbInfo.getTableStatus() == 3){
 				// show dolla
 				holder.tvTableName.setTextColor(Color.GREEN);
 				holder.imgStatus.setImageResource(R.drawable.ic_action_dollar);
@@ -127,7 +128,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 
 					@Override
 					public void onClick(View v) {
-						AlertDialog.Builder builder = new AlertDialog.Builder(context);
+						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 						builder.setTitle(R.string.close_table);
 						builder.setMessage(R.string.close_table_confirm);
 						builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
@@ -144,9 +145,9 @@ public class SelectTableListAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 
-								final ProgressDialog progress = new ProgressDialog(context);
-								progress.setMessage(context.getString(R.string.close_table_progress));
-								new TableUtils.CloseTable(context, globalVar, tbName.getTableID(), 
+								final ProgressDialog progress = new ProgressDialog(mContext);
+								progress.setMessage(mContext.getString(R.string.close_table_progress));
+								new TableUtils.CloseTable(mContext, mGlobalVar, tbInfo.getiTableID(), 
 										new ProgressListener(){
 
 											@Override
@@ -159,7 +160,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 												if(progress.isShowing())
 													progress.dismiss();
 												d.dismiss();
-												tbName.setSTATUS(0);
+												tbInfo.setTableStatus(0);
 												notifyDataSetChanged();
 											}
 
@@ -168,7 +169,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 												if(progress.isShowing())
 													progress.dismiss();
 												
-												new AlertDialog.Builder(context)
+												new AlertDialog.Builder(mContext)
 												.setMessage(msg)
 												.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 													
@@ -190,15 +191,15 @@ public class SelectTableListAdapter extends BaseAdapter {
 				holder.btnCloseTable.setVisibility(View.GONE);
 			}
 
-			if(tbName.getTableID() == 0)
+			if(tbInfo.getTableStatus() == 0)
 				holder.btnTbInfo.setVisibility(View.GONE);
 			
 			holder.btnTbInfo.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
-					final Dialog detailDialog = new Dialog(context, R.style.CustomDialog);
-					LayoutInflater inflater = LayoutInflater.from(context);
+					final Dialog detailDialog = new Dialog(mContext, R.style.CustomDialog);
+					LayoutInflater inflater = LayoutInflater.from(mContext);
 					View orderView = inflater.inflate(R.layout.order_list_layout, null);
 					ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
 					TextView tvTableName = (TextView) orderView.findViewById(R.id.textViewOrderListTitle);
@@ -208,11 +209,11 @@ public class SelectTableListAdapter extends BaseAdapter {
 					
 					ProgressBar progress = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
 					//tvTableName.setText()
-					tvTableName.setText(context.getString(R.string.text_table) + ":" + tbName.getTableName());
+					tvTableName.setText(mContext.getString(R.string.text_table) + ":" + holder.tableName);
 					
 					//new CurrentOrderFromTableTask(context, globalVar, tbName.getTableID(), lvOrder).execute(globalVar.FULL_URL);
-					new LoadBillDetailTask(context, globalVar, tbName.getTableID(), 
-							lvOrder, tvSumText, tvSumPrice, progress).execute(globalVar.FULL_URL);
+					new LoadBillDetailTask(mContext, mGlobalVar, tbInfo.getiTableID(), 
+							lvOrder, tvSumText, tvSumPrice, progress).execute(GlobalVar.FULL_URL);
 					detailDialog.setContentView(orderView);
 					detailDialog.getWindow().setGravity(Gravity.TOP);
 					detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
@@ -236,7 +237,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 //			holder.tvStatus.setTextColor(Color.GREEN);
 			holder.tvTableName.setTextColor(Color.GREEN);
 			holder.imgStatus.setImageResource(R.drawable.user_green);
-			if(tbName.getTableID() == 0)
+			if(tbInfo.getiTableID() == 0)
 				holder.imgStatus.setVisibility(View.GONE);
 			else
 				holder.imgStatus.setVisibility(View.VISIBLE);
@@ -244,7 +245,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.btnTbInfo.setVisibility(View.INVISIBLE);
 			holder.btnCloseTable.setVisibility(View.GONE);
 		}
-		holder.tvTableName.setText(tbName.getTableName());
+		holder.tvTableName.setText(holder.tableName);
 		return convertView;
 	}
 

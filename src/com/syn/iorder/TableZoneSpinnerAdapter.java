@@ -1,8 +1,7 @@
 package com.syn.iorder;
 
 import java.util.List;
-
-import syn.pos.data.model.TableInfo.TableZone;
+import syn.pos.data.model.TableName;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class TableZoneSpinnerAdapter extends BaseAdapter{
-	private List<TableZone> tbZoneLst;
+	private List<TableName.TableZone> tbZoneLst;
 	private LayoutInflater inflater;
-	public TableZoneSpinnerAdapter(Context c, List<TableZone> tbZoneLst){
+	public TableZoneSpinnerAdapter(Context c, List<TableName.TableZone> tbZoneLst){
 		this.tbZoneLst = tbZoneLst;
 		inflater = LayoutInflater.from(c);
 	}
@@ -25,7 +24,7 @@ public class TableZoneSpinnerAdapter extends BaseAdapter{
 	}
 
 	@Override
-	public TableZone getItem(int position) {
+	public TableName.TableZone getItem(int position) {
 		// TODO Auto-generated method stub
 		return tbZoneLst.get(position);
 	}
@@ -38,7 +37,7 @@ public class TableZoneSpinnerAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TableZone tbZone = tbZoneLst.get(position);
+		TableName.TableZone tbZone = tbZoneLst.get(position);
 		ViewHolder holder;
 		if(convertView == null){
 			convertView = inflater.inflate(R.layout.spinner_item, null);

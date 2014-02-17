@@ -5,15 +5,17 @@ package com.syn.iorder;
  */
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
+
 import com.google.gson.Gson;
+
 import syn.pos.data.dao.MenuUtil;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.OrderSendData;
 import syn.pos.data.model.TableInfo;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -43,7 +45,7 @@ public class ReprintMenuActivity extends Activity {
 	SelectOrderAdapter menuAdapter;
 	private List<OrderSendData.OrderDetail> orderDetailLst;
 	
-	private int TABLE_ID;
+	private int mTableId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,97 @@ public class ReprintMenuActivity extends Activity {
 		listViewMenu = (ListView) findViewById(R.id.listViewCancelMenu);
 		progressBar = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
 		
-		new LoadTableTask(context, globalVar).execute(GlobalVar.FULL_URL);
+		new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
+			
+			@Override
+			public void onPre() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+			}
+			
+			@Override
+			public void onPost(final TableName tbName) {
+				new LoadAllTableV2(context, globalVar, new LoadAllTableV2.LoadTableProgress() {
+					
+					@Override
+					public void onPre() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+					}
+					
+					@Override
+					public void onPost(final List<TableInfo> tbInfoLst) {
+						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbName));
+						spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+							@Override
+							public void onItemSelected(AdapterView<?> parent, View v,
+									int position, long id) {
+								TableName.TableZone tbZone = 
+										(TableName.TableZone) parent.getItemAtPosition(position);
+								final List<TableInfo> newTbInfoLst = 
+										IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
+
+								listViewTableName.setAdapter(
+										IOrderUtility.createTableNameAdapter(context, globalVar, newTbInfoLst));
+								listViewTableName.setOnItemClickListener(new OnItemClickListener(){
+
+									@Override
+									public void onItemClick(AdapterView<?> parent, View v,
+											int position, long id) {
+										TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);
+												
+										mTableId = tbInfo.getiTableID();
+
+										detail = new OrderSendData();
+										detail.xListOrderDetail = new ArrayList<OrderSendData.OrderDetail>();
+										menuAdapter = new SelectOrderAdapter(context, globalVar, detail.xListOrderDetail);
+										menuAdapter.notifyDataSetChanged();
+										
+										// create menu temptable
+										MenuUtil menuUtil = new MenuUtil(context);
+										menuUtil.createMenuTemp();
+										
+										// load current order
+										new CurrentOrderTask(context, globalVar).execute(GlobalVar.FULL_URL);
+									}
+									
+								});
+							}
+
+							@Override
+							public void onNothingSelected(AdapterView<?> arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+						});
+					}
+				}).execute(GlobalVar.FULL_URL);
+			}
+		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	@Override
@@ -71,7 +163,7 @@ public class ReprintMenuActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if(TABLE_ID != 0){
+				if(mTableId != 0){
 					MenuUtil menuUtil = new MenuUtil(context);
 					orderDetailLst = menuUtil
 							.listMenuToCancel();
@@ -118,7 +210,7 @@ public class ReprintMenuActivity extends Activity {
 			
 			property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 
@@ -190,79 +282,7 @@ public class ReprintMenuActivity extends Activity {
 			}
 		}
 	}
-	
-	private class LoadTableTask extends WebServiceTask{
-		private static final String webMethod = "WSmPOS_JSON_LoadAllTableData";
-		
-		public LoadTableTask(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
-		}
 
-		@Override
-		protected void onPostExecute(String result) {
-			if(progress.isShowing())
-				progress.dismiss();
-			
-			GsonDeserialze gdz = new GsonDeserialze();
-
-			try {
-				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
-				spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbInfo));
-				spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View v,
-							int position, long id) {
-						TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(position);
-						final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
-
-						listViewTableName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
-						listViewTableName.setOnItemClickListener(new OnItemClickListener(){
-
-							@Override
-							public void onItemClick(AdapterView<?> parent, View v,
-									int position, long id) {
-								TableName tbName = (TableName) parent.getItemAtPosition(position);
-										
-								TABLE_ID = tbName.getTableID();
-
-								detail = new OrderSendData();
-								detail.xListOrderDetail = new ArrayList<OrderSendData.OrderDetail>();
-								menuAdapter = new SelectOrderAdapter(context, globalVar, detail.xListOrderDetail);
-								menuAdapter.notifyDataSetChanged();
-								
-								// create menu temptable
-								MenuUtil menuUtil = new MenuUtil(context);
-								menuUtil.createMenuTemp();
-								
-								// load current order
-								new CurrentOrderTask(context, globalVar).execute(GlobalVar.FULL_URL);
-							}
-							
-						});
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-				});
-			} catch (Exception e) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			tvProgress.setText(R.string.loading_progress);
-			progress.setMessage(tvProgress.getText().toString());
-			progress.show();
-		}
-		
-	}
-	
 	private class CurrentOrderTask extends WebServiceTask{
 		private static final String webMethod = "WSiOrder_JSON_LoadCurrentOrderFromTableID";
 		
@@ -271,7 +291,7 @@ public class ReprintMenuActivity extends Activity {
 
 			PropertyInfo property = new PropertyInfo();
 			property.setName("iTableID");
-			property.setValue(TABLE_ID);
+			property.setValue(mTableId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}

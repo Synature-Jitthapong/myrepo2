@@ -52,7 +52,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		tvProgress = new TextView(c);
 		tvProgress.setText(R.string.loading_progress);
 	}
-
+	
 	@Override
 	protected void onPreExecute() {
 		progress.setMessage(tvProgress.getText().toString());
