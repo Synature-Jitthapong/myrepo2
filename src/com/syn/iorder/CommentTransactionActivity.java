@@ -9,14 +9,14 @@ import org.ksoap2.serialization.PropertyInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
 import syn.pos.data.dao.TransactionComment;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.TableInfo;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,7 +55,7 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 	private GlobalVar mGlobalVar;
 	private int mSelectedTableId;
 	private String mSelectedTableName;
-	private TableInfo mTableInfo;
+	private List<TableInfo> mTbInfoLst;
 	private ListView mLvTable;
 	private Spinner mSpTableZone;
 	
@@ -72,7 +72,57 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 		mLvTable.setOnItemClickListener(this);
 		mSpTableZone.setOnItemSelectedListener(this);
 		
-		new LoadTableTask(CommentTransactionActivity.this, mGlobalVar).execute(GlobalVar.FULL_URL);
+		new LoadAllTableV1(CommentTransactionActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
+			
+			@Override
+			public void onPre() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost(final TableName tbName) {
+				new LoadAllTableV2(CommentTransactionActivity.this, mGlobalVar, new LoadAllTableV2.LoadTableProgress() {
+					
+					@Override
+					public void onPre() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onPost(List<TableInfo> tbInfoLst) {
+						mTbInfoLst = tbInfoLst;
+						mSpTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(
+								CommentTransactionActivity.this, tbName));
+					}
+				}).execute(GlobalVar.FULL_URL);
+			}
+		}).execute(GlobalVar.FULL_URL);
 	}
 
 	@Override
@@ -93,47 +143,16 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 			break;
 		}
 	}
-
-	private class LoadTableTask extends WebServiceTask{
-		private static final String webMethod = "WSmPOS_JSON_LoadAllTableData";
-		
-		public LoadTableTask(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			if(progress.isShowing())
-				progress.dismiss();
-			
-			GsonDeserialze gdz = new GsonDeserialze();
-
-			try {
-				mTableInfo = gdz.deserializeTableInfoJSON(result);
-				mSpTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, mTableInfo));
-			} catch (Exception e) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			tvProgress.setText(R.string.loading_progress);
-			progress.setMessage(tvProgress.getText().toString());
-			progress.show();
-		}
-		
-	}
 	
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View v, int position,
 			long id) {
 		switch(parent.getId()){
 		case R.id.spTableZone:
-			TableInfo.TableZone tbZone = (TableZone) parent.getItemAtPosition(position);
-			final List<TableInfo.TableName> tbNameLst = IOrderUtility.filterTableNameHaveOrder(mTableInfo, tbZone);
+			TableName.TableZone tbZone = (TableName.TableZone) parent.getItemAtPosition(position);
+			final List<TableInfo> newTbInfoLst = IOrderUtility.filterTableNameHaveOrder(mTbInfoLst, tbZone);
 	
-			mLvTable.setAdapter(IOrderUtility.createTableNameAdapter(CommentTransactionActivity.this, mGlobalVar, tbNameLst));
+			mLvTable.setAdapter(IOrderUtility.createTableNameAdapter(CommentTransactionActivity.this, mGlobalVar, newTbInfoLst));
 			break;
 		}
 	}
@@ -270,11 +289,12 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		switch(parent.getId()){
 		case R.id.lvTable:
-			TableName tbName = (TableName) parent.getItemAtPosition(position);			
-			mSelectedTableId = tbName.getTableID();
-			mSelectedTableName = tbName.getTableName();
+			TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);			
+			mSelectedTableId = tbInfo.getiTableID();
+			mSelectedTableName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() :
+				tbInfo.getSzTableName();
 			
-			new LoadCurrentCommentTransTask().execute(mGlobalVar.FULL_URL);
+			new LoadCurrentCommentTransTask().execute(GlobalVar.FULL_URL);
 			break;
 		}
 	}

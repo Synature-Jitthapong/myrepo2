@@ -1,8 +1,10 @@
 package com.syn.iorder;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
@@ -11,7 +13,6 @@ import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.Register;
 import syn.pos.data.dao.ShowMenuColumnName;
@@ -63,6 +64,7 @@ public class GlobalVar {
 	public DecimalFormat decimalFormat;
 	public DecimalFormat qtyFormat;
 	public DecimalFormat qtyDecimalFormat;
+	public SimpleDateFormat mTimeFormat;
 	static TableInfo TBINFO = null;
 
 	public GlobalVar(Context context) {
@@ -86,10 +88,13 @@ public class GlobalVar {
 		String qtyPatern = globalProp.getGlobalProperty().getQtyFormat() == null ? "#,###"
 				: globalProp.getGlobalProperty().getQtyFormat();
 		String qtyDecimalPatern = "#,###.####";
+		String timeFormat = globalProp.getGlobalProperty().getTimeFormat().equals("") ? 
+				"HH:mm:ss" : globalProp.getGlobalProperty().getTimeFormat();
 
 		decimalFormat = new DecimalFormat(decimalPatern);
 		qtyFormat = new DecimalFormat(qtyPatern);
 		qtyDecimalFormat = new DecimalFormat(qtyDecimalPatern);
+		mTimeFormat = new SimpleDateFormat(timeFormat, Locale.getDefault());
 
 		GLOBAL_PROP = globalProp.getGlobalProperty();
 

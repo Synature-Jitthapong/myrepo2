@@ -1,18 +1,20 @@
 package com.syn.iorder;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.syn.iorder.PrinterUtils.Printer;
 
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.QueueInfo;
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -89,6 +91,7 @@ public class QueueActivity extends Activity {
 
 		// find view
 		progressQueue = (ProgressBar) findViewById(R.id.progressBarQueue);
+		progressQueue.setVisibility(View.GONE);
 		tvCustomerQty = (TextView) findViewById(R.id.textViewCustomerQty);
 		tvTotalQueue = (TextView) findViewById(R.id.textViewTotalQueue);
 		editTextCustomerName = (EditText) findViewById(R.id.editTextCustomerName);
@@ -1263,7 +1266,6 @@ public class QueueActivity extends Activity {
 		protected int tableId;
 		protected int queueQty;
 		protected String queueName;
-
 		protected View view;
 		protected LinearLayout tableListLayout;
 		protected TextView tvTitle;
@@ -1274,16 +1276,25 @@ public class QueueActivity extends Activity {
 		protected TextView tvSelectTableName;
 		protected Button btnSelectTableMinus;
 		protected Button btnSelectTablePlus;
-
-		Spinner spinnerTbZone;
+		private Spinner spinnerTbZone;
 		private ListView tbListView;
-
-		protected ProgressBar progressBar;
 
 		public SelectTableTask(Context c, GlobalVar gb, int qId, int qQty,
 				String qName) {
-			super(c, gb, "WSmPOS_JSON_LoadAllTableData");
+			super(c, gb, LoadAllTableV2.LOAD_TABLE_V2_METHOD);
 
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iComputerID");
+			property.setValue(GlobalVar.COMPUTER_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
 			queueId = qId;
 			queueQty = qQty;
 			queueName = qName;
@@ -1317,131 +1328,137 @@ public class QueueActivity extends Activity {
 			spinnerTbZone = (Spinner) view
 					.findViewById(R.id.spinner_table_zone);
 			tbListView = (ListView) view.findViewById(R.id.tableList);
-
-			progressBar = (ProgressBar) view
-					.findViewById(R.id.loadTableProgress);
-
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
+			if(progress.isShowing())
+				progress.dismiss();
+			
+			Gson gson = new Gson();
+			Type type = new TypeToken<WebServiceResult>(){}.getType();
+			WebServiceResult ws = gson.fromJson(result, type);
+			if(ws.getiResultID() == 0){
+				type = new TypeToken<List<TableInfo>>(){}.getType();
+				final List<TableInfo> tbInfoLst = gson.fromJson(ws.getSzResultData(), type);
+				new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
+					
+					@Override
+					public void onPre() {
+					}
+					
+					@Override
+					public void onPost() {
+					}
+					
+					@Override
+					public void onError(String msg) {
+						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+					}
+					
+					@Override
+					public void onPost(final TableName tbName) {
+						spinnerTbZone.setAdapter(
+								IOrderUtility.createTableZoneAdapter(context, tbName));
+						spinnerTbZone.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
-			GsonDeserialze gdz = new GsonDeserialze();
-			try {
-				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
+									@Override
+									public void onItemSelected(AdapterView<?> parent,
+											View v, int pos, long id) {
+										TableName.TableZone tbZone = 
+												(TableName.TableZone) parent.getItemAtPosition(pos);
 
-				spinnerTbZone.setAdapter(IOrderUtility.createTableZoneAdapter(
-						context, tbInfo));
-				spinnerTbZone
-						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+										List<TableInfo> newTbInfoLst = 
+												IOrderUtility.filterEmptyTableName(tbInfoLst, tbZone);
+
+										SelectTableListAdapter adapter = 
+												new SelectTableListAdapter(context, globalVar, newTbInfoLst);
+
+										tbListView.setAdapter(adapter);
+									}
+
+									@Override
+									public void onNothingSelected(AdapterView<?> arg0) {
+										// TODO Auto-generated method stub
+
+									}
+								});
+
+						tbListView.setOnItemClickListener(new OnItemClickListener() {
 
 							@Override
-							public void onItemSelected(AdapterView<?> parent,
-									View v, int pos, long id) {
-								TableZone tbZone = (TableZone) parent
-										.getItemAtPosition(pos);
+							public void onItemClick(AdapterView<?> parent, View v,
+									int position, long id) {
+								// set list selected background
 
-								List<TableName> tbNameList = IOrderUtility
-										.filterEmptyTableName(tbInfo, tbZone);
+								final SelectTableListAdapter.SelectTableViewHolder holder = (SelectTableListAdapter.SelectTableViewHolder) v
+										.getTag();
 
-								SelectTableListAdapter adapter = new SelectTableListAdapter(
-										context, globalVar, tbNameList);
+								 //enable ctrl
+								 tvSelectTableCusNo.setEnabled(true);
+								 btnSelectTableMinus.setEnabled(true);
+								 btnSelectTablePlus.setEnabled(true);
 
-								tbListView.setAdapter(adapter);
+								btnSelectTableMinus
+										.setOnClickListener(new OnClickListener() {
+
+											@Override
+											public void onClick(View v) {
+												int capacity = queueQty;
+												--capacity;
+												if (capacity > 0) {
+													tvSelectTableCusNo
+															.setText(globalVar.qtyFormat
+																	.format(capacity));
+													queueQty = capacity;
+												}
+											}
+
+										});
+
+								btnSelectTablePlus
+										.setOnClickListener(new OnClickListener() {
+
+											@Override
+											public void onClick(View v) {
+												int capacity = queueQty;
+												++capacity;
+												tvSelectTableCusNo
+														.setText(globalVar.qtyFormat
+																.format(capacity));
+												queueQty = capacity;
+											}
+
+										});
+
+								TableInfo tbInfo = (TableInfo) parent
+										.getItemAtPosition(position);
+								tvSelectTableName.setText(holder.tableName);
+								tableId = tbInfo.getiTableID();
+								btnConfirm.setEnabled(true);
 							}
 
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-								// TODO Auto-generated method stub
-
-							}
 						});
-
-				tbListView.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View v,
-							int position, long id) {
-						// set list selected background
-
-						final SelectTableListAdapter.SelectTableViewHolder holder = (SelectTableListAdapter.SelectTableViewHolder) v
-								.getTag();
-
-						 //enable ctrl
-						 tvSelectTableCusNo.setEnabled(true);
-						 btnSelectTableMinus.setEnabled(true);
-						 btnSelectTablePlus.setEnabled(true);
-
-						btnSelectTableMinus
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										int capacity = queueQty;
-										--capacity;
-										if (capacity > 0) {
-											tvSelectTableCusNo
-													.setText(globalVar.qtyFormat
-															.format(capacity));
-											queueQty = capacity;
-										}
-									}
-
-								});
-
-						btnSelectTablePlus
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										int capacity = queueQty;
-										++capacity;
-										tvSelectTableCusNo
-												.setText(globalVar.qtyFormat
-														.format(capacity));
-										queueQty = capacity;
-									}
-
-								});
-
-						TableName tbName = (TableName) parent
-								.getItemAtPosition(position);
-						tvSelectTableName.setText(holder.tableName);
-						tableId = tbName.getTableID();
-						btnConfirm.setEnabled(true);
 					}
-
-				});
-			} catch (Exception e) {
-
-				final CustomDialog customDialog = new CustomDialog(context,
-						R.style.CustomDialog);
-				customDialog.title.setVisibility(View.VISIBLE);
-				customDialog.title
-						.setText(R.string.global_dialog_title_error);
-				customDialog.message.setText(result);
-				customDialog.btnCancel.setVisibility(View.GONE);
-				customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-				customDialog.btnOk.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						customDialog.dismiss();
-					}
-				});
-				customDialog.show();
+				}).execute(GlobalVar.FULL_URL);
+				tableListLayout.setVisibility(View.VISIBLE);
+			}else{
+				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, 
+						ws.getSzResultData().equals("") ? result : ws.getSzResultData(), 0);
 			}
-
-			progressBar.setVisibility(View.GONE);
-			tableListLayout.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		protected void onPreExecute() {
+			progress.setMessage(context.getString(R.string.load_table_progress));
+			progress.show();
+			
 			final Dialog dialog = new Dialog(context, R.style.CustomDialog);
 			//tvTitle.setTextSize(48);
 			tvTitle.setText("Queue : " + queueName);
 			dialog.setContentView(view);
+			dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+					WindowManager.LayoutParams.MATCH_PARENT);
 			dialog.show();
 
 			btnConfirm.setOnClickListener(new OnClickListener() {
@@ -1519,8 +1536,6 @@ public class QueueActivity extends Activity {
 					customDialog.show();
 				}
 			});
-
-			progressBar.setVisibility(View.VISIBLE);
 		}
 
 	}

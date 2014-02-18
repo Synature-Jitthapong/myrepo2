@@ -2,19 +2,17 @@ package com.syn.iorder;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-
-import org.ksoap2.serialization.PropertyInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -51,8 +49,7 @@ import syn.pos.data.model.ReasonGroups;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.SyncDataLogModel;
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -61,11 +58,7 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class IOrderUtility {
@@ -248,15 +241,15 @@ public class IOrderUtility {
 	}
 	
 	public static TableZoneSpinnerAdapter createTableZoneAdapter(
-			Context context, TableInfo tbInfo) {
-		if (tbInfo != null) {
-			TableZone tbZone = new TableZone();
+			Context context, TableName tbName) {
+		if (tbName != null) {
+			TableName.TableZone tbZone = new TableName.TableZone();
 			tbZone.setZoneID(0);
 			tbZone.setZoneName("All Zone");
-			tbInfo.TableZone.add(0, tbZone);
+			tbName.TableZone.add(0, tbZone);
 
 			TableZoneSpinnerAdapter tbZoneAdapter = 
-					new TableZoneSpinnerAdapter(context, tbInfo.TableZone);
+					new TableZoneSpinnerAdapter(context, tbName.TableZone);
 
 			return tbZoneAdapter;
 		}
@@ -265,9 +258,9 @@ public class IOrderUtility {
 
 	public static SelectTableListAdapter createTableNameAdapter(
 			Context context, GlobalVar globalVar,
-			final List<TableName> tbNameLst) {
+			final List<TableInfo> tbInfoLst) {
 		SelectTableListAdapter tbNameAdapter = new SelectTableListAdapter(
-				context, globalVar, tbNameLst, false);
+				context, globalVar, tbInfoLst, false);
 		return tbNameAdapter;
 	}
 
@@ -282,11 +275,11 @@ public class IOrderUtility {
 		return index;
 	}
 
-	public static int indexOfTbList(List<TableInfo.TableName> tbNameLst,
+	public static int indexOfTbList(List<TableInfo> tbInfoLst,
 			int tableId) {
 		int index = -1;
-		for (int i = 0; i < tbNameLst.size(); i++) {
-			if (tableId == tbNameLst.get(i).getTableID()) {
+		for (int i = 0; i < tbInfoLst.size(); i++) {
+			if (tableId == tbInfoLst.get(i).getiTableID()) {
 				index = i;
 				break;
 			}
@@ -294,55 +287,55 @@ public class IOrderUtility {
 		return index;
 	}
 
-	public static List<TableName> filterTableNameHaveOrder(TableInfo tbInfo,
-			TableZone tbZone) {
-		List<TableName> tbNameList = new ArrayList<TableName>();
-		for (TableName tbName : tbInfo.TableName) {
-			if (tbName.getTableStatus() == 1) {
+	public static List<TableInfo> filterTableNameHaveOrder(List<TableInfo> tbInfoLst,
+			TableName.TableZone tbZone) {
+		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
+		for (TableInfo tbInfo : tbInfoLst) {
+			if (tbInfo.isbHasOrder()) {
 				if (tbZone.getZoneID() != 0) {
-					if (tbZone.getZoneID() == tbName.getZoneID()) {
-						tbNameList.add(tbName);
+					if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
+						tbFilterLst.add(tbInfo);
 					}
 				} else {
-					tbNameList.add(tbName);
+					tbFilterLst.add(tbInfo);
 				}
 			}
 		}
-		return tbNameList;
+		return tbFilterLst;
 	}
 
-	public static List<TableName> filterTableName(TableInfo tbInfo,
-			TableZone tbZone, int tableId) {
-		List<TableName> tbNameList = new ArrayList<TableName>();
-		for (TableName tbName : tbInfo.TableName) {
-			if (tbName.getTableID() != tableId) {
+	public static List<TableInfo> filterTableName(List<TableInfo> tbInfoLst,
+			TableName.TableZone tbZone, int tableId) {
+		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
+		for (TableInfo tbInfo : tbInfoLst) {
+			if (tbInfo.getiTableID() != tableId && !tbInfo.isbIsCombineTable()) {
 				if (tbZone.getZoneID() != 0) {
-					if (tbZone.getZoneID() == tbName.getZoneID()) {
-						tbNameList.add(tbName);
+					if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
+						tbFilterLst.add(tbInfo);
 					}
 				} else {
-					tbNameList.add(tbName);
+					tbFilterLst.add(tbInfo);
 				}
 			}
 		}
-		return tbNameList;
+		return tbFilterLst;
 	}
 
-	public static List<TableName> filterEmptyTableName(TableInfo tbInfo,
-			TableZone tbZone) {
-		List<TableName> tbNameList = new ArrayList<TableName>();
-		for (TableName tbName : tbInfo.TableName) {
-			if (tbName.getTableStatus() == 0) {
+	public static List<TableInfo> filterEmptyTableName(List<TableInfo> tbInfoLst,
+			TableName.TableZone tbZone) {
+		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
+		for (TableInfo tbInfo : tbInfoLst) {
+			if (tbInfo.getTableStatus() == 0) {
 				if (tbZone.getZoneID() != 0) {
-					if (tbZone.getZoneID() == tbName.getZoneID()) {
-						tbNameList.add(tbName);
+					if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
+						tbFilterLst.add(tbInfo);
 					}
 				} else {
-					tbNameList.add(tbName);
+					tbFilterLst.add(tbInfo);
 				}
 			}
 		}
-		return tbNameList;
+		return tbFilterLst;
 	}
 
 	public static List<OrderSendData.OrderDetail> filterProductType(List<OrderSendData.OrderDetail> order){
@@ -356,19 +349,19 @@ public class IOrderUtility {
 		return orderFilter;
 	}
 	
-	public static List<TableName> filterTableName(TableInfo tbInfo,
-			TableZone tbZone) {
-		List<TableName> tbNameList = new ArrayList<TableName>();
-		for (TableName tbName : tbInfo.TableName) {
+	public static List<TableInfo> filterTableName(List<TableInfo> tbInfoLst,
+			TableName.TableZone tbZone) {
+		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
+		for (TableInfo tbInfo : tbInfoLst) {
 			if (tbZone.getZoneID() != 0) {
-				if (tbZone.getZoneID() == tbName.getZoneID()) {
-					tbNameList.add(tbName);
+				if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
+					tbFilterLst.add(tbInfo);
 				}
 			} else {
-				tbNameList.add(tbName);
+				tbFilterLst.add(tbInfo);
 			}
 		}
-		return tbNameList;
+		return tbFilterLst;
 	}
 
 	// Web service zone
@@ -832,64 +825,64 @@ public class IOrderUtility {
 		});
 	}
 
-	public static class LoadTableTask extends WebServiceTask {
-
-		private Spinner spTbZone;
-		private ListView lvTbName;
-		private LinearLayout layoutProgress;
-
-		public LoadTableTask(Context c, GlobalVar gb, Spinner spTableZone,
-				ListView lvTableName, LinearLayout layoutPrgs) {
-			super(c, gb, "WSmPOS_JSON_LoadAllTableData");
-			spTbZone = spTableZone;
-			lvTbName = lvTableName;
-			layoutProgress = layoutPrgs;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			layoutProgress.setVisibility(View.VISIBLE);
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			layoutProgress.setVisibility(View.GONE);
-
-			GsonDeserialze gdz = new GsonDeserialze();
-			try {
-				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
-				spTbZone.setAdapter(IOrderUtility.createTableZoneAdapter(
-						context, tbInfo));
-				spTbZone.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View v,
-							int pos, long id) {
-						TableZone tbZone = (TableZone) parent
-								.getItemAtPosition(pos);
-
-						List<TableName> tbNameList = IOrderUtility
-								.filterTableName(tbInfo, tbZone);
-
-						SelectTableListAdapter adapter = new SelectTableListAdapter(
-								context, globalVar, tbNameList, false);
-
-						lvTbName.setAdapter(adapter);
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-
-					}
-				});
-			} catch (Exception e) {
-				IOrderUtility.alertDialog(context,
-						R.string.global_dialog_title_error, result, 0);
-			}
-		}
-
-	}
+//	public static class LoadTableTask extends WebServiceTask {
+//
+//		private Spinner spTbZone;
+//		private ListView lvTbName;
+//		private LinearLayout layoutProgress;
+//
+//		public LoadTableTask(Context c, GlobalVar gb, Spinner spTableZone,
+//				ListView lvTableName, LinearLayout layoutPrgs) {
+//			super(c, gb, "WSmPOS_JSON_LoadAllTableDataV2");
+//			spTbZone = spTableZone;
+//			lvTbName = lvTableName;
+//			layoutProgress = layoutPrgs;
+//		}
+//
+//		@Override
+//		protected void onPreExecute() {
+//			layoutProgress.setVisibility(View.VISIBLE);
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String result) {
+//			layoutProgress.setVisibility(View.GONE);
+//
+//			GsonDeserialze gdz = new GsonDeserialze();
+//			try {
+//				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
+//				spTbZone.setAdapter(IOrderUtility.createTableZoneAdapter(
+//						context, tbInfo));
+//				spTbZone.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+//
+//					@Override
+//					public void onItemSelected(AdapterView<?> parent, View v,
+//							int pos, long id) {
+//						TableZone tbZone = (TableZone) parent
+//								.getItemAtPosition(pos);
+//
+//						List<TableName> tbNameList = IOrderUtility
+//								.filterTableName(tbInfo, tbZone);
+//
+//						SelectTableListAdapter adapter = new SelectTableListAdapter(
+//								context, globalVar, tbNameList, false);
+//
+//						lvTbName.setAdapter(adapter);
+//					}
+//
+//					@Override
+//					public void onNothingSelected(AdapterView<?> arg0) {
+//						// TODO Auto-generated method stub
+//
+//					}
+//				});
+//			} catch (Exception e) {
+//				IOrderUtility.alertDialog(context,
+//						R.string.global_dialog_title_error, result, 0);
+//			}
+//		}
+//
+//	}
 
 	public static class CheckOutOfProductTask extends WebServiceTask {
 		
@@ -1012,6 +1005,34 @@ public class IOrderUtility {
 
 		}
 		return false;
+	}
+	
+	public static String formatJSONDate(GlobalVar globalVar, String tbTime){
+		String reg = "[^0-9]";
+		String timeStr = "";
+		try {
+			long tbTimeMillisec = 0;
+			/* split "+0700" from dot net webservice
+			 * because never use it
+			 */
+			String[] filterPlus7 = tbTime.split("\\+");
+			if(filterPlus7.length > 1)
+				tbTimeMillisec = Long.parseLong(filterPlus7[0].replaceAll(reg, ""));
+			else
+				tbTimeMillisec = Long.parseLong(tbTime.replaceAll(reg, ""));
+			
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(tbTimeMillisec);
+			timeStr = globalVar.mTimeFormat.format(c.getTime());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return timeStr;
+	}
+	
+	public static String formatCombindTableName(boolean isCombind, String combindTbName, String tbName){
+		return isCombind ? combindTbName : tbName;
 	}
 	
 	public static boolean checkConfig(Context c){

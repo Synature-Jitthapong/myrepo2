@@ -2,12 +2,9 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import syn.pos.data.model.TableInfo;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
+import syn.pos.data.model.TableName;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,8 @@ public class TableListBuilder extends AlertDialog.Builder{
 
 	public Button mBtnClose;
 	
-	public TableListBuilder(final Context context, final GlobalVar globalVar, final TableInfo tbInfo) {
+	public TableListBuilder(final Context context, final GlobalVar globalVar, 
+			final TableName tbName, final List<TableInfo> tbInfoLst) {
 		super(context);	
 		
 		LayoutInflater inflater = (LayoutInflater)
@@ -33,36 +31,36 @@ public class TableListBuilder extends AlertDialog.Builder{
 		mBtnClose = (Button) closeTableView.findViewById(R.id.btnClose);
 		setView(closeTableView);
 		
-		spTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbInfo));
+		spTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbName));
 		spTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int position, long id) {
 				
-				TableZone tbZone = (TableZone) parent.getItemAtPosition(position);
-				List<TableName> tbNameLst = new ArrayList<TableName>();
-				for (TableName tbName : tbInfo.TableName) {
-					if (tbName.getTableStatus() == 3) {
+				TableName.TableZone tbZone = (TableName.TableZone) parent.getItemAtPosition(position);
+				List<TableInfo> tbInfoLst = new ArrayList<TableInfo>();
+				for (TableInfo tbInfo : tbInfoLst) {
+					if (tbInfo.getTableStatus() == 3) {
 						if (tbZone.getZoneID() != 0) {
-							if (tbZone.getZoneID() == tbName.getZoneID()) {
-								tbNameLst.add(tbName);
+							if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
+								tbInfoLst.add(tbInfo);
 							}
 						} else {
-							tbNameLst.add(tbName);
+							tbInfoLst.add(tbInfo);
 						}
 					}
 				}
 				
-				if(tbNameLst.size() == 0){
-					tbInfo.TableName = new ArrayList<TableInfo.TableName>();
-					TableInfo.TableName tbName = new TableInfo.TableName();
-					tbName.setTableID(0);
-					tbName.setTableName(context.getString(R.string.no_table));
-					tbNameLst.add(tbName);
+				if(tbInfoLst.size() == 0){
+					tbInfoLst = new ArrayList<TableInfo>();
+					TableInfo tbInfo = new TableInfo();
+					tbInfo.setiTableID(0);
+					tbInfo.setSzTableName(context.getString(R.string.no_table));
+					tbInfoLst.add(tbInfo);
 				}
 				
-				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, tbNameLst, false));
+				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, tbInfoLst, false));
 			}
 
 			@Override

@@ -9,9 +9,8 @@ import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.KdsOrderInfo;
 import syn.pos.data.model.OrderSendData;
 import syn.pos.data.model.TableInfo;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
-import syn.pos.data.model.TableInfo.TableName;
-import syn.pos.data.model.TableInfo.TableZone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,7 +31,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class KdsInfoActivity extends Activity {
-	private Context CONTEXT;
+	private Context mContext;
 	private Spinner spinnerTableZone;
 	private TextView tvKdsSelTable;
 	private ListView tableListView;
@@ -44,8 +43,8 @@ public class KdsInfoActivity extends Activity {
 	private Button btnSortByItem;
 	private Button btnSortByItemName;
 	private GlobalVar globalVar;
-	private int SELECTED_TABLEID;
-	private int SORT_BY = 0;
+	private int mSelTableId;
+	private int mSortBy = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +63,8 @@ public class KdsInfoActivity extends Activity {
 		
 		//btnKdsClose = (Button) findViewById(R.id.buttonKdsClose);
 		
-		CONTEXT = this;
-		globalVar = new GlobalVar(CONTEXT);
+		mContext = this;
+		globalVar = new GlobalVar(mContext);
 
 		btnSortByTime.setOnClickListener(new OnClickListener(){
 
@@ -74,11 +73,11 @@ public class KdsInfoActivity extends Activity {
 				v.setSelected(true);
 				btnSortByItem.setSelected(false);
 				btnSortByItemName.setSelected(false);
-				SORT_BY = 0;
+				mSortBy = 0;
 				
-				if(SELECTED_TABLEID != 0)
-					new KdsOrderInfoTask(CONTEXT, globalVar,
-							SELECTED_TABLEID, SORT_BY).execute(GlobalVar.FULL_URL);
+				if(mSelTableId != 0)
+					new KdsOrderInfoTask(mContext, globalVar,
+							mSelTableId, mSortBy).execute(GlobalVar.FULL_URL);
 				else
 					new CurrentOrderFromTableTask(KdsInfoActivity.this, globalVar).execute(GlobalVar.FULL_URL);
 			}
@@ -91,11 +90,11 @@ public class KdsInfoActivity extends Activity {
 				v.setSelected(true);
 				btnSortByTime.setSelected(false);
 				btnSortByItemName.setSelected(false);
-				SORT_BY = 1;
+				mSortBy = 1;
 				
-				if(SELECTED_TABLEID != 0)
-					new KdsOrderInfoTask(CONTEXT, globalVar,
-							SELECTED_TABLEID, SORT_BY).execute(GlobalVar.FULL_URL);
+				if(mSelTableId != 0)
+					new KdsOrderInfoTask(mContext, globalVar,
+							mSelTableId, mSortBy).execute(GlobalVar.FULL_URL);
 				else
 					new CurrentOrderFromTableTask(KdsInfoActivity.this, globalVar).execute(GlobalVar.FULL_URL);
 			}
@@ -108,18 +107,129 @@ public class KdsInfoActivity extends Activity {
 				v.setSelected(true);
 				btnSortByTime.setSelected(false);
 				btnSortByItem.setSelected(false);
-				SORT_BY = 2;
+				mSortBy = 2;
 				
-				if(SELECTED_TABLEID != 0)
-					new KdsOrderInfoTask(CONTEXT, globalVar,
-							SELECTED_TABLEID, SORT_BY).execute(GlobalVar.FULL_URL);
+				if(mSelTableId != 0)
+					new KdsOrderInfoTask(mContext, globalVar,
+							mSelTableId, mSortBy).execute(GlobalVar.FULL_URL);
 				else
 					new CurrentOrderFromTableTask(KdsInfoActivity.this, globalVar).execute(GlobalVar.FULL_URL);
 			}
 			
 		});
 		
-		new LoadTableTask(CONTEXT, globalVar).execute(GlobalVar.FULL_URL);
+		new LoadAllTableV1(mContext, globalVar, new LoadAllTableV1.LoadTableProgress() {
+			
+			@Override
+			public void onPre() {
+				tableProgress.setVisibility(View.VISIBLE);
+				tableListView.setVisibility(View.INVISIBLE);
+			}
+			
+			@Override
+			public void onPost() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost(final TableName tbName) {
+				new LoadAllTableV2(mContext, globalVar, new LoadAllTableV2.LoadTableProgress() {
+					
+					@Override
+					public void onPre() {
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onPost(final List<TableInfo> tbInfoLst) {
+						tableProgress.setVisibility(View.GONE);
+						tableListView.setVisibility(View.VISIBLE);
+						
+						TableZoneSpinnerAdapter tbZoneAdapter =IOrderUtility.createTableZoneAdapter(mContext, tbName); 
+						spinnerTableZone.setAdapter(tbZoneAdapter);
+
+						spinnerTableZone
+								.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+									@Override
+									public void onItemSelected(AdapterView<?> parent, View v,
+											int pos, long id) {
+										TableName.TableZone tbZone = (TableName.TableZone) parent
+												.getItemAtPosition(pos);
+										final List<TableInfo> newTbInfoLst
+											= IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
+										TableInfo tbInfo = new TableInfo();
+										tbInfo.setiTableID(0);
+										tbInfo.setSzTableName("All table");
+										tbInfo.setTableStatus(1);
+										newTbInfoLst.add(0, tbInfo);
+										
+										tableListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, newTbInfoLst));
+										tableListView
+												.setOnItemClickListener(new OnItemClickListener() {
+													@Override
+													public void onItemClick(
+															AdapterView<?> parent, View v,
+															int pos, long id) {
+
+														TableInfo tbInfo = (TableInfo) parent
+																.getItemAtPosition(pos);
+														
+														// set selected table name
+														String tbName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() :
+															tbInfo.getSzTableName();
+														tvKdsSelTable.setText(tbName);
+														
+														mSelTableId = tbInfo.getiTableID();
+														if(tbInfo.getTableStatus() == 0){
+															// selected btn sort by time
+															btnSortByTime.setSelected(false);
+															btnSortByItem.setSelected(false);
+															btnSortByItemName.setSelected(false);
+															
+															new CurrentOrderFromTableTask(KdsInfoActivity.this, globalVar).execute(GlobalVar.FULL_URL);
+														}else{
+															// selected btn sort by time
+															btnSortByTime.setSelected(true);
+															btnSortByItem.setSelected(false);
+															btnSortByItemName.setSelected(false);
+															
+															new KdsOrderInfoTask(mContext, globalVar,
+																	mSelTableId, mSortBy).execute(GlobalVar.FULL_URL);
+														}
+													}
+
+												});
+									}
+
+									@Override
+									public void onNothingSelected(AdapterView<?> arg0) {
+
+									}
+
+								});
+					}
+				}).execute(GlobalVar.FULL_URL);
+			}
+		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	
@@ -139,95 +249,6 @@ public class KdsInfoActivity extends Activity {
 		return true;
 	}
 
-
-	private class LoadTableTask extends WebServiceTask{
-		private static final String webMethod = "WSmPOS_JSON_LoadAllTableData";
-		
-		public LoadTableTask(Context c, GlobalVar gb) {
-			super(c, gb, webMethod);
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			tableProgress.setVisibility(View.GONE);
-			tableListView.setVisibility(View.VISIBLE);
-			
-			GsonDeserialze gdz = new GsonDeserialze();
-
-			try {
-				final TableInfo tbInfo = gdz.deserializeTableInfoJSON(result);
-				TableZoneSpinnerAdapter tbZoneAdapter =IOrderUtility.createTableZoneAdapter(context, tbInfo); 
-				spinnerTableZone.setAdapter(tbZoneAdapter);
-
-				spinnerTableZone
-						.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-
-							@Override
-							public void onItemSelected(AdapterView<?> parent, View v,
-									int pos, long id) {
-								final TableZone tbZone = (TableZone) parent
-										.getItemAtPosition(pos);
-								final List<TableName> tbNameLst = IOrderUtility.filterTableNameHaveOrder(tbInfo, tbZone);
-								TableName tbName = new TableName();
-								tbName.setTableID(0);
-								tbName.setTableName("All table");
-								tbName.setSTATUS(1);
-								tbNameLst.add(0, tbName);
-								
-								tableListView.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, tbNameLst));
-								tableListView
-										.setOnItemClickListener(new OnItemClickListener() {
-											@Override
-											public void onItemClick(
-													AdapterView<?> parent, View v,
-													int pos, long id) {
-
-												TableName tbName = (TableName) parent
-														.getItemAtPosition(pos);
-												
-												// set selected table name
-												tvKdsSelTable.setText(tbName.getTableName());
-												
-												SELECTED_TABLEID = tbName.getTableID();
-												if(tbName.getTableID() == 0){
-													// selected btn sort by time
-													btnSortByTime.setSelected(false);
-													btnSortByItem.setSelected(false);
-													btnSortByItemName.setSelected(false);
-													
-													new CurrentOrderFromTableTask(KdsInfoActivity.this, globalVar).execute(GlobalVar.FULL_URL);
-												}else{
-													// selected btn sort by time
-													btnSortByTime.setSelected(true);
-													btnSortByItem.setSelected(false);
-													btnSortByItemName.setSelected(false);
-													
-													new KdsOrderInfoTask(CONTEXT, globalVar,
-															SELECTED_TABLEID, SORT_BY).execute(GlobalVar.FULL_URL);
-												}
-											}
-
-										});
-							}
-
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-
-							}
-
-						});
-			} catch (Exception e) {
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			tableProgress.setVisibility(View.VISIBLE);
-			tableListView.setVisibility(View.INVISIBLE);
-		}
-		
-	}
 	// kds webservice
 	private class KdsOrderInfoTask extends WebServiceTask{
 
@@ -271,15 +292,15 @@ public class KdsInfoActivity extends Activity {
 						kdsListView.setAdapter(kdsAdapter);
 					} catch (Exception e) {
 						e.printStackTrace();
-						IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
+						IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 					}
 				}else{
-					IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, 
+					IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, 
 							wsResult.getSzResultData() != "" ? wsResult.getSzResultData() : result, 0);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				IOrderUtility.alertDialog(CONTEXT, R.string.global_dialog_title_error, result, 0);
+				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}	
 		}
 	}
@@ -328,10 +349,10 @@ public class KdsInfoActivity extends Activity {
 		protected List<OrderSendData.OrderDetail> orderList;
 		
 		public KdsListAdapterAllTable(List<OrderSendData.OrderDetail> orderList){
-			inflater = LayoutInflater.from(CONTEXT);
+			inflater = LayoutInflater.from(mContext);
 			this.orderList = orderList;
-			mi = new MenuItem(CONTEXT);
-			imgLoader = new ImageLoader(CONTEXT, ImageLoader.IMAGE_SIZE.SMALL);
+			mi = new MenuItem(mContext);
+			imgLoader = new ImageLoader(mContext, ImageLoader.IMAGE_SIZE.SMALL);
 		}
 		
 		@Override
@@ -408,10 +429,10 @@ public class KdsInfoActivity extends Activity {
 		protected MenuItem mi;
 		
 		public KdsListAdapter(List<KdsOrderInfo> kdsList){
-			inflater = LayoutInflater.from(CONTEXT);
-			mi = new MenuItem(CONTEXT);
+			inflater = LayoutInflater.from(mContext);
+			mi = new MenuItem(mContext);
 			this.kdsList = kdsList;
-			imgLoader = new ImageLoader(CONTEXT, ImageLoader.IMAGE_SIZE.SMALL);
+			imgLoader = new ImageLoader(mContext, ImageLoader.IMAGE_SIZE.SMALL);
 		}
 		
 		@Override
