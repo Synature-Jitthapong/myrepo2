@@ -8,12 +8,16 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
 import syn.pos.data.dao.AppConfig;
 import syn.pos.data.dao.ComputerProperty;
 import syn.pos.data.dao.GlobalProperty;
@@ -287,7 +291,7 @@ public class IOrderUtility {
 			TableName.TableZone tbZone) {
 		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
 		for (TableInfo tbInfo : tbInfoLst) {
-			if (tbInfo.getTableStatus() == 1) {
+			if (tbInfo.isbHasOrder()) {
 				if (tbZone.getZoneID() != 0) {
 					if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
 						tbFilterLst.add(tbInfo);
@@ -304,7 +308,7 @@ public class IOrderUtility {
 			TableName.TableZone tbZone, int tableId) {
 		List<TableInfo> tbFilterLst = new ArrayList<TableInfo>();
 		for (TableInfo tbInfo : tbInfoLst) {
-			if (tbInfo.getiTableID() != tableId) {
+			if (tbInfo.getiTableID() != tableId && !tbInfo.isbIsCombineTable()) {
 				if (tbZone.getZoneID() != 0) {
 					if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
 						tbFilterLst.add(tbInfo);
@@ -1001,6 +1005,34 @@ public class IOrderUtility {
 
 		}
 		return false;
+	}
+	
+	public static String formatJSONDate(GlobalVar globalVar, String tbTime){
+		String reg = "[^0-9]";
+		String timeStr = "";
+		try {
+			long tbTimeMillisec = 0;
+			/* split "+0700" from dot net webservice
+			 * because never use it
+			 */
+			String[] filterPlus7 = tbTime.split("\\+");
+			if(filterPlus7.length > 1)
+				tbTimeMillisec = Long.parseLong(filterPlus7[0].replaceAll(reg, ""));
+			else
+				tbTimeMillisec = Long.parseLong(tbTime.replaceAll(reg, ""));
+			
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(tbTimeMillisec);
+			timeStr = globalVar.mTimeFormat.format(c.getTime());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return timeStr;
+	}
+	
+	public static String formatCombindTableName(boolean isCombind, String combindTbName, String tbName){
+		return isCombind ? combindTbName : tbName;
 	}
 	
 	public static boolean checkConfig(Context c){

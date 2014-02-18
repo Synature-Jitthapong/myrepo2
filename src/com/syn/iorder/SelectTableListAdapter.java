@@ -72,6 +72,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 		TextView tvStatus;
 		TextView tvTableName;
 		TextView tvTableCapacity;
+		TextView tvTbTime;
 		Button btnCloseTable;
 	}
 	
@@ -89,6 +90,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.imgStatus = (ImageView) convertView.findViewById(R.id.imageViewStatus);
 			holder.tvTableName = (TextView) convertView.findViewById(R.id.selecttable_tvname);
 			holder.tvTableCapacity = (TextView) convertView.findViewById(R.id.selecttable_tvcapacity);
+			holder.tvTbTime = (TextView) convertView.findViewById(R.id.tvTbTime);
 			holder.btnTbInfo = (Button) convertView.findViewById(R.id.button1);
 			holder.btnCloseTable = (Button) convertView.findViewById(R.id.button2);
 			convertView.setTag(holder);
@@ -100,8 +102,8 @@ public class SelectTableListAdapter extends BaseAdapter {
 		
 		holder.lastPosition = position;
 		holder.customerQty = tbInfo.getiNoOfCustomer();
-		holder.tableName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() : 
-			tbInfo.getSzTableName();
+		holder.tableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+				tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 		
 		if(mIsShowCapacity){
 			holder.tvTableCapacity.setVisibility(View.VISIBLE);
@@ -115,7 +117,6 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.imgStatus.setImageResource(R.drawable.hasorder);
 			
 			holder.btnTbInfo.setVisibility(View.VISIBLE);
-			
 			
 			// already checkbill
 			if(tbInfo.getTableStatus() == 3){
@@ -190,7 +191,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 				holder.btnTbInfo.setVisibility(View.VISIBLE);
 				holder.btnCloseTable.setVisibility(View.GONE);
 			}
-
+			
 			if(tbInfo.getTableStatus() == 0)
 				holder.btnTbInfo.setVisibility(View.GONE);
 			
@@ -246,6 +247,16 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.btnCloseTable.setVisibility(View.GONE);
 		}
 		holder.tvTableName.setText(holder.tableName);
+		holder.tvTableName.setSelected(true);
+		
+		// print long bill
+		if(tbInfo.getiNumberPrintBill() > 0){
+			holder.tvTbTime.setVisibility(View.VISIBLE);
+			holder.tvTbTime.setText(IOrderUtility.formatJSONDate(mGlobalVar, tbInfo.getdEndTime()));
+		}else{
+			holder.tvTbTime.setVisibility(View.GONE);
+		}
+		
 		return convertView;
 	}
 

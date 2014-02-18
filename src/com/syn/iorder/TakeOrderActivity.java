@@ -3,9 +3,12 @@ package com.syn.iorder;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ksoap2.serialization.PropertyInfo;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import syn.pos.data.dao.MenuComment;
 import syn.pos.data.dao.POSOrdering;
 import syn.pos.data.dao.QuestionGroups;
@@ -135,7 +138,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 		mGlobalVar = new GlobalVar(this);
 		
-		//if(IOrderUtility.checkRegister(this)){
+		if(IOrderUtility.checkRegister(this)){
 			// check login
 			if (GlobalVar.STAFF_ID != 0) {
 				// initial component
@@ -153,12 +156,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			} else {
 				gotoLogin();
 			}
-//		}else{
-//			Intent intent = new Intent(TakeOrderActivity.this,
-//					RegisterActivity.class);
-//			TakeOrderActivity.this.startActivity(intent);
-//			TakeOrderActivity.this.finish();
-//		}
+		}else{
+			Intent intent = new Intent(TakeOrderActivity.this,
+					RegisterActivity.class);
+			TakeOrderActivity.this.startActivity(intent);
+			TakeOrderActivity.this.finish();
+		}
 	}
 
 	private void initComponent(){
@@ -3964,8 +3967,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				public void onClick(View v) {
 					if (tableId != 0) {
 						mCurrTableId = tableId;
-						mCurrTableName = mTbInfo.isbIsCombineTable() ? mTbInfo.getSzCombineTableName() 
-								: mTbInfo.getSzTableName();
+						mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+								mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
 					}
 					setSelectedTable();
 					dialogSelectTable.dismiss();
@@ -4097,8 +4100,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								
 								if (tableId != 0) {
 									mCurrTableId = tableId;
-									mCurrTableName = mTbInfo.isbIsCombineTable() ? mTbInfo.getSzCombineTableName() 
-											: mTbInfo.getSzTableName();
+									mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+											mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
 								}
 								
 								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
@@ -4672,8 +4675,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 				public void onClick(View v) {
 					if (tableId != 0) {
 						mCurrTableId = tableId;
-						mCurrTableName = mTbInfo.isbIsCombineTable() ? 
-								mTbInfo.getSzCombineTableName() : mTbInfo.getSzTableName();
+						mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+								mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
 					}
 
 					if (mCurrTableId != 0) {
@@ -4722,6 +4725,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 		@Override
 		protected void onPostExecute(String result) {
+			if(progress.isShowing())
+				progress.dismiss();
+			
 			Gson gson = new Gson();
 			Type type = new TypeToken<WebServiceResult>(){}.getType();
 			WebServiceResult ws = gson.fromJson(result, type);
@@ -4783,7 +4789,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 							@Override
 							public void onItemClick(AdapterView<?> parent, View v,
 									final int position, long id) {
-
 								mTbInfo = (TableInfo) 
 										parent.getItemAtPosition(position);
 
@@ -4864,9 +4869,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 																true);
 														cusDialog.dismiss();
 														tableId = mTbInfo.getiTableID();
-														String tbName = mTbInfo.isbIsCombineTable() ? mTbInfo.getSzCombineTableName() 
-																: mTbInfo.getSzTableName();
-														tvSelectTableName.setText(tbName);
+														tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+																mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName()));
 														tvSelectTableCusNo
 																.setText(globalVar.qtyFormat.format(1));
 														mCustomerQty = 1;
@@ -4884,9 +4888,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 										cusDialog.show();
 									} else {
 										tableId = mTbInfo.getiTableID();
-										String tbName = mTbInfo.isbIsCombineTable() ? 
-												mTbInfo.getSzCombineTableName() : mTbInfo.getSzTableName();
-										tvSelectTableName.setText(tbName);
+										tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+												mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName()));
 										tvSelectTableCusNo.setText(globalVar.qtyFormat
 												.format(1));
 										mCustomerQty = 1;
@@ -5013,8 +5016,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								
 								if (tableId != 0) {
 									mCurrTableId = tableId;
-									mCurrTableName = mTbInfo.isbIsCombineTable() ? mTbInfo.getSzCombineTableName() 
-											: mTbInfo.getSzTableName();
+									mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+											mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
 								}
 								
 								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
@@ -5048,6 +5051,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		
 		@Override
 		protected void onPreExecute() {
+			progress.setMessage(context.getString(R.string.load_table_progress));
+			progress.show();
+			
 			dialogSelectTable.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
 					WindowManager.LayoutParams.MATCH_PARENT);
 			dialogSelectTable.show();

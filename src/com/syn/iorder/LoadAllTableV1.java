@@ -19,7 +19,7 @@ public class LoadAllTableV1 extends WebServiceTask{
 
 	@Override
 	protected void onPreExecute() {
-		progress.setMessage(context.getText(R.string.load_table_progress));
+		progress.setMessage(context.getString(R.string.load_table_progress));
 		progress.show();
 		mListener.onPre();
 	}

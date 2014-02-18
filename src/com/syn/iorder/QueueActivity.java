@@ -91,6 +91,7 @@ public class QueueActivity extends Activity {
 
 		// find view
 		progressQueue = (ProgressBar) findViewById(R.id.progressBarQueue);
+		progressQueue.setVisibility(View.GONE);
 		tvCustomerQty = (TextView) findViewById(R.id.textViewCustomerQty);
 		tvTotalQueue = (TextView) findViewById(R.id.textViewTotalQueue);
 		editTextCustomerName = (EditText) findViewById(R.id.editTextCustomerName);
@@ -1331,12 +1332,15 @@ public class QueueActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
+			if(progress.isShowing())
+				progress.dismiss();
+			
 			Gson gson = new Gson();
 			Type type = new TypeToken<WebServiceResult>(){}.getType();
 			WebServiceResult ws = gson.fromJson(result, type);
 			if(ws.getiResultID() == 0){
 				type = new TypeToken<List<TableInfo>>(){}.getType();
-				final List<TableInfo> tbInfoLst = gson.fromJson(result, type);
+				final List<TableInfo> tbInfoLst = gson.fromJson(ws.getSzResultData(), type);
 				new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
 					
 					@Override
@@ -1446,10 +1450,15 @@ public class QueueActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
+			progress.setMessage(context.getString(R.string.load_table_progress));
+			progress.show();
+			
 			final Dialog dialog = new Dialog(context, R.style.CustomDialog);
 			//tvTitle.setTextSize(48);
 			tvTitle.setText("Queue : " + queueName);
 			dialog.setContentView(view);
+			dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+					WindowManager.LayoutParams.MATCH_PARENT);
 			dialog.show();
 
 			btnConfirm.setOnClickListener(new OnClickListener() {

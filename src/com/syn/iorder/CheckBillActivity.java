@@ -99,19 +99,16 @@ public class CheckBillActivity extends Activity {
 	}
 
 	private void disableButton(){
-		if(!GlobalVar.sIsCalculateDiscount){
-			btnCheckbill.setEnabled(false);
-			btnPrint.setEnabled(false);
-			btnSetmember.setEnabled(false);
-			btnEditQuestion.setEnabled(false);
-		}
+		btnCalDiscount.setEnabled(false);
+		btnCheckbill.setEnabled(false);
+		btnPrint.setEnabled(false);
+		btnSetmember.setEnabled(false);
+		btnEditQuestion.setEnabled(false);
 	}
 	
 	private void enableButton(){
-		if(GlobalVar.sIsCalculateDiscount)
-			btnCalDiscount.setEnabled(true);
-		if(GlobalVar.sIsEnableCallCheckBill ||GlobalVar.sIsEnablePrintLongBill)
-			btnCheckbill.setEnabled(true);
+		btnCalDiscount.setEnabled(true);
+		btnCheckbill.setEnabled(true);
 		btnPrint.setEnabled(true);
 		btnSetmember.setEnabled(true);
 		btnEditQuestion.setEnabled(true);
@@ -1246,9 +1243,9 @@ public class CheckBillActivity extends Activity {
 							btnCheckbill.setText(R.string.call_checkbill);
 					}
 					
-					if(mSummaryTrans.CallForCheckBill == 99){
-						disableButton();
-					}
+					//if(mSummaryTrans.CallForCheckBill == 99){
+					//	disableButton();
+					//}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(mContext, 
 						globalVar, mSummaryTrans);
