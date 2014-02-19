@@ -39,28 +39,28 @@ public class TableListBuilder extends AlertDialog.Builder{
 					int position, long id) {
 				
 				TableName.TableZone tbZone = (TableName.TableZone) parent.getItemAtPosition(position);
-				List<TableInfo> tbInfoLst = new ArrayList<TableInfo>();
+				List<TableInfo> newTbInfoLst = new ArrayList<TableInfo>();
 				for (TableInfo tbInfo : tbInfoLst) {
 					if (tbInfo.getTableStatus() == 3) {
 						if (tbZone.getZoneID() != 0) {
 							if (tbZone.getZoneID() == tbInfo.getiTableZoneID()) {
-								tbInfoLst.add(tbInfo);
+								newTbInfoLst.add(tbInfo);
 							}
 						} else {
-							tbInfoLst.add(tbInfo);
+							newTbInfoLst.add(tbInfo);
 						}
 					}
 				}
 				
-				if(tbInfoLst.size() == 0){
-					tbInfoLst = new ArrayList<TableInfo>();
+				if(newTbInfoLst.size() == 0){
+					newTbInfoLst = new ArrayList<TableInfo>();
 					TableInfo tbInfo = new TableInfo();
 					tbInfo.setiTableID(0);
 					tbInfo.setSzTableName(context.getString(R.string.no_table));
-					tbInfoLst.add(tbInfo);
+					newTbInfoLst.add(tbInfo);
 				}
 				
-				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, tbInfoLst, false));
+				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, newTbInfoLst, false));
 			}
 
 			@Override

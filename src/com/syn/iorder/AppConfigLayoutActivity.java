@@ -152,7 +152,7 @@ public class AppConfigLayoutActivity extends Activity {
 			
 			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
 			shopProp.setSelectedLanguage(lang.getLangID());
-			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangCode());
+			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangID());
 			
 			//loadSetting();
 			

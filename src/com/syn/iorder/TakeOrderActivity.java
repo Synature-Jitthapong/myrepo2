@@ -4870,7 +4870,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 														cusDialog.dismiss();
 														tableId = mTbInfo.getiTableID();
 														tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
-																mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName()));
+																mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName()));
 														tvSelectTableCusNo
 																.setText(globalVar.qtyFormat.format(1));
 														mCustomerQty = 1;
@@ -4889,7 +4889,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 									} else {
 										tableId = mTbInfo.getiTableID();
 										tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
-												mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName()));
+												mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName()));
 										tvSelectTableCusNo.setText(globalVar.qtyFormat
 												.format(1));
 										mCustomerQty = 1;
@@ -5017,7 +5017,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 								if (tableId != 0) {
 									mCurrTableId = tableId;
 									mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
-											mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
+											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName());
 								}
 								
 								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());

@@ -50,7 +50,7 @@ public class LoginActivity extends Activity {
 
 			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
 			ShopData.Language lang = shopProp.getLanguage();
-			IOrderUtility.switchLanguage(context, lang.getLangCode());
+			IOrderUtility.switchLanguage(context, lang.getLangID());
 			
 			setContentView(R.layout.activity_login);
 			tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
