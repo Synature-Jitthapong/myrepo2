@@ -88,7 +88,8 @@ public class GlobalVar {
 		String qtyPatern = globalProp.getGlobalProperty().getQtyFormat() == null ? "#,###"
 				: globalProp.getGlobalProperty().getQtyFormat();
 		String qtyDecimalPatern = "#,###.####";
-		String timeFormat = globalProp.getGlobalProperty().getTimeFormat().equals("") ? 
+		String timeFormat = globalProp.getGlobalProperty().getTimeFormat() == null ? "HH:mm:ss" :
+				globalProp.getGlobalProperty().getTimeFormat().equals("") ? 
 				"HH:mm:ss" : globalProp.getGlobalProperty().getTimeFormat();
 
 		decimalFormat = new DecimalFormat(decimalPatern);
