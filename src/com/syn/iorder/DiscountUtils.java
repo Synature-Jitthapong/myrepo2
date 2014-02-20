@@ -145,10 +145,38 @@ public class DiscountUtils {
 		private String DiscountButtonName;
 	    private int PromotionID;
 	    private int PromotionType;
+	    private int IsRequireReferenceNo;
 	    private int MaxNumberCanApplied;
+	    private int CurrentAppliedNumber;
+	    //private int CurrentReferenceNo
+	    private int InputDiscountNo;
 	    private int noCoupone;
 	    private boolean isChecked;
 	    
+		public int getIsRequireReferenceNo() {
+			return IsRequireReferenceNo;
+		}
+
+		public void setIsRequireReferenceNo(int isRequireReferenceNo) {
+			IsRequireReferenceNo = isRequireReferenceNo;
+		}
+
+		public int getCurrentAppliedNumber() {
+			return CurrentAppliedNumber;
+		}
+
+		public void setCurrentAppliedNumber(int currentAppliedNumber) {
+			CurrentAppliedNumber = currentAppliedNumber;
+		}
+
+		public int getInputDiscountNo() {
+			return InputDiscountNo;
+		}
+
+		public void setInputDiscountNo(int inputDiscountNo) {
+			InputDiscountNo = inputDiscountNo;
+		}
+
 		public boolean isChecked() {
 			return isChecked;
 		}
