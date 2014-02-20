@@ -137,7 +137,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		setTitle("");
 		
 		mGlobalVar = new GlobalVar(this);
-		
 		if(IOrderUtility.checkRegister(this)){
 			// check login
 			if (GlobalVar.STAFF_ID != 0) {
