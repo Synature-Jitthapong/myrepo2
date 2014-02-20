@@ -303,6 +303,7 @@ public class LoginActivity extends Activity {
 				@Override
 				public void onSuccess() {
 					updateWebserviceVersion();
+					startActivity(new Intent(LoginActivity.this, LoginActivity.class));
 				}
 
 				@Override

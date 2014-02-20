@@ -34,6 +34,7 @@ public class GlobalVar {
 	public static boolean sIsAddOnlyOneItem = false;
 	public static boolean sIsCalculateDiscount = false;
 	public static boolean sIsEnableGenQueueWithSelectPrinter = false;
+	public static boolean sIsEnableMaxCharFormergeTable = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";

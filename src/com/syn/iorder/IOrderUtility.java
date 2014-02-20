@@ -1031,8 +1031,17 @@ public class IOrderUtility {
 		return timeStr;
 	}
 	
-	public static String formatCombindTableName(boolean isCombind, String combindTbName, String tbName){
-		return isCombind ? combindTbName : tbName;
+	public static String formatCombindTableName(boolean isCombind, String combindTbName, String currTbName){
+		if(!isCombind)
+			return currTbName;
+		
+		String tbName = null;
+		if(GlobalVar.sIsEnableMaxCharFormergeTable){
+			tbName = currTbName + " [" + combindTbName + "]";
+		}else{
+			tbName = currTbName + "+" + combindTbName;
+		}
+		return tbName;
 	}
 	
 	public static boolean checkConfig(Context c){
