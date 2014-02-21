@@ -17,6 +17,71 @@ import android.content.Context;
 
 public class DiscountUtils {
 	
+	public static class ApplayDiscountWithTransaction extends WebServiceTask{
+		public static final String APPLY_DISCOUNT_METHOD = "WSiOrder_JSON_ApplyDiscountWithTransaction";
+		private GetSummaryBillWithDiscountListener mListener;
+		
+		public ApplayDiscountWithTransaction(Context c, GlobalVar gb, int tableId, 
+				String promotions, String promotionsRefNo,
+				GetSummaryBillWithDiscountListener listener) {
+			super(c, gb, APPLY_DISCOUNT_METHOD);
+			
+			mListener = listener;
+			
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iComputerID");
+			property.setValue(GlobalVar.COMPUTER_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iTableID");
+			property.setValue(tableId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("szListPromotionID");
+			property.setValue(promotions);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("szListItemRefNo");
+			property.setValue(promotionsRefNo);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			mListener.onPre();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			GsonDeserialze gdz = new GsonDeserialze();
+			try {
+				WebServiceResult wsResult = gdz.deserializeWsResultJSON(result);
+				if(wsResult.getiResultID() == 0){
+					mListener.onPost(gdz.deserializeSummaryTransactionJSON(wsResult.getSzResultData()));
+				}else{
+					mListener.onError(wsResult.getSzResultData().equals("") ? 
+							result : wsResult.getSzResultData());
+				}
+			} catch (Exception e) {
+				mListener.onError(result);
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static class GetSummaryBillWithDiscountTask extends WebServiceTask{
 		public static final String GET_SUMM_BILL_METHOD = "WSiOrder_JSON_GetSummaryBillWithDiscountItems";
 		
@@ -86,7 +151,7 @@ public class DiscountUtils {
 		public static final String LIST_BUTTON_DISCOUNT_METHOD = "WSiOrder_JSON_ListButtonDiscountItems";
 		private LoadButtonDiscountListener mListener;
 		
-		public ListButtonDiscountTask(Context c, GlobalVar gb, 
+		public ListButtonDiscountTask(Context c, GlobalVar gb, int transId, int compId,
 				LoadButtonDiscountListener listener) {
 			super(c, gb, LIST_BUTTON_DISCOUNT_METHOD);
 			
@@ -101,6 +166,18 @@ public class DiscountUtils {
 			property = new PropertyInfo();
 			property.setName("iStaffID");
 			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+
+			property = new PropertyInfo();
+			property.setName("iDbTransID");
+			property.setValue(transId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iDbCompID");
+			property.setValue(compId);
 			property.setType(int.class);
 			soapRequest.addProperty(property);
 		}
@@ -132,6 +209,26 @@ public class DiscountUtils {
 			
 		}	
 	}
+
+	public static String toPromotionRefNoSeperate(int refNo, int applyNumber){
+		String promotionsRefNo = null;
+		for(int i = 0; i < applyNumber; i++){
+			promotionsRefNo = String.valueOf(refNo);
+			if(i < applyNumber -1)
+				promotionsRefNo = ",";
+		}
+		return promotionsRefNo;
+	}
+	
+	public static String toPromotionSeperate(int promotionId, int applyNumber){
+		String promotions = null;
+		for(int i = 0; i < applyNumber; i++){
+			promotions = String.valueOf(promotionId);
+			if(i < applyNumber -1)
+				promotions = ",";
+		}
+		return promotions;
+	}
 	
 	public static interface GetSummaryBillWithDiscountListener extends ProgressListener{
 		void onPost(SummaryTransaction summTrans);
@@ -149,10 +246,18 @@ public class DiscountUtils {
 	    private int MaxNumberCanApplied;
 	    private int CurrentAppliedNumber;
 	    private int[] CurrentReferenceNo;
+	    private int ReferenceNo;
 	    private int InputDiscountNo;
-	    private int noCoupone;
 	    private boolean isChecked;
 	    
+		public int getReferenceNo() {
+			return ReferenceNo;
+		}
+
+		public void setReferenceNo(int referenceNo) {
+			ReferenceNo = referenceNo;
+		}
+
 		public int[] getCurrentReferenceNo() {
 			return CurrentReferenceNo;
 		}
@@ -187,14 +292,6 @@ public class DiscountUtils {
 
 		public boolean isChecked() {
 			return isChecked;
-		}
-
-		public int getNoCoupone() {
-			return noCoupone;
-		}
-
-		public void setNoCoupone(int noCoupone) {
-			this.noCoupone = noCoupone;
 		}
 
 		public void setChecked(boolean isChecked) {

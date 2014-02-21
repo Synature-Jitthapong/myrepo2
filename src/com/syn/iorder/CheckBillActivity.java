@@ -21,6 +21,7 @@ import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -520,6 +521,8 @@ public class CheckBillActivity extends Activity {
 										TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);
 												
 										mTableId = tbInfo.getiTableID();
+										mTransactionId = tbInfo.getiTransactionID();
+										mComputerId = tbInfo.getiComputerID();
 										String tableName = tbInfo.isbIsCombineTable() ? 
 												tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
 										tvTableName.setText(R.string.text_table);
@@ -566,8 +569,8 @@ public class CheckBillActivity extends Activity {
 
 	// calculate discount
 	private void calculateDiscount(){
-		final List<DiscountUtils.ButtonDiscount> promotionLst = 
-				new ArrayList<DiscountUtils.ButtonDiscount> ();
+		final List<ButtonDiscount> promotionLst = 
+				new ArrayList<ButtonDiscount>();
 		
 		final LayoutInflater inflater = (LayoutInflater)
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -664,21 +667,23 @@ public class CheckBillActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(promotionLst.size() != 0){
-					String promotionId = "";
-					String noCoupone = "";
+					String promotions = "";
+					String promotionsRefNo = "";
 					for(int i = 0; i < promotionLst.size(); i++){
 						DiscountUtils.ButtonDiscount promotion = 
 								promotionLst.get(i);
-						promotionId += String.valueOf(promotion.getPromotionID());
-						noCoupone += String.valueOf(promotion.getNoCoupone());
-						
+						int promotionId = promotion.getPromotionID();
+						int applyNumber = promotion.getCurrentAppliedNumber();
+						int refNo = promotion.getReferenceNo();
+						promotions += DiscountUtils.toPromotionSeperate(promotionId, applyNumber);
+						promotionsRefNo += DiscountUtils.toPromotionRefNoSeperate(refNo, applyNumber);
 						if(i < promotionLst.size() - 1){
-							promotionId += ",";
-							noCoupone += ",";
+							promotions += ",";
+							promotionsRefNo += ",";
 						}
 					}
-					new DiscountUtils.GetSummaryBillWithDiscountTask(mContext, globalVar, 
-							mTableId, promotionId, noCoupone, getSummListener).execute(GlobalVar.FULL_URL);
+					new DiscountUtils.ApplayDiscountWithTransaction(mContext, globalVar, 
+							mTableId, promotions, promotionsRefNo, getSummListener).execute(GlobalVar.FULL_URL);
 				}else{
 					new AlertDialog.Builder(mContext)
 					.setMessage(R.string.select_promotion)
@@ -739,8 +744,40 @@ public class CheckBillActivity extends Activity {
 								int position, long id) {
 							final DiscountUtils.ButtonDiscount btnDiscount = 
 									(DiscountUtils.ButtonDiscount) parent.getItemAtPosition(position);
-							
-							btnDiscount.setNoCoupone(1);
+						
+							btnDiscount.setCurrentAppliedNumber(1);
+							// popup for enter reference number if required
+							if(btnDiscount.getIsRequireReferenceNo() == 1 && !btnDiscount.isChecked()){
+								AlertDialog.Builder builder = 
+										new AlertDialog.Builder(mContext);
+								final EditText txtRefNo = new EditText(mContext);
+								builder.setTitle(R.string.enter_ref_no);
+								builder.setView(txtRefNo);
+								builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+									}
+								});
+								builder.setPositiveButton(android.R.string.ok, null);
+								final AlertDialog d = builder.create();
+								d.show();
+								d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										try {
+											btnDiscount.setReferenceNo(Integer.parseInt(txtRefNo.getText().toString()));
+											btnDiscount.setChecked(true);
+											promotionLst.add(btnDiscount);
+											d.dismiss();
+										} catch (NumberFormatException e) {
+											e.printStackTrace();
+										}
+									}
+									
+								});
+							}
 							
 							// popup for enter number promotion
 							if(btnDiscount.getMaxNumberCanApplied() > 1 && !btnDiscount.isChecked()){
@@ -759,7 +796,8 @@ public class CheckBillActivity extends Activity {
 											int qty = Integer.parseInt(txtQty.getText().toString());
 											if(++qty <= btnDiscount.getMaxNumberCanApplied()){
 												txtQty.setText(String.valueOf(qty));
-												btnDiscount.setNoCoupone(qty);
+												btnDiscount.setCurrentAppliedNumber(qty);
+												discountAdapter.notifyDataSetChanged();
 											}
 										} catch (NumberFormatException e) {
 											// TODO Auto-generated catch block
@@ -776,7 +814,8 @@ public class CheckBillActivity extends Activity {
 											int qty = Integer.parseInt(txtQty.getText().toString());
 											if(--qty > 0){
 												txtQty.setText(String.valueOf(qty));
-												btnDiscount.setNoCoupone(qty);
+												btnDiscount.setCurrentAppliedNumber(qty);
+												discountAdapter.notifyDataSetChanged();
 											}
 										} catch (NumberFormatException e) {
 											// TODO Auto-generated catch block
@@ -793,8 +832,8 @@ public class CheckBillActivity extends Activity {
 									
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										promotionLst.remove(btnDiscount);
 										btnDiscount.setChecked(false);
+										promotionLst.remove(btnDiscount);
 										discountAdapter.notifyDataSetChanged();
 									}
 								});
@@ -805,9 +844,8 @@ public class CheckBillActivity extends Activity {
 										if(Integer.parseInt(txtQty.getText().toString()) >
 											btnDiscount.getMaxNumberCanApplied()){
 
-											promotionLst.remove(btnDiscount);
 											btnDiscount.setChecked(false);
-											discountAdapter.notifyDataSetChanged();
+											promotionLst.remove(btnDiscount);
 											
 											new AlertDialog.Builder(mContext)
 											.setMessage(mContext.getString(R.string.promotion_limit) +
@@ -820,8 +858,9 @@ public class CheckBillActivity extends Activity {
 											})
 											.show();
 										}else{
-											discountAdapter.notifyDataSetChanged();
+											promotionLst.add(btnDiscount);
 										}
+										discountAdapter.notifyDataSetChanged();
 									}
 								});
 								AlertDialog d = builder.create();
@@ -829,11 +868,11 @@ public class CheckBillActivity extends Activity {
 							}
 							
 							if(btnDiscount.isChecked()){
-								promotionLst.remove(btnDiscount);
 								btnDiscount.setChecked(false);
+								promotionLst.remove(btnDiscount);
 							}else{
-								promotionLst.add(btnDiscount);
 								btnDiscount.setChecked(true);
+								promotionLst.add(btnDiscount);
 							}
 							discountAdapter.notifyDataSetChanged();
 						}
@@ -844,7 +883,7 @@ public class CheckBillActivity extends Activity {
 			};
 			
 		new DiscountUtils.ListButtonDiscountTask(mContext, 
-				globalVar, loadDiscountListener).execute(GlobalVar.FULL_URL);
+				globalVar, mTransactionId, mComputerId, loadDiscountListener).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void printLongbill(){
