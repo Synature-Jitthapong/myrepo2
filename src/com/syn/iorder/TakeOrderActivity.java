@@ -370,6 +370,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						GlobalVar.sIsEnableCallCheckBill = true;
 					}else if(feature.getFeatureValue() == 2){
 						GlobalVar.sIsEnablePrintLongBill = true;
+					}else if(feature.getFeatureValue() == 3){
+						GlobalVar.sIsEnableCallCheckbillPayCashDetail = true;
 					}
 					break;
 				case 11: // calculate discount

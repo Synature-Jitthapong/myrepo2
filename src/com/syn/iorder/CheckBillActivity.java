@@ -150,9 +150,11 @@ public class CheckBillActivity extends Activity {
 		/* change btnCallCheckBill text to Print long bill
 		 * if feature is enabled
 		 */
-		if(GlobalVar.sIsEnablePrintLongBill)
+		if(GlobalVar.sIsEnableCallCheckBill)
+			btnCheckbill.setText(R.string.call_checkbill);
+		else if(GlobalVar.sIsEnablePrintLongBill)
 			btnCheckbill.setText(R.string.print_long_bill);
-		else if(GlobalVar.sIsEnableCallCheckBill)
+		else if(GlobalVar.sIsEnableCallCheckbillPayCashDetail)
 			btnCheckbill.setText(R.string.call_checkbill);
 		else
 			btnCheckbill.setVisibility(View.GONE);
@@ -415,6 +417,8 @@ public class CheckBillActivity extends Activity {
 					printLongbill();
 				else if(GlobalVar.sIsEnableCallCheckBill)
 					checkBill();
+				else if(GlobalVar.sIsEnableCallCheckbillPayCashDetail)
+					checkBillSetPaydetail();
 			}
 		});
 		
@@ -845,6 +849,10 @@ public class CheckBillActivity extends Activity {
 			
 		new DiscountUtils.ListButtonDiscountTask(mContext, 
 				globalVar, loadDiscountListener).execute(GlobalVar.FULL_URL);
+	}
+	
+	private void checkBillSetPaydetail(){
+		
 	}
 	
 	private void printLongbill(){

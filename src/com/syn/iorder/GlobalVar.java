@@ -5,16 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
-
 import android.content.Context;
 import android.provider.Settings.Secure;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.GridView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import syn.pos.data.dao.ProgramFeature;
-import syn.pos.data.dao.Register;
 import syn.pos.data.dao.ShowMenuColumnName;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.ShopData.ComputerProperty;
@@ -35,6 +28,7 @@ public class GlobalVar {
 	public static boolean sIsCalculateDiscount = false;
 	public static boolean sIsEnableGenQueueWithSelectPrinter = false;
 	public static boolean sIsEnableMaxCharFormergeTable = false;
+	public static boolean sIsEnableCallCheckbillPayCashDetail = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";
