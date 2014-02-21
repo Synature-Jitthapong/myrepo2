@@ -148,11 +148,19 @@ public class DiscountUtils {
 	    private int IsRequireReferenceNo;
 	    private int MaxNumberCanApplied;
 	    private int CurrentAppliedNumber;
-	    //private int CurrentReferenceNo
+	    private int[] CurrentReferenceNo;
 	    private int InputDiscountNo;
 	    private int noCoupone;
 	    private boolean isChecked;
 	    
+		public int[] getCurrentReferenceNo() {
+			return CurrentReferenceNo;
+		}
+
+		public void setCurrentReferenceNo(int[] currentReferenceNo) {
+			CurrentReferenceNo = currentReferenceNo;
+		}
+
 		public int getIsRequireReferenceNo() {
 			return IsRequireReferenceNo;
 		}
