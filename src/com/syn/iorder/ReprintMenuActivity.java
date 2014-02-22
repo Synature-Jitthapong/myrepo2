@@ -113,7 +113,8 @@ public class ReprintMenuActivity extends Activity {
 										IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
 
 								listViewTableName.setAdapter(
-										IOrderUtility.createTableNameAdapter(context, globalVar, newTbInfoLst));
+										IOrderUtility.createTableNameAdapter(
+												context, globalVar, newTbInfoLst, false, true));
 								listViewTableName.setOnItemClickListener(new OnItemClickListener(){
 
 									@Override

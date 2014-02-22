@@ -139,7 +139,8 @@ public class MoveMenuActivity extends Activity {
 												IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
 		
 										mListViewSourceTbName = (ListView) findViewById(R.id.listViewSorceTableName);
-										mListViewSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(mContext, mGlobalVar, newTbInfoLst));
+										mListViewSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(
+												mContext, mGlobalVar, newTbInfoLst, false, true));
 										mListViewSourceTbName
 												.setOnItemClickListener(new OnItemClickListener() {
 													@Override
@@ -160,7 +161,8 @@ public class MoveMenuActivity extends Activity {
 														mBtnShooseMenu.setText(R.string.move_menu_btn_choose_menu);
 														ListView listViewDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
 														List<TableInfo> tbInfoLstTo = IOrderUtility.filterTableName(tbInfoLst, tbZone, tbInfo.getiTableID());
-														listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(mContext, mGlobalVar, tbInfoLstTo));
+														listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(
+																mContext, mGlobalVar, tbInfoLstTo, false, true));
 													}
 		
 												});
@@ -188,7 +190,7 @@ public class MoveMenuActivity extends Activity {
 										mListViewDestTbName = (ListView) findViewById(R.id.listViewDestTableName);
 										mListViewDestTbName.setAdapter(
 												IOrderUtility.createTableNameAdapter(
-														mContext, mGlobalVar, newTbInfoLst));
+														mContext, mGlobalVar, newTbInfoLst, false, true));
 		
 										mListViewDestTbName
 												.setOnItemClickListener(new OnItemClickListener() {

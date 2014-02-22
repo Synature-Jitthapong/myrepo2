@@ -60,7 +60,7 @@ public class TableListBuilder extends AlertDialog.Builder{
 					newTbInfoLst.add(tbInfo);
 				}
 				
-				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, newTbInfoLst, false));
+				lvTable.setAdapter(new SelectTableListAdapter(context, globalVar, newTbInfoLst, false, true));
 			}
 
 			@Override

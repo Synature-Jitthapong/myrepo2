@@ -440,5 +440,6 @@
 	<string name="close_table_confirm">คุณต้องการปิดโต๊ะ?</string>
 	<string name="no_table">ไม่มีโต๊ะที่เก็บเงินแล้ว</string>
     <string name="already_print_longbill">พิมพ์ใบลองบิลแล้ว</string>
-
+	<string name="enter_ref_no">ใส่หมายเลข Reference</string>
+	<string name="confirm_cancel">คุณต้องการยกเลิก?</string>
 </resources>

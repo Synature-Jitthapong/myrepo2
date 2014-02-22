@@ -152,7 +152,8 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 			TableName.TableZone tbZone = (TableName.TableZone) parent.getItemAtPosition(position);
 			final List<TableInfo> newTbInfoLst = IOrderUtility.filterTableNameHaveOrder(mTbInfoLst, tbZone);
 	
-			mLvTable.setAdapter(IOrderUtility.createTableNameAdapter(CommentTransactionActivity.this, mGlobalVar, newTbInfoLst));
+			mLvTable.setAdapter(IOrderUtility.createTableNameAdapter(
+					CommentTransactionActivity.this, mGlobalVar, newTbInfoLst, false, true));
 			break;
 		}
 	}

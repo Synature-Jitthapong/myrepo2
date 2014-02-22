@@ -28,7 +28,8 @@ public class SelectTableListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private GlobalVar mGlobalVar;
 	private boolean mIsShowCapacity = true;
-
+	private boolean mIsShowBtnInfo = true;
+	
 	public SelectTableListAdapter(Context context, GlobalVar globalVar,
 			List<TableInfo> tbInfoLst) {
 		mGlobalVar = globalVar;
@@ -39,13 +40,14 @@ public class SelectTableListAdapter extends BaseAdapter {
 	}
 	
 	public SelectTableListAdapter(Context context, GlobalVar globalVar,
-			List<TableInfo> tbInfoLst, boolean iSShowCapacity) {
+			List<TableInfo> tbInfoLst, boolean iSShowCapacity, boolean isShowBtnInfo) {
 		mGlobalVar = globalVar;
 		mTableInfoLst = tbInfoLst;
 		mContext = context;
 		mInflater = (LayoutInflater) 
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mIsShowCapacity = iSShowCapacity;
+		mIsShowBtnInfo = isShowBtnInfo;
 	}
 
 	@Override
@@ -248,6 +250,12 @@ public class SelectTableListAdapter extends BaseAdapter {
 		}
 		holder.tvTableName.setText(holder.tableName);
 		holder.tvTableName.setSelected(true);
+		
+
+		if(mIsShowBtnInfo)
+			holder.btnTbInfo.setVisibility(View.VISIBLE);
+		else
+			holder.btnTbInfo.setVisibility(View.GONE);
 		
 		// print long bill
 		if(tbInfo.getiNumberPrintBill() > 0){

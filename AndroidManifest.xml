@@ -82,7 +82,7 @@
             android:name="com.syn.iorder.CheckBillActivity"
             android:label="@string/activity_checkbill"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
             android:name="com.syn.iorder.SearchMemberActivity"
