@@ -396,7 +396,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 					}
 					break;
 				case 14: // max char to show table name
-					
+					if(feature.getFeatureValue() == 0){
+						GlobalVar.sIsEnableMaxCharFormergeTable = false;
+					}else if(feature.getFeatureValue() == 1){
+						GlobalVar.sIsEnableMaxCharFormergeTable = true;
+					}
 					break;
 				}
 			}

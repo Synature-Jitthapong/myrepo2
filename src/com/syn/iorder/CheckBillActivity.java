@@ -2,11 +2,15 @@ package com.syn.iorder;
 /*
  * set member 
  */
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.syn.iorder.DiscountUtils.ButtonDiscount;
 import com.syn.iorder.PrinterUtils.Printer;
 
@@ -953,6 +957,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {	
+				checkBill();
 			}
 		})
 		.setPositiveButton(R.string.global_btn_yes, new DialogInterface.OnClickListener() {
@@ -1471,7 +1476,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 			new SetPaymentCashDetail(mContext, globalVar, payAmount).execute(GlobalVar.FULL_URL);
 		}else{
 			new AlertDialog.Builder(mContext)
-			.setTitle(R.string.enter_enough_money)
+			.setTitle(R.string.input_money)
+			.setMessage(R.string.enter_enough_money)
 			.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -1528,9 +1534,44 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 		protected void onPostExecute(String result) {
 			if(progress.isShowing())
 				progress.dismiss();
-			new AlertDialog.Builder(mContext)
-			.setMessage(result)
-			.show();
+			Gson gson = new Gson();
+			Type type = new TypeToken<WebServiceResult>(){}.getType();
+			try {
+				WebServiceResult ws = gson.fromJson(result, type);
+				if(ws.getiResultID() == 0){
+					// refresh
+					new ShowSummaryBillTask(context, globalVar).execute(GlobalVar.FULL_URL);
+					new AlertDialog.Builder(mContext)
+					.setMessage(R.string.call_chekcbill_success)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					})
+					.show();
+				}else{
+					new AlertDialog.Builder(mContext)
+					.setMessage(result)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					})
+					.show();
+				}
+			} catch (JsonSyntaxException e) {
+				new AlertDialog.Builder(mContext)
+				.setMessage(result)
+				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				})
+				.show();
+			}
 		}
 		
 	}

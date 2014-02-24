@@ -28,7 +28,8 @@
         android:layout_toLeftOf="@+id/tvTotalPay"
         android:text="@string/change"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvChange"
@@ -41,7 +42,8 @@
         android:gravity="right"
         android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView3"
@@ -53,7 +55,8 @@
         android:layout_marginLeft="8dp"
         android:text="@string/total"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvTotalPay"
@@ -64,22 +67,18 @@
         android:layout_marginRight="8dp"
         android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txtTotalPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:ems="5"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:textStyle="bold" >
-
-        <requestFocus />
-    </EditText>
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:padding="0dp" />
 
     <TextView
         android:id="@+id/textView1"
@@ -93,14 +92,15 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
-        android:padding="0dp" />
+    <EditText
+        android:id="@+id/txtTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_toRightOf="@+id/textView1"
+        android:ems="5"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:textStyle="bold" />
 
 </RelativeLayout>
