@@ -1032,10 +1032,16 @@ public class IOrderUtility {
 		return timeStr;
 	}
 	
-	public static double stringToDouble(String text) throws ParseException{
+	public static double stringToDouble(String text){
 		double value = 0.0d;
 		NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-		Number num = format.parse(text);
+		Number num = value;
+		try {
+			num = format.parse(text);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		value = num.doubleValue();
 		return value;
 	}

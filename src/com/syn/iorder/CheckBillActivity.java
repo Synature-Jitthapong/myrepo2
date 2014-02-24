@@ -46,7 +46,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class CheckBillActivity extends Activity {
+public class CheckBillActivity extends Activity implements PayInfoFragment.PaymentListener {
 	private boolean isSearchMember = true;
 	
 	private Spinner spinnerTableZone;
@@ -83,7 +83,7 @@ public class CheckBillActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_check_bill);
 		
-		mContext = this;
+		mContext = CheckBillActivity.this;
 		
 		globalVar = new GlobalVar(this);
 		initComponent();
@@ -946,7 +946,23 @@ public class CheckBillActivity extends Activity {
 	}
 	
 	private void checkBillSetPaydetail(){
-		
+		new AlertDialog.Builder(mContext)
+		.setTitle(R.string.input_money)
+		.setMessage(R.string.confirm_input_money)
+		.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {	
+			}
+		})
+		.setPositiveButton(R.string.global_btn_yes, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				PayInfoFragment f = PayInfoFragment.newInstance(mSummaryTrans.TransactionSummary.fTotalSalePrice);
+				f.show(getFragmentManager(), "payinfo");
+			}
+		}).show();
 	}
 	
 	private void printLongbill(){
@@ -1447,5 +1463,75 @@ public class CheckBillActivity extends Activity {
 				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, result, 0);
 			}
 		}
+	}
+
+	@Override
+	public void onSend(String payAmount) {
+		if(IOrderUtility.stringToDouble(payAmount) >= mSummaryTrans.TransactionSummary.fTotalSalePrice){
+			new SetPaymentCashDetail(mContext, globalVar, payAmount).execute(GlobalVar.FULL_URL);
+		}else{
+			new AlertDialog.Builder(mContext)
+			.setTitle(R.string.enter_enough_money)
+			.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			}).show();
+		}
+	}
+	
+	public class SetPaymentCashDetail extends WebServiceTask{
+		public static final String METHOD = "WSiOrder_JSON_SetPaymentCashDetail";
+		public SetPaymentCashDetail(Context c, GlobalVar globalVar, String totalPay) {
+			super(c, globalVar, METHOD);
+			
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iComputerID");
+			property.setValue(GlobalVar.COMPUTER_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iDbTransID");
+			property.setValue(mTransactionId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iDbCompID");
+			property.setValue(mComputerId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("fPayAmount");
+			property.setValue(totalPay);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progress.setMessage(context.getString(R.string.loading_progress));
+			progress.show();
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			if(progress.isShowing())
+				progress.dismiss();
+			new AlertDialog.Builder(mContext)
+			.setMessage(result)
+			.show();
+		}
+		
 	}
 }

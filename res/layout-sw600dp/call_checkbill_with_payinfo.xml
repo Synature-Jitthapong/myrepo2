@@ -6,13 +6,13 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/txtTotalPay"
+        android:id="@+id/txtTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
-        android:ems="10"
+        android:ems="5"
         android:inputType="number"
         android:textSize="32sp"
         android:textStyle="bold" />
@@ -21,20 +21,61 @@
         android:id="@+id/lvPayment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/textView3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/txtTotalPay" >
+        android:layout_below="@+id/txtTotalPrice" >
 
     </ListView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/tvTotalPay"
+        android:text="@string/change"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:gravity="right"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtTotalPay"
-        android:layout_alignBottom="@+id/txtTotalPay"
-        android:layout_toLeftOf="@+id/txtTotalPay"
-        android:text="@string/pay"
+        android:layout_alignBaseline="@+id/txtTotalPrice"
+        android:layout_alignBottom="@+id/txtTotalPrice"
+        android:layout_toLeftOf="@+id/txtTotalPrice"
+        android:text="@string/total_price"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/textView2"
+        android:text="@string/total"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvTotalPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvChange"
+        android:layout_alignParentRight="true"
+        android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
