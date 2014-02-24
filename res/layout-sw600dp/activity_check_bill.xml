@@ -209,7 +209,7 @@
                         android:layout_margin="2dp"
                         android:layout_weight="1"
                         android:background="@drawable/light_grey_button"
-                        android:text="@string/calculate_discount" />
+                        android:text="@string/discount" />
 
                     <Button
                         android:id="@+id/buttonBillSetMember"

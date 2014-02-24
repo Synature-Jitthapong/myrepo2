@@ -27,6 +27,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -583,7 +584,7 @@ public class CheckBillActivity extends Activity {
 		builder.setTitle(R.string.select_promotion);
 		builder.setView(discountView);
 		builder.setNegativeButton(R.string.global_btn_cancel, null);
-		builder.setPositiveButton(R.string.global_btn_ok, null);
+		builder.setPositiveButton(R.string.apply_discount, null);
 		final AlertDialog dialogSelPromo = builder.create();
 		dialogSelPromo.show();
 		
@@ -798,6 +799,7 @@ public class CheckBillActivity extends Activity {
 								AlertDialog.Builder builder = 
 										new AlertDialog.Builder(mContext);
 								final EditText txtRefNo = new EditText(mContext);
+								txtRefNo.setInputType(InputType.TYPE_CLASS_NUMBER);
 								builder.setTitle(R.string.enter_ref_no);
 								builder.setView(txtRefNo);
 								builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -812,7 +814,8 @@ public class CheckBillActivity extends Activity {
 								builder.setPositiveButton(android.R.string.ok, null);
 								final AlertDialog d = builder.create();
 								d.show();
-								
+
+								txtRefNo.requestFocus();
 								d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
 
 									@Override
