@@ -182,7 +182,8 @@ public class KdsInfoActivity extends Activity {
 										tbInfo.setTableStatus(1);
 										newTbInfoLst.add(0, tbInfo);
 										
-										tableListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, newTbInfoLst));
+										tableListView.setAdapter(IOrderUtility.createTableNameAdapter(
+												mContext, globalVar, newTbInfoLst, false, true));
 										tableListView
 												.setOnItemClickListener(new OnItemClickListener() {
 													@Override

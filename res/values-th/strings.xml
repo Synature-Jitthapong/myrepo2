@@ -428,7 +428,6 @@
     <string name="already_print_longbill">Ok, Already printed long bill</string>
     <string name="print_long_bill">Print long bill</string>
     <string name="please_select_printer">Please select printer</string>
-    <string name="calculate_discount">Cal. Discount</string>
     <string name="select_promotion">Please select promotion</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
@@ -440,5 +439,7 @@
 	<string name="close_table_confirm">คุณต้องการปิดโต๊ะ?</string>
 	<string name="no_table">ไม่มีโต๊ะที่เก็บเงินแล้ว</string>
     <string name="already_print_longbill">พิมพ์ใบลองบิลแล้ว</string>
-
+	<string name="enter_ref_no">ใส่หมายเลข Reference</string>
+	<string name="confirm_cancel">คุณต้องการยกเลิก?</string>
+	<string name="apply_discount">ใช้ส่วนลด</string>
 </resources>

@@ -258,9 +258,9 @@ public class IOrderUtility {
 
 	public static SelectTableListAdapter createTableNameAdapter(
 			Context context, GlobalVar globalVar,
-			final List<TableInfo> tbInfoLst) {
+			final List<TableInfo> tbInfoLst, boolean isShowCapacity, boolean isShowBtnInfo) {
 		SelectTableListAdapter tbNameAdapter = new SelectTableListAdapter(
-				context, globalVar, tbInfoLst, false);
+				context, globalVar, tbInfoLst, isShowCapacity, isShowBtnInfo);
 		return tbNameAdapter;
 	}
 

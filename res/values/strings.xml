@@ -468,7 +468,8 @@ Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</
     <string name="already_print_longbill">Ok, Already printed long bill</string>
     <string name="print_long_bill">Print long bill</string>
     <string name="please_select_printer">Please select printer</string>
-    <string name="calculate_discount">Cal. Discount</string>
+    <string name="discount">Discount</string>
+    <string name="apply_discount">Apply Discount</string>
     <string name="select_promotion">Please select promotion</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
@@ -487,4 +488,6 @@ Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</
 	<string name="enter_register_code">Please enter register code.</string>
 	<string name="register_code_incorrect">Register code is incorrect.</string>
 	<string name="pay">Pay</string>
+	<string name="enter_ref_no">Please enter reference number.</string>
+	<string name="confirm_cancel">Are you sure you want to cancel?</string>
 </resources>

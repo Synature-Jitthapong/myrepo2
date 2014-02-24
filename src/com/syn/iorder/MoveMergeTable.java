@@ -118,7 +118,8 @@ public class MoveMergeTable extends Activity {
 												IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
 
 										ListView listViewSourceTbName = (ListView) findViewById(R.id.listViewSorceTableName);
-										listViewSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(mContext, mGlobalVar, newTbInfoLst));
+										listViewSourceTbName.setAdapter(IOrderUtility.createTableNameAdapter(
+												mContext, mGlobalVar, newTbInfoLst, false, true));
 										listViewSourceTbName
 												.setOnItemClickListener(new OnItemClickListener() {
 													@Override
@@ -140,7 +141,8 @@ public class MoveMergeTable extends Activity {
 																IOrderUtility.filterTableName(tbInfoLst, tbZone, tbInfo.getiTableID());
 														ListView listViewDestTbName = 
 																(ListView) findViewById(R.id.listViewDestTableName);
-														listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(mContext, mGlobalVar, tbInfoLstTo));
+														listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(
+																mContext, mGlobalVar, tbInfoLstTo, false, true));
 													}
 
 												});
@@ -169,7 +171,7 @@ public class MoveMergeTable extends Activity {
 												(ListView) findViewById(R.id.listViewDestTableName);
 										listViewDestTbName.setAdapter(
 												IOrderUtility.createTableNameAdapter(
-														mContext, mGlobalVar, newTbInfoLst));
+														mContext, mGlobalVar, newTbInfoLst, false, true));
 
 										listViewDestTbName
 												.setOnItemClickListener(new OnItemClickListener() {

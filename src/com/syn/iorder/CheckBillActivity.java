@@ -21,11 +21,13 @@ import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -254,7 +256,7 @@ public class CheckBillActivity extends Activity {
 											
 										}
 								
-							}).execute(globalVar.FULL_URL);
+							}).execute(GlobalVar.FULL_URL);
 						}
 						
 					});
@@ -515,7 +517,8 @@ public class CheckBillActivity extends Activity {
 								final List<TableInfo> newTbInfoLst =
 										IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
 								
-								tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(mContext, globalVar, newTbInfoLst));
+								tableNameListView.setAdapter(IOrderUtility.createTableNameAdapter(
+										mContext, globalVar, newTbInfoLst, false, false));
 								tableNameListView.setOnItemClickListener(new OnItemClickListener(){
 
 									@Override
@@ -524,6 +527,8 @@ public class CheckBillActivity extends Activity {
 										TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);
 												
 										mTableId = tbInfo.getiTableID();
+										mTransactionId = tbInfo.getiTransactionID();
+										mComputerId = tbInfo.getiComputerID();
 										String tableName = tbInfo.isbIsCombineTable() ? 
 												tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
 										tvTableName.setText(R.string.text_table);
@@ -570,8 +575,8 @@ public class CheckBillActivity extends Activity {
 
 	// calculate discount
 	private void calculateDiscount(){
-		final List<DiscountUtils.ButtonDiscount> promotionLst = 
-				new ArrayList<DiscountUtils.ButtonDiscount> ();
+		final List<ButtonDiscount> promotionLst = 
+				new ArrayList<ButtonDiscount>();
 		
 		final LayoutInflater inflater = (LayoutInflater)
 				mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -582,46 +587,44 @@ public class CheckBillActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setTitle(R.string.select_promotion);
 		builder.setView(discountView);
-		builder.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-		builder.setPositiveButton(R.string.global_btn_ok, null);
-		final AlertDialog d = builder.create();
-		d.show();
+		builder.setNegativeButton(R.string.global_btn_cancel, null);
+		builder.setPositiveButton(R.string.apply_discount, null);
+		final AlertDialog dialogSelPromo = builder.create();
+		dialogSelPromo.show();
 		
 		/// bill summar
-		View orderView = inflater.inflate(R.layout.order_list_layout, null);
-		final ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
-		final TextView tvSumText = (TextView) orderView.findViewById(R.id.textViewSumText);
-		final TextView tvSumPrice = (TextView) orderView.findViewById(R.id.textViewSumPrice);
-		ImageButton btnClose = (ImageButton) orderView.findViewById(R.id.imageButtonCloseOrderDialog);
-		final ProgressBar progressSumm = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
+//		View orderView = inflater.inflate(R.layout.order_list_layout, null);
+//		final ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
+//		final TextView tvSumText = (TextView) orderView.findViewById(R.id.textViewSumText);
+//		final TextView tvSumPrice = (TextView) orderView.findViewById(R.id.textViewSumPrice);
+//		ImageButton btnClose = (ImageButton) orderView.findViewById(R.id.imageButtonCloseOrderDialog);
+//		final ProgressBar progressSumm = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
+//		
+//		final Dialog detailDialog = new Dialog(mContext, R.style.CustomDialog);
+//		detailDialog.setContentView(orderView);
+//		detailDialog.getWindow().setGravity(Gravity.TOP);
+//		detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+//				WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//		btnClose.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				detailDialog.dismiss();
+//			}
+//			
+//		});
 		
-		final Dialog detailDialog = new Dialog(mContext, R.style.CustomDialog);
-		detailDialog.setContentView(orderView);
-		detailDialog.getWindow().setGravity(Gravity.TOP);
-		detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
-				WindowManager.LayoutParams.WRAP_CONTENT);
-
-		btnClose.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				detailDialog.dismiss();
-			}
-			
-		});
-		
+		final ProgressDialog applyPromoProgress = new ProgressDialog(mContext);
 		final DiscountUtils.GetSummaryBillWithDiscountListener getSummListener =
 				new DiscountUtils.GetSummaryBillWithDiscountListener() {
 					
 					@Override
 					public void onPre() {
-						progressSumm.setVisibility(View.VISIBLE);
-						detailDialog.show();
+//						progressSumm.setVisibility(View.VISIBLE);
+//						detailDialog.show();
+						applyPromoProgress.setMessage(mContext.getString(R.string.loading_progress));
+						applyPromoProgress.show();
 					}
 					
 					@Override
@@ -632,7 +635,9 @@ public class CheckBillActivity extends Activity {
 					
 					@Override
 					public void onError(String msg) {
-						progressSumm.setVisibility(View.GONE);
+						//progressSumm.setVisibility(View.GONE);
+						if(applyPromoProgress.isShowing())
+							applyPromoProgress.dismiss();
 						
 						new AlertDialog.Builder(mContext)
 						.setMessage(msg)
@@ -646,56 +651,93 @@ public class CheckBillActivity extends Activity {
 					
 					@Override
 					public void onPost(SummaryTransaction summTrans) {
-						progressSumm.setVisibility(View.GONE);
+						//progressSumm.setVisibility(View.GONE);
 						
-						if(summTrans != null){
-							tvSumText.setText(null);
-							tvSumPrice.setText(null);
-							for(syn.pos.data.model.SummaryTransaction.DisplaySummary displaySummary 
-									: summTrans.TransactionSummary.DisplaySummaryList){
-								tvSumText.append(displaySummary.szDisplayName + "\n");
-								tvSumPrice.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
-							}
-						}
-						lvOrder.setAdapter(new BillDetailAdapter(mContext, 
-								globalVar, summTrans));
+//						if(summTrans != null){
+//							tvSumText.setText(null);
+//							tvSumPrice.setText(null);
+//							for(syn.pos.data.model.SummaryTransaction.DisplaySummary displaySummary 
+//									: summTrans.TransactionSummary.DisplaySummaryList){
+//								tvSumText.append(displaySummary.szDisplayName + "\n");
+//								tvSumPrice.append(globalVar.decimalFormat.format(displaySummary.fPriceValue) + "\n");
+//							}
+//						}
+//						lvOrder.setAdapter(new BillDetailAdapter(mContext, 
+//								globalVar, summTrans));
+
+						if(applyPromoProgress.isShowing())
+							applyPromoProgress.dismiss();
+						dialogSelPromo.dismiss();
+						new ShowSummaryBillTask(mContext, 
+								globalVar).execute(GlobalVar.FULL_URL);
 					}
 				};
 				
-		Button btnOk = d.getButton(AlertDialog.BUTTON_POSITIVE);
-		btnOk.setOnClickListener(new OnClickListener(){
+		dialogSelPromo.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				if(promotionLst.size() != 0){
-					String promotionId = "";
-					String noCoupone = "";
+				if(promotionLst.size() > 0){
+					new AlertDialog.Builder(mContext)
+					.setTitle(android.R.string.cancel)
+					.setMessage(R.string.confirm_cancel)
+					.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					})
+					.setPositiveButton(R.string.global_btn_yes, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new DiscountUtils.ApplayDiscountWithTransaction(mContext, globalVar, 
+									mTableId, "", "", getSummListener).execute(GlobalVar.FULL_URL);
+						}
+					}).show();
+				}else{
+					new DiscountUtils.ApplayDiscountWithTransaction(mContext, globalVar, 
+							mTableId, "", "", getSummListener).execute(GlobalVar.FULL_URL);
+				}
+			}
+			
+		});
+		
+		dialogSelPromo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//if(promotionLst.size() != 0){
+					String promotions = "";
+					String promotionsRefNo = "";
 					for(int i = 0; i < promotionLst.size(); i++){
 						DiscountUtils.ButtonDiscount promotion = 
 								promotionLst.get(i);
-						promotionId += String.valueOf(promotion.getPromotionID());
-						noCoupone += String.valueOf(promotion.getNoCoupone());
-						
+						int promotionId = promotion.getPromotionID();
+						int applyNumber = promotion.getCurrentAppliedNumber();
+						int refNo = promotion.getReferenceNo(); 
+						promotions += DiscountUtils.toPromotionSeperate(promotionId, applyNumber);
+						promotionsRefNo += DiscountUtils.toPromotionRefNoSeperate(refNo, applyNumber);
 						if(i < promotionLst.size() - 1){
-							promotionId += ",";
-							noCoupone += ",";
+							promotions += ",";
+							promotionsRefNo += ",";
 						}
 					}
-					new DiscountUtils.GetSummaryBillWithDiscountTask(mContext, globalVar, 
-							mTableId, promotionId, noCoupone, getSummListener).execute(GlobalVar.FULL_URL);
-				}else{
-					new AlertDialog.Builder(mContext)
-					.setMessage(R.string.select_promotion)
-					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
-
-						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
-						}
-						
-					})
-					.show();
-				}
+					new DiscountUtils.ApplayDiscountWithTransaction(mContext, globalVar, 
+							mTableId, promotions, promotionsRefNo, getSummListener).execute(GlobalVar.FULL_URL);
+//				}else{
+//					new AlertDialog.Builder(mContext)
+//					.setMessage(R.string.select_promotion)
+//					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
+//
+//						@Override
+//						public void onClick(DialogInterface dialog,
+//								int which) {
+//						}
+//						
+//					})
+//					.show();
+//				}
 			}
 		});
 				
@@ -736,6 +778,15 @@ public class CheckBillActivity extends Activity {
 					
 					final DiscountButtonListAdapter discountAdapter = 
 							new DiscountButtonListAdapter(mContext, btnDiscountLst);
+					
+					for(DiscountUtils.ButtonDiscount discount : btnDiscountLst){
+						if(discount.getCurrentAppliedNumber() > 0){
+							discount.setChecked(true);
+							promotionLst.add(discount);
+						}
+					}
+					discountAdapter.notifyDataSetChanged();
+					
 					lvDiscount.setOnItemClickListener(new OnItemClickListener(){
 
 						@Override
@@ -743,8 +794,48 @@ public class CheckBillActivity extends Activity {
 								int position, long id) {
 							final DiscountUtils.ButtonDiscount btnDiscount = 
 									(DiscountUtils.ButtonDiscount) parent.getItemAtPosition(position);
+						
+							if(btnDiscount.getCurrentAppliedNumber() == 0)
+								btnDiscount.setCurrentAppliedNumber(1);
 							
-							btnDiscount.setNoCoupone(1);
+							// popup for enter reference number if required
+							if(btnDiscount.getIsRequireReferenceNo() == 1 && !btnDiscount.isChecked()){
+								AlertDialog.Builder builder = 
+										new AlertDialog.Builder(mContext);
+								final EditText txtRefNo = new EditText(mContext);
+								txtRefNo.setInputType(InputType.TYPE_CLASS_NUMBER);
+								builder.setTitle(R.string.enter_ref_no);
+								builder.setView(txtRefNo);
+								builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										btnDiscount.setChecked(false);
+										btnDiscount.setCurrentAppliedNumber(0);
+										discountAdapter.notifyDataSetChanged();
+									}
+								});
+								builder.setPositiveButton(android.R.string.ok, null);
+								final AlertDialog d = builder.create();
+								d.show();
+
+								txtRefNo.requestFocus();
+								d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										try {
+											btnDiscount.setReferenceNo(Integer.parseInt(txtRefNo.getText().toString()));
+											btnDiscount.setChecked(true);
+											discountAdapter.notifyDataSetChanged();
+											d.dismiss();
+										} catch (NumberFormatException e) {
+											e.printStackTrace();
+										}
+									}
+									
+								});
+							}
 							
 							// popup for enter number promotion
 							if(btnDiscount.getMaxNumberCanApplied() > 1 && !btnDiscount.isChecked()){
@@ -763,7 +854,8 @@ public class CheckBillActivity extends Activity {
 											int qty = Integer.parseInt(txtQty.getText().toString());
 											if(++qty <= btnDiscount.getMaxNumberCanApplied()){
 												txtQty.setText(String.valueOf(qty));
-												btnDiscount.setNoCoupone(qty);
+												btnDiscount.setCurrentAppliedNumber(qty);
+												discountAdapter.notifyDataSetChanged();
 											}
 										} catch (NumberFormatException e) {
 											// TODO Auto-generated catch block
@@ -780,7 +872,8 @@ public class CheckBillActivity extends Activity {
 											int qty = Integer.parseInt(txtQty.getText().toString());
 											if(--qty > 0){
 												txtQty.setText(String.valueOf(qty));
-												btnDiscount.setNoCoupone(qty);
+												btnDiscount.setCurrentAppliedNumber(qty);
+												discountAdapter.notifyDataSetChanged();
 											}
 										} catch (NumberFormatException e) {
 											// TODO Auto-generated catch block
@@ -797,8 +890,8 @@ public class CheckBillActivity extends Activity {
 									
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										promotionLst.remove(btnDiscount);
 										btnDiscount.setChecked(false);
+										btnDiscount.setCurrentAppliedNumber(0);
 										discountAdapter.notifyDataSetChanged();
 									}
 								});
@@ -809,9 +902,8 @@ public class CheckBillActivity extends Activity {
 										if(Integer.parseInt(txtQty.getText().toString()) >
 											btnDiscount.getMaxNumberCanApplied()){
 
-											promotionLst.remove(btnDiscount);
 											btnDiscount.setChecked(false);
-											discountAdapter.notifyDataSetChanged();
+											btnDiscount.setCurrentAppliedNumber(0);
 											
 											new AlertDialog.Builder(mContext)
 											.setMessage(mContext.getString(R.string.promotion_limit) +
@@ -824,8 +916,9 @@ public class CheckBillActivity extends Activity {
 											})
 											.show();
 										}else{
-											discountAdapter.notifyDataSetChanged();
+											btnDiscount.setChecked(true);
 										}
+										discountAdapter.notifyDataSetChanged();
 									}
 								});
 								AlertDialog d = builder.create();
@@ -833,11 +926,12 @@ public class CheckBillActivity extends Activity {
 							}
 							
 							if(btnDiscount.isChecked()){
-								promotionLst.remove(btnDiscount);
 								btnDiscount.setChecked(false);
+								btnDiscount.setCurrentAppliedNumber(0);
+								promotionLst.remove(btnDiscount);
 							}else{
-								promotionLst.add(btnDiscount);
 								btnDiscount.setChecked(true);
+								promotionLst.add(btnDiscount);
 							}
 							discountAdapter.notifyDataSetChanged();
 						}
@@ -848,7 +942,7 @@ public class CheckBillActivity extends Activity {
 			};
 			
 		new DiscountUtils.ListButtonDiscountTask(mContext, 
-				globalVar, loadDiscountListener).execute(GlobalVar.FULL_URL);
+				globalVar, mTransactionId, mComputerId, loadDiscountListener).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void checkBillSetPaydetail(){

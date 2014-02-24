@@ -122,7 +122,8 @@ public class CancelMenuActivity extends Activity {
 								final List<TableInfo> newTbInfoLst = 
 										IOrderUtility.filterTableNameHaveOrder(tbInfoLst, tbZone);
 
-								listViewTableName.setAdapter(IOrderUtility.createTableNameAdapter(context, globalVar, newTbInfoLst));
+								listViewTableName.setAdapter(IOrderUtility.createTableNameAdapter(
+										context, globalVar, newTbInfoLst, false, true));
 								listViewTableName.setOnItemClickListener(new OnItemClickListener(){
 
 									@Override
