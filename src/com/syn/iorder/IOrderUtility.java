@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1029,6 +1030,14 @@ public class IOrderUtility {
 			e.printStackTrace();
 		} 
 		return timeStr;
+	}
+	
+	public static double stringToDouble(String text) throws ParseException{
+		double value = 0.0d;
+		NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+		Number num = format.parse(text);
+		value = num.doubleValue();
+		return value;
 	}
 	
 	public static String formatCombindTableName(boolean isCombind, String combindTbName, String currTbName){

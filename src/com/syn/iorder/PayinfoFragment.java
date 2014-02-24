@@ -1,4 +1,6 @@
 package com.syn.iorder;
+import java.text.ParseException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,8 +20,10 @@ import android.widget.TextView;
 
 public class PayinfoFragment extends DialogFragment{
 	private PaymentListener mListener;
-	private double totalPrice;
-	private double totalPay;
+	private GlobalVar mGlobalVar;
+	private double mTotalPrice;
+	private double mTotalPay;
+	private EditText mTxtTotalPrice;
 	
 	public static PayinfoFragment newInstance(double totalPrice){
 		PayinfoFragment f = new PayinfoFragment();
@@ -36,7 +40,7 @@ public class PayinfoFragment extends DialogFragment{
 
 			@Override
 			public void onClick(View v) {
-				mListener.onSend(totalPay);
+				mListener.onSend(mTotalPay);
 			}
 			
 		});
@@ -48,7 +52,7 @@ public class PayinfoFragment extends DialogFragment{
 		LayoutInflater inflater = (LayoutInflater)
 				getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View payInfo = inflater.inflate(R.layout.call_checkbill_with_payinfo, null);
-		final EditText txtTotalPay = (EditText) payInfo.findViewById(R.id.txtTotalPay);
+		mTxtTotalPrice = (EditText) payInfo.findViewById(R.id.txtTotalPay);
 		final ListView lvPayInfo = (ListView) payInfo.findViewById(R.id.lvPayment);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 			.setView(payInfo)
@@ -60,7 +64,8 @@ public class PayinfoFragment extends DialogFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		totalPrice = getArguments().getDouble("totalPrice");
+		mGlobalVar = new GlobalVar(getActivity());
+		mTotalPrice = getArguments().getDouble("totalPrice");
 	}
 
 	@Override
@@ -100,7 +105,14 @@ public class PayinfoFragment extends DialogFragment{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			String amount = mPayDetailArr[position];
-			ViewHolder holder = null;
+			double price = 0;
+			try {
+				price = IOrderUtility.stringToDouble(amount);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			final ViewHolder holder;
 			if(convertView == null){
 				convertView = mInflater.inflate(R.layout.payment_detail_template, null);
 				holder = new ViewHolder();
@@ -112,13 +124,28 @@ public class PayinfoFragment extends DialogFragment{
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
-			holder.tvPayName.setText(amount);
+			try {
+				holder.tvPayName.setText(mGlobalVar.decimalFormat.format(IOrderUtility.stringToDouble(amount)));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			holder.txtPayAmount.setText("1");
 			holder.btnMinus.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View v) {
-					
+					double qty = 1;
+					try {
+						qty = IOrderUtility.stringToDouble(holder.txtPayAmount.getText().toString());
+						if(--qty > 0){
+							mTxtTotalPrice = qty * 
+							holder.txtPayAmount.setText(mGlobalVar.qtyFormat.format(qty));
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
 				}
 				
 			});
