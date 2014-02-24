@@ -533,8 +533,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 										mTableId = tbInfo.getiTableID();
 										mTransactionId = tbInfo.getiTransactionID();
 										mComputerId = tbInfo.getiComputerID();
-										String tableName = tbInfo.isbIsCombineTable() ? 
-												tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
+										String tableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+												tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 										tvTableName.setText(R.string.text_table);
 										tvTableName.append(":" + tableName);
 										

@@ -195,8 +195,8 @@ public class KdsInfoActivity extends Activity {
 																.getItemAtPosition(pos);
 														
 														// set selected table name
-														String tbName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() :
-															tbInfo.getSzTableName();
+														String tbName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 														tvKdsSelTable.setText(tbName);
 														
 														mSelTableId = tbInfo.getiTableID();

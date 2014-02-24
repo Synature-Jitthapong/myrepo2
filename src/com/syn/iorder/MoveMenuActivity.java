@@ -151,8 +151,8 @@ public class MoveMenuActivity extends Activity {
 														
 														TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(pos);
 														mFromTbId = tbInfo.getiTableID();
-														mFromTbName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() :
-															tbInfo.getSzTableName();
+														mFromTbName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 		
 														TextView tvTbFrom = (TextView) findViewById(R.id.tvTbFrom);
 														tvTbFrom.setText(mFromTbName);
@@ -200,9 +200,8 @@ public class MoveMenuActivity extends Activity {
 															int pos, long id) {
 														TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(pos);
 														mToTbId = tbInfo.getiTableID();
-														mToTbName = tbInfo.isbIsCombineTable() ? 
-																tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
-		
+														mToTbName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());		
 														TextView tvTbTo = (TextView) findViewById(R.id.tvTbTo);
 														tvTbTo.setText(mToTbName);
 														mBtnShooseMenu.setEnabled(true);

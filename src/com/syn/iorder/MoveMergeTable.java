@@ -130,8 +130,8 @@ public class MoveMergeTable extends Activity {
 														TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(pos);
 														mFromTbId = tbInfo.getiTableID();
 														mToTbId = 0;
-														String tbName = tbInfo.isbIsCombineTable() ? 
-																tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
+														String tbName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 														TextView tvTableFrom = (TextView) findViewById(R.id.tvTbFrom);
 														tvTableFrom.setText(tbName);
 														TextView tvTableTo = (TextView) findViewById(R.id.tvTbTo);
@@ -187,8 +187,8 @@ public class MoveMergeTable extends Activity {
 														
 														TextView tvTableTo = 
 																(TextView) findViewById(R.id.tvTbTo);
-														String tableName = tbInfo.isbIsCombineTable() ?
-																tbInfo.getSzCombineTableName() : tbInfo.getSzTableName();
+														String tableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 														tvTableTo.setText(tableName);
 													}
 

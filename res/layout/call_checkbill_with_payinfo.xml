@@ -101,6 +101,7 @@
         android:ems="5"
         android:imeOptions="actionDone"
         android:inputType="number"
+        android:selectAllOnFocus="true"
         android:textStyle="bold" />
-
+	<requestFocus />
 </RelativeLayout>

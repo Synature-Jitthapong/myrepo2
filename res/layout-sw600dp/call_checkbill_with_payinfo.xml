@@ -99,6 +99,7 @@
         android:imeOptions="actionDone"
         android:inputType="number"
         android:textSize="32sp"
+        android:selectAllOnFocus="true"
         android:textStyle="bold" >
 
         <requestFocus />

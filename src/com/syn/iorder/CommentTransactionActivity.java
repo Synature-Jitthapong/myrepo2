@@ -292,7 +292,8 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 		case R.id.lvTable:
 			TableInfo tbInfo = (TableInfo) parent.getItemAtPosition(position);			
 			mSelectedTableId = tbInfo.getiTableID();
-			mSelectedTableName = tbInfo.isbIsCombineTable() ? tbInfo.getSzCombineTableName() :
+			mSelectedTableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
+					tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 				tbInfo.getSzTableName();
 			
 			new LoadCurrentCommentTransTask().execute(GlobalVar.FULL_URL);
