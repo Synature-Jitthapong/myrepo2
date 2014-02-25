@@ -1088,7 +1088,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 									// print
 									new PrinterUtils.PrintTransToPrinterTask(mContext, 
 											globalVar, mTransactionId, mComputerId, 
-											builder.getPrinterData().getPrinterID(), GlobalVar.SHOP_ID, printListener).execute(GlobalVar.FULL_URL);
+											builder.getPrinterData().getPrinterID(), GlobalVar.STAFF_ID, printListener).execute(GlobalVar.FULL_URL);
 								}else{
 									new AlertDialog.Builder(mContext)
 									.setMessage(R.string.please_select_printer)
