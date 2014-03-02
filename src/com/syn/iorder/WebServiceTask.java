@@ -78,7 +78,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 			envelope.dotNet = true;
 			envelope.setOutputSoapObject(soapRequest);
 
-			HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 30000);
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
 
 			String soapAction = nameSpace + webMethod;
 			try {
