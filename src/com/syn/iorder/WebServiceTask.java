@@ -1,6 +1,8 @@
 package com.syn.iorder;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -8,6 +10,13 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+
+import syn.pos.data.model.WebServiceResult;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -106,5 +115,14 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		}
 		return result;
 	}
-
+	
+	public WebServiceResult toServiceObject(String json) throws JsonSyntaxException{
+		if(json.equals(""))
+			return null;
+		
+		Gson gson = new Gson();
+		Type type = new TypeToken<WebServiceResult>(){}.getType();
+		WebServiceResult ws = gson.fromJson(json, type);
+		return ws;
+	}
 }

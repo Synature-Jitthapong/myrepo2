@@ -3,7 +3,7 @@
     package="com.syn.iorder"
     android:versionCode="17"
     android:versionName="1.7.17" >
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -26,7 +26,8 @@
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -38,7 +39,8 @@
             android:name="com.syn.iorder.TakeOrderActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" ><intent-filter>
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -81,7 +83,8 @@
         <activity
             android:name="com.syn.iorder.CheckBillActivity"
             android:label="@string/activity_checkbill"
-            android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
             android:name="com.syn.iorder.SearchMemberActivity"
@@ -139,7 +142,12 @@
         </activity>
         <activity
             android:name="com.syn.iorder.CommentTransactionActivity"
-            android:label="@string/title_activity_comment_transaction" android:windowSoftInputMode="stateHidden">
+            android:label="@string/title_activity_comment_transaction"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.syn.iorder.MergeMultiTableActivity"
+            android:label="@string/title_activity_merge_multi_table" >
         </activity>
     </application>
 

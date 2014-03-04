@@ -1366,9 +1366,10 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 							btnCheckbill.setText(R.string.call_checkbill);
 					}
 					
-					//if(mSummaryTrans.CallForCheckBill == 99){
-					//	disableButton();
-					//}
+					if(mSummaryTrans.CallForCheckBill == 99){
+						if(!GlobalVar.sIsEnableBuffetType)
+							disableButton();
+					}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(mContext, 
 						globalVar, mSummaryTrans);

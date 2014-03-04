@@ -29,6 +29,7 @@ public class GlobalVar {
 	public static boolean sIsEnableGenQueueWithSelectPrinter = false;
 	public static boolean sIsEnableMaxCharFormergeTable = false;
 	public static boolean sIsEnableCallCheckbillPayCashDetail = false;
+	public static boolean sIsEnableBuffetType = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";

@@ -252,7 +252,7 @@ public class SelectTableListAdapter extends BaseAdapter {
 		holder.tvTableName.setSelected(true);
 		
 
-		if(mIsShowBtnInfo)
+		if(mIsShowBtnInfo && tbInfo.getTableStatus() != 0)
 			holder.btnTbInfo.setVisibility(View.VISIBLE);
 		else
 			holder.btnTbInfo.setVisibility(View.GONE);

@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    tools:context=".MergeMultiTableActivity" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_action_plus" />
+
+    <TextView
+        android:id="@+id/tvFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/imageView1"
+        android:background="@drawable/white_layer"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minHeight="32dp"
+        android:padding="2dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tvTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView1"
+        android:background="@drawable/white_layer"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minHeight="32dp"
+        android:padding="2dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/spZoneFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvFrom"
+        android:layout_toLeftOf="@+id/imageView1" />
+
+    <Spinner
+        android:id="@+id/spZoneTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTo"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/spZoneFrom" />
+
+    <ListView
+        android:id="@+id/lvReason"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/white_layer"
+        android:choiceMode="multipleChoice" >
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/lvTbFrom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_above="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/spZoneFrom"
+        android:layout_below="@+id/spZoneFrom"
+        android:background="@drawable/white_layer"
+        android:choiceMode="singleChoice" >
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/lvTbTo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/spZoneTo"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/spZoneTo"
+        android:background="@drawable/white_layer"
+        android:choiceMode="multipleChoice" >
+
+    </ListView>
+
+    <EditText
+        android:id="@+id/txtReason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lvReason"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="2dp"
+        android:ems="10"
+        android:textSize="12sp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtReason"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:text="@string/reason"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

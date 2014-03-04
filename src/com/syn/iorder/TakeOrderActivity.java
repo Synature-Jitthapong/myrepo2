@@ -402,6 +402,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						GlobalVar.sIsEnableMaxCharFormergeTable = true;
 					}
 					break;
+				case 15: // buffet type
+					if(feature.getFeatureValue() > 0){
+						GlobalVar.sIsEnableBuffetType = true;
+					}else{
+						GlobalVar.sIsEnableBuffetType = false;
+					}
 				}
 			}
 		}
@@ -465,9 +471,14 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 			TakeOrderActivity.this.startActivity(intent);
 			return true;
 		case R.id.action_mergeTable:
-			intent = new Intent(TakeOrderActivity.this, MoveMergeTable.class);
-			intent.putExtra("func", 2); // 1=merge
-			TakeOrderActivity.this.startActivity(intent);
+			if(!GlobalVar.sIsEnableBuffetType){
+				intent = new Intent(TakeOrderActivity.this, MoveMergeTable.class);
+				intent.putExtra("func", 2); // 1=merge
+				TakeOrderActivity.this.startActivity(intent);
+			}else{
+				intent = new Intent(TakeOrderActivity.this, MergeMultiTableActivity.class);
+				startActivity(intent);
+			}
 			return true;
 		case R.id.action_comment_trans:
 			intent = new Intent(TakeOrderActivity.this, CommentTransactionActivity.class);
