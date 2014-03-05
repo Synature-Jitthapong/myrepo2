@@ -2,13 +2,16 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import syn.pos.data.model.ReasonGroups;
 import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.TableName;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,11 +65,17 @@ public class MergeMultiTableActivity extends Activity{
 		String tableIds = "";
 		String reasonIds = "";
 		
-		for(TableInfo tbInfo : mSelTbLst){
-			tableIds += tbInfo.getiTableID() + ",";
+		for(int i = 0; i < mSelTbLst.size(); i++){
+			TableInfo tbInfo = mSelTbLst.get(i);
+			tableIds += tbInfo.getiTableID();
+			if(i < mSelTbLst.size() - 1)
+				tableIds += ",";
 		}
-		for(ReasonGroups.ReasonDetail reason : mSelReasonLst){
-			reasonIds = reason.getReasonID() + ",";
+		for(int i = 0; i < mSelReasonLst.size(); i ++){
+			ReasonGroups.ReasonDetail reason = mSelReasonLst.get(i);
+			reasonIds += reason.getReasonID();
+			if(i < mSelReasonLst.size() - 1)
+				reasonIds += ",";
 		}
 		
 		new TableUtils.MergeMultiTableService(mContext, mGlobalVar, mTbFromId, 
@@ -82,18 +91,35 @@ public class MergeMultiTableActivity extends Activity{
 					public void onPost() {
 						if(mProgress.isShowing())
 							mProgress.dismiss();
-						IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, 
-								R.string.merge_table_result_success, 0);
+						new AlertDialog.Builder(mContext)
+						.setTitle(R.string.merge_table_activity_title)
+						.setMessage(R.string.merge_table_result_success)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						}).show();
 					}
 
 					@Override
 					public void onError(String msg) {
 						if(mProgress.isShowing())
 							mProgress.dismiss();
-						IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
+						new AlertDialog.Builder(mContext)
+						.setTitle(R.string.merge_table_activity_title)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								
+							}
+						}).show();
 					}
 			
-		});
+		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void loadReason(){
@@ -185,8 +211,7 @@ public class MergeMultiTableActivity extends Activity{
 
 										mLvFrom.setAdapter(IOrderUtility.createTableNameAdapter(
 												mContext, mGlobalVar, newTbInfoLst, false, true));
-										mLvFrom
-												.setOnItemClickListener(new OnItemClickListener() {
+										mLvFrom.setOnItemClickListener(new OnItemClickListener() {
 													@Override
 													public void onItemClick(
 															AdapterView<?> parent, View v,
@@ -247,9 +272,14 @@ public class MergeMultiTableActivity extends Activity{
 															tbInfo.setChecked(true);
 															mSelTbLst.add(tbInfo);	
 														}
-														
-														String tableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
-																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
+														String tableName = "";
+														for(int i = 0; i < mSelTbLst.size(); i++){
+															TableInfo selTbInfo = mSelTbLst.get(i);
+															tableName += IOrderUtility.formatCombindTableName(selTbInfo.isbIsCombineTable(), 
+																	selTbInfo.getSzCombineTableName(), selTbInfo.getSzTableName());
+															if(i < mSelTbLst.size() - 1)
+																tableName += ", ";
+														}
 														mTvTo.setText(tableName);
 														mTvTo.setSelected(true);
 													}

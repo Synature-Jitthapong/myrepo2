@@ -441,4 +441,5 @@
 	<string name="enter_ref_no">ใส่หมายเลข Reference</string>
 	<string name="confirm_cancel">คุณต้องการยกเลิก?</string>
 	<string name="apply_discount">ใช้ส่วนลด</string>
+	<string name="title_activity_merge_multi_table">รวมหลายโต๊ะ</string>
 </resources>

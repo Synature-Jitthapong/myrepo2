@@ -14,33 +14,41 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/ic_action_plus" />
 
     <TextView
         android:id="@+id/tvFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/imageView1"
         android:background="@drawable/white_layer"
+        android:ellipsize="marquee"
         android:gravity="center"
-        android:minHeight="96dp"
-        android:minWidth="96dp"
+        android:lines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minHeight="72dp"
         android:padding="8dp"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tvTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView1"
         android:background="@drawable/white_layer"
+        android:ellipsize="marquee"
         android:gravity="center"
-        android:minHeight="96dp"
-        android:minWidth="96dp"
+        android:lines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minHeight="72dp"
         android:padding="8dp"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Spinner
@@ -117,6 +125,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/reason"
         android:textAppearance="?android:attr/textAppearanceLarge" />

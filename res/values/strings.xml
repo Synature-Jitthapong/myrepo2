@@ -496,6 +496,6 @@ Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</
     <string name="enter_enough_money">Please enter enough money.</string>
     <string name="input_money">Input Money</string>
     <string name="confirm_input_money">Do you want to input money?</string>
-    <string name="title_activity_merge_multi_table">MergeMultiTableActivity</string>
+    <string name="title_activity_merge_multi_table">Merge Multi Table</string>
 
 </resources>

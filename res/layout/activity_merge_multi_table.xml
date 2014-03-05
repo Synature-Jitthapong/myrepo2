@@ -22,7 +22,7 @@
         android:layout_toLeftOf="@+id/imageView1"
         android:background="@drawable/white_layer"
         android:ellipsize="marquee"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:lines="1"
         android:marqueeRepeatLimit="marquee_forever"
         android:minHeight="32dp"
@@ -39,7 +39,7 @@
         android:layout_toRightOf="@+id/imageView1"
         android:background="@drawable/white_layer"
         android:ellipsize="marquee"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:lines="1"
         android:marqueeRepeatLimit="marquee_forever"
         android:minHeight="32dp"
@@ -121,8 +121,8 @@
         android:layout_above="@+id/txtReason"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
         android:text="@string/reason"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
