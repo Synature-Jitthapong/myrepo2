@@ -1514,7 +1514,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					
+					PayInfoFragment f = PayInfoFragment.newInstance(mTransactionId, mComputerId, mSummaryTrans.TransactionSummary.fTotalSalePrice);
+					f.show(getFragmentManager(), "payinfo");
 				}
 			}).show();
 		}

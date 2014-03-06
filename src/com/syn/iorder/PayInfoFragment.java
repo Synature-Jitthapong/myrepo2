@@ -69,7 +69,7 @@ public class PayInfoFragment extends DialogFragment{
 		mPayInfoAdapter = new PayInfoAdapter();
 		lvPayInfo.setAdapter(mPayInfoAdapter);
 		mTxtTotalPrice.setText(mGlobalVar.decimalFormat.format(mTotalPrice));
-		mTvTotalPay.setText(mGlobalVar.decimalFormat.format(mTotalPrice));
+		mTvTotalPay.setText(mGlobalVar.decimalFormat.format(mTotalPay));
 		mTxtTotalPrice.setOnEditorActionListener(new OnEditorActionListener(){
 
 			@Override
@@ -108,7 +108,8 @@ public class PayInfoFragment extends DialogFragment{
 		mTransactionId = getArguments().getInt("transactionId");
 		mComputerId = getArguments().getInt("computerId");
 		mTotalPrice = getArguments().getDouble("totalPrice");
-		mTotalPay = mTotalPrice;
+		//mTotalPay = mTotalPrice;
+		mTotalPay = 0.0d;
 	}
 
 	@Override
@@ -128,15 +129,15 @@ public class PayInfoFragment extends DialogFragment{
 		public PayInfoAdapter(){
 			mPaymentLst = new ArrayList<PaymentInfo>();
 			String[] paymentArr = getActivity().getResources().getStringArray(R.array.price_list_arr);
-			double amount = mTotalPrice;
+			//double amount = mTotalPrice;
 			for(String payment : paymentArr){
 				PaymentInfo p = new PaymentInfo();
 				Double value = IOrderUtility.stringToDouble(payment);
-				int moneyQty = (int) amount / value.intValue();
-				amount = amount % value.intValue();
+				//int moneyQty = (int) amount / value.intValue();
+				//amount = amount % value.intValue();
 				//Log.d("money", value + ":" + moneyQty);
 				p.setPaymentValue(value);
-				p.setPaymentQty(moneyQty);
+				//p.setPaymentQty(moneyQty);
 				mPaymentLst.add(p);
 			}
 			mInflater = (LayoutInflater)
