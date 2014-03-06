@@ -1,11 +1,15 @@
 package com.syn.iorder;
 
+import java.lang.reflect.Type;
+
 import org.ksoap2.serialization.PropertyInfo;
 
 import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.WebServiceResult;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 
@@ -204,6 +208,61 @@ public class TableUtils {
 		
 	}
 
+	public static class LoadMergedTable extends WebServiceTask{
+		public static final String METHOD = "WSiOrder_JSON_GetListTablesOfMergeTable";
+		private LoadMergeTableProgressListener mListener;
+		
+		public LoadMergedTable(Context c, GlobalVar gb, int transId, int compId, LoadMergeTableProgressListener listener) {
+			super(c, gb, METHOD);
+			mListener = listener;
+			
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iComputerID");
+			property.setValue(GlobalVar.COMPUTER_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iDbTransID");
+			property.setValue(transId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iDbCompID");
+			property.setValue(compId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mListener.onPre();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Gson gson = new Gson();
+			Type type = new TypeToken<int[]>(){}.getType();
+			try {
+				int[] tbIds = gson.fromJson(result, type);
+				mListener.onPost(tbIds);
+			} catch (JsonSyntaxException e) {
+				mListener.onError(result);
+			}
+		}
+	}
+	
+	public static interface LoadMergeTableProgressListener extends ProgressListener{
+		void onPost(int[] TbIds);
+	}
+	
 	public static interface LoadTableProgressListener extends ProgressListener{
 		void onPost(TableInfo tbInfo);
 	}
