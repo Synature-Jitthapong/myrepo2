@@ -3241,6 +3241,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 	private void loadTableSummaryTrans(final int tableId){
 		new AlertDialog.Builder(TakeOrderActivity.this)
 		.setTitle(R.string.input_money)
+		.setCancelable(false)
 		.setMessage(R.string.confirm_input_money)
 		.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
 			

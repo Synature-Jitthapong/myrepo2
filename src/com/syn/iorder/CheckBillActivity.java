@@ -2,18 +2,11 @@ package com.syn.iorder;
 /*
  * set member 
  */
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ksoap2.serialization.PropertyInfo;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.syn.iorder.DiscountUtils.ButtonDiscount;
 import com.syn.iorder.PrinterUtils.Printer;
-
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
@@ -25,23 +18,19 @@ import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.InputType;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -949,9 +938,10 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 				globalVar, mTransactionId, mComputerId, loadDiscountListener).execute(GlobalVar.FULL_URL);
 	}
 	
-	public void checkBillSetPaydetail(){
+	private void checkBillSetPaydetail(){
 		new AlertDialog.Builder(mContext)
 		.setTitle(R.string.input_money)
+		.setCancelable(false)
 		.setMessage(R.string.confirm_input_money)
 		.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
 			

@@ -91,6 +91,7 @@ public class PayInfoFragment extends DialogFragment{
 		});
 		return new AlertDialog.Builder(getActivity())
 			.setView(payInfo)
+			.setCancelable(false)
 			.setNeutralButton(R.string.send, new DialogInterface.OnClickListener() {
 				
 				@Override
@@ -133,7 +134,7 @@ public class PayInfoFragment extends DialogFragment{
 				Double value = IOrderUtility.stringToDouble(payment);
 				int moneyQty = (int) amount / value.intValue();
 				amount = amount % value.intValue();
-				Log.d("money", value + ":" + moneyQty);
+				//Log.d("money", value + ":" + moneyQty);
 				p.setPaymentValue(value);
 				p.setPaymentQty(moneyQty);
 				mPaymentLst.add(p);

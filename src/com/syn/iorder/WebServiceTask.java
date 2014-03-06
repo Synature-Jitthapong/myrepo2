@@ -136,7 +136,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				return true;
 			}else{
 				mHttpErrCode = conn.getResponseCode();
-				mHttpErrMsg = conn.getResponseMessage();
+				mHttpErrMsg = mHttpErrCode + " " + conn.getResponseMessage();
 				return false;
 			}
 		} catch (MalformedURLException e) {
