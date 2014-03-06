@@ -147,7 +147,12 @@
         </activity>
         <activity
             android:name="com.syn.iorder.MergeMultiTableActivity"
-            android:label="@string/title_activity_merge_multi_table" android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+            android:label="@string/title_activity_merge_multi_table"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.syn.iorder.SplitTableActivity"
+            android:label="@string/title_activity_split_table" >
         </activity>
     </application>
 
