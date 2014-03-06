@@ -358,8 +358,8 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				finish();
 				cusDialog.dismiss();
-				LoginActivity.this.finish();
 			}
 		});
 		cusDialog.show();

@@ -949,7 +949,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 				globalVar, mTransactionId, mComputerId, loadDiscountListener).execute(GlobalVar.FULL_URL);
 	}
 	
-	private void checkBillSetPaydetail(){
+	public void checkBillSetPaydetail(){
 		new AlertDialog.Builder(mContext)
 		.setTitle(R.string.input_money)
 		.setMessage(R.string.confirm_input_money)
@@ -964,7 +964,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				PayInfoFragment f = PayInfoFragment.newInstance(mSummaryTrans.TransactionSummary.fTotalSalePrice);
+				PayInfoFragment f = PayInfoFragment.newInstance(mTransactionId, mComputerId, mSummaryTrans.TransactionSummary.fTotalSalePrice);
 				f.show(getFragmentManager(), "payinfo");
 			}
 		}).show();
@@ -1472,9 +1472,50 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 	}
 
 	@Override
-	public void onSend(String payAmount) {
-		if(IOrderUtility.stringToDouble(payAmount) >= mSummaryTrans.TransactionSummary.fTotalSalePrice){
-			new SetPaymentCashDetail(mContext, globalVar, payAmount).execute(GlobalVar.FULL_URL);
+	public void onSend(int transactionId, int computerId, double totalPrice, double payAmount) {
+		if(payAmount >= mSummaryTrans.TransactionSummary.fTotalSalePrice){
+			final ProgressDialog progress = new ProgressDialog(this);
+			new PaymentCashDetail(mContext, globalVar, mTransactionId, mComputerId, String.valueOf(payAmount), 
+					new ProgressListener(){
+
+				@Override
+				public void onPre() {
+					progress.setMessage(mContext.getString(R.string.loading_progress));
+					progress.show();
+				}
+
+				@Override
+				public void onPost() {
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(mContext)
+					.setMessage(R.string.call_chekcbill_success)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					})
+					.show();
+				}
+
+				@Override
+				public void onError(String msg) {
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(mContext)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						})
+						.show();
+				}
+				
+			}).execute(GlobalVar.FULL_URL);
 		}else{
 			new AlertDialog.Builder(mContext)
 			.setTitle(R.string.input_money)
@@ -1487,93 +1528,5 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 				}
 			}).show();
 		}
-	}
-	
-	public class SetPaymentCashDetail extends WebServiceTask{
-		public static final String METHOD = "WSiOrder_JSON_SetPaymentCashDetail";
-		public SetPaymentCashDetail(Context c, GlobalVar globalVar, String totalPay) {
-			super(c, globalVar, METHOD);
-			
-			PropertyInfo property = new PropertyInfo();
-			property.setName("iComputerID");
-			property.setValue(GlobalVar.COMPUTER_ID);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-			
-			property = new PropertyInfo();
-			property.setName("iStaffID");
-			property.setValue(GlobalVar.STAFF_ID);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-			
-			property = new PropertyInfo();
-			property.setName("iDbTransID");
-			property.setValue(mTransactionId);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-			
-			property = new PropertyInfo();
-			property.setName("iDbCompID");
-			property.setValue(mComputerId);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-			
-			property = new PropertyInfo();
-			property.setName("fPayAmount");
-			property.setValue(totalPay);
-			property.setType(String.class);
-			soapRequest.addProperty(property);
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			progress.setMessage(context.getString(R.string.loading_progress));
-			progress.show();
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			if(progress.isShowing())
-				progress.dismiss();
-			Gson gson = new Gson();
-			Type type = new TypeToken<WebServiceResult>(){}.getType();
-			try {
-				WebServiceResult ws = gson.fromJson(result, type);
-				if(ws.getiResultID() == 0){
-					// refresh
-					new ShowSummaryBillTask(context, globalVar).execute(GlobalVar.FULL_URL);
-					new AlertDialog.Builder(mContext)
-					.setMessage(R.string.call_chekcbill_success)
-					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					})
-					.show();
-				}else{
-					new AlertDialog.Builder(mContext)
-					.setMessage(result)
-					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					})
-					.show();
-				}
-			} catch (JsonSyntaxException e) {
-				new AlertDialog.Builder(mContext)
-				.setMessage(result)
-				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				})
-				.show();
-			}
-		}
-		
 	}
 }

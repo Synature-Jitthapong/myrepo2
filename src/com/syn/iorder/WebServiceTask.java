@@ -2,7 +2,11 @@ package com.syn.iorder;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import org.apache.http.HttpConnection;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -32,6 +36,8 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	protected GlobalVar globalVar;
 	protected ProgressDialog progress;
 	protected TextView tvProgress;
+	protected int mHttpErrCode;
+	protected String mHttpErrMsg;
 	protected String mConnErrMsg;
 
 	public WebServiceTask(Context c, GlobalVar gb, String method) {
@@ -77,37 +83,42 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
-			// fetch data
-			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-					SoapEnvelope.VER11);
-			
-			// tell server not keep connection
-			System.setProperty("http.keepAlive", "false");
-			
-			envelope.dotNet = true;
-			envelope.setOutputSoapObject(soapRequest);
-
-			HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
-
-			String soapAction = nameSpace + webMethod;
-			try {
-				androidHttpTransport.call(soapAction, envelope);
+			// check server status
+			if(checkServerStatus(url)){
+				// fetch data
+				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+						SoapEnvelope.VER11);
+				
+				// tell server not keep connection
+				System.setProperty("http.keepAlive", "false");
+				
+				envelope.dotNet = true;
+				envelope.setOutputSoapObject(soapRequest);
+	
+				HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
+	
+				String soapAction = nameSpace + webMethod;
 				try {
-					result = envelope.getResponse().toString();
-				} catch (SoapFault e) {
+					androidHttpTransport.call(soapAction, envelope);
+					try {
+						result = envelope.getResponse().toString();
+					} catch (SoapFault e) {
+						result = mConnErrMsg + "\n" + e.getMessage();
+						e.printStackTrace();
+					}
+				} catch (IOException e) {
+					result = mConnErrMsg + "\n" + e.getMessage();
+					e.printStackTrace();
+				} catch (XmlPullParserException e) {
 					result = mConnErrMsg + "\n" + e.getMessage();
 					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				result = mConnErrMsg + "\n" + e.getMessage();
-				e.printStackTrace();
-			} catch (XmlPullParserException e) {
-				result = mConnErrMsg + "\n" + e.getMessage();
-				e.printStackTrace();
-			}
-
-			if(result == null || result.equals("")){
-				result = mConnErrMsg;
+	
+				if(result == null || result.equals("")){
+					result = mConnErrMsg;
+				}
+			}else{
+				result = mHttpErrMsg;
 			}
 		} else {
 			// display error
@@ -116,10 +127,27 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 		return result;
 	}
 	
+	public boolean checkServerStatus(String strUrl){
+		try {
+			URL url = new URL(strUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.connect();
+			if(conn.getResponseCode() == 200){
+				return true;
+			}else{
+				mHttpErrCode = conn.getResponseCode();
+				mHttpErrMsg = conn.getResponseMessage();
+				return false;
+			}
+		} catch (MalformedURLException e) {
+			mHttpErrMsg = e.getMessage();
+		} catch (IOException e) {
+			mHttpErrMsg = mConnErrMsg;
+		}
+		return false;
+	}
+	
 	public WebServiceResult toServiceObject(String json) throws JsonSyntaxException{
-		if(json.equals(""))
-			return null;
-		
 		Gson gson = new Gson();
 		Type type = new TypeToken<WebServiceResult>(){}.getType();
 		WebServiceResult ws = gson.fromJson(json, type);

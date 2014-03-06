@@ -10,6 +10,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ import android.widget.TextView.OnEditorActionListener;
 public class PayInfoFragment extends DialogFragment{
 	private PaymentListener mListener;
 	private GlobalVar mGlobalVar;
+	private int mTransactionId;
+	private int mComputerId;
 	private double mTotalPrice;
 	private double mTotalPay;
 	private double mChange;
@@ -35,9 +38,11 @@ public class PayInfoFragment extends DialogFragment{
 	private TextView mTvTotalPay;
 	private TextView mTvChange;
 	
-	public static PayInfoFragment newInstance(double totalPrice){
+	public static PayInfoFragment newInstance(int transactionId, int computerId, double totalPrice){
 		PayInfoFragment f = new PayInfoFragment();
 		Bundle b = new Bundle();
+		b.putInt("transactionId", transactionId);
+		b.putInt("computerId", computerId);
 		b.putDouble("totalPrice", totalPrice);
 		f.setArguments(b);
 		return f;
@@ -90,7 +95,7 @@ public class PayInfoFragment extends DialogFragment{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					mListener.onSend(String.valueOf(mTotalPay));
+					mListener.onSend(mTransactionId, mComputerId, mTotalPrice, mTotalPay);
 				}
 			}).create();
 	}
@@ -99,6 +104,8 @@ public class PayInfoFragment extends DialogFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mGlobalVar = new GlobalVar(getActivity());
+		mTransactionId = getArguments().getInt("transactionId");
+		mComputerId = getArguments().getInt("computerId");
 		mTotalPrice = getArguments().getDouble("totalPrice");
 		mTotalPay = mTotalPrice;
 	}
@@ -120,10 +127,15 @@ public class PayInfoFragment extends DialogFragment{
 		public PayInfoAdapter(){
 			mPaymentLst = new ArrayList<PaymentInfo>();
 			String[] paymentArr = getActivity().getResources().getStringArray(R.array.price_list_arr);
+			double amount = mTotalPrice;
 			for(String payment : paymentArr){
 				PaymentInfo p = new PaymentInfo();
-				p.setPaymentName(payment);
-				p.setPaymentValue(IOrderUtility.stringToDouble(payment));
+				Double value = IOrderUtility.stringToDouble(payment);
+				int moneyQty = (int) amount / value.intValue();
+				amount = amount % value.intValue();
+				Log.d("money", value + ":" + moneyQty);
+				p.setPaymentValue(value);
+				p.setPaymentQty(moneyQty);
 				mPaymentLst.add(p);
 			}
 			mInflater = (LayoutInflater)
@@ -249,6 +261,6 @@ public class PayInfoFragment extends DialogFragment{
 	}
 	
 	public static interface PaymentListener{
-		void onSend(String payAmount);
+		void onSend(int transactionId, int computerId, double totalPrice, double payAmount);
 	}
 }

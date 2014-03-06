@@ -23,6 +23,7 @@ import syn.pos.data.model.POSData_OrderTransInfo;
 import syn.pos.data.model.ProductGroups;
 import syn.pos.data.model.QueueInfo;
 import syn.pos.data.model.ShopData;
+import syn.pos.data.model.SummaryTransaction;
 import syn.pos.data.model.TableName;
 import syn.pos.data.model.ShopData.SeatNo;
 import syn.pos.data.model.TableInfo;
@@ -33,7 +34,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
@@ -72,7 +75,7 @@ import android.widget.RadioGroup.LayoutParams;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
-public class TakeOrderActivity extends Activity implements OnClickListener{
+public class TakeOrderActivity extends Activity implements OnClickListener, PayInfoFragment.PaymentListener{
 	private Spinner mMenuGroupSpinner;
 	private Spinner mMenuDeptSpinner;
 	private GridView mMenuItemGridView;
@@ -3234,6 +3237,65 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 	}
 
+	// load summary trans
+	private void loadTableSummaryTrans(final int tableId){
+		new AlertDialog.Builder(TakeOrderActivity.this)
+		.setTitle(R.string.input_money)
+		.setMessage(R.string.confirm_input_money)
+		.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {	
+				
+			}
+		})
+		.setPositiveButton(R.string.global_btn_yes, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				final ProgressDialog progress = new ProgressDialog(TakeOrderActivity.this);
+				new TableSummaryBill(TakeOrderActivity.this, mGlobalVar, tableId, new TableSummaryBill.LoadBillSummaryListener() {
+					
+					@Override
+					public void onPre() {
+						progress.setMessage(TakeOrderActivity.this.getString(R.string.loading_progress));
+						progress.show();
+					}
+					
+					@Override
+					public void onPost() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onError(String msg) {
+						if(progress.isShowing())
+							progress.dismiss();
+						new AlertDialog.Builder(TakeOrderActivity.this)
+						.setTitle(R.string.pay)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).show();
+					}
+					
+					@Override
+					public void onPost(SummaryTransaction summaryTrans) {
+						if(progress.isShowing())
+							progress.dismiss();
+						PayInfoFragment f = PayInfoFragment.newInstance(summaryTrans.TransactionID, summaryTrans.ComputerID, 
+								summaryTrans.TransactionSummary.fTotalSalePrice);
+						f.show(getFragmentManager(), "payinfo");
+					}
+				}).execute(GlobalVar.FULL_URL);
+			}
+		}).show();
+	}
+	
 	// submit send order task
 	private class SubmitSendOrder extends WebServiceTask {
 		// protected static final String webMethod =
@@ -3851,6 +3913,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 		}
 
 		private void sendSuccess(){
+			final int tableId = mCurrTableId;
 			final CustomDialog customDialog = new CustomDialog(
 					TakeOrderActivity.this, R.style.CustomDialog);
 			customDialog.setCancelable(false);
@@ -3870,7 +3933,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 
 						@Override
 						public void onClick(View v) {
-							
+							if(GlobalVar.sIsEnableCallCheckbillPayCashDetail)
+								loadTableSummaryTrans(tableId);
 							customDialog.dismiss();
 						}
 					});
@@ -6297,6 +6361,67 @@ public class TakeOrderActivity extends Activity implements OnClickListener{
 						}
 					}).execute(GlobalVar.FULL_URL);
 			break;
+		}
+	}
+
+	@Override
+	public void onSend(final int transactionId, final int computerId, final double totalPrice, double payAmount) {
+		if(payAmount >= totalPrice){
+			final ProgressDialog progress = new ProgressDialog(TakeOrderActivity.this);
+			new PaymentCashDetail(TakeOrderActivity.this, mGlobalVar, transactionId, computerId, String.valueOf(payAmount), 
+					new ProgressListener(){
+
+				@Override
+				public void onPre() {
+					progress.setMessage(TakeOrderActivity.this.getString(R.string.loading_progress));
+					progress.show();
+				}
+
+				@Override
+				public void onPost() {
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(TakeOrderActivity.this)
+					.setMessage(R.string.call_chekcbill_success)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+						}
+					})
+					.show();
+				}
+
+				@Override
+				public void onError(String msg) {
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(TakeOrderActivity.this)
+						.setMessage(msg)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						})
+						.show();
+				}
+				
+			}).execute(GlobalVar.FULL_URL);
+		}else{
+			new AlertDialog.Builder(TakeOrderActivity.this)
+			.setTitle(R.string.input_money)
+			.setMessage(R.string.enter_enough_money)
+			.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					PayInfoFragment f = PayInfoFragment.newInstance(transactionId, computerId, 
+							totalPrice);
+					f.show(getFragmentManager(), "payinfo");
+				}
+			}).show();
 		}
 	}
 }
