@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="4dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnMinus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/light_grey_button"
+        android:padding="0dp"
+        android:text="@string/minus" />
+
+    <EditText
+        android:id="@+id/txtQty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="2"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center" >
+
+    </EditText>
+
+    <Button
+        android:id="@+id/btnPlus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/light_grey_button"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:padding="0dp"
+        android:text="@string/plus" />
+
+</LinearLayout>

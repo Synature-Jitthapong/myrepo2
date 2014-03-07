@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="20dp" >
+
+    <TextView
+        android:id="@+id/textViewBillMember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/activity_member_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="48sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/gradient_bar_bg_2"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <TextView
+            android:id="@+id/textViewMenuItemOutOfStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/member_code"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editTextMemberCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_bg"
+            android:ems="10"
+            android:gravity="left|center_horizontal" >
+
+            <requestFocus />
+        </EditText>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" >
+
+            <Button
+                android:id="@+id/buttonSearchMember"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
+                android:background="@drawable/light_grey_button"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:text="@string/button_search_member"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBarSearchMember"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/DetailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_layer"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/textViewQueueName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_code"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewMemberCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textViewBillCustNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewMemberName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_group"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewMemberGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-" />
+
+            <TextView
+                android:id="@+id/textViewPendingRemark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_birth_day"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewMemberBirthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textViewHoldCustQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_expire"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewMemberExpire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_member_mobile"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewMemberMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:text="-"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/buttonQrCode"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/light_grey_button"
+                android:text="@string/call_checkbill_setmember_qrcode"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/buttonBarCode"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/light_grey_button"
+                android:text="@string/call_checkbill_setmember_barcode"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

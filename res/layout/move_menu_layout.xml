@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="bottom|right" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textViewQueueListTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_move_menu_from"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerSourceTableZone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvTbFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_layer"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listViewSorceTableName"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_layer"
+                android:choiceMode="singleChoice" >
+            </ListView>
+
+            <Button
+                android:id="@+id/moveMenuBtnChooseMenu"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/light_grey_button"
+                android:enabled="false"
+                android:minHeight="0dp"
+                android:minWidth="48dp"
+                android:text="@string/move_menu_btn_choose_menu"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/moveMenuTvMenuToMove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="@string/move_menu_tv_menu_to_move"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/moveMenuListViewMenu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_layer" >
+
+            </ListView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewKdsMenuImg"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|top"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_action_arrow" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="bottom" >
+
+                <TextView
+                    android:id="@+id/tvTbTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_layer"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textViewFastFoodCustQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_move_menu_to"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerDestTableZone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listViewDestTableName"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_layer"
+                android:choiceMode="singleChoice" >
+            </ListView>
+
+            <TextView
+                android:id="@+id/moveMenuTvReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="@string/move_menu_tv_reason"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/moveMenuTxtReason"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/edittext_bg"
+                android:ems="10"
+                android:hint="@string/enter_reason"
+                android:inputType="textMultiLine" />
+
+            <ListView
+                android:id="@+id/moveMenuListViewReason"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_layer" >
+
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

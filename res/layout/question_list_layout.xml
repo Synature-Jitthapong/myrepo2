@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_light"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select *"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:background="@drawable/white_layer"
+        android:choiceMode="singleChoice"
+        android:listSelector="@drawable/list_selector"
+        android:padding="4dp" >
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@string/global_btn_cancel"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/buttonSeat"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@string/global_btn_ok"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

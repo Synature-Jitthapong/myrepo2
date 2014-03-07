@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	 <style name="ExtraLarge">
+	     <item name="android:textSize">48sp</item>
+	 </style>
+	 <style name="BigLarge">
+	     <item name="android:textSize">32sp</item>
+	 </style>
+	 <style name="SectionHead" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:drawableBottom">@drawable/section_head</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:textColor">@color/dark_orange</item>
+    </style>
+	<style name="EditText" parent="@android:style/Widget.EditText">
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+     <style name="CustomDialog" parent="android:style/Theme.DeviceDefault.Light.Dialog">
+   		<item name="android:windowNoTitle">true</item>
+   		<item name="android:windowBackground">@color/grey_light</item>
+	</style>
+  	<style name="AppTheme" parent="AppBaseTheme">
+  	    <item name="android:windowBackground">@color/grey_light</item>
+       <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+    </style>  
+     <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+    </style>
+</resources>

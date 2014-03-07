@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey_light"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="4dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/enter_open_price"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextDetailPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/white_layer"
+        android:ems="10"
+        android:gravity="right|center_vertical"
+        android:inputType="numberDecimal"
+        android:padding="4dp"
+        android:textStyle="bold" >
+
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@string/global_btn_cancel"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@string/global_btn_ok"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

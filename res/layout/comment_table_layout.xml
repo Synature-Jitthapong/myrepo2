@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnClose"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnClose"
+        android:layout_marginBottom="8dp"
+        android:layout_toLeftOf="@+id/btnClose"
+        android:gravity="center|center_vertical"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/spCommDept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1" />
+
+    <LinearLayout
+        android:id="@+id/listViewContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonContent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/spCommDept"
+        android:layout_marginBottom="4dp" >
+
+        <ListView
+            android:id="@+id/lvCommItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/white_layer"
+            android:choiceMode="multipleChoice" >
+
+        </ListView>
+
+        <ListView
+            android:id="@+id/lvSelectedComm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/white_layer" >
+
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@android:string/cancel"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/light_grey_button"
+            android:text="@android:string/ok"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnClose"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:paddingLeft="0dp" />
+
+</RelativeLayout>

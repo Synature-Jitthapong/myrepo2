@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp" >
+
+    <Spinner
+        android:id="@+id/spTableZone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnClose"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/lvTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/spTableZone"
+        android:background="@drawable/white_layer" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/btnClose"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+        android:paddingLeft="8dp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnClose"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/close_table"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="32sp" />
+
+</RelativeLayout>
