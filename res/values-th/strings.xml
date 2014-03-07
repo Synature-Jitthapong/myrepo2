@@ -442,4 +442,8 @@
 	<string name="confirm_cancel">คุณต้องการยกเลิก?</string>
 	<string name="apply_discount">ใช้ส่วนลด</string>
 	<string name="title_activity_merge_multi_table">รวมหลายโต๊ะ</string>
+	<string name="split_table">แยกโต๊ะ</string>
+    <string name="not_found_table">ไม่พบรายการโต๊ะ</string>
+    <string name="split_table_success">แยกโต๊ะเรียบร้อยแล้ว</string>
+    <string name="confirm_split_table">ต้องการแยกโต๊ะ?</string>
 </resources>

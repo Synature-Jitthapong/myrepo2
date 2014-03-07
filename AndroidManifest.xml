@@ -134,7 +134,7 @@
         <activity
             android:name="com.syn.iorder.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.syn.iorder.AboutActivity"
@@ -143,16 +143,16 @@
         <activity
             android:name="com.syn.iorder.CommentTransactionActivity"
             android:label="@string/title_activity_comment_transaction"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.syn.iorder.MergeMultiTableActivity"
             android:label="@string/title_activity_merge_multi_table"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.syn.iorder.SplitTableActivity"
-            android:label="@string/title_activity_split_table" >
+            android:label="@string/title_activity_split_table" android:screenOrientation="portrait">
         </activity>
     </application>
 

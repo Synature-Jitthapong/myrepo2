@@ -448,6 +448,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			menu.findItem(R.id.menu_manage_queue).setVisible(false);
 		}
 
+		if(GlobalVar.sIsEnableBuffetType){
+			menu.findItem(R.id.action_split_table).setVisible(true);
+		}else{
+			menu.findItem(R.id.action_split_table).setVisible(false);
+		}
+		
 		if(GlobalVar.sIsEnableChecker){
 			menu.findItem(R.id.action_kds).setVisible(true);
 		}else{
@@ -482,6 +488,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				intent = new Intent(TakeOrderActivity.this, MergeMultiTableActivity.class);
 				startActivity(intent);
 			}
+			return true;
+		case R.id.action_split_table:
+			intent = new Intent(TakeOrderActivity.this, SplitTableActivity.class);
+			startActivity(intent);
 			return true;
 		case R.id.action_comment_trans:
 			intent = new Intent(TakeOrderActivity.this, CommentTransactionActivity.class);

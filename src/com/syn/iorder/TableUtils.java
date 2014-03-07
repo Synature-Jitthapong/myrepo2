@@ -19,7 +19,7 @@ public class TableUtils {
 		public static final String SPLIT_MULTI_TABLE_METHOD = "WSiOrder_JSON_SplitMultiTable";
 		private ProgressListener mListener;
 		
-		public SplitMultiTableService(Context c, GlobalVar gb, int staffId, 
+		public SplitMultiTableService(Context c, GlobalVar gb,
 				int transId, int compId, String tbIds, String reasonIds, 
 				String reason, ProgressListener listener) {
 			super(c, gb, SPLIT_MULTI_TABLE_METHOD);
@@ -260,7 +260,7 @@ public class TableUtils {
 	}
 	
 	public static interface LoadMergeTableProgressListener extends ProgressListener{
-		void onPost(int[] TbIds);
+		void onPost(int[] tbIds);
 	}
 	
 	public static interface LoadTableProgressListener extends ProgressListener{
