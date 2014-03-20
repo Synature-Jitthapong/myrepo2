@@ -1,6 +1,7 @@
 package com.syn.iorder;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import org.ksoap2.serialization.PropertyInfo;
 
@@ -10,10 +11,67 @@ import syn.pos.data.model.WebServiceResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.syn.iorder.util.SQLiteHelper;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 
 public class TableUtils {
+	
+	public static int getMappingTableId(Context c, String tableName){
+		int tableId = 0;
+		if(tableName.equals(""))
+			return 0;
+		SQLiteHelper sqliteHelper = new SQLiteHelper(c);
+		SQLiteDatabase sqlite = sqliteHelper.getReadableDatabase();
+		Cursor cursor = sqlite.query("TableInfo", 
+				new String[]{"tb_id", "tb_name"}, 
+				"tb_name" + "=?", new String[]{tableName}, null, null, null);
+		if(cursor.moveToFirst()){
+			tableId = cursor.getInt(cursor.getColumnIndex("tb_id"));
+		}
+		cursor.close();
+		return tableId;
+	}
+	
+	public static void createTemporaryTableInfo(Context c, List<TableInfo> tbInfLst){
+		String sqlDrop = "drop table if exists TableInfo";
+		String sqlCreate = "create table TableInfo("
+				+ " tb_id integer, "
+				+ " tb_name text"
+				+ ");";
+		try {
+			SQLiteHelper sqliteHelper = new SQLiteHelper(c);
+			SQLiteDatabase sqlite = sqliteHelper.getWritableDatabase();
+			sqlite.execSQL(sqlDrop);
+			sqlite.execSQL(sqlCreate);
+			for(TableInfo tbInf : tbInfLst){
+				ContentValues cv = new ContentValues();
+				cv.put("tb_id", tbInf.getiTableID());
+				cv.put("tb_name", tbInf.getSzTableName());
+				sqlite.insert("TableInfo", null, cv);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static class LoadAllTableNoProgress extends LoadAllTableV2{
+
+		public LoadAllTableNoProgress(Context c, GlobalVar globalVar,
+				LoadTableProgress listener) {
+			super(c, globalVar, listener);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			progress.dismiss();
+		}
+	}
 	
 	public static class SplitMultiTableService extends WebServiceTask{
 		public static final String SPLIT_MULTI_TABLE_METHOD = "WSiOrder_JSON_SplitMultiTable";

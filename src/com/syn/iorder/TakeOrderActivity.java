@@ -411,6 +411,34 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					}else{
 						GlobalVar.sIsEnableBuffetType = false;
 					}
+					break;
+				case 16: // fastfood map table name
+					if(feature.getFeatureValue() > 0){
+						GlobalVar.sIsEnableFastFoodMapTable = true;
+						new TableUtils.LoadAllTableNoProgress(TakeOrderActivity.this, mGlobalVar, 
+								new LoadAllTableV2.LoadTableProgress() {
+									
+									@Override
+									public void onPre() {
+									}
+									
+									@Override
+									public void onPost() {
+									}
+									
+									@Override
+									public void onError(String msg) {
+									}
+									
+									@Override
+									public void onPost(List<TableInfo> tbInfoLst) {
+										TableUtils.createTemporaryTableInfo(TakeOrderActivity.this, tbInfoLst);
+									}
+								}).execute(GlobalVar.FULL_URL);
+					}else{
+						GlobalVar.sIsEnableFastFoodMapTable = false;
+					}
+					break;
 				}
 			}
 		}
@@ -2441,31 +2469,30 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 			// hide btn when order is type 7
 			if (mi.getProductTypeID() == 7) {
-				holder.btnMinus.setVisibility(View.GONE);
-				holder.btnPlus.setVisibility(View.GONE);
+				//holder.btnMinus.setVisibility(View.GONE);
+				//holder.btnPlus.setVisibility(View.GONE);
 				holder.btnComment.setVisibility(View.GONE);
 				holder.btnEdit.setVisibility(View.VISIBLE);
 
 				// show /
-				holder.tvOrderListMenuQty.setVisibility(View.INVISIBLE);
+				//holder.tvOrderListMenuQty.setVisibility(View.INVISIBLE);
 				// holder.tvOrderListMenuPrice.setText(mi.getCurrencySymbol() +
 				// globalVar.decimalFormat.format(mi.getPricePerUnit()));
 			} else {
-				holder.btnMinus.setVisibility(View.VISIBLE);
-				holder.btnPlus.setVisibility(View.VISIBLE);
+				//holder.btnMinus.setVisibility(View.VISIBLE);
+				//holder.btnPlus.setVisibility(View.VISIBLE);
 				holder.btnComment.setVisibility(View.VISIBLE);
 				holder.tvOrderListMenuQty.setVisibility(View.VISIBLE);
 				holder.btnEdit.setVisibility(View.GONE);
-				
-				if(GlobalVar.sIsAddOnlyOneItem){
-					holder.btnPlus.setVisibility(View.GONE);
-					holder.btnMinus.setVisibility(View.GONE);
-				}else{
-					holder.btnPlus.setVisibility(View.VISIBLE);
-					holder.btnMinus.setVisibility(View.VISIBLE);
-				}
 			}
-			
+			// alway add one item feature
+			if(GlobalVar.sIsAddOnlyOneItem){
+				holder.btnPlus.setVisibility(View.GONE);
+				holder.btnMinus.setVisibility(View.GONE);
+			}else{
+				holder.btnPlus.setVisibility(View.VISIBLE);
+				holder.btnMinus.setVisibility(View.VISIBLE);
+			}
 			return convertView;
 		}
 
@@ -3314,9 +3341,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 		// answer question
 		private List<ProductGroups.QuestionAnswerData> qsAnsLst;
-		
+
 		public SubmitSendOrder(Context c, GlobalVar gb, String method,
-				String queueName, int custQty) {
+				String queueName, int custQty, int saleMode, int tableId) {
 			super(c, gb, method);
 
 			PropertyInfo property = new PropertyInfo();
@@ -3332,86 +3359,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				property.setType(int.class);
 				soapRequest.addProperty(property);
 			}
-
-			// sendorder json
-			POSData_OrderTransInfo orderTrans = new POSData_OrderTransInfo();
-			orderTrans.setSzTransNote("");
-
-			orderTrans.xListPaymentAmount = new ArrayList<POSData_OrderTransInfo.POSData_PaymentAmount>();
-
-			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-			if (ml.size() > 0) {
-				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
-				for (MenuDataItem mi : ml) {
-					POSData_OrderTransInfo.POSData_OrderItemInfo orderItem = new POSData_OrderTransInfo.POSData_OrderItemInfo();
-					orderItem.setiProductID(mi.getProductID());
-					orderItem.setfProductQty(mi.getProductQty());
-					orderItem.setfProductPrice(mi.getPricePerUnit());
-					orderItem.setSzOrderComment(mi.getOrderComment());
-					orderItem.setiSaleMode(mi.getSaleMode());
-					orderItem.setiSeatID(mi.getSeatId());
-					orderItem.setiCourseID(mi.getCourseId());
-
-					// type7
-					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
-						orderItem.xListChildOrderSetLinkType7 = new ArrayList<POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info>();
-
-						for (ProductGroups.PComponentSet pcs : mi.pCompSetLst) {
-							POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info type7 = new POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info();
-							type7.setiPGroupID(pcs.getPGroupID());
-							type7.setiProductID(pcs.getProductID());
-							type7.setfProductQty(pcs.getProductQty());
-							type7.setfProductPrice(pcs.getPricePerUnit());
-							type7.setiSetGroupNo(pcs.getSetGroupNo());
-							type7.setSzOrderComment(pcs.getOrderComment());
-
-							// comment of type 7
-							if (pcs.menuCommentList != null
-									&& pcs.menuCommentList.size() > 0) {
-								type7.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-								for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
-									POSData_OrderTransInfo.POSData_CommentInfo comment = new POSData_OrderTransInfo.POSData_CommentInfo();
-									comment.setiCommentID(mc.getMenuCommentID());
-									comment.setfCommentQty(mc.getCommentQty());
-									comment.setfCommentPrice(mc
-											.getProductPricePerUnit());
-
-									type7.xListCommentInfo.add(comment);
-								}
-							}
-
-							orderItem.xListChildOrderSetLinkType7.add(type7);
-						}
-					}
-
-					// type7
-					if (mi.menuCommentList != null
-							&& mi.menuCommentList.size() > 0) {
-
-						orderItem.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-						for (MenuGroups.MenuComment mc : mi.menuCommentList) {
-							POSData_OrderTransInfo.POSData_CommentInfo orderComment = new POSData_OrderTransInfo.POSData_CommentInfo();
-
-							orderComment.setiCommentID(mc.getMenuCommentID());
-							orderComment.setfCommentQty(mc.getCommentQty());
-							orderComment.setfCommentPrice(mc
-									.getProductPricePerUnit());
-
-							orderItem.xListCommentInfo.add(orderComment);
-						}
-					}
-					orderTrans.xListOrderItem.add(orderItem);
-				}
-			}
-
-			Gson gson = new Gson();
-			String jsonToSend = gson.toJson(orderTrans);
-			Log.d("Log order data", jsonToSend);
 
 			property = new PropertyInfo();
 			property.setName("iStaffID");
@@ -3430,10 +3377,22 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			property.setValue(queueName);
 			property.setType(String.class);
 			soapRequest.addProperty(property);
-
+			
+			property = new PropertyInfo();
+			property.setName("iSaleMode");
+			property.setValue(saleMode);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iTableID");
+			property.setValue(mCurrTableId);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+			
 			property = new PropertyInfo();
 			property.setName("szJSon_OrderTransData");
-			property.setValue(jsonToSend);
+			property.setValue(generateTransactionJson(""));
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -3455,86 +3414,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				soapRequest.addProperty(property);
 			}
 
-			// sendorder json
-			POSData_OrderTransInfo orderTrans = new POSData_OrderTransInfo();
-			orderTrans.setSzTransNote(ref);
-
-			orderTrans.xListPaymentAmount = new ArrayList<POSData_OrderTransInfo.POSData_PaymentAmount>();
-
-			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-			if (ml.size() > 0) {
-				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
-				for (MenuDataItem mi : ml) {
-					POSData_OrderTransInfo.POSData_OrderItemInfo orderItem = new POSData_OrderTransInfo.POSData_OrderItemInfo();
-					orderItem.setiProductID(mi.getProductID());
-					orderItem.setfProductQty(mi.getProductQty());
-					orderItem.setfProductPrice(mi.getPricePerUnit());
-					orderItem.setSzOrderComment(mi.getOrderComment());
-					orderItem.setiSaleMode(mi.getSaleMode());
-					orderItem.setiSeatID(mi.getSeatId());
-					orderItem.setiCourseID(mi.getCourseId());
-
-					// type7
-					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
-						orderItem.xListChildOrderSetLinkType7 = new ArrayList<POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info>();
-
-						for (ProductGroups.PComponentSet pcs : mi.pCompSetLst) {
-							POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info type7 = new POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info();
-							type7.setiPGroupID(pcs.getPGroupID());
-							type7.setiProductID(pcs.getProductID());
-							type7.setfProductQty(pcs.getProductQty());
-							type7.setfProductPrice(pcs.getPricePerUnit());
-							type7.setiSetGroupNo(pcs.getSetGroupNo());
-							type7.setSzOrderComment(pcs.getOrderComment());
-
-							// comment of type 7
-							if (pcs.menuCommentList != null
-									&& pcs.menuCommentList.size() > 0) {
-								type7.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-								for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
-									POSData_OrderTransInfo.POSData_CommentInfo comment = new POSData_OrderTransInfo.POSData_CommentInfo();
-									comment.setiCommentID(mc.getMenuCommentID());
-									comment.setfCommentQty(mc.getCommentQty());
-									comment.setfCommentPrice(mc
-											.getProductPricePerUnit());
-
-									type7.xListCommentInfo.add(comment);
-								}
-							}
-
-							orderItem.xListChildOrderSetLinkType7.add(type7);
-						}
-					}
-
-					// type7
-					if (mi.menuCommentList != null
-							&& mi.menuCommentList.size() > 0) {
-
-						orderItem.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-						for (MenuGroups.MenuComment mc : mi.menuCommentList) {
-							POSData_OrderTransInfo.POSData_CommentInfo orderComment = new POSData_OrderTransInfo.POSData_CommentInfo();
-
-							orderComment.setiCommentID(mc.getMenuCommentID());
-							orderComment.setfCommentQty(mc.getCommentQty());
-							orderComment.setfCommentPrice(mc
-									.getProductPricePerUnit());
-
-							orderItem.xListCommentInfo.add(orderComment);
-						}
-					}
-					orderTrans.xListOrderItem.add(orderItem);
-				}
-			}
-
-			Gson gson = new Gson();
-			String jsonToSend = gson.toJson(orderTrans);
-			Log.d("Log order data", jsonToSend);
-
 			property = new PropertyInfo();
 			property.setName("iStaffID");
 			property.setValue(GlobalVar.STAFF_ID);
@@ -3555,7 +3434,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 			property = new PropertyInfo();
 			property.setName("szJSon_OrderTransData");
-			property.setValue(jsonToSend);
+			property.setValue(generateTransactionJson(ref));
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -3584,86 +3463,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				soapRequest.addProperty(property);
 			}
 
-			// sendorder json
-			POSData_OrderTransInfo orderTrans = new POSData_OrderTransInfo();
-			orderTrans.setSzTransNote("");
-
-			orderTrans.xListPaymentAmount = new ArrayList<POSData_OrderTransInfo.POSData_PaymentAmount>();
-
-			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-			if (ml.size() > 0) {
-				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
-				for (MenuDataItem mi : ml) {
-					POSData_OrderTransInfo.POSData_OrderItemInfo orderItem = new POSData_OrderTransInfo.POSData_OrderItemInfo();
-					orderItem.setiProductID(mi.getProductID());
-					orderItem.setfProductQty(mi.getProductQty());
-					orderItem.setfProductPrice(mi.getPricePerUnit());
-					orderItem.setSzOrderComment(mi.getOrderComment());
-					orderItem.setiSaleMode(mi.getSaleMode());
-					orderItem.setiSeatID(mi.getSeatId());
-					orderItem.setiCourseID(mi.getCourseId());
-
-					// type7
-					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
-						orderItem.xListChildOrderSetLinkType7 = new ArrayList<POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info>();
-
-						for (ProductGroups.PComponentSet pcs : mi.pCompSetLst) {
-							POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info type7 = new POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info();
-							type7.setiPGroupID(pcs.getPGroupID());
-							type7.setiProductID(pcs.getProductID());
-							type7.setfProductQty(pcs.getProductQty());
-							type7.setfProductPrice(pcs.getPricePerUnit());
-							type7.setiSetGroupNo(pcs.getSetGroupNo());
-							type7.setSzOrderComment(pcs.getOrderComment());
-
-							// comment of type 7
-							if (pcs.menuCommentList != null
-									&& pcs.menuCommentList.size() > 0) {
-								type7.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-								for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
-									POSData_OrderTransInfo.POSData_CommentInfo comment = new POSData_OrderTransInfo.POSData_CommentInfo();
-									comment.setiCommentID(mc.getMenuCommentID());
-									comment.setfCommentQty(mc.getCommentQty());
-									comment.setfCommentPrice(mc
-											.getProductPricePerUnit());
-
-									type7.xListCommentInfo.add(comment);
-								}
-							}
-
-							orderItem.xListChildOrderSetLinkType7.add(type7);
-						}
-					}
-
-					// type7
-					if (mi.menuCommentList != null
-							&& mi.menuCommentList.size() > 0) {
-
-						orderItem.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-						for (MenuGroups.MenuComment mc : mi.menuCommentList) {
-							POSData_OrderTransInfo.POSData_CommentInfo orderComment = new POSData_OrderTransInfo.POSData_CommentInfo();
-
-							orderComment.setiCommentID(mc.getMenuCommentID());
-							orderComment.setfCommentQty(mc.getCommentQty());
-							orderComment.setfCommentPrice(mc
-									.getProductPricePerUnit());
-
-							orderItem.xListCommentInfo.add(orderComment);
-						}
-					}
-					orderTrans.xListOrderItem.add(orderItem);
-				}
-			}
-
-			Gson gson = new Gson();
-			String jsonToSend = gson.toJson(orderTrans);
-			Log.d("Log order data", jsonToSend);
-
 			property = new PropertyInfo();
 			property.setName("iQueueID");
 			property.setValue(queueId);
@@ -3672,7 +3471,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 			property = new PropertyInfo();
 			property.setName("szJSon_OrderTransData");
-			property.setValue(jsonToSend);
+			property.setValue(generateTransactionJson(""));
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -3694,86 +3493,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				soapRequest.addProperty(property);
 			}
 
-			// sendorder json
-			POSData_OrderTransInfo orderTrans = new POSData_OrderTransInfo();
-			orderTrans.setSzTransNote("");
-
-			orderTrans.xListPaymentAmount = new ArrayList<POSData_OrderTransInfo.POSData_PaymentAmount>();
-
-			POSOrdering posOrder = new POSOrdering(TakeOrderActivity.this);
-			List<syn.pos.data.model.MenuDataItem> ml = posOrder.listOrder(
-					GlobalVar.TRANSACTION_ID, GlobalVar.COMPUTER_ID);
-
-			if (ml.size() > 0) {
-				orderTrans.xListOrderItem = new ArrayList<POSData_OrderTransInfo.POSData_OrderItemInfo>();
-				for (MenuDataItem mi : ml) {
-					POSData_OrderTransInfo.POSData_OrderItemInfo orderItem = new POSData_OrderTransInfo.POSData_OrderItemInfo();
-					orderItem.setiProductID(mi.getProductID());
-					orderItem.setfProductQty(mi.getProductQty());
-					orderItem.setfProductPrice(mi.getPricePerUnit());
-					orderItem.setSzOrderComment(mi.getOrderComment());
-					orderItem.setiSaleMode(mi.getSaleMode());
-					orderItem.setiSeatID(mi.getSeatId());
-					orderItem.setiCourseID(mi.getCourseId());
-
-					// type7
-					if (mi.pCompSetLst != null && mi.pCompSetLst.size() > 0) {
-						orderItem.xListChildOrderSetLinkType7 = new ArrayList<POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info>();
-
-						for (ProductGroups.PComponentSet pcs : mi.pCompSetLst) {
-							POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info type7 = new POSData_OrderTransInfo.POSData_ChildOrderSetLinkType7Info();
-							type7.setiPGroupID(pcs.getPGroupID());
-							type7.setiProductID(pcs.getProductID());
-							type7.setfProductQty(pcs.getProductQty());
-							type7.setfProductPrice(pcs.getPricePerUnit());
-							type7.setiSetGroupNo(pcs.getSetGroupNo());
-							type7.setSzOrderComment(pcs.getOrderComment());
-
-							// comment of type 7
-							if (pcs.menuCommentList != null
-									&& pcs.menuCommentList.size() > 0) {
-								type7.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-								for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
-									POSData_OrderTransInfo.POSData_CommentInfo comment = new POSData_OrderTransInfo.POSData_CommentInfo();
-									comment.setiCommentID(mc.getMenuCommentID());
-									comment.setfCommentQty(mc.getCommentQty());
-									comment.setfCommentPrice(mc
-											.getProductPricePerUnit());
-
-									type7.xListCommentInfo.add(comment);
-								}
-							}
-
-							orderItem.xListChildOrderSetLinkType7.add(type7);
-						}
-					}
-
-					// type7
-					if (mi.menuCommentList != null
-							&& mi.menuCommentList.size() > 0) {
-
-						orderItem.xListCommentInfo = new ArrayList<POSData_OrderTransInfo.POSData_CommentInfo>();
-
-						for (MenuGroups.MenuComment mc : mi.menuCommentList) {
-							POSData_OrderTransInfo.POSData_CommentInfo orderComment = new POSData_OrderTransInfo.POSData_CommentInfo();
-
-							orderComment.setiCommentID(mc.getMenuCommentID());
-							orderComment.setfCommentQty(mc.getCommentQty());
-							orderComment.setfCommentPrice(mc
-									.getProductPricePerUnit());
-
-							orderItem.xListCommentInfo.add(orderComment);
-						}
-					}
-					orderTrans.xListOrderItem.add(orderItem);
-				}
-			}
-
-			Gson gson = new Gson();
-			String jsonToSend = gson.toJson(orderTrans);
-			Log.d("Log order data", jsonToSend);
-
 			property = new PropertyInfo();
 			property.setName("iStaffID");
 			property.setValue(GlobalVar.STAFF_ID);
@@ -3794,7 +3513,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 			property = new PropertyInfo();
 			property.setName("szJSon_OrderTransData");
-			property.setValue(jsonToSend);
+			property.setValue(generateTransactionJson(""));
 			property.setType(String.class);
 			soapRequest.addProperty(property);
 		}
@@ -3818,9 +3537,35 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				soapRequest.addProperty(property);
 			}
 
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+
+			property = new PropertyInfo();
+			property.setName("iTableID");
+			property.setValue(mCurrTableId);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+
+			property = new PropertyInfo();
+			property.setName("iCustomerQty");
+			property.setValue(mCustomerQty);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+
+			property = new PropertyInfo();
+			property.setName("szJSon_OrderTransData");
+			property.setValue(generateTransactionJson(""));
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+		}
+
+		private String generateTransactionJson(String transNote){
 			// sendorder json
 			POSData_OrderTransInfo orderTrans = new POSData_OrderTransInfo();
-			orderTrans.setSzTransNote("");
+			orderTrans.setSzTransNote(transNote);
 
 			orderTrans.xListPaymentAmount = new ArrayList<POSData_OrderTransInfo.POSData_PaymentAmount>();
 
@@ -3893,36 +3638,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					orderTrans.xListOrderItem.add(orderItem);
 				}
 			}
-
 			Gson gson = new Gson();
-			String jsonToSend = gson.toJson(orderTrans);
-			Log.d("Log order data", jsonToSend);
-
-			property = new PropertyInfo();
-			property.setName("iStaffID");
-			property.setValue(GlobalVar.STAFF_ID);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-
-			property = new PropertyInfo();
-			property.setName("iTableID");
-			property.setValue(mCurrTableId);
-			property.setType(String.class);
-			soapRequest.addProperty(property);
-
-			property = new PropertyInfo();
-			property.setName("iCustomerQty");
-			property.setValue(mCustomerQty);
-			property.setType(int.class);
-			soapRequest.addProperty(property);
-
-			property = new PropertyInfo();
-			property.setName("szJSon_OrderTransData");
-			property.setValue(jsonToSend);
-			property.setType(String.class);
-			soapRequest.addProperty(property);
+			return gson.toJson(orderTrans);
 		}
-
+		
 		private void sendSuccess(){
 			final int tableId = mCurrTableId;
 			final CustomDialog customDialog = new CustomDialog(
@@ -6016,15 +5735,41 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					public void onClick(View v) {
 						if (!dialog.txtFastRef.getText().toString().equals("")) {
 							dialog.dismiss();
-							if (mGlobalVar.MEMBER_ID == 0) {
-								new SubmitSendOrder(
-										TakeOrderActivity.this,
-										mGlobalVar,
-										"WSiOrder_JSON_SendFastFoodOrderTransactionData",
-										dialog.txtFastRef.getText().toString(),
-										Integer.parseInt(dialog.tvCustQty
-												.getText().toString()))
-										.execute(GlobalVar.FULL_URL);
+							if (GlobalVar.MEMBER_ID == 0) {
+								if(GlobalVar.sIsEnableFastFoodMapTable){
+									int tableId = TableUtils.getMappingTableId(TakeOrderActivity.this, 
+											dialog.txtFastRef.getText().toString());
+									if(tableId != 0){
+										new SubmitSendOrder(
+												TakeOrderActivity.this,
+												mGlobalVar,
+												"WSiOrder_JSON_SendFastFoodOrderTransactionWithTableID",
+												dialog.txtFastRef.getText().toString(),
+												Integer.parseInt(dialog.tvCustQty
+														.getText().toString()), mTransSaleMode, tableId)
+												.execute(GlobalVar.FULL_URL);
+									}else{
+										new AlertDialog.Builder(TakeOrderActivity.this)
+										.setTitle(R.string.send)
+										.setMessage(R.string.not_found_table)
+										.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										}).show();
+									}
+								}else{
+									new SubmitSendOrder(
+											TakeOrderActivity.this,
+											mGlobalVar,
+											"WSiOrder_JSON_SendFastFoodOrderTransactionData",
+											dialog.txtFastRef.getText().toString(),
+											Integer.parseInt(dialog.tvCustQty
+													.getText().toString()), mTransSaleMode, 0)
+											.execute(GlobalVar.FULL_URL);
+								}
+								
 							} else {
 								new SubmitSendOrder(
 										TakeOrderActivity.this,
@@ -6032,7 +5777,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 										"WSiOrder_JSON_SendFastFoodOrderTransactionDataWithMemberID",
 										dialog.txtFastRef.getText().toString(),
 										Integer.parseInt(dialog.tvCustQty
-												.getText().toString()))
+												.getText().toString()), mTransSaleMode, mCurrTableId)
 										.execute(GlobalVar.FULL_URL);
 							}
 						} else {

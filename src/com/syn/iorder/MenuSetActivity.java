@@ -128,7 +128,9 @@ public class MenuSetActivity extends Activity {
 				// check balance
 				if (pcgData.getRequireAmount() == 0) {
 					tvMenuSetReqAmount.setText("...");
+					tvMenuSetReqAmount.setVisibility(View.GONE);
 				} else {
+					tvMenuSetReqAmount.setVisibility(View.VISIBLE);
 					double balance = calculateSetRequireAmount(
 							pcgData.getPGroupID(), pcgData.getRequireAmount());
 				}
@@ -196,12 +198,12 @@ public class MenuSetActivity extends Activity {
 
 				}
 
-				LayoutParams layoutParam = new LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,
-						1f);
+//				LayoutParams layoutParam = new LayoutParams(
+//						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,
+//						1f);
 				//layoutParam.width = 250;
-				v.setMinimumWidth(200);
-				layout.addView(v, layoutParam);
+				//v.setMinimumWidth(200);
+				layout.addView(v);
 
 				i++;
 			}

@@ -400,7 +400,7 @@
     <string name="clear_table_title">Clear table</string>
     <string name="cf_clear_table">ต้องการ clear โต๊ะที่เลือกไว้?</string>
     <string name="enter_open_price">กรุณาใส่ราคาสินค้า</string>
-    <string name="session_expire">โปรแกรม front ยังไม่ได้เปิด คุณจะไม่สามารถส่งรายการไดๆได้</string>  
+    <string name="session_expire">ยังไม่ได้เปิดการขาย คุณจะไม่สามารถส่งรายการไดๆได้</string>  
     <string name="hint_price">ราคา</string>
     <string name="enter_product_amount">กรุณาใส่จำนวนสินค้า</string>
     <string name="hint_product_qty">จำนวน</string>

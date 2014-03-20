@@ -399,7 +399,7 @@
     <string name="clear_table_title">Clear table</string>
     <string name="cf_clear_table">Are you sure you want to clear selected table?</string>
     <string name="enter_open_price">Please enter product price.</string>
-    <string name="session_expire">Front program did not open you cannot send any order.</string>
+    <string name="session_expire">Shop is already endday you cannot send any order.</string>
     <string name="hint_price">Price</string>
     <string name="enter_product_amount">Please enter product qty.</string>
     <string name="hint_product_qty">Qty</string>

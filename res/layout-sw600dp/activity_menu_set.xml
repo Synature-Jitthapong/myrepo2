@@ -27,22 +27,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="128dp"
             android:background="@drawable/control_bar_bg"
+            android:gravity="center_vertical"
             android:orientation="vertical" >
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollViewPluResult"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="4dp"
-                android:paddingTop="4dp" >
+                android:layout_height="match_parent" >
 
                 <LinearLayout
                     android:id="@+id/layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="1dip"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                 </LinearLayout>
