@@ -324,6 +324,8 @@ public class LoginActivity extends Activity {
 				@Override
 				public void onSuccess() {
 					updateWebserviceVersion();
+					finish();
+					startActivity(new Intent(LoginActivity.this, LoginActivity.class));
 				}
 
 				@Override
@@ -379,7 +381,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				cusDialog.dismiss();
-				LoginActivity.this.finish();
+				finish();
 			}
 		});
 		cusDialog.show();

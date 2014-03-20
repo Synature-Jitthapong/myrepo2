@@ -127,7 +127,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		
 		mGlobalVar = new GlobalVar(this);
 
-		if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
 			// check login
 			if (GlobalVar.STAFF_ID != 0) {
 				// initial component
@@ -145,12 +145,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 			} else {
 				gotoLogin();
 			}
-		} else {
-			Intent intent = new Intent(TakeOrderActivity.this,
-					RegisterActivity.class);
-			TakeOrderActivity.this.startActivity(intent);
-			TakeOrderActivity.this.finish();
-		}
+//		} else {
+//			Intent intent = new Intent(TakeOrderActivity.this,
+//					RegisterActivity.class);
+//			TakeOrderActivity.this.startActivity(intent);
+//			TakeOrderActivity.this.finish();
+//		}
 	}
 
 	private void initComponent(){
@@ -2128,29 +2128,28 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 
 			// hide btn when order is type 7
 			if (mi.getProductTypeID() == 7) {
-				holder.btnMinus.setVisibility(View.GONE);
-				holder.btnPlus.setVisibility(View.GONE);
+				//holder.btnMinus.setVisibility(View.GONE);
+				//holder.btnPlus.setVisibility(View.GONE);
 				holder.btnComment.setVisibility(View.GONE);
 				holder.btnEdit.setVisibility(View.VISIBLE);
 
 				// show /
-				holder.tvOrderListMenuQty.setVisibility(View.INVISIBLE);
+				//holder.tvOrderListMenuQty.setVisibility(View.INVISIBLE);
 				// holder.tvOrderListMenuPrice.setText(mi.getCurrencySymbol() +
 				// globalVar.decimalFormat.format(mi.getPricePerUnit()));
 			} else {
-				holder.btnMinus.setVisibility(View.VISIBLE);
-				holder.btnPlus.setVisibility(View.VISIBLE);
+				//holder.btnMinus.setVisibility(View.VISIBLE);
+				//holder.btnPlus.setVisibility(View.VISIBLE);
 				holder.btnComment.setVisibility(View.VISIBLE);
-				holder.tvOrderListMenuQty.setVisibility(View.VISIBLE);
+				//holder.tvOrderListMenuQty.setVisibility(View.VISIBLE);
 				holder.btnEdit.setVisibility(View.GONE);
-				
-				if(mAddOnlyOneItem){
-					holder.btnPlus.setVisibility(View.GONE);
-					holder.btnMinus.setVisibility(View.GONE);
-				}else{
-					holder.btnPlus.setVisibility(View.VISIBLE);
-					holder.btnMinus.setVisibility(View.VISIBLE);
-				}
+			}
+			if(mAddOnlyOneItem){
+				holder.btnPlus.setVisibility(View.GONE);
+				holder.btnMinus.setVisibility(View.GONE);
+			}else{
+				holder.btnPlus.setVisibility(View.VISIBLE);
+				holder.btnMinus.setVisibility(View.VISIBLE);
 			}
 			
 			return convertView;

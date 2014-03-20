@@ -42,6 +42,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/tvMenuCode"
                 android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="2"
                 android:text="name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="12sp" />

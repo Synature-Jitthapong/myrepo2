@@ -32,6 +32,7 @@
                 android:layout_below="@+id/tvMenuCode"
                 android:gravity="left"
                 android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="2"
                 android:text="menu name"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
