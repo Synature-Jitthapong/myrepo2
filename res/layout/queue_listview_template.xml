@@ -84,7 +84,7 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:text="@string/queue_btn_cancel"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse"
             android:textSize="12sp" />
     </LinearLayout>
 

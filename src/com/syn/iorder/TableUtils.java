@@ -37,17 +37,11 @@ public class TableUtils {
 		return tableId;
 	}
 	
-	public static void createTemporaryTableInfo(Context c, List<TableInfo> tbInfLst){
-		String sqlDrop = "drop table if exists TableInfo";
-		String sqlCreate = "create table TableInfo("
-				+ " tb_id integer, "
-				+ " tb_name text"
-				+ ");";
+	public static void insertTableInfoTableInfo(Context c, List<TableInfo> tbInfLst){
 		try {
 			SQLiteHelper sqliteHelper = new SQLiteHelper(c);
 			SQLiteDatabase sqlite = sqliteHelper.getWritableDatabase();
-			sqlite.execSQL(sqlDrop);
-			sqlite.execSQL(sqlCreate);
+			sqlite.delete("TableInfo", null, null);
 			for(TableInfo tbInf : tbInfLst){
 				ContentValues cv = new ContentValues();
 				cv.put("tb_id", tbInf.getiTableID());

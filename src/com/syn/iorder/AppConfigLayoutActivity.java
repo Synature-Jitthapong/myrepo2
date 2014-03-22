@@ -1,6 +1,9 @@
 package com.syn.iorder;
 
 import java.util.List;
+
+import com.syn.iorder.QueueUtils.QueueButton;
+
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ShowMenuColumnName;
 import syn.pos.data.dao.SyncDataLog;
@@ -23,6 +26,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class AppConfigLayoutActivity extends Activity {
@@ -74,6 +78,7 @@ public class AppConfigLayoutActivity extends Activity {
 
 		loadSetting();
 		loadLanguage();
+		queueSetting();
 	}
 
 	@Override
@@ -404,6 +409,58 @@ public class AppConfigLayoutActivity extends Activity {
 		
 		private class ViewHolder{
 			private TextView textView1;
+		}
+	}
+	
+	private void queueSetting(){
+		GlobalVar globalVar = new GlobalVar(this);
+		List<ShopData.ProgramFeature> featureList = globalVar.PROGRAM_FEATURE;
+		for(ShopData.ProgramFeature feature : featureList){
+			if(feature.getFeatureID() == 1){
+				if(feature.getFeatureValue() == 1)
+					GlobalVar.sIsEnableQueue = true;
+				else
+					GlobalVar.sIsEnableQueue = false;
+				break;
+			}
+		}
+		if(GlobalVar.sIsEnableQueue){
+			((TableRow) findViewById(R.id.tableRow5)).setVisibility(View.VISIBLE);
+			final TextView tvQueueButton = (TextView) findViewById(R.id.tvQueueButton);
+			Button btnMinus = (Button) findViewById(R.id.btnMinus);
+			Button btnPlus = (Button) findViewById(R.id.btnPlus);
+			
+			List<QueueButton> btnQueueLst = QueueUtils.getQueueBtnLst(this);
+			if(btnQueueLst.size() == 0){
+				QueueUtils.insertQueueButton(this, 3);
+			}else{
+				QueueUtils.insertQueueButton(this, btnQueueLst.size());
+				tvQueueButton.setText(String.valueOf(btnQueueLst.size()));
+			}
+			btnMinus.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					int qty = Integer.parseInt(tvQueueButton.getText().toString());
+					if(--qty > 1){
+						QueueUtils.insertQueueButton(AppConfigLayoutActivity.this, qty);
+						tvQueueButton.setText(String.valueOf(qty));
+					}
+				}
+				
+			});
+			btnPlus.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					int qty = Integer.parseInt(tvQueueButton.getText().toString());
+					QueueUtils.insertQueueButton(AppConfigLayoutActivity.this, ++qty);
+					tvQueueButton.setText(String.valueOf(qty));
+				}
+				
+			});
+		}else{
+			((TableRow) findViewById(R.id.tableRow5)).setVisibility(View.GONE);
 		}
 	}
 }

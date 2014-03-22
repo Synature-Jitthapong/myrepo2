@@ -38,6 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,9 +57,6 @@ public class QueueActivity extends Activity {
 	private Button btnActivityClose;
 	private Button btnQueueMinus;
 	private Button btnQueuePlus;
-	private Button btnGroupA;
-	private Button btnGroupB;
-	private Button btnGroupC;
 	private Button btnSortByTime;
 	private Button btnSortByGroup;
 	private Button btnEditQueue;
@@ -99,9 +97,6 @@ public class QueueActivity extends Activity {
 		btnQueueRefresh = (Button) findViewById(R.id.buttonQueueRefresh);
 		btnQueueMinus = (Button) findViewById(R.id.buttonQueueMinus);
 		btnQueuePlus = (Button) findViewById(R.id.buttonQueuePlus);
-		btnGroupA = (Button) findViewById(R.id.buttonQueueGroup1);
-		btnGroupB = (Button) findViewById(R.id.buttonQueueGroup2);
-		btnGroupC = (Button) findViewById(R.id.buttonQueueGroup3);
 		queueListView = (ListView) findViewById(R.id.listViewQueue);
 		btnSortByTime = (Button) findViewById(R.id.buttonSortQueueByTime);
 		btnSortByGroup = (Button) findViewById(R.id.buttonSortQueueByGroup);
@@ -166,35 +161,35 @@ public class QueueActivity extends Activity {
 
 		});
 
-		btnGroupA.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				queueGroupId = 1;
-				excuteGenerateQueue();
-			}
-
-		});
-
-		btnGroupB.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				queueGroupId = 2;
-				excuteGenerateQueue();
-			}
-
-		});
-
-		btnGroupC.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				queueGroupId = 3;
-				excuteGenerateQueue();
-			}
-
-		});
+//		btnGroupA.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				queueGroupId = 1;
+//				excuteGenerateQueue();
+//			}
+//
+//		});
+//
+//		btnGroupB.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				queueGroupId = 2;
+//				excuteGenerateQueue();
+//			}
+//
+//		});
+//
+//		btnGroupC.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				queueGroupId = 3;
+//				excuteGenerateQueue();
+//			}
+//
+//		});
 
 		btnQueueMinus.setOnClickListener(new OnClickListener() {
 
@@ -221,6 +216,8 @@ public class QueueActivity extends Activity {
 			}
 
 		});
+		
+		generateQueueButton();
 	}
 
 	@Override
@@ -430,7 +427,7 @@ public class QueueActivity extends Activity {
 
 		@Override
 		public int getCount() {
-			return queueList.size();
+			return queueList != null ? queueList.size() : 0;
 		}
 
 		@Override
@@ -1544,5 +1541,28 @@ public class QueueActivity extends Activity {
 			});
 		}
 
+	}
+	
+	private void generateQueueButton(){
+		List<QueueUtils.QueueButton> queueBtnLst = QueueUtils.getQueueBtnLst(QueueActivity.this);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		HorizontalScrollView scroll = (HorizontalScrollView) findViewById(R.id.horizontalScrollView1);
+		LinearLayout btnContainer = (LinearLayout) scroll.findViewById(R.id.queueButtonContainer);
+		btnContainer.removeAllViews();
+		for(final QueueUtils.QueueButton btn : queueBtnLst){
+			View btnLayout = inflater.inflate(R.layout.button_queue_template, null);
+			TextView tvGroupName = (TextView) btnLayout.findViewById(R.id.textView1);
+			tvGroupName.setText(btn.getQueueGroupName());
+			btnLayout.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					queueGroupId = btn.getQueueGroupId();
+					excuteGenerateQueue();
+				}
+				
+			});
+			btnContainer.addView(btnLayout);
+		}
 	}
 }

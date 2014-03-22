@@ -140,7 +140,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 		setTitle("");
 		
 		mGlobalVar = new GlobalVar(this);
-		if(IOrderUtility.checkRegister(this)){
+		//if(IOrderUtility.checkRegister(this)){
 			// check login
 			if (GlobalVar.STAFF_ID != 0) {
 				// initial component
@@ -158,12 +158,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			} else {
 				gotoLogin();
 			}
-		}else{
-			Intent intent = new Intent(TakeOrderActivity.this,
-					RegisterActivity.class);
-			TakeOrderActivity.this.startActivity(intent);
-			TakeOrderActivity.this.finish();
-		}
+//		}else{
+//			Intent intent = new Intent(TakeOrderActivity.this,
+//					RegisterActivity.class);
+//			TakeOrderActivity.this.startActivity(intent);
+//			TakeOrderActivity.this.finish();
+//		}
 	}
 
 	private void initComponent(){
@@ -432,7 +432,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 									
 									@Override
 									public void onPost(List<TableInfo> tbInfoLst) {
-										TableUtils.createTemporaryTableInfo(TakeOrderActivity.this, tbInfoLst);
+										TableUtils.insertTableInfoTableInfo(TakeOrderActivity.this, tbInfoLst);
 									}
 								}).execute(GlobalVar.FULL_URL);
 					}else{

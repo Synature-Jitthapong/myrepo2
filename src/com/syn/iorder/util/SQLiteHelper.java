@@ -8,6 +8,19 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 	
 	public static final String DB_NAME = "iOrder.db";
 	public static final int DB_VERSION = 1;
+
+	public static final String QUEUE_SQL = "create table QueueButton("
+			+ "queue_group_id integer not null default 0 primary key,"
+			+ "queue_group_name text"
+			+ ");";
+	public static final String TABLE_SQL = "create table TableInfo("
+			+ " tb_id integer, "
+			+ " tb_name text"
+			+ ");";
+	public static final String[] SQL_CREATE={
+		TABLE_SQL,
+		QUEUE_SQL
+	};
 	
 	public SQLiteHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -15,8 +28,9 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-		
+		for(String sql : SQL_CREATE){
+			db.execSQL(sql);
+		}
 	}
 
 	@Override
