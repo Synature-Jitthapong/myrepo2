@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+
 import android.content.Context;
+import android.content.res.Configuration;
 import android.provider.Settings.Secure;
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.ShowMenuColumnName;
@@ -124,4 +126,7 @@ public class GlobalVar {
 		SHOW_MENU_COLUMN = showColName.getShowMenuColumn();
 	}
 
+	public static boolean isXLargeTablet(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+	}
 }

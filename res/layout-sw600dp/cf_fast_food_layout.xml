@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_light"
     android:orientation="vertical"
+    android:padding="8dp"
     android:paddingBottom="4dp" >
 
     <TextView
         android:id="@+id/textViewFFTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
         android:text="@string/fast_food_send_order"
@@ -17,87 +22,31 @@
         android:textSize="48sp"
         android:textStyle="bold" />
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/editTextFFRef"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/white_layer"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ffSendCustLayout"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/edittext_bg"
+        android:ems="15"
+        android:hint="@string/text_send_fastfood_ref"
+        android:inputType="textMultiLine"
+        android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
-        <LinearLayout
-            android:id="@+id/ffSendCustLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:gravity="center_vertical" >
-
-            <TextView
-                android:id="@+id/textViewQueueName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="20dp"
-                android:text="@string/fast_food_cust_qty"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <Button
-                android:id="@+id/buttonFastFoodMinus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/light_grey_button"
-                android:text="-" />
-
-            <TextView
-                android:id="@+id/textViewCustQty"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:minWidth="48dp"
-                android:padding="4dp"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/buttonFastFoodPlus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/light_grey_button"
-                android:text="+" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/line_split_input" />
-
-        <EditText
-            android:id="@+id/editTextFFRef"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/edittext_bg"
-            android:ems="15"
-            android:hint="@string/text_send_fastfood_ref"
-            android:inputType="textMultiLine"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
-
-    </LinearLayout>
+    <requestFocus />
 
     <TableLayout
+        android:id="@+id/TableLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/editTextFFRef"
+        android:layout_marginTop="10dp" >
 
         <TableRow
             android:id="@+id/tableRow1"
@@ -263,73 +212,76 @@
                 android:text="Button"
                 android:visibility="invisible" />
         </TableRow>
-
     </TableLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonFastFoodCancel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="vertical" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1"
+        android:background="@drawable/light_grey_button"
+        android:minWidth="128dp"
+        android:text="@string/global_btn_cancel"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left" >
-
-        </LinearLayout>
-    </LinearLayout>
+    <Button
+        android:id="@+id/buttonFastFoodOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/textViewFFTitle"
+        android:layout_weight="1"
+        android:background="@drawable/light_grey_button"
+        android:minWidth="128dp"
+        android:text="@string/global_btn_ok"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/ffSendCustLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:gravity="center_horizontal" >
+        android:layout_alignLeft="@+id/textViewFFTitle"
+        android:layout_below="@+id/textViewFFTitle"
+        android:layout_marginLeft="58dp"
+        android:gravity="center_vertical" >
 
-        <Button
-            android:id="@+id/buttonFastFoodCancel"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textViewQueueName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:layout_weight="1"
-            android:background="@drawable/light_grey_button"
-            android:text="@string/global_btn_cancel"
+            android:text="@string/fast_food_cust_qty"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/buttonFastFoodOk"
-            android:layout_width="match_parent"
+            android:id="@+id/buttonFastFoodMinus"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_margin="2dp"
             android:background="@drawable/light_grey_button"
-            android:text="@string/global_btn_ok"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="-" />
 
+        <TextView
+            android:id="@+id/textViewCustQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_layer"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:padding="4dp"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonFastFoodPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/light_grey_button"
+            android:text="+" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

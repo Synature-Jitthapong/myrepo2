@@ -5817,15 +5817,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					}
 
 				});
-
-				dialog.getWindow().setGravity(Gravity.TOP);
-				// dialog.getWindow()
-				// .setSoftInputMode(
-				// WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-				dialog.getWindow().setLayout(
-						android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-
 				dialog.show();
 			} else if (mTransSaleMode != 1) {
 				final Dialog smDialog = new Dialog(TakeOrderActivity.this,

@@ -2,8 +2,11 @@ package com.syn.iorder;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -182,8 +185,10 @@ public class SendOrderKeypadDialog extends Dialog {
 			}
 
 		});
-
-		this.setContentView(view);
+		
+		setContentView(view);
+		getWindow()
+		.setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 	}
-
 }

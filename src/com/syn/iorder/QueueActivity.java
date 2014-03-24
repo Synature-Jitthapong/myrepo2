@@ -29,6 +29,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -78,6 +79,7 @@ public class QueueActivity extends Activity {
 
 	private GlobalVar globalVar;
 	private Context context;
+	private Dialog mDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -867,15 +869,6 @@ public class QueueActivity extends Activity {
 				}
 
 			});
-
-			dialog.getWindow().setGravity(Gravity.TOP);
-//			dialog.getWindow()
-//					.setSoftInputMode(
-//							WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-			dialog.getWindow().setLayout(
-					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-
 			dialog.show();
 		}
 		
@@ -1025,6 +1018,11 @@ public class QueueActivity extends Activity {
 		public LoadQueueTask(Context c, GlobalVar gb) {
 			super(c, gb, webMethod);
 
+			if(mDialog == null){
+				mDialog = new Dialog(QueueActivity.this, R.style.CustomDialog);
+				mDialog.setTitle(R.string.global_dialog_title_error);
+			}
+			
 			PropertyInfo property = new PropertyInfo();
 			property.setName("iQueueGroupID");
 			property.setValue(loadQueueGroupBy);
@@ -1067,6 +1065,8 @@ public class QueueActivity extends Activity {
 
 					tvTotalQueue.setText(globalVar.qtyFormat.format(queueList
 							.size()));
+					if(mDialog.isShowing())
+						mDialog.dismiss();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1075,10 +1075,19 @@ public class QueueActivity extends Activity {
 			} catch (Exception e) {
 				e.printStackTrace();
 				try {
-					syn.pos.mobile.util.Log.appendLog(context, result);
-
-					IOrderUtility.alertDialog(context,
-							R.string.global_dialog_title_error, result, 0);
+					TextView tvMsg = new TextView(QueueActivity.this);
+					if(GlobalVar.isXLargeTablet(QueueActivity.this))
+						tvMsg.setTextSize(32);
+					tvMsg.setText(result);
+					tvMsg.setLayoutParams(new LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT, 
+							LinearLayout.LayoutParams.WRAP_CONTENT));
+					tvMsg.setGravity(Gravity.CENTER);
+					mDialog.setContentView(tvMsg);
+					mDialog.getWindow().setGravity(Gravity.TOP);
+					mDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+							WindowManager.LayoutParams.WRAP_CONTENT);
+					mDialog.show();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
