@@ -805,13 +805,15 @@ public class QueueActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			// tvProgress.setText(R.string.call_queue_progress);
-			// progress.setMessage(tvProgress.getText());
-			// progress.show();
-			progress.dismiss();
+			 tvProgress.setText(R.string.call_queue_progress);
+			 progress.setMessage(tvProgress.getText());
+			 progress.show();
 		}
 
 		private void popupDialogKeyPad(){
+			if(progress.isShowing())
+				progress.dismiss();
+			
 			final SendOrderKeypadDialog dialog = new SendOrderKeypadDialog(
 					globalVar, QueueActivity.this,
 					R.style.CustomDialog);
@@ -1067,6 +1069,10 @@ public class QueueActivity extends Activity {
 							.size()));
 					if(mDialog.isShowing())
 						mDialog.dismiss();
+					View v = QueueActivity.this.getCurrentFocus();
+					if(v instanceof EditText){
+						GlobalVar.hideKeyboard(QueueActivity.this, ((EditText) v));
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1092,7 +1098,7 @@ public class QueueActivity extends Activity {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
+				tvTotalQueue.setText("0");
 				// setTitle(R.string.global_network_connection_problem);
 			}
 		}

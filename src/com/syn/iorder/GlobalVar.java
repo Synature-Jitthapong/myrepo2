@@ -9,6 +9,8 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.provider.Settings.Secure;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.ShowMenuColumnName;
 import syn.pos.data.model.ShopData;
@@ -126,6 +128,12 @@ public class GlobalVar {
 		SHOW_MENU_COLUMN = showColName.getShowMenuColumn();
 	}
 
+	public static void hideKeyboard(Context c, EditText edt){
+		InputMethodManager imm = (InputMethodManager) c.getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(edt.getWindowToken(), 0);	
+	}
+	
 	public static boolean isXLargeTablet(Context context) {
 		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
 	}

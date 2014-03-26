@@ -8,6 +8,7 @@ import org.ksoap2.serialization.PropertyInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.syn.iorder.QueueUtils.QueueButton;
 
 import syn.pos.data.dao.MenuComment;
 import syn.pos.data.dao.POSOrdering;
@@ -297,6 +298,12 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						GlobalVar.sIsEnableQueue = true;
 						mBtnSetQueue.setVisibility(View.VISIBLE);
 						mBtnSendByQueue.setVisibility(View.VISIBLE);
+						List<QueueButton> btnQueueLst = QueueUtils.getQueueBtnLst(this);
+						if(btnQueueLst.size() == 0){
+							QueueUtils.insertQueueButton(this, 3);
+						}else{
+							QueueUtils.insertQueueButton(this, btnQueueLst.size());
+						}
 					} else {
 						GlobalVar.sIsEnableQueue = false;
 						mBtnSetQueue.setVisibility(View.GONE);
