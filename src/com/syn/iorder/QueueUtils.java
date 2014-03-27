@@ -54,6 +54,81 @@ public class QueueUtils {
 		return sqliteHelper.getWritableDatabase();
 	}
 	
+	public static class CheckinWithTableId extends WebServiceTask{
+		
+		public static final String CHECKIN_WITH_TABLE_ID_METHOD = "WSiQueue_JSON_CheckInQueueFromFastFoodWithTableID";
+		
+		private ProgressListener mListener;
+		
+		public CheckinWithTableId(Context c, GlobalVar gb, int queueId, 
+				String fastfoodNo, int memberId, int tableId, ProgressListener listener) {
+			super(c, gb, CHECKIN_WITH_TABLE_ID_METHOD);
+			
+			mListener = listener;
+			
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iQueueID");
+			property.setValue(queueId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("szFastFoodNo");
+			property.setValue(fastfoodNo);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iComputerID");
+			property.setValue(GlobalVar.COMPUTER_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iStaffID");
+			property.setValue(GlobalVar.STAFF_ID);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iMemberID");
+			property.setValue(memberId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			property = new PropertyInfo();
+			property.setName("iTableID");
+			property.setValue(tableId);
+			property.setType(String.class);
+			soapRequest.addProperty(property);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			mListener.onPre();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if(progress.isShowing())
+				progress.dismiss();
+			
+			try {
+				WebServiceResult ws = toServiceObject(result);
+				if(ws.getiResultID() == 0){
+					mListener.onPost();
+				}else{
+					mListener.onError(ws.getSzResultData().equals("") ? result : ws.getSzResultData());
+				}
+			} catch (JsonSyntaxException e) {
+				mListener.onError(result);
+			}
+		}
+		
+		
+	}
+	
 	public static class GenerateQueue extends WebServiceTask{
 		public static final String GEN_QUEUE_METHOD = 
 				"WSiQueue_JSON_GenerateNewQueueWithSelectQueuePrinter";

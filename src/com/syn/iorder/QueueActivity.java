@@ -826,12 +826,66 @@ public class QueueActivity extends Activity {
 				public void onClick(View v) {
 					if (!dialog.txtFastRef.getText().toString()
 							.equals("")) {
-						
-						new CheckInQueueFastFood(QueueActivity.this,
-								globalVar, queueId, dialog.txtFastRef
-										.getText().toString(), globalVar.MEMBER_ID)
-								.execute(globalVar.FULL_URL);
-						
+						if(GlobalVar.sIsEnableFastFoodMapTable){
+							int tableId = TableUtils.getMappingTableId(QueueActivity.this, 
+									dialog.txtFastRef.getText().toString());
+							if(tableId != 0){
+								new QueueUtils.CheckinWithTableId(QueueActivity.this, globalVar,
+										queueId, dialog.txtFastRef.getText().toString(), GlobalVar.MEMBER_ID, 
+										tableId, new ProgressListener(){
+
+											@Override
+											public void onPre() {
+												// TODO Auto-generated method stub
+												
+											}
+
+											@Override
+											public void onPost() {
+												new AlertDialog.Builder(QueueActivity.this)
+												.setTitle(R.string.checkin_queue_title)
+												.setMessage(R.string.checkin_success)
+												.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+													
+													@Override
+													public void onClick(DialogInterface dialog, int which) {
+														new LoadQueueTask(QueueActivity.this, globalVar)
+																.execute(GlobalVar.FULL_URL);
+													}
+												}).show();
+											}
+
+											@Override
+											public void onError(String msg) {
+												new AlertDialog.Builder(QueueActivity.this)
+												.setTitle(R.string.checkin_queue_title)
+												.setMessage(msg)
+												.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+													
+													@Override
+													public void onClick(DialogInterface dialog, int which) {
+													}
+												}).show();
+											}
+									
+								}).execute(GlobalVar.FULL_URL);
+							}else{
+								new AlertDialog.Builder(QueueActivity.this)
+								.setTitle(R.string.checkin_queue_title)
+								.setMessage(R.string.not_found_table)
+								.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+									}
+								}).show();
+							}
+						}else{
+							new CheckInQueueFastFood(QueueActivity.this,
+									globalVar, queueId, dialog.txtFastRef
+											.getText().toString(), GlobalVar.MEMBER_ID)
+									.execute(GlobalVar.FULL_URL);
+						}
 						dialog.dismiss();
 
 					} else {
