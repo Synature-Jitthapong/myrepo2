@@ -460,7 +460,7 @@ public class IOrderUtility {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					
-					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, e.getMessage(), 0);
+					//IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, e.getMessage(), 0);
 				}
 
 				ComputerProperty cp = new ComputerProperty(context);
