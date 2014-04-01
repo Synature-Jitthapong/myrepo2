@@ -3202,15 +3202,20 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 	
 	private void updateOrderListView(MenuDataItem menuDataItem){
 		boolean isUpdate = false;
-		for(int i = 0; i < mOrderLst.size(); i++){
-			MenuDataItem item = mOrderLst.get(i);
-			if(item.getOrderDetailId() == menuDataItem.getOrderDetailId()){
-				mOrderLst.set(i, menuDataItem);
-				mOrderLstAdapter.notifyDataSetChanged();
-				mOrderListView.setSelection(i);
-				isUpdate = true;
-				break;
+		try {
+			for(int i = 0; i < mOrderLst.size(); i++){
+				MenuDataItem item = mOrderLst.get(i);
+				if(item.getOrderDetailId() == menuDataItem.getOrderDetailId()){
+					mOrderLst.set(i, menuDataItem);
+					mOrderLstAdapter.notifyDataSetChanged();
+					mOrderListView.setSelection(i);
+					isUpdate = true;
+					break;
+				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		if(!isUpdate){
 			mOrderLst.add(menuDataItem);
