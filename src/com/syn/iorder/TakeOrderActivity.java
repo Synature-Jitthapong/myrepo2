@@ -325,8 +325,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				case 3:
 					if(feature.getFeatureValue() == 1){
 						GlobalVar.sIsAddOnlyOneItem = true;
+						GlobalVar.sIsAddSameItem = false;
 					}else{
 						GlobalVar.sIsAddOnlyOneItem = false;
+						GlobalVar.sIsAddSameItem = true;
 					}
 					break;
 				case 4:

@@ -72,16 +72,21 @@ public class BillDetailAdapter extends BaseAdapter{
 			}
 			
 			String extra = "";
-			if(!order.szSeatNo.equals("") && !order.szGroupNoShortName.equals("")){
-				extra = order.szGroupNoShortName + "-" + order.szSeatNo;
-			}else{
-				if(!order.szSeatNo.equals("")){
-					extra = order.szSeatNo;
+			try {
+				if(!order.szSeatNo.equals("") && !order.szGroupNoShortName.equals("")){
+					extra = order.szGroupNoShortName + "-" + order.szSeatNo;
+				}else{
+					if(!order.szSeatNo.equals("")){
+						extra = order.szSeatNo;
+					}
+					
+					if(!order.szGroupNoShortName.equals("")){
+						extra = order.szGroupNoShortName;
+					}
 				}
-				
-				if(!order.szGroupNoShortName.equals("")){
-					extra = order.szGroupNoShortName;
-				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
 			holder.tvOrderQty.setLayoutParams(param);
