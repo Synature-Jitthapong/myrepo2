@@ -244,7 +244,7 @@ public class QueueActivity extends Activity {
 						editTextCustomerName.getWindowToken(), 0);
 				isRun = false;
 
-				QueueActivity.this.finish();
+				finish();
 			}
 
 		});
@@ -689,8 +689,8 @@ public class QueueActivity extends Activity {
 								intent.putExtra("QUEUE_ID", queueId);
 								intent.putExtra("QUEUE_NAME", queueName);
 								intent.putExtra("CUSTOMER_QTY", queueQty);
-								QueueActivity.this.startActivity(intent);
-								QueueActivity.this.finish();
+								startActivity(intent);
+								finish();
 							}
 
 						});
@@ -702,8 +702,8 @@ public class QueueActivity extends Activity {
 						intent.putExtra("QUEUE_ID", queueId);
 						intent.putExtra("QUEUE_NAME", queueName);
 						intent.putExtra("CUSTOMER_QTY", queueQty);
-						QueueActivity.this.startActivity(intent);
-						QueueActivity.this.finish();
+						startActivity(intent);
+						finish();
 					}
 				} else {
 					IOrderUtility.alertDialog(context,
@@ -811,8 +811,6 @@ public class QueueActivity extends Activity {
 		}
 
 		private void popupDialogKeyPad(){
-			if(progress.isShowing())
-				progress.dismiss();
 			
 			final SendOrderKeypadDialog dialog = new SendOrderKeypadDialog(
 					globalVar, QueueActivity.this,
@@ -930,83 +928,19 @@ public class QueueActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			// if (progress.isShowing())
-			// progress.dismiss();
-
-			// final CustomDialog customDialog = new CustomDialog(context,
-			// R.style.CustomDialog);
-			// customDialog.title.setVisibility(View.VISIBLE);
-			// customDialog.title.setText(R.string.call_queue_dialog_title);
-			// customDialog.message.setText(R.string.call_queue_success);
-			// customDialog.btnCancel.setVisibility(View.GONE);
-			// customDialog.btnOk.setText(R.string.global_close_dialog_btn);
-			// customDialog.btnOk.setOnClickListener(new OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// new LoadQueueTask(context, globalVar)
-			// .execute(GlobalVar.FULL_URL);
-			// customDialog.dismiss();
-			// }
-			// });
-			// customDialog.show();
+			 if (progress.isShowing())
+				 progress.dismiss();
 
 			// table type
 			if (globalVar.SHOP_DATA.getShopType() == 1) {
 				new SelectTableTask(context, globalVar, queueId, queueQty,
 						queueName).execute(GlobalVar.FULL_URL);
 			} else if (globalVar.SHOP_DATA.getShopType() == 2) {
-				if (globalVar.SHOP_DATA.getFastFoodType() == 1) { // manual queue
-//					if(isHavePreOrder == 1){
-//						final Dialog detailDialog = new Dialog(QueueActivity.this, R.style.CustomDialogBottomRadius);
-//						LayoutInflater inflater = LayoutInflater.from(QueueActivity.this);
-//						View orderView = inflater.inflate(R.layout.order_list_layout, null);
-//						ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
-//						TextView tvTitle = (TextView) orderView.findViewById(R.id.textViewOrderListTitle);
-//						TextView tvSumText = (TextView) orderView.findViewById(R.id.textViewSumText);
-//						TextView tvSumPrice = (TextView) orderView.findViewById(R.id.textViewSumPrice);
-//						ImageButton btnClose = (ImageButton) orderView.findViewById(R.id.imageButtonCloseOrderDialog);
-//						Button btnCheckInFromSummary = (Button) orderView.findViewById(R.id.buttonSendFromSummary);
-//						btnCheckInFromSummary.setText(R.string.queue_btn_call);
-//						btnCheckInFromSummary.setVisibility(View.VISIBLE);
-//						
-//						ProgressBar progress = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
-//						
-//						new CheckSummaryBillDummyTask(QueueActivity.this, globalVar, 
-//								lvOrder, tvSumText, tvSumPrice, progress).execute(globalVar.FULL_URL);
-//						tvTitle.setText(R.string.button_check_price);
-//						detailDialog.setContentView(orderView);
-//						detailDialog.getWindow().setGravity(Gravity.TOP);
-//						detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
-//								WindowManager.LayoutParams.WRAP_CONTENT);
-//						detailDialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
-//
-//						btnClose.setOnClickListener(new OnClickListener(){
-//
-//							@Override
-//							public void onClick(View v) {
-//								detailDialog.dismiss();
-//							}
-//							
-//						});
-//						
-//						btnCheckInFromSummary.setOnClickListener(new OnClickListener(){
-//
-//							@Override
-//							public void onClick(View v) {
-//								popupDialogKeyPad();
-//								detailDialog.dismiss();
-//							}
-//							
-//						});
-//						
-//						detailDialog.show();
-//					}else{
+				if (globalVar.SHOP_DATA.getFastFoodType() == 1) {
 						popupDialogKeyPad();
-//					}
 				}
 			} else {
-				QueueActivity.this.finish();
+				finish();
 			}
 		}
 	}
