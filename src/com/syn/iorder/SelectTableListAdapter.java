@@ -120,6 +120,13 @@ public class SelectTableListAdapter extends BaseAdapter {
 			
 			holder.btnTbInfo.setVisibility(View.VISIBLE);
 			
+			/*
+			 * already print long bill
+			 */
+			if(tbInfo.getTableStatus() == 5){
+				holder.imgStatus.setImageResource(R.drawable.ic_printbill);
+			}
+			
 			// already checkbill
 			if(tbInfo.getTableStatus() == 3){
 				// show dolla
@@ -193,9 +200,6 @@ public class SelectTableListAdapter extends BaseAdapter {
 				holder.btnTbInfo.setVisibility(View.VISIBLE);
 				holder.btnCloseTable.setVisibility(View.GONE);
 			}
-			
-			if(tbInfo.getTableStatus() == 0)
-				holder.btnTbInfo.setVisibility(View.GONE);
 			
 			holder.btnTbInfo.setOnClickListener(new OnClickListener(){
 

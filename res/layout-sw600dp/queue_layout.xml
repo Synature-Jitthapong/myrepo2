@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:gravity="right"
-                android:text="@string/customer_name"
+                android:text="@string/queue_customer_name_label"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <EditText
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:gravity="right"
-                android:text="@string/mobile"
+                android:text="@string/queue_customer_tel_label"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <EditText
