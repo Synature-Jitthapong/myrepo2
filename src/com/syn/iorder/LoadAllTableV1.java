@@ -19,20 +19,26 @@ public class LoadAllTableV1 extends WebServiceTask{
 
 	@Override
 	protected void onPreExecute() {
-		progress.setMessage(context.getString(R.string.load_table_progress));
-		progress.show();
+//		progress.setMessage(context.getString(R.string.load_table_progress));
+//		progress.show();
 		mListener.onPre();
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
-		if(progress.isShowing())
-			progress.dismiss();
+//		if(progress.isShowing())
+//			progress.dismiss();
 		
 		Gson gson = new Gson();
 		Type type = new TypeToken<TableName>(){}.getType();
 		try {
 			TableName tbName = gson.fromJson(result, type);
+
+			TableName.TableZone tbZone = new TableName.TableZone();
+			tbZone.setZoneID(0);
+			tbZone.setZoneName("All Zone");
+			tbName.TableZone.add(0, tbZone);
+			
 			mListener.onPost(tbName);
 		} catch (JsonSyntaxException e) {
 			mListener.onError(result);

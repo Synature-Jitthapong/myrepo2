@@ -244,11 +244,6 @@ public class IOrderUtility {
 	public static TableZoneSpinnerAdapter createTableZoneAdapter(
 			Context context, TableName tbName) {
 		if (tbName != null) {
-			TableName.TableZone tbZone = new TableName.TableZone();
-			tbZone.setZoneID(0);
-			tbZone.setZoneName("All Zone");
-			tbName.TableZone.add(0, tbZone);
-
 			TableZoneSpinnerAdapter tbZoneAdapter = 
 					new TableZoneSpinnerAdapter(context, tbName.TableZone);
 

@@ -79,27 +79,27 @@ public class MoveMenuActivity extends Activity {
 		mSpinnerMoveTbZone = (Spinner) findViewById(R.id.spinnerSourceTableZone);
 		mSpinnerMoveTbZoneTo = (Spinner) findViewById(R.id.spinnerDestTableZone);
 		
-		new LoadAllTableV1(mContext, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(mContext, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(mContext, mGlobalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -122,7 +122,7 @@ public class MoveMenuActivity extends Activity {
 					@Override
 					public void onPost(final List<TableInfo> tbInfoLst) {
 						TableZoneSpinnerAdapter tbZoneAdapter = 
-								IOrderUtility.createTableZoneAdapter(mContext, tbName);
+								IOrderUtility.createTableZoneAdapter(mContext, GlobalVar.sTbName);
 						mSpinnerMoveTbZone.setAdapter(tbZoneAdapter);
 						mSpinnerMoveTbZoneTo.setAdapter(tbZoneAdapter);
 		
@@ -218,8 +218,8 @@ public class MoveMenuActivity extends Activity {
 								});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 
 		mBtnShooseMenu.setOnClickListener(new View.OnClickListener() {
 			@Override

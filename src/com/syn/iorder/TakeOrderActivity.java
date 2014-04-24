@@ -589,27 +589,27 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 	}
 
 	private void closeTable(){
-		new LoadAllTableV1(TakeOrderActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				IOrderUtility.alertDialog(TakeOrderActivity.this, R.string.global_dialog_title_error, msg, 0);
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(TakeOrderActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				IOrderUtility.alertDialog(TakeOrderActivity.this, R.string.global_dialog_title_error, msg, 0);
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(TakeOrderActivity.this, mGlobalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -632,7 +632,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					@Override
 					public void onPost(final List<TableInfo> tbInfoLst) {
 						TableListBuilder builder = 
-								new TableListBuilder(TakeOrderActivity.this, mGlobalVar, tbName, tbInfoLst);
+								new TableListBuilder(TakeOrderActivity.this, mGlobalVar, GlobalVar.sTbName, tbInfoLst);
 						final AlertDialog d = builder.create();
 								d.show();
 								builder.setCloseButton(null, new OnClickListener(){
@@ -645,8 +645,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 								});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	
@@ -3711,6 +3711,10 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			clearCourse();
 
 			iOrderInit();	
+			
+			// update IsOutOfStock
+			new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
+					mGlobalVar).execute(GlobalVar.FULL_URL);
 		}
 		
 		@Override
@@ -4583,25 +4587,25 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					type = new TypeToken<List<TableInfo>>(){}.getType();
 					final List<TableInfo> tbInfoLst = 
 							gson.fromJson(ws.getSzResultData(), type);
-					new LoadAllTableV1(TakeOrderActivity.this, globalVar, new LoadAllTableV1.LoadTableProgress() {
-						
-						@Override
-						public void onPre() {
-						}
-						
-						@Override
-						public void onPost() {
-						}
-						
-						@Override
-						public void onError(String msg) {
-							IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
-						}
-						
-						@Override
-						public void onPost(final TableName tbName) {
+//					new LoadAllTableV1(TakeOrderActivity.this, globalVar, new LoadAllTableV1.LoadTableProgress() {
+//						
+//						@Override
+//						public void onPre() {
+//						}
+//						
+//						@Override
+//						public void onPost() {
+//						}
+//						
+//						@Override
+//						public void onError(String msg) {
+//							IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+//						}
+//						
+//						@Override
+//						public void onPost(final TableName tbName) {
 							spinnerTbZone.setAdapter(IOrderUtility.createTableZoneAdapter(
-									TakeOrderActivity.this, tbName));
+									TakeOrderActivity.this, GlobalVar.sTbName));
 							spinnerTbZone
 									.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
@@ -4767,8 +4771,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 								}
 
 							});
-						}
-					}).execute(GlobalVar.FULL_URL);
+//						}
+//					}).execute(GlobalVar.FULL_URL);
 				}else{
 					IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, 
 							ws.getSzResultData().equals("") ? result : ws.getSzResultData(), 0);
@@ -5983,10 +5987,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					R.string.global_dialog_title_warning,
 					R.string.no_order_msg, 0);
 		}
-
-		// update IsOutOfStock
-		new IOrderUtility.CheckOutOfProductTask(TakeOrderActivity.this,
-				mGlobalVar).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void sendQueueOrder(){

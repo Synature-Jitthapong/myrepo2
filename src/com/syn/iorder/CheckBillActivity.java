@@ -457,27 +457,27 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 			}
 		});
 		
-		 new LoadAllTableV1(this, globalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		 new LoadAllTableV1(this, globalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				IOrderUtility.alertDialog(mContext, R.string.global_dialog_title_error, msg, 0);
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(mContext, globalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -499,7 +499,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 					
 					@Override
 					public void onPost(final List<TableInfo> tbInfoLst) {
-						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(mContext, tbName));
+						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(mContext, GlobalVar.sTbName));
 						spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 							@Override
@@ -544,8 +544,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 						});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 	}
 
 	@Override

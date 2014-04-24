@@ -1,9 +1,11 @@
 package com.syn.iorder;
 
 import java.util.List;
+
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
+import syn.pos.data.model.TableName;
 import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -148,6 +150,9 @@ public class LoginActivity extends Activity {
 				});
 			}
 		}).execute(GlobalVar.FULL_URL);
+		
+		// prepare tablename data
+		preparedTableData();
 	}
 	
 	private void updateWebserviceVersion(){
@@ -199,6 +204,34 @@ public class LoginActivity extends Activity {
 				.getSyncTimeStamp();
 		tvLastUpdate.setText(syncData.getSyncTime());
 		tvWsVersion.setText(syncData.getWebServiceVersion());
+	}
+	
+	private void preparedTableData(){
+		new LoadAllTableV1(this, globalVar, new LoadAllTableV1.LoadTableProgress() {
+			
+			@Override
+			public void onPre() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPost(TableName tbName) {
+				GlobalVar.sTbName = tbName;
+			}
+		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	private void checkPermission(int staffId, String staffCode, String staffName){

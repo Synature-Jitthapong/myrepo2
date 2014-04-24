@@ -18,6 +18,7 @@ import syn.pos.data.model.ShopData.ComputerProperty;
 import syn.pos.data.model.ShopData.GlobalProperty;
 import syn.pos.data.model.ShopData.ShopProperty;
 import syn.pos.data.model.TableInfo;
+import syn.pos.data.model.TableName;
 
 public class GlobalVar {
 	public static boolean sIsEnableChecker = false;
@@ -59,6 +60,7 @@ public class GlobalVar {
 	public static String WS_NAMESPACE = "http://tempuri.org/";
 	public static int DISPLAY_MENU_IMG = 0;
 	public static int SHOW_MENU_COLUMN = 1;
+	
 	public ShopProperty SHOP_DATA;
 	public List<ShopData.ProgramFeature> PROGRAM_FEATURE;
 	public GlobalProperty GLOBAL_PROP;
@@ -69,6 +71,8 @@ public class GlobalVar {
 	public SimpleDateFormat mTimeFormat;
 	static TableInfo TBINFO = null;
 
+	public static TableName sTbName;
+	
 	public GlobalVar(Context context) {
 		syn.pos.data.dao.ComputerProperty comProp = new syn.pos.data.dao.ComputerProperty(
 				context);
@@ -128,7 +132,7 @@ public class GlobalVar {
 		ShowMenuColumnName showColName = new ShowMenuColumnName(context);
 		SHOW_MENU_COLUMN = showColName.getShowMenuColumn();
 	}
-
+	
 	public static void hideKeyboard(Context c, EditText edt){
 		InputMethodManager imm = (InputMethodManager) c.getSystemService(
 			      Context.INPUT_METHOD_SERVICE);

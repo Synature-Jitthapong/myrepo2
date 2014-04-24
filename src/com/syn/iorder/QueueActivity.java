@@ -67,7 +67,7 @@ public class QueueActivity extends Activity {
 
 	private boolean isRun = true;
 	private Handler handler;
-	private final int updateInterval = 30000;
+	private final int updateInterval = 60000;
 	private int queueGroupId;
 	private int custQty = 1;
 	private String custName;

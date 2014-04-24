@@ -59,27 +59,27 @@ public class ReprintMenuActivity extends Activity {
 		listViewMenu = (ListView) findViewById(R.id.listViewCancelMenu);
 		progressBar = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
 		
-		new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(context, globalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -101,7 +101,7 @@ public class ReprintMenuActivity extends Activity {
 					
 					@Override
 					public void onPost(final List<TableInfo> tbInfoLst) {
-						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbName));
+						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, GlobalVar.sTbName));
 						spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 							@Override
@@ -149,8 +149,8 @@ public class ReprintMenuActivity extends Activity {
 						});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	@Override

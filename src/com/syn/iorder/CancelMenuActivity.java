@@ -71,26 +71,26 @@ public class CancelMenuActivity extends Activity {
 		progressBar = (ProgressBar) findViewById(R.id.progressBarShooseMenu);
 		txtCancelMenuReason = (EditText) findViewById(R.id.txtCancelMenuReason);
 		
-		new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(context, globalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, msg, 0);
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(context, globalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -112,7 +112,7 @@ public class CancelMenuActivity extends Activity {
 					
 					@Override
 					public void onPost(final List<TableInfo> tbInfoLst) {
-						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, tbName));
+						spinnerTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(context, GlobalVar.sTbName));
 						spinnerTableZone.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 							@Override
@@ -158,8 +158,8 @@ public class CancelMenuActivity extends Activity {
 						});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 
 		// load reason
 		final List<ReasonGroups.ReasonDetail> reasonDetailLst = IOrderUtility

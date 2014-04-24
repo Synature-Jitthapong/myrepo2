@@ -118,28 +118,28 @@ public class KdsInfoActivity extends Activity {
 			
 		});
 		
-		new LoadAllTableV1(mContext, globalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				tableProgress.setVisibility(View.VISIBLE);
-				tableListView.setVisibility(View.INVISIBLE);
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(mContext, globalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				tableProgress.setVisibility(View.VISIBLE);
+//				tableListView.setVisibility(View.INVISIBLE);
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(mContext, globalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -163,7 +163,7 @@ public class KdsInfoActivity extends Activity {
 						tableProgress.setVisibility(View.GONE);
 						tableListView.setVisibility(View.VISIBLE);
 						
-						TableZoneSpinnerAdapter tbZoneAdapter =IOrderUtility.createTableZoneAdapter(mContext, tbName); 
+						TableZoneSpinnerAdapter tbZoneAdapter =IOrderUtility.createTableZoneAdapter(mContext, GlobalVar.sTbName); 
 						spinnerTableZone.setAdapter(tbZoneAdapter);
 
 						spinnerTableZone
@@ -229,8 +229,8 @@ public class KdsInfoActivity extends Activity {
 								});
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 	}
 	
 	

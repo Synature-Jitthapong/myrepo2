@@ -72,28 +72,28 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 		mLvTable.setOnItemClickListener(this);
 		mSpTableZone.setOnItemSelectedListener(this);
 		
-		new LoadAllTableV1(CommentTransactionActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
-			
-			@Override
-			public void onPre() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onError(String msg) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onPost(final TableName tbName) {
+//		new LoadAllTableV1(CommentTransactionActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
+//			
+//			@Override
+//			public void onPre() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onError(String msg) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void onPost(final TableName tbName) {
 				new LoadAllTableV2(CommentTransactionActivity.this, mGlobalVar, new LoadAllTableV2.LoadTableProgress() {
 					
 					@Override
@@ -118,11 +118,11 @@ public class CommentTransactionActivity extends Activity implements OnClickListe
 					public void onPost(List<TableInfo> tbInfoLst) {
 						mTbInfoLst = tbInfoLst;
 						mSpTableZone.setAdapter(IOrderUtility.createTableZoneAdapter(
-								CommentTransactionActivity.this, tbName));
+								CommentTransactionActivity.this, GlobalVar.sTbName));
 					}
 				}).execute(GlobalVar.FULL_URL);
-			}
-		}).execute(GlobalVar.FULL_URL);
+//			}
+//		}).execute(GlobalVar.FULL_URL);
 	}
 
 	@Override
