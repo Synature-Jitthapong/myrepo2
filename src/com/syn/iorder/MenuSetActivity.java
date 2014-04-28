@@ -201,8 +201,8 @@ public class MenuSetActivity extends Activity {
 //				LayoutParams layoutParam = new LayoutParams(
 //						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,
 //						1f);
-				//layoutParam.width = 250;
-				//v.setMinimumWidth(200);
+//				layoutParam.width = 250;
+//				v.setMinimumWidth(200);
 				layout.addView(v);
 
 				i++;

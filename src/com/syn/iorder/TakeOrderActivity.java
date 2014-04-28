@@ -3207,7 +3207,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 		try {
 			for(int i = 0; i < mOrderLst.size(); i++){
 				MenuDataItem item = mOrderLst.get(i);
-				if(item.getOrderDetailId() == menuDataItem.getOrderDetailId()){
+				if(item.getOrderDetailId() == 
+						menuDataItem.getOrderDetailId() &&
+						item.getProductTypeID() != 7){
 					mOrderLst.set(i, menuDataItem);
 					mOrderLstAdapter.notifyDataSetChanged();
 					mOrderListView.setSelection(i);
