@@ -132,7 +132,7 @@ public class LoginActivity extends Activity {
 							new AlertDialog.Builder(LoginActivity.this)
 							.setCancelable(false)
 							.setTitle(R.string.register)
-							.setMessage(R.string.device_not_register)
+							.setMessage(msg)
 							.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
 								
 								@Override
