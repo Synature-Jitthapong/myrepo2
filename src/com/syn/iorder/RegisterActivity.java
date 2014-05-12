@@ -7,13 +7,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements TextWatcher{
 	private String mDeviceCode;
 	private EditText txtProductCode;
 	private EditText txtLicenceCodeSeq1;
@@ -84,6 +86,15 @@ public class RegisterActivity extends Activity {
 		txtBrand.setText(android.os.Build.BRAND);
 		txtCPUHardware.setText(android.os.Build.CPU_ABI);
 		txtCPUAbi.setText(android.os.Build.CPU_ABI2);
+		
+		txtLicenceCodeSeq1.addTextChangedListener(this);
+		txtLicenceCodeSeq2.addTextChangedListener(this);
+		txtLicenceCodeSeq3.addTextChangedListener(this);
+		txtLicenceCodeSeq4.addTextChangedListener(this);
+		txtRegCodeSeq1.addTextChangedListener(this);
+		txtRegCodeSeq2.addTextChangedListener(this);
+		txtRegCodeSeq3.addTextChangedListener(this);
+		txtRegCodeSeq4.addTextChangedListener(this);
 		
 		getRegisterInfo();
 	}
@@ -213,6 +224,7 @@ public class RegisterActivity extends Activity {
 									register.insertRegisterInfo(licenceCode, mDeviceCode, regCode);
 
 									new AlertDialog.Builder(RegisterActivity.this)
+									.setTitle(R.string.register)
 									.setMessage(R.string.register_success)
 									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 										
@@ -253,6 +265,7 @@ public class RegisterActivity extends Activity {
 	
 	private void alertDialog(int msg){
 		new AlertDialog.Builder(RegisterActivity.this)
+		.setTitle(R.string.register)
 		.setMessage(msg)
 		.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 			
@@ -264,5 +277,48 @@ public class RegisterActivity extends Activity {
 	
 	public void onCancelClicked(){
 		RegisterActivity.this.finish();
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		View v = getCurrentFocus();
+		if(v instanceof EditText){
+			switch(v.getId()){
+			case R.id.txtLicenceCodeSeq1:
+				if(txtLicenceCodeSeq1.getText().toString().length() == 4)
+					txtLicenceCodeSeq2.requestFocus();
+			case R.id.txtLicenceCodeSeq2:
+				if(txtLicenceCodeSeq2.getText().toString().length() == 4)
+					txtLicenceCodeSeq3.requestFocus();
+			case R.id.txtLicenceCodeSeq3:
+				if(txtLicenceCodeSeq3.getText().toString().length() == 4)
+					txtLicenceCodeSeq4.requestFocus();
+			case R.id.txtLicenceCodeSeq4:
+				if(txtLicenceCodeSeq4.getText().toString().length() == 4)
+					txtRegCodeSeq1.requestFocus();
+			case R.id.txtRegCodeSeq1:
+				if(txtRegCodeSeq1.getText().toString().length() == 4)
+					txtRegCodeSeq2.requestFocus();
+			case R.id.txtRegCodeSeq2:
+				if(txtRegCodeSeq2.getText().toString().length() == 4)
+					txtRegCodeSeq3.requestFocus();
+			case R.id.txtRegCodeSeq3:
+				if(txtRegCodeSeq3.getText().toString().length() == 4)
+					txtRegCodeSeq4.requestFocus();
+			}
+		}
 	}
 }

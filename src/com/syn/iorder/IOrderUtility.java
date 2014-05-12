@@ -966,7 +966,86 @@ public class IOrderUtility {
 		tv.setText(text);
 	}
 	
-	public static boolean checkRegister(Context c){
+	public static class CheckLicense extends WebServiceTask{
+
+		public static final String METHOD = "WSmPOS_JSON_CheckLicenseSoftware";
+		
+		private CheckLicenseListener mListener;
+		
+		public CheckLicense(Context c, GlobalVar gb, CheckLicenseListener listener) {
+			super(c, gb, METHOD);
+			mListener = listener;
+		}
+		
+		
+		@Override
+		protected void onPreExecute() {
+			mListener.onPre();
+		}
+
+
+		@Override
+		protected void onPostExecute(String result) {
+			WebServiceResult wsResult = null;
+			try {
+				wsResult = toServiceObject(result);
+				if(wsResult.getiResultID() == 0){
+					mListener.onSuccess();
+				}else if(wsResult.getiResultID() == -1){
+					mListener.onFail(wsResult.getSzResultData());
+				}
+			} catch (JsonSyntaxException e) {
+				mListener.onNetworkDown(result);
+			}
+		}
+
+
+		public static interface CheckLicenseListener{
+			void onPre();
+			void onSuccess();
+			void onNetworkDown(String msg);
+			void onFail(String msg);
+		}
+	}
+	
+	/**
+	 * Check register license from webservice
+	 * @param c
+	 * @param gb
+	 * @param listener
+	 */
+	public static void checkRegisterFromWebService(Context c, GlobalVar gb, final CheckLicense.CheckLicenseListener listener){
+		new CheckLicense(c, gb, new CheckLicense.CheckLicenseListener() {
+			
+			@Override
+			public void onSuccess() {
+				listener.onSuccess();
+			}
+			
+			@Override
+			public void onPre() {
+				listener.onPre();
+			}
+			
+			@Override
+			public void onNetworkDown(String msg){
+				listener.onNetworkDown(msg);
+			}
+			
+			@Override
+			public void onFail(String msg) {
+				listener.onFail(msg);
+			}
+		}).execute(GlobalVar.FULL_URL);
+	}
+	
+	/**
+	 * Check register license from local
+	 * @param c
+	 * @param gb
+	 * @param listener
+	 */
+	public static void checkRegister(final Context c, GlobalVar gb, final CheckLicense.CheckLicenseListener listener){
 		Register register = new Register(c);
 		register.getRegisterInfo();
 		if (register.getRegisterCode() != null
@@ -984,23 +1063,23 @@ public class IOrderUtility {
 										register.getDeviceCode(),
 										register.getRegisterCode());
 						if (compare == 0) {
-							return true;
+							listener.onSuccess();
 						} 
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else {
-
+					checkRegisterFromWebService(c, gb, listener);
 				}
 
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
+		}else{
+			checkRegisterFromWebService(c, gb, listener);
 		}
-		return false;
 	}
 	
 	public static String formatJSONDate(GlobalVar globalVar, String tbTime){

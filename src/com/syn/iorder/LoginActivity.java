@@ -10,7 +10,10 @@ import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -44,12 +47,9 @@ public class LoginActivity extends Activity {
 		context = this;
 		super.onCreate(savedInstanceState);
 		
-		// check register
-		// if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
+		globalVar = new GlobalVar(context);
 		// check config
 		if (IOrderUtility.checkConfig(this)) {
-			globalVar = new GlobalVar(context);
-
 			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
 			ShopData.Language lang = shopProp.getLanguage();
 			IOrderUtility.switchLanguage(context, lang.getLangID());
@@ -69,10 +69,10 @@ public class LoginActivity extends Activity {
 			txtPassWord.clearFocus();
 			// txtUserName.setText("nipon");
 			// txtPassWord.setText("pospwnet");
-
+	
 			loadDeviceData();
 			txtPassWord.setOnEditorActionListener(new OnEditorActionListener() {
-
+	
 				@Override
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
@@ -82,14 +82,73 @@ public class LoginActivity extends Activity {
 					}
 					return false;
 				}
-
+	
 			});
-
+	
 			btnLogin.setOnClickListener(new Button.OnClickListener() {
-
+	
 				@Override
 				public void onClick(View v) {
-					doLogin();
+					final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
+					progress.setTitle(R.string.check_license);
+					progress.setCancelable(false);
+					IOrderUtility.checkRegister(LoginActivity.this, globalVar, 
+							new IOrderUtility.CheckLicense.CheckLicenseListener() {
+						
+						@Override
+						public void onSuccess() {
+							if(progress.isShowing())
+								progress.dismiss();
+							doLogin();
+						}
+						
+						@Override
+						public void onNetworkDown(String msg){
+							if(progress.isShowing())
+								progress.dismiss();
+							new AlertDialog.Builder(LoginActivity.this)
+							.setCancelable(false)
+							.setTitle(R.string.global_network_connection_problem)
+							.setMessage(msg)
+							.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+								}
+							}).show();
+						}
+						
+						@Override
+						public void onPre() {
+							progress.setMessage(
+									LoginActivity.this.getString(R.string.check_license_progress));
+							progress.show();
+						}
+						
+						@Override
+						public void onFail(String msg) {
+							if(progress.isShowing())
+								progress.dismiss();
+							new AlertDialog.Builder(LoginActivity.this)
+							.setCancelable(false)
+							.setTitle(R.string.register)
+							.setMessage(R.string.device_not_register)
+							.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									finish();
+								}
+							}).setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+									finish();
+								}
+							}).show();
+						}
+					});
 				}
 			});
 		} else {
@@ -97,12 +156,6 @@ public class LoginActivity extends Activity {
 			startActivity(intent);
 			finish();
 		}
-		// } else {
-		// Intent intent = new Intent(TakeOrderActivity.this,
-		// RegisterActivity.class);
-		// TakeOrderActivity.this.startActivity(intent);
-		// TakeOrderActivity.this.finish();
-		// }
 	}
 
 	private void doLogin(){
