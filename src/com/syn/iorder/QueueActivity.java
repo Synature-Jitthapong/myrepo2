@@ -65,9 +65,6 @@ public class QueueActivity extends Activity {
 	private List<QueueInfo> queueList;
 	private QueueListAdapter queueAdapter;
 
-	private boolean isRun = true;
-	private Handler handler;
-	private final int updateInterval = 60000;
 	private int queueGroupId;
 	private int custQty = 1;
 	private String custName;
@@ -105,10 +102,11 @@ public class QueueActivity extends Activity {
 		btnEditQueue = (Button) findViewById(R.id.buttonQueueEdit);
 
 		editTextCustomerName.requestFocus();
-		// refresh queue list interval
-		handler = new Handler();
-		handler.post(updateQueueList);
 
+		queueList = new ArrayList<QueueInfo>();
+		queueAdapter = new QueueListAdapter();
+		queueListView.setAdapter(queueAdapter);
+		
 		btnEditQueue.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -157,8 +155,7 @@ public class QueueActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				new LoadQueueTask(context, globalVar)
-						.execute(GlobalVar.FULL_URL);
+				loadQueue();
 			}
 
 		});
@@ -219,13 +216,17 @@ public class QueueActivity extends Activity {
 
 		});
 		
+		loadQueue();
 		generateQueueButton();
 	}
 
+	private void loadQueue(){
+		new LoadQueueTask(context, globalVar)
+				.execute(GlobalVar.FULL_URL);	
+	}
+	
 	@Override
 	protected void onDestroy() {
-		isRun = false;
-		handler.removeCallbacks(updateQueueList);
 		super.onDestroy();
 	}
 
@@ -242,7 +243,6 @@ public class QueueActivity extends Activity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(
 						editTextCustomerName.getWindowToken(), 0);
-				isRun = false;
 
 				finish();
 			}
@@ -251,28 +251,6 @@ public class QueueActivity extends Activity {
 
 		return true;
 	}
-
-	private Runnable updateQueueList = new Runnable() {
-
-		@Override
-		public void run() {
-			if (isRun) {
-				try {
-					queueList = new ArrayList<QueueInfo>();
-					queueAdapter = new QueueListAdapter();
-					queueListView.setAdapter(queueAdapter);
-					new LoadQueueTask(context, globalVar)
-							.execute(GlobalVar.FULL_URL);
-
-					handler.postDelayed(this, updateInterval);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-	};
 
 	private void generateQueueWithSelectPrinter(){
 		final ProgressDialog progress = new ProgressDialog(context);
@@ -500,11 +478,18 @@ public class QueueActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						new LoadPreOrderTask(QueueActivity.this, globalVar,
-								queueInfo.getiQueueID(), queueInfo
-										.getSzQueueName(), queueInfo
-										.getiCustomerQty())
-								.execute(globalVar.FULL_URL);
+//						new LoadPreOrderTask(QueueActivity.this, globalVar,
+//								queueInfo.getiQueueID(), queueInfo
+//										.getSzQueueName(), queueInfo
+//										.getiCustomerQty())
+//								.execute(globalVar.FULL_URL);
+						Intent intent = new Intent(QueueActivity.this,
+								TakeOrderActivity.class);
+						intent.putExtra("QUEUE_ID", queueInfo.getiQueueID());
+						intent.putExtra("QUEUE_NAME", queueInfo.getSzQueueName());
+						intent.putExtra("CUSTOMER_QTY", queueInfo.getiCustomerQty());
+						startActivity(intent);
+						finish();
 					}
 
 				});
@@ -759,7 +744,7 @@ public class QueueActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 
 			try {
-				// QueueInfo queueInfo = gdz.deserializeQueueInfoJSON(result);
+				final QueueInfo queueInfo = gdz.deserializeQueueInfoJSON(result);
 				// queueList.add(queueInfo);
 				// queueAdapter.notifyDataSetChanged();
 				// queueListView.setSelection(queueAdapter.getCount());
@@ -768,6 +753,28 @@ public class QueueActivity extends Activity {
 				new LoadQueueTask(context, globalVar)
 						.execute(GlobalVar.FULL_URL);
 
+				new AlertDialog.Builder(QueueActivity.this)
+				.setTitle(R.string.pre_order)
+				.setMessage(R.string.ask_pre_order)
+				.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				}).setPositiveButton(R.string.global_btn_yes, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(QueueActivity.this,
+								TakeOrderActivity.class);
+						intent.putExtra("QUEUE_ID", queueInfo.getiQueueID());
+						intent.putExtra("QUEUE_NAME", queueInfo.getSzQueueName());
+						intent.putExtra("CUSTOMER_QTY", queueInfo.getiCustomerQty());
+						startActivity(intent);
+						finish();
+					}
+				}).show();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				syn.pos.mobile.util.Log.appendLog(context, result);
@@ -779,6 +786,34 @@ public class QueueActivity extends Activity {
 		}
 	}
 
+	private class ReCallQueue extends WebServiceTask{
+		private static final String METHOD = "WSiQueue_JSON_CallQueue";
+
+		private Button mRefBtnCall;
+		
+		public ReCallQueue(Context c, GlobalVar gb, int queueId, Button refBtn) {
+			super(c, gb, METHOD);
+			PropertyInfo property = new PropertyInfo();
+			property.setName("iQueueID");
+			property.setValue(queueId);
+			property.setType(int.class);
+			soapRequest.addProperty(property);
+			
+			mRefBtnCall = refBtn;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mRefBtnCall.setEnabled(false);
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			mRefBtnCall.setEnabled(true);
+		}
+		
+	}
+	
 	// call queue
 	private class CallQueueTask extends WebServiceTask {
 		private static final String webMethod = "WSiQueue_JSON_CallQueue";
@@ -1334,6 +1369,18 @@ public class QueueActivity extends Activity {
 			spinnerTbZone = (Spinner) view
 					.findViewById(R.id.spinner_table_zone);
 			tbListView = (ListView) view.findViewById(R.id.tableList);
+			
+			// btn recall queue
+			final Button btnCall = (Button) view.findViewById(R.id.button1);
+			btnCall.setVisibility(View.VISIBLE);
+			btnCall.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					new ReCallQueue(QueueActivity.this, globalVar, queueId, btnCall).execute(GlobalVar.FULL_URL);
+				}
+				
+			});
 		}
 
 		@Override

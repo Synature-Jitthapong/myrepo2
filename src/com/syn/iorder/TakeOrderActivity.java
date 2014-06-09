@@ -78,6 +78,11 @@ import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
 public class TakeOrderActivity extends Activity implements OnClickListener, PayInfoFragment.PaymentListener{
+	/**
+	 * mode pre order from queue activity
+	 */
+	private int mPreOrderFromQueue = -1;
+	
 	private Spinner mMenuGroupSpinner;
 	private Spinner mMenuDeptSpinner;
 	private GridView mMenuItemGridView;
@@ -243,6 +248,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 		// param from QueueActivity
 		Intent intent = getIntent();
 		if (intent.getIntExtra("QUEUE_ID", 0) != 0) {
+			mPreOrderFromQueue = 1;
 			
 			int queueId = intent.getIntExtra("QUEUE_ID", 0);
 			String queueName = intent
@@ -1821,9 +1827,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			if(mi.getSaleMode() != 1){
 				ProductGroups.SaleMode s = saleMode.getSaleMode(mi.getSaleMode());
 				if(s.getPositionPrefix() == 0){
-					extraMenuName = s.getPrefixText() + menuName;
+					extraMenuName = s.getPrefixText() != null ? s.getPrefixText() : "" + menuName;
 				}else{
-					extraMenuName = menuName + s.getPrefixText();
+					extraMenuName = menuName + s.getPrefixText() != null ? s.getPrefixText() : "";
 				}
 			}
 
@@ -3293,6 +3299,17 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					"WSiOrder_JSON_SendPreOrderTableTransactionFromQueueID",
 					queueId);
 		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if(mPreOrderFromQueue == 1){
+				mPreOrderFromQueue = -1;
+				TakeOrderActivity.this.startActivity(new Intent(TakeOrderActivity.this, QueueActivity.class));
+				finish();
+			}
+		}
+		
 	}
 
 	// load summary trans
@@ -6030,8 +6047,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						});
 				cusDialog.show();
 			} else {
-				new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
-						.execute(GlobalVar.FULL_URL);
+//				new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
+//						.execute(GlobalVar.FULL_URL);
+
+				new SendOrderFromQueueTask(TakeOrderActivity.this,
+						mGlobalVar, mCurrQueueId).execute(GlobalVar.FULL_URL);
 			}
 		} else {
 			IOrderUtility.alertDialog(TakeOrderActivity.this,

@@ -448,4 +448,6 @@
     <string name="confirm_split_table">ต้องการแยกโต๊ะ?</string>
     <string name="queue_setting">ตั้งค่าคิว</string>
     <string name="queue_button_qty">ปุ่มคิว</string>
+    <string name="ask_pre_order">ต้องการ Pre Order ตอนนี้เลยไหม?</string>
+    <string name="call_queue">เรียกคิว</string>
 </resources>
