@@ -5074,8 +5074,8 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				GlobalVar.COMPUTER_ID, 0, "", 0);
 
 		// clear order of queue
-		// posOrder.deleteOrderDetail(GlobalVar.TRANSACTION_ID);
-		// listAllOrder();
+		posOrder.deleteOrderDetail(GlobalVar.TRANSACTION_ID);
+		listAllOrder();
 
 		mCurrQueueId = 0;
 		mCustomerQty = 0;
@@ -6047,11 +6047,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						});
 				cusDialog.show();
 			} else {
-//				new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
-//						.execute(GlobalVar.FULL_URL);
-
-				new SendOrderFromQueueTask(TakeOrderActivity.this,
-						mGlobalVar, mCurrQueueId).execute(GlobalVar.FULL_URL);
+				if(mPreOrderFromQueue == 1){
+					new SendOrderFromQueueTask(TakeOrderActivity.this,
+							mGlobalVar, mCurrQueueId).execute(GlobalVar.FULL_URL);	
+				}else{
+					new LoadQueueTask(TakeOrderActivity.this, mGlobalVar)
+							.execute(GlobalVar.FULL_URL);
+				}
 			}
 		} else {
 			IOrderUtility.alertDialog(TakeOrderActivity.this,
