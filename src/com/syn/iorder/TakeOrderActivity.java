@@ -9,6 +9,7 @@ import org.ksoap2.serialization.PropertyInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.syn.iorder.PrinterUtils.Printer;
 import com.syn.iorder.QueueUtils.QueueButton;
 
 import syn.pos.data.dao.MenuComment;
@@ -3301,12 +3302,176 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 		}
 
 		@Override
+		protected void sendSuccess() {
+			super.sendSuccess();
+			customDialog.dismiss();
+		}
+
+		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			if(mPreOrderFromQueue == 1){
-				mPreOrderFromQueue = -1;
-				TakeOrderActivity.this.startActivity(new Intent(TakeOrderActivity.this, QueueActivity.class));
-				finish();
+			if(GlobalVar.sIsEnableBuffetType){
+				new AlertDialog.Builder(TakeOrderActivity.this)
+				.setTitle(R.string.print_long_bill)
+				.setMessage(R.string.ask_for_print_long_bill)
+				.setCancelable(false)
+				.setNegativeButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				})
+				.setPositiveButton(R.string.global_btn_no, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+
+						
+						final ProgressDialog progress = new ProgressDialog(TakeOrderActivity.this);
+						
+						final PrinterUtils.PrintLongbillListener printListener = 
+								new PrinterUtils.PrintLongbillListener() {
+									
+									@Override
+									public void onPre() {
+										progress.setMessage(getString(R.string.print_progress));
+										progress.show();
+									}
+									
+									@Override
+									public void onPost() {
+									}
+									
+									@Override
+									public void onError(String msg) {
+										if(progress.isShowing())
+											progress.dismiss();
+										
+										AlertDialog.Builder builder = new AlertDialog.Builder(TakeOrderActivity.this);
+										builder.setMessage(msg);
+										builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										});
+										
+										AlertDialog d = builder.create();
+										d.show();
+									}
+									
+									@Override
+									public void onPost(WebServiceResult res, String result) {
+										if(progress.isShowing())
+											progress.dismiss();
+										
+										String msg = getString(R.string.already_print_longbill);
+										
+										if(res.getiResultID() != 0)
+											msg = res.getSzResultData().equals("") ? result : res.getSzResultData();
+										
+										AlertDialog.Builder builder = new AlertDialog.Builder(TakeOrderActivity.this);
+										builder.setMessage(msg);
+										builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										});
+										
+										AlertDialog d = builder.create();
+										d.show();
+									}
+							};
+								
+						final PrinterUtils.LoadPrinterProgressListener loadPrinterListener = 
+								new PrinterUtils.LoadPrinterProgressListener() {
+									
+									@Override
+									public void onPre() {
+										progress.setMessage(getString(R.string.loading_progress));
+										progress.show();
+									}
+									
+									@Override
+									public void onPost() {
+									}
+									
+									@Override
+									public void onError(String msg) {
+										if(progress.isShowing())
+											progress.dismiss();
+										
+										AlertDialog.Builder builder = 
+												new AlertDialog.Builder(TakeOrderActivity.this);
+										builder.setMessage(msg);
+										builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+												// back to queue activity if pre order from queue
+												if(mPreOrderFromQueue == 1){
+													mPreOrderFromQueue = -1;
+													startActivity(new Intent(TakeOrderActivity.this, QueueActivity.class));
+													finish();
+												}
+											}
+										});
+										AlertDialog d = builder.create();
+										d.show();
+									}
+									
+									@Override
+									public void onPost(final List<Printer> printerLst, String result) {
+										if(progress.isShowing())
+											progress.dismiss();
+										
+										final PrinterListBuilder builder = 
+												new PrinterListBuilder(TakeOrderActivity.this, printerLst);
+										builder.setTitle(R.string.select_printer);
+										builder.setNegativeButton(R.string.global_btn_close, 
+												new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										});
+										builder.setPositiveButton(R.string.global_btn_ok, null);
+										
+										final AlertDialog d = builder.create();
+										d.show();
+										d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+											@Override
+											public void onClick(View v) {
+												if(builder.getPrinterData().getPrinterID() != 0){
+													d.dismiss();
+													// print
+//													new PrinterUtils.PrintTransToPrinterTask(TakeOrderActivity.this, 
+//															globalVar, mTransactionId, mComputerId, 
+//															builder.getPrinterData().getPrinterID(), GlobalVar.STAFF_ID, printListener).execute(GlobalVar.FULL_URL);
+												}else{
+													new AlertDialog.Builder(TakeOrderActivity.this)
+													.setMessage(R.string.please_select_printer)
+													.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+														
+														@Override
+														public void onClick(DialogInterface dialog, int which) {
+														}
+													})
+													.show();
+												}
+											}
+											
+										});
+									}
+								};
+								
+						new PrinterUtils.LoadPrinterTask(TakeOrderActivity.this, globalVar, 
+								GlobalVar.STAFF_ID, loadPrinterListener).execute(GlobalVar.FULL_URL);
+					}
+				}).show();
 			}
 		}
 		
@@ -3376,7 +3541,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 	private class SubmitSendOrder extends WebServiceTask {
 		// protected static final String webMethod =
 		// "WSiOrder_JSON_SendTableOrderTransactionData";
-
+		
+		protected CustomDialog customDialog;
+		
 		// answer question
 		private List<ProductGroups.QuestionAnswerData> qsAnsLst;
 
@@ -3680,9 +3847,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			return gson.toJson(orderTrans);
 		}
 		
-		private void sendSuccess(){
+		protected void sendSuccess(){
 			final int tableId = mCurrTableId;
-			final CustomDialog customDialog = new CustomDialog(
+			customDialog = new CustomDialog(
 					TakeOrderActivity.this, R.style.CustomDialog);
 			customDialog.setCancelable(false);
 			customDialog.title.setVisibility(View.VISIBLE);
