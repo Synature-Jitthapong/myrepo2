@@ -2,11 +2,7 @@ package com.syn.iorder;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import org.apache.http.HttpConnection;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -77,74 +73,41 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 	@Override
 	protected String doInBackground(String... uri) {
 		String result = "";
-		String url = uri[0];
-
+		String url = uri[0];// + "?WSDL";
+		
+		System.setProperty("http.keepAlive", "false");
 		ConnectivityManager connMgr = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
-			// check server status
-			if(checkServerStatus(url)){
-				// fetch data
-				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-						SoapEnvelope.VER11);
-				
-				// tell server not keep connection
-				System.setProperty("http.keepAlive", "false");
-				
-				envelope.dotNet = true;
-				envelope.setOutputSoapObject(soapRequest);
-	
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(url, 60000);
-	
-				String soapAction = nameSpace + webMethod;
-				try {
-					androidHttpTransport.call(soapAction, envelope);
-					try {
-						result = envelope.getResponse().toString();
-					} catch (SoapFault e) {
-						result = mConnErrMsg + "\n" + e.getMessage();
-						e.printStackTrace();
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+			envelope.dotNet = true;
+			envelope.setOutputSoapObject(soapRequest);
+			String soapAction = nameSpace + webMethod;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
+			androidHttpTransport.debug = true;
+			try {
+				androidHttpTransport.call(soapAction, envelope);
+				if(envelope.bodyIn instanceof SoapObject){
+					SoapObject soapResult = (SoapObject) envelope.bodyIn;
+					if(soapResult != null){
+						result = soapResult.getProperty(0).toString();
+					}else{
+						result = "No result!";
 					}
-				} catch (IOException e) {
-					result = mConnErrMsg + "\n" + e.getMessage();
-					e.printStackTrace();
-				} catch (XmlPullParserException e) {
-					result = mConnErrMsg + "\n" + e.getMessage();
-					e.printStackTrace();
+				}else if(envelope.bodyIn instanceof SoapFault){
+					SoapFault soapFault = (SoapFault) envelope.bodyIn;
+					result = soapFault.getMessage();
 				}
-	
-				if(result == null || result.equals("")){
-					result = mConnErrMsg;
-				}
-			}else{
-				result = mHttpErrMsg;
+			} catch (IOException e) {
+				result = e.getMessage();
+			} catch (XmlPullParserException e) {
+				result = e.getMessage();
 			}
-		} else {
-			// display error
-			result = mConnErrMsg;
+		}else{
+			result = "Cannot connect to network!";
 		}
 		return result;
-	}
-	
-	public boolean checkServerStatus(String strUrl){
-		try {
-			URL url = new URL(strUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.connect();
-			if(conn.getResponseCode() == 200){
-				return true;
-			}else{
-				mHttpErrCode = conn.getResponseCode();
-				mHttpErrMsg = mHttpErrCode + " " + conn.getResponseMessage();
-				return false;
-			}
-		} catch (MalformedURLException e) {
-			mHttpErrMsg = e.getMessage();
-		} catch (IOException e) {
-			mHttpErrMsg = mConnErrMsg;
-		}
-		return false;
 	}
 	
 	public WebServiceResult toServiceObject(String json) throws JsonSyntaxException{

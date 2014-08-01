@@ -1,9 +1,11 @@
 package com.syn.iorder;
 
 import java.lang.reflect.Type;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
 import syn.pos.data.model.TableName;
 import android.content.Context;
 

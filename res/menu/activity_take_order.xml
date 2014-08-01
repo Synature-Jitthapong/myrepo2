@@ -1,23 +1,69 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menu_manage_queue" android:title="@string/menu_manage_queue" android:showAsAction="always|withText" android:icon="@drawable/ic_action_queue_light"></item><item android:id="@+id/table_util" android:title="@string/action_menu_table_util" android:showAsAction="always|withText" android:icon="@drawable/ic_action_table_utility">
+
+    <item
+        android:id="@+id/menu_manage_queue"
+        android:icon="@drawable/ic_action_queue_light"
+        android:showAsAction="always|withText"
+        android:title="@string/menu_manage_queue">
+    </item>
+    <item
+        android:id="@+id/table_util"
+        android:icon="@drawable/ic_action_table_utility"
+        android:showAsAction="always|withText"
+        android:title="@string/action_menu_table_util">
         <menu>
-            <item android:id="@+id/action_moveTable" android:showAsAction="always|withText" android:title="@string/action_movetable">
+            <item
+                android:id="@+id/action_moveTable"
+                android:showAsAction="always|withText"
+                android:title="@string/action_movetable">
             </item>
-            <item android:id="@+id/action_mergeTable" android:showAsAction="always|withText" android:title="@string/action_mergetable">
+            <item
+                android:id="@+id/action_mergeTable"
+                android:showAsAction="always|withText"
+                android:title="@string/action_mergetable">
             </item>
-            <item android:id="@+id/action_split_table" android:title="@string/split_table" android:showAsAction="always|withText" /><item android:id="@+id/action_comment_trans" android:title="@string/comment_trans" android:showAsAction="always|withText" /><item android:id="@+id/action_kds" android:title="@string/action_kds" android:showAsAction="always|withText" />
-            <item android:id="@+id/action_close_table" android:title="@string/close_table" android:showAsAction="always|withText"/>
-            
-            
+            <item
+                android:id="@+id/action_split_table"
+                android:showAsAction="always|withText"
+                android:title="@string/split_table"/>
+            <item
+                android:id="@+id/action_comment_trans"
+                android:showAsAction="always|withText"
+                android:title="@string/comment_trans"/>
+            <item
+                android:id="@+id/action_kds"
+                android:showAsAction="always|withText"
+                android:title="@string/action_kds"/>
+            <item
+                android:id="@+id/action_close_table"
+                android:showAsAction="always|withText"
+                android:title="@string/close_table"/>
         </menu>
-    </item><item android:id="@+id/menu_util" android:title="@string/action_menu_menu_util" android:showAsAction="always|withText" android:icon="@drawable/ic_action_menu_utility">
+    </item>
+    <item
+        android:id="@+id/menu_util"
+        android:icon="@drawable/ic_action_menu_utility"
+        android:showAsAction="always|withText"
+        android:title="@string/action_menu_menu_util">
         <menu>
-            <item android:id="@+id/action_move_menu" android:title="@string/action_menu_move_menu">
+            <item
+                android:id="@+id/action_move_menu"
+                android:title="@string/action_menu_move_menu">
             </item>
-            <item android:id="@+id/action_cancel_menu" android:title="@string/action_menu_cancel_menu" />
-            <item android:id="@+id/action_reprint" android:title="@string/reprint_quick_order"/>
+            <item
+                android:id="@+id/action_cancel_menu"
+                android:title="@string/action_menu_cancel_menu"/>
+            <item
+                android:id="@+id/action_reprint"
+                android:title="@string/reprint_quick_order"/>
         </menu>
-    </item><item android:id="@+id/checkbill" android:title="@string/action_bill_summary" android:showAsAction="always|withText" android:icon="@drawable/ic_action_receipt_light"></item>
+    </item>
+    <item
+        android:id="@+id/checkbill"
+        android:icon="@drawable/ic_action_receipt_light"
+        android:showAsAction="always|withText"
+        android:title="@string/action_bill_summary">
+    </item>
 
     <!--
     <item android:id="@+id/menu_hold"
@@ -31,17 +77,29 @@
           <item android:id="@+id/menu_send_order"
 	      android:title="@string/menu_send_order"></item>
     -->
-     <item android:id="@+id/item_other" android:showAsAction="always" android:icon="@drawable/ic_menu_moreoverflow_normal_holo_light">
-         <menu><item android:id="@+id/hold_order" android:title="@string/btn_holdorder"></item><item android:id="@+id/order_hold" android:title="@string/btn_display_holdorder"></item><item android:id="@+id/menu_clear_order" android:title="@string/menu_clearorder">
-    </item><item android:id="@+id/menu_logout" android:title="@string/menu_logout" android:visible="false">
-    </item></menu>
-     </item>
-    
-    
-    
-    
-    
-    
-    
+    <item
+        android:id="@+id/item_other"
+        android:icon="@drawable/ic_menu_moreoverflow_normal_holo_light"
+        android:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/hold_order"
+                android:title="@string/btn_holdorder">
+            </item>
+            <item
+                android:id="@+id/order_hold"
+                android:title="@string/btn_display_holdorder">
+            </item>
+            <item
+                android:id="@+id/menu_clear_order"
+                android:title="@string/menu_clearorder">
+            </item>
+            <item
+                android:id="@+id/menu_logout"
+                android:title="@string/menu_logout"
+                android:visible="false">
+            </item>
+        </menu>
+    </item>
 
 </menu>

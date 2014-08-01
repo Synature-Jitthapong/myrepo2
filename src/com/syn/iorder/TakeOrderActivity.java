@@ -41,6 +41,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -1828,9 +1829,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			if(mi.getSaleMode() != 1){
 				ProductGroups.SaleMode s = saleMode.getSaleMode(mi.getSaleMode());
 				if(s.getPositionPrefix() == 0){
-					extraMenuName = s.getPrefixText() != null ? s.getPrefixText() : "" + menuName;
+					extraMenuName = (s.getPrefixText() != null ? s.getPrefixText() : "") + menuName;
 				}else{
-					extraMenuName = menuName + s.getPrefixText() != null ? s.getPrefixText() : "";
+					extraMenuName = menuName + (s.getPrefixText() != null ? s.getPrefixText() : "");
 				}
 			}
 
@@ -4621,7 +4622,451 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 		}
 
 	}
+	
+	private class LoadTableTaskQuestionV1{
+		
+		protected View view;
+		protected LinearLayout layoutTotalCust;
+		protected ListView tbListView;
+		protected TextView tvTitle, tvSelectTableCusNo, tvSelectTableName;
+		protected Button btnCancel, btnConfirm, btnClearTable;
+		protected Button btnSelectTableMinus;
+		protected Button btnSelectTablePlus;
+		protected Spinner spinnerTbZone;
+		protected Dialog dialogSelectTable;
+		protected List<ProductGroups.QuestionAnswerData> selectedAnswerLst;
+		protected TableInfo mTbInfo;
+		protected int tableId, selectedIdx = -1;
+		
+		public LoadTableTaskQuestionV1(Context c) {
+			LayoutInflater inflater = LayoutInflater
+					.from(TakeOrderActivity.this);
+			view = inflater.inflate(R.layout.select_table_layout_with_qs, null);
+			
+			layoutTotalCust = (LinearLayout) view.findViewById(R.id.LinearLayoutTotalCust);
+			tvTitle = (TextView) view.findViewById(R.id.textViewTitle);
+			btnCancel = (Button) view.findViewById(R.id.buttonConfirmCancel);
+			btnConfirm = (Button) view.findViewById(R.id.buttonConfirm);
+			btnClearTable = (Button) view.findViewById(R.id.buttonClearSelectedTable);
 
+			tvSelectTableCusNo = (TextView) view.findViewById(R.id.select_table_txtcusno);
+			tvSelectTableName = (TextView) view.findViewById(R.id.select_table_cusno_tvname);
+			btnSelectTableMinus = (Button) view.findViewById(R.id.select_table_cusno_btnminus);
+			btnSelectTablePlus = (Button) view.findViewById(R.id.select_table_cusno_btnplus);
+			
+			spinnerTbZone = (Spinner) view.findViewById(R.id.spinner_table_zone);
+			tbListView = (ListView) view.findViewById(R.id.tableList);
+
+			// hide layoutTotalCust by question config
+			if(GlobalVar.sIsEnableTableQuestion){
+				layoutTotalCust.setVisibility(View.GONE);
+				selectedAnswerLst = new ArrayList<ProductGroups.QuestionAnswerData>();
+			}else{
+				layoutTotalCust.setVisibility(View.VISIBLE);
+			}
+			
+			dialogSelectTable = new Dialog(TakeOrderActivity.this,
+					R.style.CustomDialog);
+			tvTitle.setText(R.string.dialog_title_sendorder);
+			dialogSelectTable.setContentView(view);
+			dialogSelectTable.getWindow().setLayout(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+
+			mTbInfo = new TableInfo();
+			if (mCurrTableId != 0) {
+				tvSelectTableName.setText(mCurrTableName);
+				
+				if(mCustomerQty > 0)
+					tvSelectTableCusNo.setText(mGlobalVar.qtyFormat
+						.format(mCustomerQty));
+				else
+					tvSelectTableCusNo.setText("1");
+				
+				if(!GlobalVar.sIsEnableTableQuestion)
+					btnConfirm.setEnabled(true);
+			}
+
+			btnConfirm.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (tableId != 0) {
+						mCurrTableId = tableId;
+						mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+								mTbInfo.getSzTableName(), mTbInfo.getSzCombineTableName());
+					}
+
+					if (mCurrTableId != 0) {
+						if (GlobalVar.MEMBER_ID == 0) {
+							new SubmitSendOrder(TakeOrderActivity.this,
+									mGlobalVar, "WSiOrder_JSON_SendTableOrderTransactionData")
+									.execute(GlobalVar.FULL_URL);
+						} else {
+							new SubmitSendOrder(TakeOrderActivity.this,
+									mGlobalVar,
+									"WSiOrder_JSON_SendTableOrderTransactionDataWithMemberID")
+									.execute(GlobalVar.FULL_URL);
+						}
+					} else {
+						final CustomDialog customDialog = new CustomDialog(
+								TakeOrderActivity.this, R.style.CustomDialog);
+						customDialog.title.setVisibility(View.VISIBLE);
+						customDialog.title.setText(R.string.select_table_title);
+						customDialog.message
+								.setText(R.string.select_table_warning);
+						customDialog.btnCancel.setVisibility(View.GONE);
+						customDialog.btnOk
+								.setText(R.string.global_close_dialog_btn);
+						customDialog.btnOk
+								.setOnClickListener(new OnClickListener() {
+
+									@Override
+									public void onClick(View v) {
+										customDialog.dismiss();
+									}
+								});
+						customDialog.show();
+					}
+					dialogSelectTable.dismiss();
+				}
+			});
+
+			btnCancel.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					dialogSelectTable.dismiss();
+				}
+			});
+			
+			new LoadAllTableV1(TakeOrderActivity.this, mGlobalVar, new LoadAllTableV1.LoadTableProgress() {
+				
+				@Override
+				public void onPre() {
+					dialogSelectTable.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+							WindowManager.LayoutParams.MATCH_PARENT);
+					dialogSelectTable.show();
+				}
+				
+				@Override
+				public void onPost() {
+				}
+				
+				@Override
+				public void onError(String msg) {
+					IOrderUtility.alertDialog(TakeOrderActivity.this, R.string.global_dialog_title_error, msg, 0);
+				}
+				
+				@Override
+				public void onPost(final TableName tbName) {
+					spinnerTbZone.setAdapter(IOrderUtility.createTableZoneAdapter(
+							TakeOrderActivity.this, tbName));
+					spinnerTbZone
+							.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+								@Override
+								public void onItemSelected(AdapterView<?> parent,
+										View v, int pos, long id) {
+									TableName.TableZone tbZone = 
+											(TableName.TableZone) parent.getItemAtPosition(pos);
+
+									// 28/07/2014
+									List<TableInfo> tbInfoLst = new ArrayList<TableInfo>();
+									for(TableName.TableNameOld tName : tbName.TableName){
+										TableInfo tbInfo = new TableInfo();
+										tbInfo.setiTableID(tName.getTableID());
+										tbInfo.setSzTableName(tName.getTableName());
+										tbInfo.setiTableZoneID(tName.getZoneID());
+										tbInfo.setiTableCapacity(tName.getCapacity());
+										tbInfo.setTableStatus(tName.getSTATUS());
+										tbInfo.setbIsCombineTable(false);
+										tbInfo.setSzCombineTableName("");
+										tbInfoLst.add(tbInfo);
+									}
+									List<TableInfo> newTbInfoList = 
+											IOrderUtility.filterTableName(tbInfoLst, tbZone);
+
+									SelectTableListAdapter adapter = 
+											new SelectTableListAdapter(TakeOrderActivity.this, 
+													mGlobalVar,newTbInfoList);
+
+									tbListView.setAdapter(adapter);
+									selectedIdx = 
+											IOrderUtility.indexOfTbList(newTbInfoList, mCurrTableId);
+									tbListView.setItemChecked(selectedIdx, true);
+									tbListView.setSelection(selectedIdx);							
+								}
+
+								@Override
+								public void onNothingSelected(AdapterView<?> arg0) {
+									// TODO Auto-generated method stub
+
+								}
+							});
+
+					tbListView.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> parent, View v,
+								final int position, long id) {
+							mTbInfo = (TableInfo) 
+									parent.getItemAtPosition(position);
+
+							if(mTbInfo.getTableStatus() != 3){
+								
+								btnSelectTableMinus
+										.setOnClickListener(new OnClickListener() {
+		
+											@Override
+											public void onClick(View v) {
+												int capacity = mCustomerQty;
+												--capacity;
+												if (capacity > 0) {
+													tvSelectTableCusNo.setText(
+															mGlobalVar.qtyFormat.format(capacity));
+													mCustomerQty = capacity;
+												}
+											}
+		
+										});
+		
+								btnSelectTablePlus
+										.setOnClickListener(new OnClickListener() {
+		
+											@Override
+											public void onClick(View v) {
+												int capacity = mCustomerQty;
+												++capacity;
+												tvSelectTableCusNo
+														.setText(mGlobalVar.qtyFormat
+																.format(capacity));
+												mCustomerQty = capacity;
+											}
+		
+										});
+								
+								if (mCurrTableId != 0
+										&& mCurrTableId != mTbInfo.getiTableID()) {
+									final CustomDialog cusDialog = new CustomDialog(
+											TakeOrderActivity.this,
+											R.style.CustomDialog);
+									cusDialog.setCanceledOnTouchOutside(false);
+									cusDialog.title.setVisibility(View.VISIBLE);
+									cusDialog.title
+											.setText(R.string.global_dialog_title_warning);
+									TextView tvMsg1 = new TextView(
+											TakeOrderActivity.this);
+									tvMsg1.setText(R.string.msg_already_set_table);
+									TextView tvMsg2 = new TextView(
+											TakeOrderActivity.this);
+									tvMsg2.setText(mCurrTableName);
+									TextView tvMsg3 = new TextView(
+											TakeOrderActivity.this);
+									tvMsg3.setText(R.string.cf_change_table);
+									cusDialog.message.setText(tvMsg1.getText()
+											.toString()
+											+ " "
+											+ tvMsg2.getText().toString()
+											+ " \n "
+											+ tvMsg3.getText().toString());
+									cusDialog.btnCancel
+											.setOnClickListener(new OnClickListener() {
+		
+												@Override
+												public void onClick(View v) {
+													tbListView.setItemChecked(
+															selectedIdx, true);
+													cusDialog.dismiss();
+												}
+		
+											});
+									cusDialog.btnOk
+											.setOnClickListener(new OnClickListener() {
+		
+												@Override
+												public void onClick(View v) {
+													tbListView.setItemChecked(position,
+															true);
+													cusDialog.dismiss();
+													tableId = mTbInfo.getiTableID();
+													tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+															mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName()));
+													tvSelectTableCusNo
+															.setText(mGlobalVar.qtyFormat.format(1));
+													mCustomerQty = 1;
+		
+													if(mTbInfo.getTableStatus() != 0){
+														mCustomerQty = 0;
+													}
+													
+													// popup question
+													if(GlobalVar.sIsEnableTableQuestion)
+														popupQuestion();
+												}
+		
+											});
+									cusDialog.show();
+								} else {
+									tableId = mTbInfo.getiTableID();
+									tvSelectTableName.setText(IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName()));
+									tvSelectTableCusNo.setText(mGlobalVar.qtyFormat
+											.format(1));
+									mCustomerQty = 1;
+		
+									// popup question
+									if(GlobalVar.sIsEnableTableQuestion)
+										popupQuestion();
+								}
+								
+								if(mTbInfo.getTableStatus() == 0){
+									btnSelectTableMinus.setEnabled(true);
+									btnSelectTablePlus.setEnabled(true);
+								}else{
+									btnSelectTableMinus.setEnabled(false);
+									btnSelectTablePlus.setEnabled(false);
+									mCustomerQty = 0;
+								}
+								
+								if(!GlobalVar.sIsEnableTableQuestion)
+									btnConfirm.setEnabled(true);
+								
+							}else{
+								btnSelectTableMinus.setEnabled(false);
+								btnSelectTablePlus.setEnabled(false);
+								btnConfirm.setEnabled(false);
+							}
+						}
+
+					});
+				}
+			}).execute(GlobalVar.FULL_URL);
+		}
+
+		protected void popupQuestion(){
+			btnConfirm.setEnabled(false);
+			if(mTbInfo.getTableStatus() == 0){
+				// add answer to temp 
+				final QuestionGroups qsGroup = new QuestionGroups(TakeOrderActivity.this);
+				qsGroup.insertCurrentAnswerQuestion(new ArrayList<ProductGroups.QuestionAnswerData>());
+				
+				// popup
+				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+				View questView = inflater.inflate(R.layout.question_list_layout, null);
+				TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
+				tvQestionTitle.setText("Table: " + mTbInfo);
+				Button btnOk = (Button) questView.findViewById(R.id.button1);
+				Button btnCancel = (Button) questView.findViewById(R.id.button2);
+				final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
+				final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
+				lvQuestion.setEnabled(false);
+				
+				// question adapter
+				final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listQuestionDetail();
+				
+				if(qsDetailLst != null && qsDetailLst.size() > 0){
+					final SelectTableQuestionAdapter qsAdapter = 
+							new SelectTableQuestionAdapter(TakeOrderActivity.this, mGlobalVar, qsDetailLst, tvSelectTableCusNo);
+					lvQuestion.setAdapter(qsAdapter);
+					
+					final Dialog dialog = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
+					dialog.setContentView(questView);
+					dialog.setCancelable(false);
+					dialog.getWindow().setLayout(
+							android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+							android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+					dialog.show();
+					
+					btnOk.setOnClickListener(new OnClickListener(){
+		
+						@Override
+						public void onClick(View v) {
+							boolean isChoiceQuestion = qsGroup.checkChoiceTypeQuestion(4);
+							boolean requireSelect = true;
+							// check require question
+							for(int i = 0; i < qsDetailLst.size(); i++){
+								ProductGroups.QuestionDetail qsDetail = 
+										qsDetailLst.get(i);
+								
+								if(qsDetail.getIsRequired() == 1){
+									// check selected
+									if(!qsGroup.checkAddedQuestion(qsDetail.getQuestionID())){
+										if(qsDetail.getQuestionTypeID() == 2){
+											if(qsGroup.getTotalAnswerQty() > 0){
+												if(!isChoiceQuestion){
+													requireSelect = false;
+													tvRequire.setVisibility(View.GONE);
+												}
+											}else{
+												requireSelect = true;
+												tvRequire.setVisibility(View.VISIBLE);
+												qsDetail.setRequireSelect(requireSelect);
+												qsAdapter.notifyDataSetChanged();
+												break;
+											}
+										}else{
+											requireSelect = true;
+											tvRequire.setVisibility(View.VISIBLE);
+											qsDetail.setRequireSelect(requireSelect);
+											qsAdapter.notifyDataSetChanged();
+											break;
+										}
+									}else{
+										requireSelect = false;
+										tvRequire.setVisibility(View.GONE);
+										
+										qsDetail.setRequireSelect(requireSelect);
+										qsAdapter.notifyDataSetChanged();
+									}
+								}
+							}
+							
+							if(!requireSelect){
+								dialogSelectTable.dismiss();
+								dialog.dismiss();
+								btnConfirm.setEnabled(true);
+								// submit send order 
+								
+								QuestionGroups qsGroup = new QuestionGroups(TakeOrderActivity.this);
+								selectedAnswerLst = qsGroup.listAnswerQuestion();
+								
+								if (tableId != 0) {
+									mCurrTableId = tableId;
+									mCurrTableName = IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName());
+								}
+								
+								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
+								if (GlobalVar.MEMBER_ID == 0) {
+									new SubmitSendOrder(TakeOrderActivity.this,
+											mGlobalVar, "WSiOrder_JSON_SendTableOrderTransactionData", selectedAnswerLst).execute(GlobalVar.FULL_URL);
+								} else {
+									new SubmitSendOrder(TakeOrderActivity.this,
+											mGlobalVar,
+											"WSiOrder_JSON_SendTableOrderTransactionDataWithMemberID", selectedAnswerLst)
+											.execute(GlobalVar.FULL_URL);
+								}
+							}
+						}
+					});
+					
+					btnCancel.setOnClickListener(new OnClickListener(){
+		
+						@Override
+						public void onClick(View v) {
+							btnConfirm.setEnabled(false);
+							dialog.dismiss();
+						}
+						
+					});
+				}
+			}else{
+				btnConfirm.setEnabled(true);
+			}
+		}
+	}
+	
 	private class LoadTableTaskQuestion extends WebServiceTask{
 		protected View view;
 		protected LinearLayout layoutTotalCust;
@@ -6148,7 +6593,14 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						@Override
 						public void onClick(View v) {
 							cusDialog.dismiss();
-							new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
+							SharedPreferences sharedPref = getSharedPreferences(
+									AppConfigLayoutActivity.PREF_LOAD_TABLE_VERSION, MODE_PRIVATE);
+							int loadV = sharedPref.getInt("load_v", 0);
+							if(loadV == 0){
+								new LoadTableTaskQuestionV1(TakeOrderActivity.this);
+							}else if (loadV == 1){
+								new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);	
+							}
 						}
 
 					});
@@ -6157,7 +6609,14 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					if(mCurrTableId != 0){
 						confirmSendOrder();
 					}else{
-						new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);
+						SharedPreferences sharedPref = getSharedPreferences(
+								AppConfigLayoutActivity.PREF_LOAD_TABLE_VERSION, MODE_PRIVATE);
+						int loadV = sharedPref.getInt("load_v", 0);
+						if(loadV == 0){
+							new LoadTableTaskQuestionV1(TakeOrderActivity.this);
+						}else if(loadV == 1){
+							new LoadTableTaskQuestion(TakeOrderActivity.this).execute(GlobalVar.FULL_URL);	
+						}
 					}
 				}
 			}

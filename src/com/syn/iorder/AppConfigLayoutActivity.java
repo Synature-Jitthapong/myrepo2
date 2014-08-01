@@ -13,29 +13,38 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 public class AppConfigLayoutActivity extends Activity {
+	
+	public static final String PREF_LOAD_TABLE_VERSION = "pref_load_table_version"; 
+	
 	private Context context;
 	private EditText txtServerIp;
 	private EditText txtWsName;
 	private Switch swDisplayMenuImage;
 	private Spinner spinnerShowMenuField;
 	private Spinner spinnerLanguage;
+	private Spinner mSpLoadTbVersion;
 	private TextView tvWsVersion;
 	private String message;
 	
@@ -61,6 +70,7 @@ public class AppConfigLayoutActivity extends Activity {
 		swDisplayMenuImage = (Switch) findViewById(R.id.switchDisplayMenuImage);
 		spinnerShowMenuField = (Spinner) findViewById(R.id.spinnerShowMenuField);
 		spinnerLanguage = (Spinner) findViewById(R.id.spinnerLanguage);
+		mSpLoadTbVersion = (Spinner) findViewById(R.id.spLoadTbVersion);
 		
 		swDisplayMenuImage.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
@@ -78,9 +88,33 @@ public class AppConfigLayoutActivity extends Activity {
 
 		loadSetting();
 		loadLanguage();
+		setupLoadTbVersionAdapter();
 		queueSetting();
 	}
 
+	private void setupLoadTbVersionAdapter(){
+		final SharedPreferences sharedPref = 
+				getSharedPreferences(PREF_LOAD_TABLE_VERSION, MODE_PRIVATE);
+		String[] loadTbArr = getResources().getStringArray(R.array.load_table_version);
+		ArrayAdapter<String> spTbVerAdapter = new ArrayAdapter<String>(this, 
+				android.R.layout.simple_spinner_dropdown_item, loadTbArr);
+		mSpLoadTbVersion.setAdapter(spTbVerAdapter);
+		mSpLoadTbVersion.setSelection(sharedPref.getInt("load_v", 1));
+		mSpLoadTbVersion.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View v,
+					int position, long id) {
+				sharedPref.edit().putInt("load_v", position).commit();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+			
+		});
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_app_setting, menu);
@@ -425,7 +459,7 @@ public class AppConfigLayoutActivity extends Activity {
 			}
 		}
 		if(GlobalVar.sIsEnableQueue){
-			((TableRow) findViewById(R.id.tableRow5)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.queueContainer)).setVisibility(View.VISIBLE);
 			final TextView tvQueueButton = (TextView) findViewById(R.id.tvQueueButton);
 			Button btnMinus = (Button) findViewById(R.id.btnMinus);
 			Button btnPlus = (Button) findViewById(R.id.btnPlus);
@@ -460,7 +494,7 @@ public class AppConfigLayoutActivity extends Activity {
 				
 			});
 		}else{
-			((TableRow) findViewById(R.id.tableRow5)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.queueContainer)).setVisibility(View.GONE);
 		}
 	}
 }

@@ -343,17 +343,6 @@ public class CancelMenuActivity extends Activity {
 			try {
 				WebServiceResult wsResult = gdz.deserializeWsResultJSON(result);
 				if(wsResult.getiResultID() == 0){
-//					new AlertDialog.Builder(context)
-//					.setTitle(R.string.cancel_menu_dialog_title)
-//					.setMessage(R.string.cancel_menu_result_success)
-//					.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							CancelMenuActivity.this.finish();
-//							dialog.dismiss();
-//						}
-//					}).show();
 					final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
 					customDialog.title.setVisibility(View.VISIBLE);
 					customDialog.title.setText(R.string.cancel_menu_dialog_title);
@@ -370,17 +359,6 @@ public class CancelMenuActivity extends Activity {
 					});
 					customDialog.show();
 				}else{
-//					new AlertDialog.Builder(context)
-//					.setTitle(R.string.cancel_menu_dialog_title)
-//					.setMessage(wsResult.getSzResultData())
-//					.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							CancelMenuActivity.this.finish();
-//							dialog.dismiss();
-//						}
-//					}).show();
 					final CustomDialog customDialog = new CustomDialog(context, R.style.CustomDialog);
 					customDialog.title.setVisibility(View.VISIBLE);
 					customDialog.title.setText(R.string.global_dialog_title_error);
@@ -398,16 +376,6 @@ public class CancelMenuActivity extends Activity {
 					customDialog.show();
 				}
 			} catch (Exception e) {
-//				new AlertDialog.Builder(context)
-//				.setTitle("Exception")
-//				.setMessage(result)
-//				.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						dialog.dismiss();
-//					}
-//				}).show();
 				IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, result, 0);
 			}
 		}
