@@ -89,48 +89,7 @@ public class MenuCommentListAdapter extends BaseAdapter {
 			
 			holder.btnMenuCommentMinus = (Button) convertView.findViewById(R.id.btnMenuCommentMinus);
 			holder.btnMenuCommentPlus = (Button) convertView.findViewById(R.id.btnMenuCommentPlus);
-			
 
-			holder.btnMenuCommentMinus.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					double qty = 0;
-					if(!holder.tvMenuCommentQty.getText().toString().equals(""))
-						qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
-	
-					--qty;
-					if(qty > 0){
-						holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
-						posOrder.updateOrderComment(transactionId, orderId, mc.getMenuCommentID(), 
-								qty, mc.getProductPricePerUnit());
-						
-						updateSelectedListView();
-					}
-				}
-			});
-			
-			holder.btnMenuCommentPlus.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					double qty = 0;
-					if(!holder.tvMenuCommentQty.getText().toString().equals(""))
-						qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
-					
-					++qty;
-					holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
-					
-					holder.checkBox1.setChecked(true);
-					
-					posOrder.updateOrderComment(transactionId, orderId, mc.getMenuCommentID(), 
-							qty, mc.getProductPricePerUnit());
-					
-					updateSelectedListView();
-					
-				}
-			});
-			
 			convertView.setTag(holder);
 			
 		}else{
@@ -140,6 +99,46 @@ public class MenuCommentListAdapter extends BaseAdapter {
 		holder.tvMenuCommentName.setText(mc.getMenuCommentName_0());
 		holder.tvMenuCommentPrice.setText(globalVar.decimalFormat.format(mc.getProductPricePerUnit()));
 
+		holder.btnMenuCommentMinus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				double qty = 0;
+				if(!holder.tvMenuCommentQty.getText().toString().equals(""))
+					qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
+
+				--qty;
+				if(qty > 0){
+					holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
+					posOrder.updateOrderComment(transactionId, orderId, mc.getMenuCommentID(), 
+							qty, mc.getProductPricePerUnit());
+					
+					updateSelectedListView();
+				}
+			}
+		});
+		
+		holder.btnMenuCommentPlus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				double qty = 0;
+				if(!holder.tvMenuCommentQty.getText().toString().equals(""))
+					qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
+				
+				++qty;
+				holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
+				
+				holder.checkBox1.setChecked(true);
+				
+				posOrder.updateOrderComment(transactionId, orderId, mc.getMenuCommentID(), 
+						qty, mc.getProductPricePerUnit());
+				
+				updateSelectedListView();
+				
+			}
+		});
+		
 		// checked if comment
 		if(posOrder.chkOrderComment(transactionId, orderId, mc.getMenuCommentID())){
 			holder.checkBox1.setChecked(true);

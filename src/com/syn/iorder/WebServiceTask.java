@@ -100,7 +100,7 @@ public abstract class WebServiceTask extends AsyncTask<String, String, String> {
 					result = soapFault.getMessage();
 				}
 			} catch (IOException e) {
-				result = e.getMessage();
+				result = "Connection problem! Please try again.";
 			} catch (XmlPullParserException e) {
 				result = e.getMessage();
 			}
