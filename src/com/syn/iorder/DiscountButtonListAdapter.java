@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 public class DiscountButtonListAdapter extends BaseAdapter{
 	private List<DiscountUtils.ButtonDiscount> mDiscountLst;
@@ -38,6 +39,8 @@ public class DiscountButtonListAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = mInflater.inflate(R.layout.list_selected_template, null);
 		}
+		TextView tvNo = (TextView) convertView.findViewById(R.id.tvNo);
+		tvNo.setText(null);
 		CheckedTextView chk = (CheckedTextView) convertView.findViewById(R.id.checkedTextView1);
 		chk.setText(mDiscountLst.get(position).getDiscountButtonName());
 		chk.setChecked(mDiscountLst.get(position).isChecked());
