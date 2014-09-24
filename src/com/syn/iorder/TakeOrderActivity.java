@@ -1058,7 +1058,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		syn.pos.data.dao.MenuGroup mg = 
 				new syn.pos.data.dao.MenuGroup(TakeOrderActivity.this);
 
-		List<MenuGroups.MenuGroup> mgl = mg.listAllMenuGroupNoActivated();
+		List<MenuGroups.MenuGroup> mgl = mg.listAllMenuGroup();
 
 		mMenuGroupAdapter = new MenuGroupAdapter(mgl);
 		
@@ -1075,7 +1075,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 						syn.pos.data.dao.MenuDept md = new syn.pos.data.dao.MenuDept(
 								TakeOrderActivity.this);
 
-						mMenuDeptLst = md.listMenuDeptNoActivated(mg.getMenuGroupID());
+						mMenuDeptLst = md.listMenuDept(mg.getMenuGroupID());
 						mMenuDeptAdapter = new MenuDeptAdapter();
 
 						mMenuDeptSpinner.setAdapter(mMenuDeptAdapter);
