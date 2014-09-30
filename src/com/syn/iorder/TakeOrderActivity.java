@@ -329,6 +329,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 						mIsEnableChecker = false;
 					}
 					break;
+				case 15:
+					
+					break;
 				}
 			}
 		}
