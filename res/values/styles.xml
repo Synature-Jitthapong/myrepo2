@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	 <style name="ExtraLarge" parent="android:Widget.Holo.Light.TextView">
+	<style name="ExtraLarge.LabelText" parent="ExtraLarge">
+	    <item name="android:textColor">@android:color/holo_blue_dark</item>
+	    <item name="android:background">@drawable/white_layer</item>
+	    <item name="android:minWidth">48dip</item>
+	    <item name="android:gravity">center</item>
+	</style>
+    <style name="ExtraLarge" parent="android:Widget.Holo.Light.TextView">
 	     <item name="android:textSize">48sp</item>
 	 </style>
 	 <style name="BigLarge" parent="android:Widget.Holo.Light.TextView">
@@ -29,6 +35,9 @@
     </style>  
      <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@drawable/actionbar_background</item>
+    </style>
+    <style name="GreyButton" parent="@android:style/Widget.Holo.Light.Button">
+		<item name="android:background">@drawable/light_grey_button</item>
     </style>
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
     </style>

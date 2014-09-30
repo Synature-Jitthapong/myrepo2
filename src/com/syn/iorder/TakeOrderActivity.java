@@ -115,6 +115,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 	private int mSaleModePrefix = 0;
 	private boolean mIsEnableQueue = false;
 	public static boolean mIsEnableChecker = false;
+	public static boolean sIsEnableBuffet = false;
 	private String mSearchColumn = "";
 	private boolean mAddOnlyOneItem = false;
 	private int mCommentType = 0; // global
@@ -330,7 +331,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					}
 					break;
 				case 15:
-					
+					if(feature.getFeatureID() > 0){
+						sIsEnableBuffet = true;
+					}else{
+						sIsEnableBuffet = false;
+					}
 					break;
 				}
 			}
