@@ -331,7 +331,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					}
 					break;
 				case 15:
-					if(feature.getFeatureID() > 0){
+					if(feature.getFeatureValue() > 0){
 						sIsEnableBuffet = true;
 					}else{
 						sIsEnableBuffet = false;

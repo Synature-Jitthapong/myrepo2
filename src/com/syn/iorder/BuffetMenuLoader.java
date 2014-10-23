@@ -14,9 +14,12 @@ import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class BuffetMenuLoader extends WebServiceTask{
 
+	public static final String TAG = BuffetMenuLoader.class.getSimpleName();
+	
 	public static final String METHOD = "WSiOrder_JSON_GetBuffetMenuFromTableID";
 	
 	private GetBuffetOrderListener mListener;
@@ -47,6 +50,7 @@ public class BuffetMenuLoader extends WebServiceTask{
 
 	@Override
 	protected void onPostExecute(String result) {
+		Log.i(TAG, result);
 		if(progress.isShowing())
 			progress.dismiss();
 		try {
@@ -67,7 +71,8 @@ public class BuffetMenuLoader extends WebServiceTask{
 				}
 			}
 		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
+			mListener.onError(result);
+			Log.e(TAG, e.getMessage());
 		}
 	}
 	

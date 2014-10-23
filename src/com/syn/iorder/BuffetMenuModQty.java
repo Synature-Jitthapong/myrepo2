@@ -12,7 +12,7 @@ public class BuffetMenuModQty extends WebServiceTask{
 	private BuffetMenuModQtyListener mListener;
 	
 	public BuffetMenuModQty(Context c, GlobalVar gb, int staffId, int tableId, 
-			int orderDetailId, int itemQty, BuffetMenuModQtyListener listener) {
+			String jsonBuffetOrder, BuffetMenuModQtyListener listener) {
 		super(c, gb, METHOD);
 		
 		PropertyInfo property = new PropertyInfo();
@@ -34,15 +34,9 @@ public class BuffetMenuModQty extends WebServiceTask{
 		soapRequest.addProperty(property);
 
 		property = new PropertyInfo();
-		property.setName("iOrderDetailID");
-		property.setValue(orderDetailId);
-		property.setType(int.class);
-		soapRequest.addProperty(property);
-
-		property = new PropertyInfo();
-		property.setName("iItemQty");
-		property.setValue(itemQty);
-		property.setType(int.class);
+		property.setName("szJSonListBuffetItems");
+		property.setValue(jsonBuffetOrder);
+		property.setType(String.class);
 		soapRequest.addProperty(property);
 		
 		mListener = listener;

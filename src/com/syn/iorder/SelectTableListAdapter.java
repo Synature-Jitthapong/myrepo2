@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -177,40 +176,41 @@ public class SelectTableListAdapter extends BaseAdapter {
 			holder.btnTbInfo.setVisibility(View.INVISIBLE);
 		}
 		holder.tvTableName.setText(tbName.getTableName());
-		holder.imgStatus.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				boolean status = tbName.getSTATUS() != 0 && tbName.getSTATUS() != 3;
-				if(status){
-					new BuffetMenuLoader(context, globalVar, tbName.getTableID(), new BuffetMenuLoader.GetBuffetOrderListener() {
-						
-						@Override
-						public void onPre() {
-							// TODO Auto-generated method stub
+		if(TakeOrderActivity.sIsEnableBuffet){
+			holder.imgStatus.setOnClickListener(new OnClickListener() {
+	
+				@Override
+				public void onClick(View v) {
+					boolean status = tbName.getSTATUS() != 0 && tbName.getSTATUS() != 3;
+					if(status){
+						new BuffetMenuLoader(context, globalVar, tbName.getTableID(), new BuffetMenuLoader.GetBuffetOrderListener() {
 							
-						}
-						
-						@Override
-						public void onPost(List<BuffetOrder> buffetOrder) {
-							BuffetOrder buffet = buffetOrder.get(0);
-							if(buffet != null){
-								Double qty = buffet.getfItemQty();
-								BuffetQtyDialogFragment f = BuffetQtyDialogFragment.newInstance(GlobalVar.STAFF_ID, 
-										tbName.getTableID(), tbName.getTableName(), buffet.getiOrderID(), buffet.getSzItemName(), qty.intValue());
-								Activity host = (Activity) context;
-								f.show(host.getFragmentManager(), "BuffetQtyDialog");
+							@Override
+							public void onPre() {
+								// TODO Auto-generated method stub
+								
 							}
-						}
-						
-						@Override
-						public void onError(String msg) {
-							Log.e("Select table ", msg);
-						}
-					}).execute(GlobalVar.FULL_URL);
+							
+							@Override
+							public void onPost(List<BuffetOrder> buffetOrder) {
+								BuffetOrder buffet = buffetOrder.get(0);
+								if(buffet != null){
+									BuffetQtyDialogFragment f = new BuffetQtyDialogFragment(GlobalVar.STAFF_ID, 
+											tbName.getTableID(), tbName.getTableName(), buffetOrder);
+									Activity host = (Activity) context;
+									f.show(host.getFragmentManager(), "BuffetQtyDialog");
+								}
+							}
+							
+							@Override
+							public void onError(String msg) {
+								Log.e("Select table ", msg);
+							}
+						}).execute(GlobalVar.FULL_URL);
+					}
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 

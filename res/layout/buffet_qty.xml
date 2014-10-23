@@ -3,31 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/tvQty"
-        style="@style/ExtraLarge.LabelText"
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/lvBuffet"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="1" />
-
-    <Button
-        android:id="@+id/btnMinus"
-        style="@style/GreyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/tvQty"
-        android:text="-" />
-
-    <Button
-        android:id="@+id/btnPlus"
-        style="@style/GreyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/tvQty"
-        android:text="+" />
+        android:layout_centerVertical="true" >
+    </ListView>
 
 </RelativeLayout>

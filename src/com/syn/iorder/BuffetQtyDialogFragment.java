@@ -1,6 +1,9 @@
 package com.syn.iorder;
 
 import java.text.NumberFormat;
+import java.util.List;
+
+import com.google.gson.Gson;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,36 +11,36 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class BuffetQtyDialogFragment extends DialogFragment{
 	
+	public static final String TAG = BuffetQtyDialogFragment.class.getSimpleName();
+	
 	private GlobalVar mGlobalVar;
 	
+	private BuffetListAdapter mBuffetAdapter;
+	private List<BuffetMenuLoader.BuffetOrder> mBuffetLst;
 	private int mStaffId;
 	private int mTableId;
-	private int mOrderId;
 	private String mTableName;
-	private String mItemName;
-	private int mItemQty;
-	
-	public static BuffetQtyDialogFragment newInstance(int staffId, int tableId, String tableName, int orderId, String itemName, int itemQty){
-		BuffetQtyDialogFragment f = new BuffetQtyDialogFragment();
-		Bundle b = new Bundle();
-		b.putInt("staffId", staffId);
-		b.putInt("tableId", tableId);
-		b.putInt("orderId", orderId);
-		b.putString("tableName", tableName);
-		b.putString("itemName", itemName);
-		b.putInt("itemQty", itemQty);
-		f.setArguments(b);
-		return f;
-	}
 
+	public BuffetQtyDialogFragment(int staffId, int tableId, String tableName,
+			List<BuffetMenuLoader.BuffetOrder> buffetLst){
+		mStaffId = staffId;
+		mTableId = tableId;
+		mTableName = tableName;
+		mBuffetLst = buffetLst;
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -54,41 +57,18 @@ public class BuffetQtyDialogFragment extends DialogFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mGlobalVar = new GlobalVar(getActivity());
-		mStaffId = getArguments().getInt("staffId");
-		mTableId = getArguments().getInt("tableId");
-		mOrderId = getArguments().getInt("orderId");
-		mTableName = getArguments().getString("tableName");
-		mItemName = getArguments().getString("itemName");
-		mItemQty = getArguments().getInt("itemQty");
+		mBuffetAdapter = new BuffetListAdapter();
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View content = inflater.inflate(R.layout.buffet_qty, null);
-		final TextView tvQty = (TextView) content.findViewById(R.id.tvQty);
-		final Button btnMinus = (Button) content.findViewById(R.id.btnMinus);
-		final Button btnPlus = (Button) content.findViewById(R.id.btnPlus);
-		tvQty.setText(NumberFormat.getInstance().format(mItemQty));
-		btnMinus.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				if(mItemQty > 0)
-					mItemQty--;
-				tvQty.setText(NumberFormat.getInstance().format(mItemQty));
-			}
-			
-		});
-		btnPlus.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				tvQty.setText(NumberFormat.getInstance().format(++mItemQty));
-			}
-		});
+		ListView lvBuffet = (ListView) content.findViewById(R.id.lvBuffet);
+		lvBuffet.setAdapter(mBuffetAdapter);
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(mTableName + ": " + mItemName);
+		builder.setTitle(mTableName);
 		builder.setView(content);
 		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			
@@ -103,39 +83,117 @@ public class BuffetQtyDialogFragment extends DialogFragment{
 			
 			@Override
 			public void onClick(View arg0) {
-				new BuffetMenuModQty(getActivity(), mGlobalVar, mStaffId, mTableId, mOrderId, mItemQty, new BuffetMenuModQty.BuffetMenuModQtyListener() {
-					
-					@Override
-					public void onPost(String msg) {
-						new AlertDialog.Builder(getActivity())
-						.setMessage(msg)
-						.setCancelable(false)
-						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								d.dismiss();
-							}
-						}).show();
-					}
-					
-					@Override
-					public void onError(String msg) {
-						new AlertDialog.Builder(getActivity())
-						.setMessage(msg)
-						.setCancelable(false)
-						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								d.dismiss();
-							}
-						}).show();
-						
-					}
-				}).execute(GlobalVar.FULL_URL);
+				sendModifyBuffetMenu();
 			}
 		});
 		return d;
+	}
+	
+	private void sendModifyBuffetMenu(){
+		Gson gson = new Gson();
+		String jsonBuffetOrder = gson.toJson(mBuffetLst);
+		Log.i(TAG, jsonBuffetOrder);
+		new BuffetMenuModQty(getActivity(), mGlobalVar, mStaffId, mTableId, jsonBuffetOrder, new BuffetMenuModQty.BuffetMenuModQtyListener() {
+			
+			@Override
+			public void onPost(String msg) {
+				Log.i(TAG, msg);
+				new AlertDialog.Builder(getActivity())
+				.setMessage(msg)
+				.setCancelable(false)
+				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						getDialog().dismiss();
+					}
+				}).show();
+			}
+			
+			@Override
+			public void onError(String msg) {
+				Log.e(TAG, msg);
+				new AlertDialog.Builder(getActivity())
+				.setMessage(msg)
+				.setCancelable(false)
+				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						getDialog().dismiss();
+					}
+				}).show();
+				
+			}
+		}).execute(GlobalVar.FULL_URL);	
+	}
+	
+	private class BuffetListAdapter extends BaseAdapter{
+		
+		private LayoutInflater mInflater = getActivity().getLayoutInflater();
+		
+		@Override
+		public int getCount() {
+			return mBuffetLst != null ? mBuffetLst.size() : 0;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return mBuffetLst.get(position);
+		}
+
+		@Override
+		public long getItemId(int arg0) {
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup container) {
+			ViewHolder holder;
+			if(convertView == null){
+				convertView = mInflater.inflate(R.layout.buffet_mod_item, container, false);
+				holder = new ViewHolder();
+				holder.tvBuffetName = (TextView) convertView.findViewById(R.id.tvBuffetName);
+				holder.tvBuffetQty = (TextView) convertView.findViewById(R.id.tvBuffetQty);
+				holder.btnMinus = (Button) convertView.findViewById(R.id.btnMinus);
+				holder.btnPlus = (Button) convertView.findViewById(R.id.btnPlus);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			final BuffetMenuLoader.BuffetOrder buffet = mBuffetLst.get(position);
+			holder.tvBuffetName.setText(buffet.getSzItemName());
+			holder.tvBuffetQty.setText(NumberFormat.getInstance().format(buffet.getfItemQty()));
+			holder.btnMinus.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					double qty = buffet.getfItemQty();
+					if(qty > 1){
+						buffet.setfItemQty(--qty);
+						notifyDataSetChanged();
+					}
+				}
+				
+			});
+			holder.btnPlus.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					double qty = buffet.getfItemQty();
+					buffet.setfItemQty(++qty);
+					notifyDataSetChanged();
+				}
+				
+			});
+			return convertView;
+		}
+		
+		private class ViewHolder{
+			TextView tvBuffetName;
+			TextView tvBuffetQty;
+			Button btnMinus;
+			Button btnPlus;
+		}
 	}
 }
