@@ -1,8 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
+    <item android:id="@+id/itemLoadRegisterInfo" android:showAsAction="always|withText" android:title="@string/load_register_info" android:icon="@drawable/ic_action_information">
+    </item><item
         android:id="@+id/item_confirm"
-        android:showAsAction="always"
-        android:actionLayout="@layout/button_confirm"/>
+        android:title="@string/confirm"
+        android:actionLayout="@layout/button_confirm"
+        android:showAsAction="always"/>
+    
 
 </menu>

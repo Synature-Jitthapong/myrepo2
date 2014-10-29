@@ -1,15 +1,20 @@
 package com.syn.iorder;
 
+import com.syn.iorder.RegisteredLicenseGetter.RegisterLicense;
+import com.syn.iorder.RegisteredLicenseGetter.RegisteredListener;
+
 import syn.pos.data.dao.Register;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,6 +40,8 @@ public class RegisterActivity extends Activity implements TextWatcher{
 	private EditText txtBrand;
 	private EditText txtCPUHardware;
 	private EditText txtCPUAbi;
+
+	private ProgressDialog mProgress;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,10 @@ public class RegisterActivity extends Activity implements TextWatcher{
 		txtBrand = (EditText) findViewById(R.id.EditTextBrand);
 		txtCPUHardware = (EditText) findViewById(R.id.EditTextCPUHardware);
 		txtCPUAbi = (EditText) findViewById(R.id.EditTextCPUAbi);
+		
+		mProgress = new ProgressDialog(RegisterActivity.this);
+		mProgress.setMessage(getString(R.string.loading_progress));
+		mProgress.setCancelable(false);
 		
 		// get android id
 		String androidId = Secure.getString(this.getContentResolver(),
@@ -321,4 +332,78 @@ public class RegisterActivity extends Activity implements TextWatcher{
 			}
 		}
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.itemLoadRegisterInfo:
+			GlobalVar gb = new GlobalVar(this);
+			new RegisteredLicenseGetter(this, gb, mRegisteredListener).execute(GlobalVar.FULL_URL);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private RegisteredListener mRegisteredListener = new RegisteredListener(){
+		
+		@Override
+		public void onPre() {
+			mProgress.show();
+		}
+
+		@Override
+		public void onPost(RegisterLicense register) {
+			if(mProgress.isShowing())
+				mProgress.dismiss();
+			txtDeviceCode.setText(null);
+			txtLicenceCodeSeq1.setText(null);
+			txtLicenceCodeSeq2.setText(null);
+			txtLicenceCodeSeq3.setText(null);
+			txtLicenceCodeSeq4.setText(null);
+			txtRegCodeSeq1.setText(null);
+			txtRegCodeSeq2.setText(null);
+			txtRegCodeSeq3.setText(null);
+			txtRegCodeSeq4.setText(null);
+			if(register.getiTotalLicense() == 1){
+				String licenseCode = register.getSzLicenseCode().replace("-", "");
+				String registerCode = register.getSzRegisterCode().replace("-", "");
+				txtDeviceCode.setText(register.getSzDeviceKeyCode());
+				txtLicenceCodeSeq1.setText(licenseCode.substring(0,4));
+				txtLicenceCodeSeq2.setText(licenseCode.substring(4,8));
+				txtLicenceCodeSeq3.setText(licenseCode.substring(8,12));
+				txtLicenceCodeSeq4.setText(licenseCode.substring(12,16));
+				txtRegCodeSeq1.setText(registerCode.substring(0,4));
+				txtRegCodeSeq2.setText(registerCode.substring(4,8));
+				txtRegCodeSeq3.setText(registerCode.substring(8,12));
+				txtRegCodeSeq4.setText(registerCode.substring(12,16));
+			}else{
+				new AlertDialog.Builder(RegisterActivity.this)
+				.setTitle(R.string.register)
+				.setMessage("The system found this device has registered more than one license.\nPlease recheck registered information of this device.")
+				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				}).show();
+			}
+		}
+
+		@Override
+		public void onError(String err) {
+			if(mProgress.isShowing())
+				mProgress.dismiss();
+			new AlertDialog.Builder(RegisterActivity.this)
+			.setTitle(R.string.register)
+			.setMessage(err)
+			.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+				}
+			}).show();
+		}
+		
+	};
 }
