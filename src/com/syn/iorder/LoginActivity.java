@@ -46,109 +46,107 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		context = this;
 		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.activity_login);
+		tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
+		tvComputer = (TextView) findViewById(R.id.textViewComputer);
+		tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
+		tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
+		btnLogin = (Button) findViewById(R.id.btnLogin);
+		txtUserName = (EditText) findViewById(R.id.txtUserName);
+		txtPassWord = (EditText) findViewById(R.id.txtPassword);
 		
 		globalVar = new GlobalVar(context);
 		// check config
-		if (IOrderUtility.checkConfig(this)) {
-			ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-			ShopData.Language lang = shopProp.getLanguage();
-			IOrderUtility.switchLanguage(context, lang.getLangID());
-			
-			setContentView(R.layout.activity_login);
-			tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
-			tvComputer = (TextView) findViewById(R.id.textViewComputer);
-			tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
-			tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
-			btnLogin = (Button) findViewById(R.id.btnLogin);
-			txtUserName = (EditText) findViewById(R.id.txtUserName);
-			txtPassWord = (EditText) findViewById(R.id.txtPassword);
-			
+		if (IOrderUtility.checkConfig(this)) {			
 			txtUserName.setSelectAllOnFocus(true);
 			txtPassWord.setSelectAllOnFocus(true);
 			txtUserName.clearFocus();
 			txtPassWord.clearFocus();
-			// txtUserName.setText("nipon");
-			// txtPassWord.setText("pospwnet");
-	
 			loadDeviceData();
-			txtPassWord.setOnEditorActionListener(new OnEditorActionListener() {
-	
+			
+			final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
+			progress.setTitle(R.string.check_license);
+			progress.setCancelable(false);
+			IOrderUtility.checkRegister(LoginActivity.this, globalVar, 
+					new IOrderUtility.CheckLicense.CheckLicenseListener() {
+				
 				@Override
-				public boolean onEditorAction(TextView v, int actionId,
-						KeyEvent event) {
-					if (actionId == EditorInfo.IME_ACTION_DONE) {
-						doLogin();
-						return true;
-					}
-					return false;
-				}
-	
-			});
-	
-			btnLogin.setOnClickListener(new Button.OnClickListener() {
-	
-				@Override
-				public void onClick(View v) {
-					final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
-					progress.setTitle(R.string.check_license);
-					progress.setCancelable(false);
-					IOrderUtility.checkRegister(LoginActivity.this, globalVar, 
-							new IOrderUtility.CheckLicense.CheckLicenseListener() {
-						
+				public void onSuccess() {
+					if(progress.isShowing())
+						progress.dismiss();
+					ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+					ShopData.Language lang = shopProp.getLanguage();
+					IOrderUtility.switchLanguage(context, lang.getLangID());
+					
+					txtPassWord.setOnEditorActionListener(new OnEditorActionListener() {
+			
 						@Override
-						public void onSuccess() {
-							if(progress.isShowing())
-								progress.dismiss();
+						public boolean onEditorAction(TextView v, int actionId,
+								KeyEvent event) {
+							if (actionId == EditorInfo.IME_ACTION_DONE) {
+								doLogin();
+								return true;
+							}
+							return false;
+						}
+			
+					});
+			
+					btnLogin.setOnClickListener(new Button.OnClickListener() {
+			
+						@Override
+						public void onClick(View v) {
 							doLogin();
 						}
-						
-						@Override
-						public void onNetworkDown(String msg){
-							if(progress.isShowing())
-								progress.dismiss();
-							new AlertDialog.Builder(LoginActivity.this)
-							.setCancelable(false)
-							.setTitle(R.string.global_network_connection_problem)
-							.setMessage(msg)
-							.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-								}
-							}).show();
-						}
-						
-						@Override
-						public void onPre() {
-							progress.setMessage(
-									LoginActivity.this.getString(R.string.check_license_progress));
-							progress.show();
-						}
-						
-						@Override
-						public void onFail(String msg) {
-							if(progress.isShowing())
-								progress.dismiss();
-							new AlertDialog.Builder(LoginActivity.this)
-							.setCancelable(false)
-							.setTitle(R.string.register)
-							.setMessage(msg)
-							.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									finish();
-								}
-							}).setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-									finish();
-								}
-							}).show();
-						}
 					});
+				}
+				
+				@Override
+				public void onNetworkDown(String msg){
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(LoginActivity.this)
+					.setCancelable(false)
+					.setTitle(R.string.global_network_connection_problem)
+					.setMessage(msg)
+					.setNeutralButton(R.string.global_close_dialog_btn, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					}).show();
+				}
+				
+				@Override
+				public void onPre() {
+					progress.setMessage(
+							LoginActivity.this.getString(R.string.check_license_progress));
+					progress.show();
+				}
+				
+				@Override
+				public void onFail(String msg) {
+					if(progress.isShowing())
+						progress.dismiss();
+					new AlertDialog.Builder(LoginActivity.this)
+					.setCancelable(false)
+					.setTitle(R.string.register)
+					.setMessage(msg)
+					.setNegativeButton(R.string.global_btn_cancel, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					}).setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+							finish();
+						}
+					}).show();
 				}
 			});
 		} else {
