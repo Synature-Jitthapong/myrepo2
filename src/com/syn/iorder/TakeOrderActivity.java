@@ -128,30 +128,30 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 		
 		mGlobalVar = new GlobalVar(this);
 
-		//if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
-			// check login
-			if (GlobalVar.STAFF_ID != 0) {
-				// initial component
-				initComponent();
-
-				// check feature
-				checkProgramFeature();
-
-				// list menu
-				listAllMenuItem();
-
-				// load salemode
-				createSwSaleMode();
-
-			} else {
-				gotoLogin();
-			}
-//		} else {
-//			Intent intent = new Intent(TakeOrderActivity.this,
-//					RegisterActivity.class);
-//			TakeOrderActivity.this.startActivity(intent);
-//			TakeOrderActivity.this.finish();
-//		}
+		// check config
+		if (IOrderUtility.checkConfig(this)) {
+				// check login
+				if (GlobalVar.STAFF_ID != 0) {
+					// initial component
+					initComponent();
+	
+					// check feature
+					checkProgramFeature();
+	
+					// list menu
+					listAllMenuItem();
+	
+					// load salemode
+					createSwSaleMode();
+	
+				} else {
+					gotoLogin();
+				}
+		} else {
+			Intent intent = new Intent(this, AppConfigLayoutActivity.class);
+			startActivity(intent);
+			finish();
+		}
 	}
 
 	private void initComponent(){

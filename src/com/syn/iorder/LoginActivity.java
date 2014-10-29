@@ -1,16 +1,12 @@
 package com.syn.iorder;
 
-import java.util.List;
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
-import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -25,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	private TextView tvLastUpdate;
@@ -50,28 +45,27 @@ public class LoginActivity extends Activity {
 		
 		setContentView(R.layout.activity_login);
 		
-		// check register
-		// if (IOrderUtility.checkRegister(TakeOrderActivity.this)) {
 		// check config
 		if (IOrderUtility.checkConfig(this)) {
-			tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
-			tvComputer = (TextView) findViewById(R.id.textViewComputer);
-			tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
-			tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
-			
-			globalVar = new GlobalVar(context);
-			loadDeviceData();
+			if (IOrderUtility.checkRegister(this)) {
+				tvDeviceCode = (TextView) findViewById(R.id.textViewDeviceCode);
+				tvComputer = (TextView) findViewById(R.id.textViewComputer);
+				tvLastUpdate = (TextView) findViewById(R.id.textViewUpdateLog);
+				tvWsVersion = (TextView) findViewById(R.id.textViewWsVersion);
+				
+				globalVar = new GlobalVar(context);
+				loadDeviceData();
+			} else {
+				Intent intent = new Intent(this,
+						RegisterActivity.class);
+				startActivity(intent);
+				finish();
+			}
 		} else {
 			Intent intent = new Intent(this, AppConfigLayoutActivity.class);
 			startActivity(intent);
 			finish();
 		}
-		// } else {
-		// Intent intent = new Intent(TakeOrderActivity.this,
-		// RegisterActivity.class);
-		// TakeOrderActivity.this.startActivity(intent);
-		// TakeOrderActivity.this.finish();
-		// }
 		
 		txtUserName = (EditText) findViewById(R.id.txtUserName);
 		txtPassWord = (EditText) findViewById(R.id.txtPassword);
@@ -79,8 +73,6 @@ public class LoginActivity extends Activity {
 		txtPassWord.setSelectAllOnFocus(true);
 		txtUserName.clearFocus();
 		txtPassWord.clearFocus();
-//		txtUserName.setText("nipon");
-//		txtPassWord.setText("pospwnet");
 		txtPassWord.setOnEditorActionListener(new OnEditorActionListener(){
 
 			@Override
