@@ -99,7 +99,10 @@ public class SelectOrderAdapter extends BaseAdapter {
 		holder.tvOrderQty.setText("x" + globalVar.qtyFormat.format(detail.getfItemQty()));
 		
 		if(detail.getiProductType() == 14 || detail.getiProductType() == 15){
-			holder.tvOrderName.setText("   " + detail.getSzProductName());
+			holder.checkBox1.setVisibility(View.INVISIBLE);
+			holder.tvOrderName.setText("- " + detail.getSzProductName());
+		}else{
+			holder.checkBox1.setVisibility(View.VISIBLE);
 		}
 		return convertView;
 	}

@@ -405,6 +405,7 @@ public class CancelMenuActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				detail = gdz.deserializeOrderSendDataJSON(result);
+				//Log.d("CurrentOrderDetail", result);
 				List<OrderSendData.OrderDetail> orderFilter = detail.xListOrderDetail;//IOrderUtility.filterProductType(detail.xListOrderDetail);
 				menuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
 				listViewMenu.setAdapter(menuAdapter);
@@ -418,16 +419,18 @@ public class CancelMenuActivity extends Activity {
 						OrderSendData.OrderDetail data = (OrderSendData.OrderDetail) 
 								parent.getItemAtPosition(position);//detail.xListOrderDetail.get(position);
 						if(data.getiOrderStatusID() == 1 || data.getiOrderStatusID() == 2){
-							MenuUtil menuUtil = new MenuUtil(context);
-							menuUtil.prepareMenuForCacnel(data);
-							
-							CheckBox chkBox = (CheckBox) v.findViewById(R.id.checkBox1);
-							// check if item is selected
-							menuUtil = new MenuUtil(context);
-							if(menuUtil.checkSelectedMenu(data.getiOrderID(), data.getiProductID()) != 0)
-								chkBox.setChecked(true);
-							else
-								chkBox.setChecked(false);
+							if(data.getiProductType() != 14 && data.getiProductType() != 15){
+								MenuUtil menuUtil = new MenuUtil(context);
+								menuUtil.prepareMenuForCacnel(data);
+								
+								CheckBox chkBox = (CheckBox) v.findViewById(R.id.checkBox1);
+								// check if item is selected
+								menuUtil = new MenuUtil(context);
+								if(menuUtil.checkSelectedMenu(data.getiOrderID(), data.getiProductID()) != 0)
+									chkBox.setChecked(true);
+								else
+									chkBox.setChecked(false);
+							}
 						}
 					}
 				});
