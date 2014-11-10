@@ -98,6 +98,9 @@ public class SelectOrderAdapter extends BaseAdapter {
 		holder.tvOrderName.setText(detail.getSzProductName());
 		holder.tvOrderQty.setText("x" + globalVar.qtyFormat.format(detail.getfItemQty()));
 		
+		if(detail.getiProductType() == 14 || detail.getiProductType() == 15){
+			holder.tvOrderName.setText("   " + detail.getSzProductName());
+		}
 		return convertView;
 	}
 

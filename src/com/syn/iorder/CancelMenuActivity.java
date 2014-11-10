@@ -405,7 +405,7 @@ public class CancelMenuActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				detail = gdz.deserializeOrderSendDataJSON(result);
-				List<OrderSendData.OrderDetail> orderFilter = IOrderUtility.filterProductType(detail.xListOrderDetail);
+				List<OrderSendData.OrderDetail> orderFilter = detail.xListOrderDetail;//IOrderUtility.filterProductType(detail.xListOrderDetail);
 				menuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
 				listViewMenu.setAdapter(menuAdapter);
 				
