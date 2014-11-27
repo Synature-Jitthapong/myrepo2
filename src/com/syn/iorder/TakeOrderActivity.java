@@ -2958,8 +2958,9 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			if(pCompSetLst != null){
 				if(pCompSetLst.size() > 0){
 					for(ProductGroups.PComponentSet pCompSet : pCompSetLst){
+						double price = pCompSet.getFlexibleIncludePrice() == 1 ? pCompSet.getPricePerUnit() : 0;
 						addOrderSetOfProduct(orderId, pCompSet.getProductID(), 
-								pCompSet.getPricePerUnit(), pCompSet.getChildProductAmount());
+								price, pCompSet.getChildProductAmount());
 					}
 				}
 			}
