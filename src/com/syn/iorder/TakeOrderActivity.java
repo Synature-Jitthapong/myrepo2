@@ -454,6 +454,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						GlobalVar.sIsEnableFastFoodMapTable = false;
 					}
 					break;
+				case 20: // popup order if table not empty
+					if(feature.getFeatureValue() > 0){
+						GlobalVar.sIsPopupWhenTableNotEmpty = true;
+					}else{
+						GlobalVar.sIsPopupWhenTableNotEmpty = false;
+					}
+					break;
 				}
 			}
 		}
@@ -4942,6 +4949,15 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 								btnSelectTablePlus.setEnabled(false);
 								btnConfirm.setEnabled(false);
 							}
+							
+							// already have order
+							if(mTbInfo.getTableStatus() == 1){
+								if(GlobalVar.sIsPopupWhenTableNotEmpty){
+									btnConfirm.setEnabled(false);
+									popupOrderOfTable(mTbInfo.getiTableID(), IOrderUtility.formatCombindTableName(mTbInfo.isbIsCombineTable(), 
+											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName()));
+								}
+							}
 						}
 
 					});
@@ -4949,6 +4965,67 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			}).execute(GlobalVar.FULL_URL);
 		}
 
+		private void popupOrderOfTable(int tableId, String tableName){
+			final Dialog detailDialog = new Dialog(TakeOrderActivity.this, R.style.CustomDialog);
+			detailDialog.setCanceledOnTouchOutside(false);
+			LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
+			View orderView = inflater.inflate(R.layout.order_list_layout, null);
+			ListView lvOrder = (ListView) orderView.findViewById(R.id.listViewOrder);
+			TextView tvTableName = (TextView) orderView.findViewById(R.id.textViewOrderListTitle);
+			TextView tvSumText = (TextView) orderView.findViewById(R.id.textViewSumText);
+			TextView tvSumPrice = (TextView) orderView.findViewById(R.id.textViewSumPrice);
+			ImageButton btnClose = (ImageButton) orderView.findViewById(R.id.imageButtonCloseOrderDialog);
+			Button btnSend = (Button) orderView.findViewById(R.id.buttonSendFromSummary);
+			Button btnCancel = (Button) orderView.findViewById(R.id.buttonOrderListClose);
+			
+			if(GlobalVar.sIsPopupWhenTableNotEmpty){
+				btnSend.setVisibility(View.VISIBLE);
+				btnCancel.setVisibility(View.VISIBLE);
+			}
+			
+			ProgressBar progress = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
+			//tvTableName.setText()
+			tvTableName.setText(getString(R.string.text_table) + ":" + tableName
+					+ " " + getString(R.string.already_have_order));
+			
+			//new CurrentOrderFromTableTask(context, globalVar, tbName.getTableID(), lvOrder).execute(globalVar.FULL_URL);
+			new LoadBillDetailTask(TakeOrderActivity.this, mGlobalVar, tableId, 
+					lvOrder, tvSumText, tvSumPrice, progress).execute(GlobalVar.FULL_URL);
+			detailDialog.setContentView(orderView);
+			detailDialog.getWindow().setGravity(Gravity.TOP);
+			detailDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+					WindowManager.LayoutParams.WRAP_CONTENT);
+
+			btnSend.setOnClickListener(new OnClickListener() {
+				
+				@SuppressLint("NewApi")
+				@Override
+				public void onClick(View v) {
+					btnConfirm.callOnClick();
+					detailDialog.dismiss();
+				}
+			});
+			
+			btnCancel.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					detailDialog.dismiss();
+				}
+			});
+			
+			btnClose.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					detailDialog.dismiss();
+				}
+				
+			});
+			
+			detailDialog.show();
+		}
+		
 		protected void popupQuestion(){
 			btnConfirm.setEnabled(false);
 			if(mTbInfo.getTableStatus() == 0){

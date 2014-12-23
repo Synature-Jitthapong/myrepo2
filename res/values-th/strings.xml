@@ -451,4 +451,5 @@
     <string name="ask_pre_order">ต้องการ Pre Order ตอนนี้เลยไหม?</string>
     <string name="call_queue">เรียกคิว</string>
     <string name="ask_for_print_long_bill">ต้องการพิมพ์ใบลองบิลตอนนี้เลยไหม?</string>
+    <string name="already_have_order">มีรายการอยู่แล้ว ต้องการสั่งเพิ่มหรือไม่</string>
 </resources>

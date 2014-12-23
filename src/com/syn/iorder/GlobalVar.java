@@ -37,6 +37,7 @@ public class GlobalVar {
 	public static boolean sIsEnableBuffetType = false;
 	public static boolean sIsEnableFastFoodMapTable = false;
 	public static boolean sIsAddSameItem = false;
+	public static boolean sIsPopupWhenTableNotEmpty = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";
