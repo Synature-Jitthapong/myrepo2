@@ -4635,6 +4635,11 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 
 	}
 	
+	/**
+	 * @author j1tth4
+	 * this class for load less table data
+	 * Hachiban Fujitsu request 
+	 */
 	private class LoadTableTaskQuestionV1{
 		
 		protected View view;
@@ -4980,15 +4985,14 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 			
 			if(GlobalVar.sIsPopupWhenTableNotEmpty){
 				btnSend.setVisibility(View.VISIBLE);
+				btnSend.setText(R.string.confirm);
 				btnCancel.setVisibility(View.VISIBLE);
 			}
 			
 			ProgressBar progress = (ProgressBar) orderView.findViewById(R.id.progressBarOrderOfTable);
-			//tvTableName.setText()
 			tvTableName.setText(getString(R.string.text_table) + ":" + tableName
 					+ " " + getString(R.string.already_have_order));
 			
-			//new CurrentOrderFromTableTask(context, globalVar, tbName.getTableID(), lvOrder).execute(globalVar.FULL_URL);
 			new LoadBillDetailTask(TakeOrderActivity.this, mGlobalVar, tableId, 
 					lvOrder, tvSumText, tvSumPrice, progress).execute(GlobalVar.FULL_URL);
 			detailDialog.setContentView(orderView);
