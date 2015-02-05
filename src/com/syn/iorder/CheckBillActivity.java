@@ -999,7 +999,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 						if(progress.isShowing())
 							progress.dismiss();
 						
-						String msg = mContext.getString(R.string.already_print_longbill);
+						String msg = mContext.getString(R.string.print_longbill_success);
 						
 						if(res.getiResultID() != 0)
 							msg = res.getSzResultData().equals("") ? result : res.getSzResultData();

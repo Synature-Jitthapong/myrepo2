@@ -461,6 +461,13 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 						GlobalVar.sIsPopupWhenTableNotEmpty = false;
 					}
 					break;
+				case 21: // lock when print longbill
+					if(feature.getFeatureValue() > 0){
+						GlobalVar.sIsLockWhenPrintLongbill = true;
+					}else{
+						GlobalVar.sIsLockWhenPrintLongbill = false;
+					}
+					break;
 				}
 			}
 		}
@@ -3379,7 +3386,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 										if(progress.isShowing())
 											progress.dismiss();
 										
-										String msg = getString(R.string.already_print_longbill);
+										String msg = getString(R.string.print_longbill_success);
 										
 										if(res.getiResultID() != 0)
 											msg = res.getSzResultData().equals("") ? result : res.getSzResultData();

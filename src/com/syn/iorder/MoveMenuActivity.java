@@ -55,6 +55,7 @@ public class MoveMenuActivity extends Activity {
 	private int mToTbId;
 	private String mFromTbName;
 	private String mToTbName;
+	private int mNumPrintBill;
 	
 	private EditText mTxtMoveMenuReason;
 	private ListView mMenuFromListView;
@@ -257,6 +258,9 @@ public class MoveMenuActivity extends Activity {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
 									View v, int position, long id) {
+								if(GlobalVar.sIsLockWhenPrintLongbill && mNumPrintBill > 0)
+									return;
+								
 								OrderSendData.OrderDetail detail = (OrderSendData.OrderDetail) parent
 										.getItemAtPosition(position);
 								
@@ -293,6 +297,9 @@ public class MoveMenuActivity extends Activity {
 									AdapterView<?> parent,
 									View v, int position,
 									long id) {
+								if(GlobalVar.sIsLockWhenPrintLongbill && mNumPrintBill > 0)
+									return;
+								
 								OrderSendData.OrderDetail detail = (OrderSendData.OrderDetail) parent
 										.getItemAtPosition(position);
 								mMenuUtil.reMoveMenu(
@@ -335,11 +342,12 @@ public class MoveMenuActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						mMovedMenuListView.setAdapter(mAdapter2);
-						if(mAdapter2.getCount() > 0)
-							mBtnShooseMenu.setText(R.string.move_menu_btn_edit_menu);
-							
-						lockSelectedTable();
-						
+						if(mAdapter2 != null){
+							if(mAdapter2.getCount() > 0)
+								mBtnShooseMenu.setText(R.string.move_menu_btn_edit_menu);
+								
+							lockSelectedTable();
+						}
 						dialog.dismiss();
 					}
 				});
@@ -733,6 +741,12 @@ public class MoveMenuActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				OrderSendData orderData = gdz.deserializeOrderSendDataJSON(result);
+				if(orderData.xTransaction != null){
+					mNumPrintBill = orderData.xTransaction.getiCallForCheckBill();
+				}
+				if(mNumPrintBill > 0){
+					IOrderUtility.alertDialog(MoveMenuActivity.this, R.string.already_printed_longbill, 0);
+				}
 //				if (orderData != null) {
 //					if (orderData.xListOrderDetail != null
 //							&& orderData.xListOrderDetail.size() > 0) {

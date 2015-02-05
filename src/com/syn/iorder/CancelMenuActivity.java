@@ -50,6 +50,7 @@ public class CancelMenuActivity extends Activity {
 	OrderSendData detail;
 	SelectOrderAdapter menuAdapter;
 	private List<OrderSendData.OrderDetail> orderDetailLst;
+	private int numPrintBill;
 	
 	private int mTableId;
 	private String mCancelReason;
@@ -405,17 +406,29 @@ public class CancelMenuActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				detail = gdz.deserializeOrderSendDataJSON(result);
+				if(detail.xTransaction != null){
+					numPrintBill = detail.xTransaction.getiNoPrintBillDetail();
+				}
+				if(GlobalVar.sIsLockWhenPrintLongbill && numPrintBill > 0){
+					IOrderUtility.alertDialog(CancelMenuActivity.this, R.string.already_printed_longbill, 0);
+					btnConfirm.setEnabled(false);
+				}else{
+					btnConfirm.setEnabled(true);
+				}
 				//Log.d("CurrentOrderDetail", result);
 				List<OrderSendData.OrderDetail> orderFilter = detail.xListOrderDetail;//IOrderUtility.filterProductType(detail.xListOrderDetail);
 				menuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
 				listViewMenu.setAdapter(menuAdapter);
-				
+
 				listViewMenu.setOnItemClickListener(new OnItemClickListener(){
 					
 					@Override
 					public void onItemClick(
 							AdapterView<?> parent, View v,
 							int position, long id) {
+						if(GlobalVar.sIsLockWhenPrintLongbill && numPrintBill > 0)
+							return;
+						
 						OrderSendData.OrderDetail data = (OrderSendData.OrderDetail) 
 								parent.getItemAtPosition(position);//detail.xListOrderDetail.get(position);
 						if(data.getiOrderStatusID() == 1 || data.getiOrderStatusID() == 2){

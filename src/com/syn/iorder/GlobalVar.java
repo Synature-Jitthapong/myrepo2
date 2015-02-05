@@ -38,6 +38,7 @@ public class GlobalVar {
 	public static boolean sIsEnableFastFoodMapTable = false;
 	public static boolean sIsAddSameItem = false;
 	public static boolean sIsPopupWhenTableNotEmpty = false;
+	public static boolean sIsLockWhenPrintLongbill = false;
 
 	public static int STAFF_ID = 0;
 	public static String STAFF_NAME = "";
@@ -138,6 +139,11 @@ public class GlobalVar {
 		InputMethodManager imm = (InputMethodManager) c.getSystemService(
 			      Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(edt.getWindowToken(), 0);	
+	}
+	
+	public static String getDeviceCode(Context context){
+		return Secure.getString(context.getContentResolver(),
+				Secure.ANDROID_ID);
 	}
 	
 	public static boolean isXLargeTablet(Context context) {

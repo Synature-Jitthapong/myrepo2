@@ -44,6 +44,7 @@ public class ReprintMenuActivity extends Activity {
 	OrderSendData detail;
 	SelectOrderAdapter menuAdapter;
 	private List<OrderSendData.OrderDetail> orderDetailLst;
+	private int mNumPrintBill;
 	
 	private int mTableId;
 	
@@ -308,6 +309,16 @@ public class ReprintMenuActivity extends Activity {
 			GsonDeserialze gdz = new GsonDeserialze();
 			try {
 				detail = gdz.deserializeOrderSendDataJSON(result);
+				if(detail.xTransaction != null){
+					mNumPrintBill = detail.xTransaction.getiNoPrintBillDetail();
+				}
+				if(mNumPrintBill > 0){
+					IOrderUtility.alertDialog(ReprintMenuActivity.this, R.string.already_printed_longbill, 0);
+					btnConfirm.setEnabled(false);
+				}else{
+					btnConfirm.setEnabled(true);
+				}
+				
 				List<OrderSendData.OrderDetail> orderFilter = IOrderUtility.filterProductType(detail.xListOrderDetail);
 				menuAdapter = new SelectOrderAdapter(context, globalVar, orderFilter);
 				listViewMenu.setAdapter(menuAdapter);
@@ -318,6 +329,8 @@ public class ReprintMenuActivity extends Activity {
 					public void onItemClick(
 							AdapterView<?> parent, View v,
 							int position, long id) {
+						if(GlobalVar.sIsLockWhenPrintLongbill && mNumPrintBill > 0)
+							return;
 						OrderSendData.OrderDetail data = (OrderSendData.OrderDetail) 
 								parent.getItemAtPosition(position);//detail.xListOrderDetail.get(position);
 						if(data.getiOrderStatusID() == 1 || data.getiOrderStatusID() == 2){

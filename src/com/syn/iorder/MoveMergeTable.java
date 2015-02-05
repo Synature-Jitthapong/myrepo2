@@ -2,6 +2,8 @@ package com.syn.iorder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.ksoap2.serialization.PropertyInfo;
 
@@ -15,9 +17,14 @@ import syn.pos.data.model.TableName;
 import syn.pos.data.model.ReasonGroups.ReasonDetail;
 import syn.pos.data.model.WebServiceResult;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +50,8 @@ public class MoveMergeTable extends Activity {
 	private Button mBtnClose;
 	private int mFromTbId;
 	private int mToTbId;
+	
+	private boolean isLock = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +152,10 @@ public class MoveMergeTable extends Activity {
 																(ListView) findViewById(R.id.listViewDestTableName);
 														listViewDestTbName.setAdapter(IOrderUtility.createTableNameAdapter(
 																mContext, mGlobalVar, tbInfoLstTo, false, true));
+														
+														if(GlobalVar.sIsLockWhenPrintLongbill){
+															checkTableAlreadyCallCheckBill(mFromTbId, tbName);
+														}
 													}
 
 												});
@@ -190,6 +203,10 @@ public class MoveMergeTable extends Activity {
 														String tableName = IOrderUtility.formatCombindTableName(tbInfo.isbIsCombineTable(), 
 																tbInfo.getSzCombineTableName(), tbInfo.getSzTableName());
 														tvTableTo.setText(tableName);
+														
+														if(GlobalVar.sIsLockWhenPrintLongbill){
+															checkTableAlreadyCallCheckBill(mToTbId, tableName);
+														}
 													}
 
 												});
@@ -206,6 +223,75 @@ public class MoveMergeTable extends Activity {
 				}).execute(GlobalVar.FULL_URL);
 //			}
 //		}).execute(GlobalVar.FULL_URL);
+	}
+	
+	/**
+	 * @author j1tth4
+	 * Receiver for receive current order from tableId
+	 */
+	private class CurrentOrderReceiver extends ResultReceiver{
+
+		private String tableName;
+		
+		public CurrentOrderReceiver(Handler handler, String tableName) {
+			super(handler);
+			this.tableName = tableName;
+		}
+
+		@Override
+		protected void onReceiveResult(int resultCode, Bundle resultData) {
+			super.onReceiveResult(resultCode, resultData);
+			switch(resultCode){
+			case NewWsClient.RESULT_SUCCESS:
+				CurrentOrderOfTable.CurrentOrder currentOrder =
+					resultData.getParcelable("currentOrder");
+				if(currentOrder != null){
+					if(currentOrder.xTransaction != null && currentOrder.xTransaction.getiNoPrintBillDetail() > 0){
+						String table = getString(R.string.table) + " " + tableName;
+						String alreadyPrintLongBill = getString(R.string.already_printed_longbill);
+						new AlertDialog.Builder(MoveMergeTable.this)
+						.setMessage(table + " " + alreadyPrintLongBill)
+						.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).show();
+						isLock = true;
+						mBtnMoveMerge.setEnabled(false);
+					}else{
+						if(isLock){
+							mBtnMoveMerge.setEnabled(false);
+						}else{
+							mBtnMoveMerge.setEnabled(true);
+						}
+					}
+				}
+				break;
+			case NewWsClient.RESULT_ERROR:
+				String msg = resultData.getString("msg");
+				if(!TextUtils.isEmpty(msg)){
+					new AlertDialog.Builder(MoveMergeTable.this)
+					.setMessage(msg)
+					.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					}).show();
+				}
+				break;
+			}
+		}
+		
+	}
+	
+	private void checkTableAlreadyCallCheckBill(int tableId, String tableName){
+		CurrentOrderOfTable currentOrder = 
+				new CurrentOrderOfTable(this, tableId, new CurrentOrderReceiver(new Handler(), tableName));
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.execute(currentOrder);
+		executor.shutdown();
 	}
 	
 	private void confirmOperation(int title, int msg){
