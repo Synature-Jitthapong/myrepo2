@@ -1017,13 +1017,15 @@ public class IOrderUtility {
 		return false;
 	}
 	
-	public static void switchLanguage(Context context, String langCode){
+	public static void switchLanguage(Context context, int langId){
 		Resources res = context.getResources();
 	    // Change locale settings in the app.
 	    DisplayMetrics dm = res.getDisplayMetrics();
 	    android.content.res.Configuration conf = res.getConfiguration();
-	    if(!langCode.equals(""))
-	    	conf.locale = new Locale(langCode);
+	    if(langId == 1)
+	    	conf.locale = Locale.US;
+	    else if(langId == 2)
+	    	conf.locale = new Locale("th");
 	    res.updateConfiguration(conf, dm);
 	}
 }

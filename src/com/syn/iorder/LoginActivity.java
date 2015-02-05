@@ -8,6 +8,7 @@ import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.view.KeyEvent;
@@ -39,9 +40,11 @@ public class LoginActivity extends Activity {
 		context = this;
 		super.onCreate(savedInstanceState);
 		
-		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-		ShopData.Language lang = shopProp.getLanguage();
-		IOrderUtility.switchLanguage(context, lang.getLangCode());
+//		ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+//		ShopData.Language lang = shopProp.getLanguage();
+		SharedPreferences sharedPref = getSharedPreferences(GlobalVar.PREF_LANG, MODE_PRIVATE);
+		int langId = sharedPref.getInt("langId", 1);
+		IOrderUtility.switchLanguage(context, langId);
 		
 		setContentView(R.layout.activity_login);
 		

@@ -1,6 +1,7 @@
 package com.syn.iorder;
 
 import java.util.List;
+
 import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.ShowMenuColumnName;
 import syn.pos.data.dao.SyncDataLog;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -150,9 +152,14 @@ public class AppConfigLayoutActivity extends Activity {
 			ShopData.Language lang = (ShopData.Language) 
 					spinnerLanguage.getItemAtPosition(spinnerLanguage.getSelectedItemPosition());
 			
-			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
-			shopProp.setSelectedLanguage(lang.getLangID());
-			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangCode());
+//			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
+//			shopProp.setSelectedLanguage(lang.getLangID());
+			
+			SharedPreferences sharedPref = getSharedPreferences(GlobalVar.PREF_LANG, MODE_PRIVATE);
+			SharedPreferences.Editor editor = sharedPref.edit();
+			editor.putInt("langId", lang.getLangID());
+			editor.commit();
+			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangID());
 			
 			//loadSetting();
 			

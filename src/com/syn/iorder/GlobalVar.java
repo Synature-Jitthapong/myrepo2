@@ -11,7 +11,6 @@ import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import syn.pos.data.dao.ProgramFeature;
 import syn.pos.data.dao.Register;
 import syn.pos.data.dao.ShowMenuColumnName;
@@ -22,6 +21,8 @@ import syn.pos.data.model.ShopData.ShopProperty;
 import syn.pos.data.model.TableInfo;
 
 public class GlobalVar {
+	public static final String PREF_LANG = "pref_lang";
+	
 	public static int 					STAFF_ID					= 0;
 	public static String				STAFF_NAME					= "";
 	public static String 				CURRENCY_SYMBOL 			= "";
