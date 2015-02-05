@@ -21,6 +21,8 @@ import syn.pos.data.model.TableInfo;
 import syn.pos.data.model.TableName;
 
 public class GlobalVar {
+	public static final String PREF_LANG = "pref_lang";
+	
 	public static boolean sIsEnableChecker = false;
 	public static boolean sIsEnableCallCheckBill = false;
 	public static boolean sIsEnablePrintLongBill = false;

@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.view.KeyEvent;
@@ -75,9 +76,11 @@ public class LoginActivity extends Activity {
 				public void onSuccess() {
 					if(progress.isShowing())
 						progress.dismiss();
-					ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
-					ShopData.Language lang = shopProp.getLanguage();
-					IOrderUtility.switchLanguage(context, lang.getLangID());
+//					ShopProperty shopProp = new ShopProperty(LoginActivity.this, null);
+//					ShopData.Language lang = shopProp.getLanguage();
+					SharedPreferences sharedPref = getSharedPreferences(GlobalVar.PREF_LANG, MODE_PRIVATE);
+					int langId = sharedPref.getInt("langId", 1);
+					IOrderUtility.switchLanguage(context, langId);
 					
 					txtPassWord.setOnEditorActionListener(new OnEditorActionListener() {
 			

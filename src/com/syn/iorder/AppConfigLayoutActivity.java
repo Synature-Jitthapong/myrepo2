@@ -10,6 +10,7 @@ import syn.pos.data.dao.SyncDataLog;
 import syn.pos.data.model.ShopData;
 import syn.pos.data.model.SyncDataLogModel;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -189,8 +190,14 @@ public class AppConfigLayoutActivity extends Activity {
 			ShopData.Language lang = (ShopData.Language) 
 					spinnerLanguage.getItemAtPosition(spinnerLanguage.getSelectedItemPosition());
 			
-			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
-			shopProp.setSelectedLanguage(lang.getLangID());
+//			ShopProperty shopProp = new ShopProperty(AppConfigLayoutActivity.this, null);
+//			shopProp.setSelectedLanguage(lang.getLangID());
+			
+			// save language
+			SharedPreferences sharedPref = getSharedPreferences(GlobalVar.PREF_LANG, MODE_PRIVATE);
+			SharedPreferences.Editor editor = sharedPref.edit();
+			editor.putInt("langId", lang.getLangID());
+			editor.commit();
 			IOrderUtility.switchLanguage(AppConfigLayoutActivity.this, lang.getLangID());
 			
 			//loadSetting();
