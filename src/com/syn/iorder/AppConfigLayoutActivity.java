@@ -316,8 +316,10 @@ public class AppConfigLayoutActivity extends Activity {
 		LanguageAdapter langAdapter = new LanguageAdapter(langLst);
 		spinnerLanguage.setAdapter(langAdapter);
 		
+		SharedPreferences sharedPref = getSharedPreferences(GlobalVar.PREF_LANG, MODE_PRIVATE);
+		int selectedLangId = sharedPref.getInt("langId", 1);
 		for(int i = 0; i < langLst.size(); i++){
-			if(langLst.get(i).getIsDefault() == 1){
+			if(langLst.get(i).getLangID() == selectedLangId){
 				spinnerLanguage.setSelection(i);
 				break;
 			}
