@@ -79,7 +79,8 @@ import android.widget.RadioGroup.LayoutParams;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.EditorInfo;
 
-public class TakeOrderActivity extends Activity implements OnClickListener, PayInfoFragment.PaymentListener{
+public class TakeOrderActivity extends Activity implements OnClickListener, 
+	PayInfoFragment.PaymentListener, KeyPadDialogFragment.OnKeyPadListener{
 	/**
 	 * mode pre order from queue activity
 	 */
@@ -2495,7 +2496,7 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					TakeOrderActivity.this.startActivity(intent);
 				}
 			});
-
+			
 			// hide btn when order is type 7
 			if (mi.getProductTypeID() == 7) {
 				//holder.btnMinus.setVisibility(View.GONE);
@@ -2519,6 +2520,18 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 				holder.btnPlus.setVisibility(View.GONE);
 				holder.btnMinus.setVisibility(View.GONE);
 			}else{
+				holder.tvOrderListMenuQty.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						KeyPadDialogFragment f = KeyPadDialogFragment.newInstance(
+								mi.getOrderDetailId(), groupPosition, 
+								holder.tvOrderListMenuName.getText().toString(), 
+								mi.getProductQty());
+						f.show(getFragmentManager(), KeyPadDialogFragment.TAG);
+					}
+					
+				});
 				holder.btnPlus.setVisibility(View.VISIBLE);
 				holder.btnMinus.setVisibility(View.VISIBLE);
 			}
@@ -6936,6 +6949,23 @@ public class TakeOrderActivity extends Activity implements OnClickListener, PayI
 					f.show(getFragmentManager(), "payinfo");
 				}
 			}).show();
+		}
+	}
+
+	/**
+	 * Key pad edit order qty
+	 */
+	@Override
+	public void onEnter(int orderId, int position, double val) {
+		if(mOrderLst != null){
+			mOrderLst.get(position).setProductQty(val);
+			
+			POSOrdering posOrder = new POSOrdering(
+					TakeOrderActivity.this);
+			posOrder.updateOrderDetail(GlobalVar.TRANSACTION_ID,
+					orderId, val);
+			summaryTotalSalePrice();
+			mOrderLstAdapter.notifyDataSetChanged();
 		}
 	}
 }
