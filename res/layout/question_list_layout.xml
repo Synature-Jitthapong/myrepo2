@@ -51,7 +51,7 @@
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/buttonSeat"
+            android:id="@+id/button1"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_margin="1dp"
