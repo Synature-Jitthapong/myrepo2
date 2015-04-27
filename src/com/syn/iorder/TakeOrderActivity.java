@@ -5061,12 +5061,39 @@ public class TakeOrderActivity extends Activity implements OnClickListener,
 				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 				View questView = inflater.inflate(R.layout.question_list_layout, null);
 				TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
-				tvQestionTitle.setText("Table: " + mTbInfo);
+				tvQestionTitle.setText("Table: " + tvSelectTableName.getText());
 				Button btnOk = (Button) questView.findViewById(R.id.button1);
 				Button btnCancel = (Button) questView.findViewById(R.id.button2);
 				final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
 				final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
 				lvQuestion.setEnabled(false);
+				
+				((LinearLayout) questView.findViewById(R.id.custQtyContent)).setVisibility(View.VISIBLE);
+				Button btnMinus = (Button) questView.findViewById(R.id.btnMinus);
+				Button btnPlus = (Button) questView.findViewById(R.id.btnPlus);
+				final EditText txtCustQty = (EditText) questView.findViewById(R.id.txtCustQty);
+				txtCustQty.setText(String.valueOf(mCustomerQty));
+				btnMinus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						int custQty = mCustomerQty;
+						if(custQty > 1){
+							--mCustomerQty;
+							txtCustQty.setText(String.valueOf(mCustomerQty));
+						}
+					}
+					
+				});
+				btnPlus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						++mCustomerQty;
+						txtCustQty.setText(String.valueOf(mCustomerQty));
+					}
+					
+				});
 				
 				// question adapter
 				final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listQuestionDetail();
@@ -5143,7 +5170,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener,
 											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName());
 								}
 								
-								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
 								if (GlobalVar.MEMBER_ID == 0) {
 									new SubmitSendOrder(TakeOrderActivity.this,
 											mGlobalVar, "WSiOrder_JSON_SendTableOrderTransactionData", selectedAnswerLst).execute(GlobalVar.FULL_URL);
@@ -5524,13 +5550,39 @@ public class TakeOrderActivity extends Activity implements OnClickListener,
 				LayoutInflater inflater = LayoutInflater.from(TakeOrderActivity.this);
 				View questView = inflater.inflate(R.layout.question_list_layout, null);
 				TextView tvQestionTitle = (TextView) questView.findViewById(R.id.textView1);
-				tvQestionTitle.setText("Table: " + mTbInfo);
+				tvQestionTitle.setText("Table: " + tvSelectTableName.getText());
 				Button btnOk = (Button) questView.findViewById(R.id.button1);
 				Button btnCancel = (Button) questView.findViewById(R.id.button2);
 				final TextView tvRequire = (TextView) questView.findViewById(R.id.textView2);
 				final ListView lvQuestion = (ListView) questView.findViewById(R.id.listView1);
 				lvQuestion.setEnabled(false);
 				
+				((LinearLayout) questView.findViewById(R.id.custQtyContent)).setVisibility(View.VISIBLE);
+				Button btnMinus = (Button) questView.findViewById(R.id.btnMinus);
+				Button btnPlus = (Button) questView.findViewById(R.id.btnPlus);
+				final EditText txtCustQty = (EditText) questView.findViewById(R.id.txtCustQty);
+				txtCustQty.setText(String.valueOf(mCustomerQty));
+				btnMinus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						int custQty = mCustomerQty;
+						if(custQty > 1){
+							--mCustomerQty;
+							txtCustQty.setText(String.valueOf(mCustomerQty));
+						}
+					}
+					
+				});
+				btnPlus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						++mCustomerQty;
+						txtCustQty.setText(String.valueOf(mCustomerQty));
+					}
+					
+				});
 				// question adapter
 				final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listQuestionDetail();
 				
@@ -5606,7 +5658,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener,
 											mTbInfo.getSzCombineTableName(), mTbInfo.getSzTableName());
 								}
 								
-								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
 								if (GlobalVar.MEMBER_ID == 0) {
 									new SubmitSendOrder(TakeOrderActivity.this,
 											globalVar, "WSiOrder_JSON_SendTableOrderTransactionData", selectedAnswerLst).execute(GlobalVar.FULL_URL);
