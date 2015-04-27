@@ -4495,6 +4495,34 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 				final ListView lvQuestion = (ListView) questView.findViewById(R.id.lvQuestion);
 				lvQuestion.setEnabled(false);
 				
+				((LinearLayout) questView.findViewById(R.id.custQtyContent)).setVisibility(View.VISIBLE);
+				Button btnMinus = (Button) questView.findViewById(R.id.btnMinus);
+				Button btnPlus = (Button) questView.findViewById(R.id.btnPlus);
+				final EditText txtCustQty = (EditText) questView.findViewById(R.id.txtCustQty);
+				txtCustQty.setText(String.valueOf(mCustomerQty));
+				btnMinus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						int custQty = mCustomerQty;
+						if(custQty > 1){
+							--mCustomerQty;
+							txtCustQty.setText(String.valueOf(mCustomerQty));
+						}
+					}
+					
+				});
+				btnPlus.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						++mCustomerQty;
+						txtCustQty.setText(String.valueOf(mCustomerQty));
+					}
+					
+				});
+				
+				
 				// question adapter
 				final List<ProductGroups.QuestionDetail> qsDetailLst = qsGroup.listQuestionDetail();
 				
@@ -4569,7 +4597,6 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 									mCurrTableName = tbName.getTableName();
 								}
 								
-								mCustomerQty = Integer.parseInt(tvSelectTableCusNo.getText().toString());
 								if (GlobalVar.MEMBER_ID == 0) {
 									new SubmitSendOrder(TakeOrderActivity.this,
 											globalVar, "WSiOrder_JSON_SendTableOrderTransactionData", selectedAnswerLst).execute(GlobalVar.FULL_URL);
