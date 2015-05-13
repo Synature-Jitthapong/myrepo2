@@ -20,6 +20,7 @@ import syn.pos.data.model.ReasonGroups.ReasonDetail;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -432,6 +433,10 @@ public class MoveMenuActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				int reqQuestion = 0;
+				SharedPreferences pref = getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, MODE_PRIVATE);
+				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_MOVE_TAฺBLE, 0);
+				
 				Reason reason = new Reason(MoveMenuActivity.this);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(7); 
 				if(mFromTbId == 0){
@@ -442,7 +447,8 @@ public class MoveMenuActivity extends Activity {
 					IOrderUtility.alertDialog(mContext, R.string.select_menu_to_move, 0);
 				}else if(mMovedMenuListView.getCount()==0){
 					IOrderUtility.alertDialog(mContext, R.string.select_menu_to_move, 0);
-				}else if((reasonLst != null && reasonLst.size() == 0) && mTxtMoveMenuReason.getText().toString().isEmpty()){
+				}else if((reqQuestion == 1)&& 
+						(reasonLst != null && reasonLst.size() == 0) && mTxtMoveMenuReason.getText().toString().isEmpty()){
 					IOrderUtility.alertDialog(mContext, R.string.select_reason, 0);
 				}else{
 					final CustomDialog cfDialog = new CustomDialog(MoveMenuActivity.this, R.style.CustomDialog);

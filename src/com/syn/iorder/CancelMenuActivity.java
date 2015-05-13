@@ -22,6 +22,7 @@ import syn.pos.data.model.ReasonGroups.ReasonDetail;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -207,6 +208,10 @@ public class CancelMenuActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				int reqQuestion = 0;
+				SharedPreferences pref = getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, MODE_PRIVATE);
+				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_VOID_ORDER, 0);
+				
 				Reason reason = new Reason(CancelMenuActivity.this);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(2); 
 				if(mTableId != 0){
@@ -218,7 +223,8 @@ public class CancelMenuActivity extends Activity {
 						IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
 					 }else if(orderDetailLst != null && orderDetailLst.size() == 0){
 						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_menu_to_cancel, 0);
-					 }else if((reasonLst != null && reasonLst.size() == 0) && txtCancelMenuReason.getText().toString().isEmpty()){
+					 }else if((reqQuestion == 1) && 
+							 (reasonLst != null && reasonLst.size() == 0) && txtCancelMenuReason.getText().toString().isEmpty()){
 						 IOrderUtility.alertDialog(context, R.string.global_dialog_title_error, R.string.select_reason, 0);
 					 }else{
 						mCancelReason = txtCancelMenuReason.getText().toString();

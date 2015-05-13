@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -340,13 +341,18 @@ public class MoveMergeTable extends Activity {
 
 				@Override
 				public void onClick(View v) {
+					int reqQuestion = 0;
+					SharedPreferences pref = getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, MODE_PRIVATE);
+					reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_MOVE_TAฺBLE, 0);
+					
 					Reason reason = new Reason(MoveMergeTable.this);
 					List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(mReasonGroupId); 
 					if(mFromTbId == 0){
 						IOrderUtility.alertDialog(mContext, R.string.select_source_table, 0);
 					}else if(mToTbId == 0){
 						IOrderUtility.alertDialog(mContext, R.string.select_destination_table, 0);
-					}else if((reasonLst != null && reasonLst.size() == 0) && mMoveMergeTableTxtReason.getText().toString().isEmpty()){
+					}else if((reqQuestion == 1) 
+							&& (reasonLst != null && reasonLst.size() == 0) && mMoveMergeTableTxtReason.getText().toString().isEmpty()){
 						IOrderUtility.alertDialog(mContext, R.string.select_reason, 0);
 					}else{
 						confirmOperation(R.string.cf_move_table_title, R.string.cf_move_table_msg);

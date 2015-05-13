@@ -54,9 +54,11 @@ import syn.pos.data.model.TableName;
 import syn.pos.data.model.WebServiceResult;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -446,6 +448,21 @@ public class IOrderUtility {
 				sp.insertShopProperty(sd);
 				sp.insertStaffData(sd);
 				sp.insertLanguage(sd);
+				
+				if(sd.getShopProperty() != null &&
+						sd.getShopProperty().size() > 0){
+					ShopData.ShopProperty property = 
+							sd.getShopProperty().get(0);
+					SharedPreferences pref = 
+							context.getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, Context.MODE_PRIVATE);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putInt(GlobalVar.KEY_PREF_REQ_REASON_MOVE_TAฺBLE, property.getReqReasonMoveTable());
+					editor.putInt(GlobalVar.KEY_PREF_REQ_REASON_REPRINT_TRANS, property.getReqReasonReprintTrans());
+					editor.putInt(GlobalVar.KEY_PREF_REQ_REASON_VOID_TRANS, property.getReqReasonVoidTrans());
+					editor.putInt(GlobalVar.KEY_PREF_REQ_REASON_VOID_ORDER, property.getReqReasonVoidOrder());
+					editor.putInt(GlobalVar.KEY_PREF_REQ_REASON_PRINT_BILL_DETAIL, property.getReqReasonPrintBillDetail());
+					editor.commit();
+				}
 				
 				try {
 					sp.insertStaffPermissionData(sd);

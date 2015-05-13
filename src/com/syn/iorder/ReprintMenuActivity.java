@@ -19,6 +19,7 @@ import syn.pos.data.model.WebServiceResult;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;

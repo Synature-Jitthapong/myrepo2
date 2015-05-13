@@ -22,6 +22,12 @@ import syn.pos.data.model.TableName;
 
 public class GlobalVar {
 	public static final String PREF_LANG = "pref_lang";
+	public static final String PREF_REASON_CONFIG = "pref_reason_config";
+	public static final String KEY_PREF_REQ_REASON_MOVE_TAฺBLE = "ask_when_move_table";
+	public static final String KEY_PREF_REQ_REASON_REPRINT_TRANS = "ask_when_reprint_trans";
+	public static final String KEY_PREF_REQ_REASON_VOID_TRANS = "ask_when_void_trans";
+	public static final String KEY_PREF_REQ_REASON_VOID_ORDER = "ask_when_void_order";
+	public static final String KEY_PREF_REQ_REASON_PRINT_BILL_DETAIL = "ask_when_print_bill_detail";
 	
 	public static boolean sIsEnableChecker = false;
 	public static boolean sIsEnableCallCheckBill = false;
