@@ -158,7 +158,7 @@ public class MenuCommentListAdapter extends BaseAdapter {
 			holder.btnMenuCommentPlus.setEnabled(false);
 		}
 		
-		if(mc.getProductPricePerUnit() <= 0)
+		if(!mc.isCommentWithPrice())
 		{
 			holder.btnMenuCommentPlus.setVisibility(View.INVISIBLE);
 			holder.btnMenuCommentMinus.setVisibility(View.GONE);

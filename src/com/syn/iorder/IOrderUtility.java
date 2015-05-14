@@ -373,6 +373,7 @@ public class IOrderUtility {
 			context = c;
 			IOrderUtility.progress = new ProgressDialog(c);
 			IOrderUtility.progress.setCanceledOnTouchOutside(false);
+			IOrderUtility.progress.setCancelable(false);
 			// DataBaseHelper dbHelper = new DataBaseHelper(c);
 			// dbHelper.deleteDbFile();
 		}

@@ -210,7 +210,7 @@ public class CancelMenuActivity extends Activity {
 			public void onClick(View v) {
 				int reqQuestion = 0;
 				SharedPreferences pref = getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, MODE_PRIVATE);
-				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_VOID_ORDER, 0);
+				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_VOID_ORDER, 1);
 				
 				Reason reason = new Reason(CancelMenuActivity.this);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(2); 

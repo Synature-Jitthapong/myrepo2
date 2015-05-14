@@ -435,7 +435,7 @@ public class MoveMenuActivity extends Activity {
 			public void onClick(View v) {
 				int reqQuestion = 0;
 				SharedPreferences pref = getSharedPreferences(GlobalVar.PREF_REASON_CONFIG, MODE_PRIVATE);
-				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_MOVE_TAฺBLE, 0);
+				reqQuestion = pref.getInt(GlobalVar.KEY_PREF_REQ_REASON_MOVE_TAฺBLE, 1);
 				
 				Reason reason = new Reason(MoveMenuActivity.this);
 				List<ReasonDetail> reasonLst = reason.listSelectedReasonDetail(7); 

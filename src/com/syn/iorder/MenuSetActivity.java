@@ -704,7 +704,7 @@ public class MenuSetActivity extends Activity {
 				for (MenuGroups.MenuComment mc : pcs.menuCommentList) {
 					menuComment += mc.getMenuCommentName_0() + " ";
 
-					if (mc.getProductPricePerUnit() > 0) {
+					if (mc.isCommentWithPrice()) {
 						menuComment += " "
 								+ globalVar.qtyFormat
 										.format(mc.getCommentQty());
@@ -715,9 +715,8 @@ public class MenuSetActivity extends Activity {
 								+ globalVar.decimalFormat.format(mc
 										.getCommentQty()
 										* mc.getProductPricePerUnit()) + " ";
-					} else {
-						menuComment += ", ";
-					}
+					} 
+					menuComment += ", ";
 				}
 				holder.tvMenuComment.setText(menuComment);
 			} else {

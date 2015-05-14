@@ -51,55 +51,53 @@ public class OrderSetMenuCommentAdapter extends MenuCommentListAdapter{
 			
 			holder.btnMenuCommentMinus = (Button) convertView.findViewById(R.id.btnMenuCommentMinus);
 			holder.btnMenuCommentPlus = (Button) convertView.findViewById(R.id.btnMenuCommentPlus);
-
-			holder.btnMenuCommentMinus.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					double qty = 0;
-					if(!holder.tvMenuCommentQty.getText().toString().equals(""))
-						qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
-
-					--qty;
-					if(qty >= 0)
-						holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
-					
-					if(qty <= 0)
-						holder.checkBox1.setChecked(false);
-					
-					posOrder.updateOrderSetComment(transactionId, orderId, pcs.getOrderSetID(), mc.getMenuCommentID(), qty);
-					updateSelectedListView();
-				}
-			});
-			
-			holder.btnMenuCommentPlus.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					double qty = 0;
-					if(!holder.tvMenuCommentQty.getText().toString().equals(""))
-						qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
-					
-					++qty;
-					holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
-					
-					holder.checkBox1.setChecked(true);
-
-					posOrder.updateOrderSetComment(transactionId, orderId, pcs.getOrderSetID(), mc.getMenuCommentID(), qty);
-					updateSelectedListView();
-				}
-			});
 			convertView.setTag(holder);
 			
 		}else{
 			holder = (MenuCommentViewHolder) convertView.getTag();
 		}
 
-		
 		holder.tvMenuCommentName.setText(mc.getMenuCommentName_0());
 		holder.tvMenuCommentPrice.setText(globalVar.decimalFormat.format(mc
 				.getProductPricePerUnit()));
+		holder.btnMenuCommentMinus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				double qty = 0;
+				if(!holder.tvMenuCommentQty.getText().toString().equals(""))
+					qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
 
+				--qty;
+				if(qty >= 0)
+					holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
+				
+				if(qty <= 0)
+					holder.checkBox1.setChecked(false);
+				
+				posOrder.updateOrderSetComment(transactionId, orderId, pcs.getOrderSetID(), mc.getMenuCommentID(), qty);
+				updateSelectedListView();
+			}
+		});
+		
+		holder.btnMenuCommentPlus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				double qty = 0;
+				if(!holder.tvMenuCommentQty.getText().toString().equals(""))
+					qty = Double.parseDouble(holder.tvMenuCommentQty.getText().toString());
+				
+				++qty;
+				holder.tvMenuCommentQty.setText(globalVar.qtyFormat.format(qty));
+				
+				holder.checkBox1.setChecked(true);
+
+				posOrder.updateOrderSetComment(transactionId, orderId, pcs.getOrderSetID(), mc.getMenuCommentID(), qty);
+				updateSelectedListView();
+			}
+		});
+		
 		// checked if comment
 		if (posOrder.chkOrderSetComment(transactionId, orderId,
 				pcs.getOrderSetID(), mc.getMenuCommentID())) {
@@ -121,7 +119,7 @@ public class OrderSetMenuCommentAdapter extends MenuCommentListAdapter{
 			holder.btnMenuCommentPlus.setEnabled(false);
 		}
 
-		if (mc.getProductPricePerUnit() <= 0) {
+		if (!mc.isCommentWithPrice()) {
 			holder.btnMenuCommentPlus.setVisibility(View.INVISIBLE);
 			holder.btnMenuCommentMinus.setVisibility(View.GONE);
 			holder.tvMenuCommentQty.setVisibility(View.GONE);
