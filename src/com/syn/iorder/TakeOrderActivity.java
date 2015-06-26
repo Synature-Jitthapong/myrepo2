@@ -2636,36 +2636,38 @@ public class TakeOrderActivity extends Activity implements OnClickListener, OnGr
 					if(!txtPrice.equals("")){
 						try {
 							double openPrice = Double.parseDouble(txtPrice.getText().toString());
-							int orderId = posOrder.addOrderDetail(GlobalVar.TRANSACTION_ID,
-									GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, productId,
-									menuName, productType, saleMode, qty, openPrice, vatAmount, 0,
-									0, 0, 0, 0, "", 0, "");
-						
-							// produce order set
-							if (productType == 7) {
-								Intent intent = new Intent(
-										TakeOrderActivity.this,
-										MenuSetActivity.class);
-								intent.putExtra("transactionId",
-										GlobalVar.TRANSACTION_ID);
-								intent.putExtra("productId", productId);
-								intent.putExtra("orderId", orderId);
-								intent.putExtra("commentType", mCommentType);
-								TakeOrderActivity.this.startActivity(intent);
-							}
-								
-							MenuDataItem menuDataItem = 
-									posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
-											orderId, 0, 0);
-							mOrderLst.add(menuDataItem);
-							mOrderLstAdapter.notifyDataSetChanged();
-	
-							summaryTotalSalePrice();
-							mOrderListView.setSelection(mOrderLst.size());
+							if(openPrice > 0){
+								int orderId = posOrder.addOrderDetail(GlobalVar.TRANSACTION_ID,
+										GlobalVar.COMPUTER_ID, GlobalVar.SHOP_ID, productId,
+										menuName, productType, saleMode, qty, openPrice, vatAmount, 0,
+										0, 0, 0, 0, "", 0, "");
+							
+								// produce order set
+								if (productType == 7) {
+									Intent intent = new Intent(
+											TakeOrderActivity.this,
+											MenuSetActivity.class);
+									intent.putExtra("transactionId",
+											GlobalVar.TRANSACTION_ID);
+									intent.putExtra("productId", productId);
+									intent.putExtra("orderId", orderId);
+									intent.putExtra("commentType", mCommentType);
+									TakeOrderActivity.this.startActivity(intent);
+								}
+									
+								MenuDataItem menuDataItem = 
+										posOrder.listOrder(GlobalVar.TRANSACTION_ID,GlobalVar.COMPUTER_ID,
+												orderId, 0, 0);
+								mOrderLst.add(menuDataItem);
+								mOrderLstAdapter.notifyDataSetChanged();
 		
-							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-							imm.hideSoftInputFromWindow(txtPrice.getWindowToken(), 0);
-							dialog.dismiss();	
+								summaryTotalSalePrice();
+								mOrderListView.setSelection(mOrderLst.size());
+			
+								InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+								imm.hideSoftInputFromWindow(txtPrice.getWindowToken(), 0);
+								dialog.dismiss();	
+							}
 						} catch (NumberFormatException e) {
 							IOrderUtility.alertDialog(TakeOrderActivity.this, 
 									R.string.global_dialog_title_error, "Please enter number.", 0);
