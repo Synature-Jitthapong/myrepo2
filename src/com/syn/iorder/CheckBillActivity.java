@@ -4,9 +4,15 @@ package com.syn.iorder;
  */
 import java.util.ArrayList;
 import java.util.List;
+
+import jpos.POSPrinter;
+
 import org.ksoap2.serialization.PropertyInfo;
+
+import com.bxl.config.editor.BXLConfigLoader;
 import com.syn.iorder.DiscountUtils.ButtonDiscount;
 import com.syn.iorder.PrinterUtils.Printer;
+
 import syn.pos.data.dao.QuestionGroups;
 import syn.pos.data.json.GsonDeserialze;
 import syn.pos.data.model.ProductGroups;
@@ -29,8 +35,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -64,12 +72,15 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 	private GlobalVar globalVar;
 	private Context mContext;
 	
+	/*############ Bixolon Print ############*/
+	private ImageButton mBtnBixPrint;
+	
 	private int mTransactionId;
 	private int mComputerId;
 	private int mTableId;
 	private int mCustomerQty = 1;
 	
-	private SummaryTransaction mSummaryTrans;
+	private SummaryTransaction mSummaryTrans;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +93,21 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 		initComponent();
 	}
 	
+	public SummaryTransaction getSummTrans(){
+		return mSummaryTrans;
+	}
+	
+	public CharSequence getTableName(){
+		return tvTableName.getText();
+	}
+	
+	public CharSequence getBillCustNo(){
+		return tvBillCustNo.getText();
+	}
+	
+	public CharSequence getBillHeader(){
+		return tvBillHeader.getText();
+	}
 	
 	@Override
 	protected void onResume() {
@@ -127,6 +153,17 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 		orderProgress = (ProgressBar) findViewById(R.id.progressBarOrderDetail);
 		tableProgress = (ProgressBar) findViewById(R.id.progressBarTable);
 		btnEditQuestion = (Button) findViewById(R.id.buttonEditQuestion);
+		
+		mBtnBixPrint = (ImageButton) findViewById(R.id.btnBixPrint);
+		mBtnBixPrint.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				BixolonPrinterFragment fragment = new BixolonPrinterFragment();
+				fragment.show(getFragmentManager(), "BixDialog");
+			}
+			
+		});
 		
 		tvBillHeader.setText(globalVar.SHOP_DATA.getShopName());
 		
