@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -121,7 +122,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 
 	private void disableButton(){
 		btnCalDiscount.setEnabled(false);
-		btnCheckbill.setEnabled(false);
+		if(!AppConfigLayoutActivity.isEnableBtPrinter(mContext))
+			btnCheckbill.setEnabled(false);
 		btnPrint.setEnabled(false);
 		btnSetmember.setEnabled(false);
 		btnEditQuestion.setEnabled(false);
@@ -155,6 +157,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 		btnEditQuestion = (Button) findViewById(R.id.buttonEditQuestion);
 		
 		mBtnBixPrint = (ImageButton) findViewById(R.id.btnBixPrint);
+		mBtnBixPrint.setVisibility(View.GONE);
 		mBtnBixPrint.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -998,143 +1001,161 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 	}
 	
 	private void printLongbill(){
-		final ProgressDialog progress = new ProgressDialog(this);
 		
-		final PrinterUtils.PrintLongbillListener printListener = 
-				new PrinterUtils.PrintLongbillListener() {
-					
-					@Override
-					public void onPre() {
-						progress.setMessage(mContext.getString(R.string.print_progress));
-						progress.show();
-					}
-					
-					@Override
-					public void onPost() {
-					}
-					
-					@Override
-					public void onError(String msg) {
-						if(progress.isShowing())
-							progress.dismiss();
+		boolean isEnableBtPrinter = AppConfigLayoutActivity.isEnableBtPrinter(mContext);
+		
+		if(isEnableBtPrinter){
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			if (mBluetoothAdapter == null) {
+			    // Device does not support Bluetooth 
+			} else{
+				if (!mBluetoothAdapter.isEnabled()) { 
+				    Intent enableBtIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+				    startActivity(enableBtIntent);
+				}else{
+					LongBillPrintFragment f = LongBillPrintFragment.newInstance(mTableId, GlobalVar.STAFF_ID);
+					f.show(this.getFragmentManager(), LongBillPrintFragment.TAG);
+				}
+			}
+		}else{
+			final ProgressDialog progress = new ProgressDialog(this);
+			
+			final PrinterUtils.PrintLongbillListener printListener = 
+					new PrinterUtils.PrintLongbillListener() {
 						
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-						builder.setMessage(msg);
-						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+						@Override
+						public void onPre() {
+							progress.setMessage(mContext.getString(R.string.print_progress));
+							progress.show();
+						}
+						
+						@Override
+						public void onPost() {
+						}
+						
+						@Override
+						public void onError(String msg) {
+							if(progress.isShowing())
+								progress.dismiss();
 							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						});
-						
-						AlertDialog d = builder.create();
-						d.show();
-					}
-					
-					@Override
-					public void onPost(WebServiceResult res, String result) {
-						if(progress.isShowing())
-							progress.dismiss();
-						
-						String msg = mContext.getString(R.string.print_longbill_success);
-						
-						if(res.getiResultID() != 0)
-							msg = res.getSzResultData().equals("") ? result : res.getSzResultData();
-						
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-						builder.setMessage(msg);
-						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
-							}
-						});
-						
-						AlertDialog d = builder.create();
-						d.show();
-					}
-			};
-				
-		final PrinterUtils.LoadPrinterProgressListener loadPrinterListener = 
-				new PrinterUtils.LoadPrinterProgressListener() {
-					
-					@Override
-					public void onPre() {
-						progress.setMessage(mContext.getString(R.string.loading_progress));
-						progress.show();
-					}
-					
-					@Override
-					public void onPost() {
-					}
-					
-					@Override
-					public void onError(String msg) {
-						if(progress.isShowing())
-							progress.dismiss();
-						
-						AlertDialog.Builder builder = 
-								new AlertDialog.Builder(mContext);
-						builder.setMessage(msg);
-						builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						});
-						AlertDialog d = builder.create();
-						d.show();
-					}
-					
-					@Override
-					public void onPost(final List<Printer> printerLst, String result) {
-						if(progress.isShowing())
-							progress.dismiss();
-						
-						final PrinterListBuilder builder = 
-								new PrinterListBuilder(mContext, printerLst);
-						builder.setTitle(R.string.select_printer);
-						builder.setNegativeButton(R.string.global_btn_close, 
-								new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						});
-						builder.setPositiveButton(R.string.global_btn_ok, null);
-						
-						final AlertDialog d = builder.create();
-						d.show();
-						d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
-
-							@Override
-							public void onClick(View v) {
-								if(builder.getPrinterData().getPrinterID() != 0){
-									d.dismiss();
-									// print
-									new PrinterUtils.PrintTransToPrinterTask(mContext, 
-											globalVar, mTransactionId, mComputerId, 
-											builder.getPrinterData().getPrinterID(), GlobalVar.STAFF_ID, printListener).execute(GlobalVar.FULL_URL);
-								}else{
-									new AlertDialog.Builder(mContext)
-									.setMessage(R.string.please_select_printer)
-									.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
-										
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-										}
-									})
-									.show();
+							AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+							builder.setMessage(msg);
+							builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
 								}
-							}
+							});
 							
-						});
-					}
+							AlertDialog d = builder.create();
+							d.show();
+						}
+						
+						@Override
+						public void onPost(WebServiceResult res, String result) {
+							if(progress.isShowing())
+								progress.dismiss();
+							
+							String msg = mContext.getString(R.string.print_longbill_success);
+							
+							if(res.getiResultID() != 0)
+								msg = res.getSzResultData().equals("") ? result : res.getSzResultData();
+							
+							AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+							builder.setMessage(msg);
+							builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									new ShowSummaryBillTask(mContext, globalVar).execute(GlobalVar.FULL_URL);
+								}
+							});
+							
+							AlertDialog d = builder.create();
+							d.show();
+						}
 				};
-				
-		new PrinterUtils.LoadPrinterTask(this, globalVar, 
-				GlobalVar.STAFF_ID, loadPrinterListener).execute(GlobalVar.FULL_URL);
+					
+			final PrinterUtils.LoadPrinterProgressListener loadPrinterListener = 
+					new PrinterUtils.LoadPrinterProgressListener() {
+						
+						@Override
+						public void onPre() {
+							progress.setMessage(mContext.getString(R.string.loading_progress));
+							progress.show();
+						}
+						
+						@Override
+						public void onPost() {
+						}
+						
+						@Override
+						public void onError(String msg) {
+							if(progress.isShowing())
+								progress.dismiss();
+							
+							AlertDialog.Builder builder = 
+									new AlertDialog.Builder(mContext);
+							builder.setMessage(msg);
+							builder.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+								}
+							});
+							AlertDialog d = builder.create();
+							d.show();
+						}
+						
+						@Override
+						public void onPost(final List<Printer> printerLst, String result) {
+							if(progress.isShowing())
+								progress.dismiss();
+							
+							final PrinterListBuilder builder = 
+									new PrinterListBuilder(mContext, printerLst);
+							builder.setTitle(R.string.select_printer);
+							builder.setNegativeButton(R.string.global_btn_close, 
+									new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+								}
+							});
+							builder.setPositiveButton(R.string.global_btn_ok, null);
+							
+							final AlertDialog d = builder.create();
+							d.show();
+							d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+
+								@Override
+								public void onClick(View v) {
+									if(builder.getPrinterData().getPrinterID() != 0){
+										d.dismiss();
+										// print
+										new PrinterUtils.PrintTransToPrinterTask(mContext, 
+												globalVar, mTransactionId, mComputerId, 
+												builder.getPrinterData().getPrinterID(), GlobalVar.STAFF_ID, printListener).execute(GlobalVar.FULL_URL);
+									}else{
+										new AlertDialog.Builder(mContext)
+										.setMessage(R.string.please_select_printer)
+										.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+											
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+											}
+										})
+										.show();
+									}
+								}
+								
+							});
+						}
+					};
+					
+			new PrinterUtils.LoadPrinterTask(this, globalVar, 
+					GlobalVar.STAFF_ID, loadPrinterListener).execute(GlobalVar.FULL_URL);	
+		}
 	}
 	
 	private void checkBill(){

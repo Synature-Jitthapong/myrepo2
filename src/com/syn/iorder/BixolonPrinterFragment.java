@@ -11,6 +11,7 @@ import jpos.POSPrinterConst;
 import jpos.config.JposEntry;
 
 import com.bxl.config.editor.BXLConfigLoader;
+import com.syn.iorder.PrinterUtils.PrintUtilLine;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,7 +19,9 @@ import android.app.DialogFragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +34,8 @@ import android.widget.Toast;
 
 public class BixolonPrinterFragment extends DialogFragment implements OnItemClickListener{
 	
+	public static final String TAG = BixolonPrinterFragment.class.getSimpleName();
+	
 	public static final int HORIZONTAL_MAX_SPACE = 38;
 	
 	private static String ESCAPE_CHARACTERS = new String(new byte[] {0x1b, 0x7c});
@@ -41,9 +46,21 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 	private final ArrayList<CharSequence> bondedDevices = new ArrayList<CharSequence>();
 	private ArrayAdapter<CharSequence> arrayAdapter;
 
+	private ArrayList<PrinterUtils.PrintUtilLine> mPrintFormatLst;
+	
+	private OnPrintedListener mOnPrintedListener;
+	
 	private BXLConfigLoader bxlConfigLoader;
 	private POSPrinter posPrinter;
 	private String logicalName;
+	
+	public static BixolonPrinterFragment newInstance(ArrayList<PrinterUtils.PrintUtilLine> printFormatLst){
+		BixolonPrinterFragment f = new BixolonPrinterFragment();
+		Bundle b = new Bundle();
+		b.putParcelableArrayList("printlines", printFormatLst);
+		f.setArguments(b);
+		return f;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +74,34 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 			bxlConfigLoader.newFile();
 		}
 		posPrinter = new POSPrinter(getActivity());
+		
+		mPrintFormatLst = getArguments().getParcelableArrayList("printlines");
+	}
+
+	public void setOnPrintedListener(OnPrintedListener listener){
+		mOnPrintedListener = listener;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		if(bondedDevices != null && bondedDevices.size() == 1){
+			setSelectedPrinter(0);
+			print();
+			
+			getDialog().dismiss();
+		}else{
+//			try {
+//				List<JposEntry> entries = bxlConfigLoader.getEntries();
+//			} catch (Exception e) {
+//				
+//			}
+			 
+			 Intent enableBtIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+			 startActivity(enableBtIntent);
+			 dismiss();
+		}
 	}
 
 	@Override
@@ -70,6 +115,8 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 		lvPrinter.setAdapter(arrayAdapter);
 		lvPrinter.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		lvPrinter.setOnItemClickListener(this);
+		
+		lvPrinter.setVisibility(View.GONE);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Please select printer");
@@ -88,74 +135,82 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 
 			@Override
 			public void onClick(View v) {
-				String textToPrint = createTextToPrint();
-				try {
-					posPrinter.open(logicalName);
-					posPrinter.claim(0);
-					posPrinter.setDeviceEnabled(true);
-					posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
-				} catch (JposException e) {
-					e.printStackTrace();
-					Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-				} finally {
-					try {
-						posPrinter.close();
-					} catch (JposException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					dialog.dismiss();
-				}
+				print();
+				dialog.dismiss();
 			}
 			
 		});
 		return dialog;
 	}
 	
+	private void print(){
+		String textToPrint = createTextToPrint();
+		try {
+			posPrinter.open(logicalName);
+			posPrinter.claim(0);
+			posPrinter.setDeviceEnabled(true);
+			posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
+		} catch (JposException e) {
+			e.printStackTrace();
+			Toast.makeText(getActivity(), "Please open bluetooth printer", Toast.LENGTH_SHORT).show();
+		} finally {
+			try {
+				posPrinter.close();
+				mOnPrintedListener.onPrinted();
+			} catch (JposException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private String createTextToPrint(){
-		SummaryTransaction sumTrans = ((CheckBillActivity)getActivity()).getSummTrans();
-		String header = ((CheckBillActivity)getActivity()).getBillHeader().toString();
-		String custNo = ((CheckBillActivity)getActivity()).getBillCustNo().toString();
-		String tableName = ((CheckBillActivity)getActivity()).getTableName().toString();
+		ArrayList<PrinterUtils.PrintUtilLine> lines = mPrintFormatLst;
 		
-		GlobalVar globalVar = new GlobalVar(getActivity());
 		StringBuilder textToPrint = new StringBuilder();
 		textToPrint.append(ESCAPE_CHARACTERS + "cM"); // font c
 		
-		// header
-		textToPrint.append(adjustAlignCenter(header) + "\n");
-		textToPrint.append(adjustAlignCenter(tableName + custNo) + "\n");
-		textToPrint.append(createLine("-") + "\n");
-		
-		if(sumTrans != null){
-			if(sumTrans.OrderList != null){
-				for(SummaryTransaction.Order order : sumTrans.OrderList){
-					String productName = globalVar.qtyFormat.format(order.fAmount) + "x" + order.szProductName;
-					String productPrice = globalVar.decimalFormat.format(order.fTotalPrice);
-					
-					textToPrint.append(productName);
-					textToPrint.append(
-							createHorizontalSpace(
-									calculateLength(productName) + 
-									calculateLength(productPrice)));
-					textToPrint.append(productPrice);
-					textToPrint.append("\n");
-				}
-			}
-			textToPrint.append(createLine("=") + "\n");
-			for(syn.pos.data.model.SummaryTransaction.DisplaySummary displaySummary 
-					: sumTrans.TransactionSummary.DisplaySummaryList){
-				String label = displaySummary.szDisplayName;
-				String value = globalVar.decimalFormat.format(displaySummary.fPriceValue);
-				textToPrint.append(label);
-				textToPrint.append(
-						createHorizontalSpace(
-								calculateLength(label) + 
-								calculateLength(value)));
-				textToPrint.append(value + "\n");
+		for(PrinterUtils.PrintUtilLine line : lines){
+			int lineType = line.getPrintLineType();
+			if(lineType == PrinterUtils.PrintUtilLine.PRINT_DEFAULT){
+				textToPrint.append(line.getLeftText());
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_LEFT){
+				textToPrint.append(line.getLeftText());
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_THREE_COLUMN){
+				String left = line.getLeftText() + " ";
+				String center = line.getCenterText();
+				String right = line.getRightText();
+				
+				int leftLength = calculateLength(left + center);
+				int rightLength = calculateLength(right);
+				textToPrint.append(left + center);
+				textToPrint.append(createHorizontalSpace(leftLength + rightLength));
+				textToPrint.append(right);
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_CENTER){
+				String left = line.getLeftText() + " ";
+				String right = line.getRightText();
+
+				int leftLength = calculateLength(left);
+				int rightLength = calculateLength(right);
+				textToPrint.append(left);
+				textToPrint.append(createHorizontalSpace(leftLength + rightLength));
+				textToPrint.append(right);
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_LEFT_RIGHT){
+				textToPrint.append(adjustAlignCenter(line.getCenterText()));
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_RIGHT){
+				String left = "";
+				String right = line.getRightText();
+				int leftLength = calculateLength(left);
+				int rightLength = calculateLength(right);
+				textToPrint.append(left);
+				textToPrint.append(createHorizontalSpace(leftLength + rightLength));
+				textToPrint.append(right);
+			}else if(lineType == PrinterUtils.PrintUtilLine.PRINT_BLANK){
+				//textToPrint.append("\n");
 			}
 			textToPrint.append("\n");
 		}
+		textToPrint.append("\n\n");
 		return textToPrint.toString();
 	}
 	
@@ -219,7 +274,11 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		String device = ((TextView) view).getText().toString();
+		setSelectedPrinter(position);
+	}
+	
+	private void setSelectedPrinter(int position){
+		String device = (String) arrayAdapter.getItem(position);//((TextView) view).getText().toString();
 
 		logicalName = device.substring(0, device.indexOf(DEVICE_ADDRESS_START));
 
@@ -249,6 +308,12 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 	}
 	
 	@Override
+	public void dismiss() {
+		super.dismiss();
+		mOnPrintedListener.onDismiss(getDialog());
+	}
+
+	@Override
 	public void onDestroy() {
 		try {
 			posPrinter.close();
@@ -275,5 +340,9 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 		if (arrayAdapter != null) {
 			arrayAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	public static interface OnPrintedListener extends DialogInterface.OnDismissListener{
+		void onPrinted();
 	}
 }

@@ -26,6 +26,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 public class AppConfigLayoutActivity extends Activity {
 	
 	public static final String PREF_LOAD_TABLE_VERSION = "pref_load_table_version"; 
+	public static final String PREF_ENABLE_BT_PRINTER = "pref_enable_bt_printer"; 
 	
 	private Context context;
 	private EditText txtServerIp;
@@ -48,6 +50,7 @@ public class AppConfigLayoutActivity extends Activity {
 	private Spinner mSpLoadTbVersion;
 	private TextView tvWsVersion;
 	private String message;
+	private CheckBox mChkEnableBtPrinter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class AppConfigLayoutActivity extends Activity {
 		spinnerShowMenuField = (Spinner) findViewById(R.id.spinnerShowMenuField);
 		spinnerLanguage = (Spinner) findViewById(R.id.spinnerLanguage);
 		mSpLoadTbVersion = (Spinner) findViewById(R.id.spLoadTbVersion);
+		mChkEnableBtPrinter = (CheckBox) findViewById(R.id.chkEnableBtPrinter);
 		
 		swDisplayMenuImage.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
@@ -91,8 +95,36 @@ public class AppConfigLayoutActivity extends Activity {
 		loadLanguage();
 		setupLoadTbVersionAdapter();
 		queueSetting();
+		setupChkEnableBtPrinter();
 	}
 
+	private void setupChkEnableBtPrinter(){
+		final SharedPreferences sharedPref = 
+				getSharedPreferences(PREF_ENABLE_BT_PRINTER, MODE_PRIVATE);
+		
+		boolean isChecked = sharedPref.getBoolean(PREF_ENABLE_BT_PRINTER, false);
+		mChkEnableBtPrinter.setChecked(isChecked);
+		
+		mChkEnableBtPrinter.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				if(isChecked){
+					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, true).commit();
+				}else{
+					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, false).commit();
+				}
+			}
+		});
+	}
+	
+	public static boolean isEnableBtPrinter(Context context){
+		SharedPreferences sharedPref = 
+				context.getSharedPreferences(PREF_ENABLE_BT_PRINTER, MODE_PRIVATE);
+		return sharedPref.getBoolean(PREF_ENABLE_BT_PRINTER, false);
+	}
+	
 	private void setupLoadTbVersionAdapter(){
 		final SharedPreferences sharedPref = 
 				getSharedPreferences(PREF_LOAD_TABLE_VERSION, MODE_PRIVATE);
