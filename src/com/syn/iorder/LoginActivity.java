@@ -32,6 +32,11 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
+	
+	public static final int NUM_CLICK_FOR_SETTING = 3;
+	
+	private int numClick = 0;
+	
 	private TextView tvLastUpdate;
 	private TextView tvWsVersion;
 	private TextView tvDeviceCode;
@@ -375,10 +380,13 @@ public class LoginActivity extends Activity {
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			intent = new Intent(LoginActivity.this,
-					AppConfigLayoutActivity.class);
-			startActivity(intent);
-			finish();
+			if(++numClick == NUM_CLICK_FOR_SETTING){
+				numClick = 0;
+				intent = new Intent(LoginActivity.this,
+						AppConfigLayoutActivity.class);
+				startActivity(intent);
+				finish();
+			}
 			return true;
 		case R.id.login_menu_exit:
 			exitApplication();
