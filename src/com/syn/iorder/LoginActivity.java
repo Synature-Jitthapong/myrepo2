@@ -24,6 +24,11 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class LoginActivity extends Activity {
+	
+	public static final int TOTAL_CLICK_FOR_SETTING = 3;
+	
+	private int mTotalClick = 0;
+	
 	private TextView tvLastUpdate;
 	private TextView tvWsVersion;
 	private TextView tvDeviceCode;
@@ -304,10 +309,13 @@ public class LoginActivity extends Activity {
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			intent = new Intent(LoginActivity.this,
-					AppConfigLayoutActivity.class);
-			LoginActivity.this.startActivity(intent);
-			LoginActivity.this.finish();
+			if(++mTotalClick == TOTAL_CLICK_FOR_SETTING){
+				intent = new Intent(LoginActivity.this,
+						AppConfigLayoutActivity.class);
+				LoginActivity.this.startActivity(intent);
+				LoginActivity.this.finish();
+				mTotalClick = 0;
+			}
 			return true;
 		case R.id.login_menu_exit:
 			exitApplication();
