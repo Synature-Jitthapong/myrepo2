@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class LongBillPrintFragment extends DialogFragment{
@@ -29,8 +30,10 @@ public class LongBillPrintFragment extends DialogFragment{
 	private LongBillListAdapter mLongBillAdapter;
 	
 	private LinearLayout mProgressContainer;
+	private ProgressBar mLoadLongBillProgress;
 	private ListView mLvLongBill;
 	private TextView mTvMesg;
+	private TextView mLoadLongBillProgressText;
 	
 	public static LongBillPrintFragment newInstance(int tableId, int staffId){
 		LongBillPrintFragment f = new LongBillPrintFragment();
@@ -63,6 +66,8 @@ public class LongBillPrintFragment extends DialogFragment{
 		View contentView = getActivity().getLayoutInflater().inflate(R.layout.longbill_list_layout, null);
 		mProgressContainer = (LinearLayout) contentView.findViewById(R.id.progressContainer);
 		mTvMesg = (TextView) contentView.findViewById(R.id.tvMesg);
+		mLoadLongBillProgress = (ProgressBar) contentView.findViewById(R.id.loadLongBillProgress);
+		mLoadLongBillProgressText = (TextView) contentView.findViewById(R.id.loadLongBillProgressText);
 		mLvLongBill = (ListView) contentView.findViewById(R.id.lvLongBill);
 		mLvLongBill.setAdapter(mLongBillAdapter);
 		
@@ -74,23 +79,23 @@ public class LongBillPrintFragment extends DialogFragment{
 //			public void onClick(DialogInterface dialog, int which) {
 //			}
 //		});
-		//builder.setPositiveButton(R.string.print_long_bill, null);
+		builder.setPositiveButton(R.string.global_btn_close, null);
 		
 		final AlertDialog dialog = builder.create();
 		dialog.show();
 		dialog.setCancelable(false);
 		dialog.setCanceledOnTouchOutside(false);
 		
-//		Button btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-//		btnPositive.setEnabled(false);
-//		btnPositive.setOnClickListener(new View.OnClickListener(){
-//
-//			@Override
-//			public void onClick(View v) {
-//				
-//			}
-//			
-//		});
+		Button btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+		btnPositive.setEnabled(false);
+		btnPositive.setOnClickListener(new View.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+			
+		});
 		return dialog;
 	}
 	
@@ -124,6 +129,9 @@ public class LongBillPrintFragment extends DialogFragment{
 				public void onError(String msg) {
 					mTvMesg.setText(msg);
 					mProgressContainer.setVisibility(View.GONE);
+
+					Button btnPositive = getButtonFromDialog(AlertDialog.BUTTON_POSITIVE);
+					btnPositive.setEnabled(true);
 				}
 				
 				@Override
@@ -137,26 +145,38 @@ public class LongBillPrintFragment extends DialogFragment{
 //					mPrintUtilLineLst = lines;
 //					mLongBillAdapter.notifyDataSetChanged();
 					
-					BixolonPrinterFragment f = BixolonPrinterFragment.newInstance(lines);
-					f.show(getFragmentManager(), BixolonPrinterFragment.TAG);
-					f.setOnPrintedListener(mOnPrintedListener);
+					BixolonBluetoothPrinter bxlPrinter = new BixolonBluetoothPrinter(getActivity(), 
+							lines, mOnPrinterWorkingListener);
 				}
 			};
 			
-	private BixolonPrinterFragment.OnPrintedListener mOnPrintedListener = 
-			new BixolonPrinterFragment.OnPrintedListener(){
+	private BixolonBluetoothPrinter.OnPrinterWorkingListener mOnPrinterWorkingListener
+		= new BixolonBluetoothPrinter.OnPrinterWorkingListener() {
+			
+			@Override
+			public void onPrintStart() {
+				mLoadLongBillProgressText.setText(R.string.print_progress);
+			}
+			
+			@Override
+			public void onPrintFinish() {
+				dismiss();
+			}
 
-				@Override
-				public void onPrinted() {
-					dismiss();
-				}
-
-				@Override
-				public void onDismiss(DialogInterface dialog) {
-					dismiss();
-				}
-		
-	};
+			@Override
+			public void onPrinterError(CharSequence message) {
+				new AlertDialog.Builder(getActivity())
+				.setCancelable(false)
+				.setMessage(R.string.connect_to_bt_printer_fail)
+				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dismiss();
+					}
+				}).show();
+			}
+		};
 	
 	private class LongBillListAdapter extends BaseAdapter{
 

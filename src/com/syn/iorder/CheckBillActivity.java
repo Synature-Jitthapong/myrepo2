@@ -71,10 +71,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 	private Button btnSetmember;
 	private Button btnEditQuestion;
 	private GlobalVar globalVar;
-	private Context mContext;
-	
-	/*############ Bixolon Print ############*/
-	private ImageButton mBtnBixPrint;
+	private Context mContext;	
 	
 	private int mTransactionId;
 	private int mComputerId;
@@ -122,8 +119,7 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 
 	private void disableButton(){
 		btnCalDiscount.setEnabled(false);
-		if(!AppConfigLayoutActivity.isEnableBtPrinter(mContext))
-			btnCheckbill.setEnabled(false);
+		btnCheckbill.setEnabled(false);
 		btnPrint.setEnabled(false);
 		btnSetmember.setEnabled(false);
 		btnEditQuestion.setEnabled(false);
@@ -155,18 +151,6 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 		orderProgress = (ProgressBar) findViewById(R.id.progressBarOrderDetail);
 		tableProgress = (ProgressBar) findViewById(R.id.progressBarTable);
 		btnEditQuestion = (Button) findViewById(R.id.buttonEditQuestion);
-		
-		mBtnBixPrint = (ImageButton) findViewById(R.id.btnBixPrint);
-		mBtnBixPrint.setVisibility(View.GONE);
-		mBtnBixPrint.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				BixolonPrinterFragment fragment = new BixolonPrinterFragment();
-				fragment.show(getFragmentManager(), "BixDialog");
-			}
-			
-		});
 		
 		tvBillHeader.setText(globalVar.SHOP_DATA.getShopName());
 		
@@ -1009,13 +993,8 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 			if (mBluetoothAdapter == null) {
 			    // Device does not support Bluetooth 
 			} else{
-				if (!mBluetoothAdapter.isEnabled()) { 
-				    Intent enableBtIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-				    startActivity(enableBtIntent);
-				}else{
-					LongBillPrintFragment f = LongBillPrintFragment.newInstance(mTableId, GlobalVar.STAFF_ID);
-					f.show(this.getFragmentManager(), LongBillPrintFragment.TAG);
-				}
+				LongBillPrintFragment f = LongBillPrintFragment.newInstance(mTableId, GlobalVar.STAFF_ID);
+				f.show(this.getFragmentManager(), LongBillPrintFragment.TAG);
 			}
 		}else{
 			final ProgressDialog progress = new ProgressDialog(this);
@@ -1417,6 +1396,9 @@ public class CheckBillActivity extends Activity implements PayInfoFragment.Payme
 					if(mSummaryTrans.CallForCheckBill == 99){
 						if(!GlobalVar.sIsEnableBuffetType)
 							disableButton();
+
+						if(AppConfigLayoutActivity.isEnableBtPrinter(mContext))
+							btnCheckbill.setEnabled(true);
 					}
 				}
 				BillDetailAdapter billDetailAdapter = new BillDetailAdapter(mContext, 

@@ -454,4 +454,6 @@
     <string name="ask_for_print_long_bill">ต้องการพิมพ์ใบลองบิลตอนนี้เลยไหม?</string>
     <string name="already_have_order">มีรายการอยู่แล้ว ต้องการสั่งเพิ่มหรือไม่</string>
 	<string name="already_printed_longbill">พิมพ์ใบลองบิลแล้ว</string>
+	
+	<string name="connect_to_bt_printer_fail">ไม่สามารถเชื่อมต่อเครื่องพิมพ์ได้ กรุณาตรวจสอบว่าเครื่องพิมพ์เปิดอยู่หรือไม่</string>
 </resources>

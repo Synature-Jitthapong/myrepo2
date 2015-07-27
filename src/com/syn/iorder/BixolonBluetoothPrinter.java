@@ -4,164 +4,149 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import syn.pos.data.model.SummaryTransaction;
 import jpos.JposException;
 import jpos.POSPrinter;
 import jpos.POSPrinterConst;
 import jpos.config.JposEntry;
 
 import com.bxl.config.editor.BXLConfigLoader;
-import com.syn.iorder.PrinterUtils.PrintUtilLine;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class BixolonPrinterFragment extends DialogFragment implements OnItemClickListener{
-	
-	public static final String TAG = BixolonPrinterFragment.class.getSimpleName();
-	
-	public static final int HORIZONTAL_MAX_SPACE = 38;
-	
+public class BixolonBluetoothPrinter extends TextPrintBase{
+
 	private static String ESCAPE_CHARACTERS = new String(new byte[] {0x1b, 0x7c});
-	
+
 	private static final String DEVICE_ADDRESS_START = " (";
 	private static final String DEVICE_ADDRESS_END = ")";
-
-	private final ArrayList<CharSequence> bondedDevices = new ArrayList<CharSequence>();
-	private ArrayAdapter<CharSequence> arrayAdapter;
-
+	
 	private ArrayList<PrinterUtils.PrintUtilLine> mPrintFormatLst;
 	
-	private OnPrintedListener mOnPrintedListener;
+	private OnPrinterWorkingListener mOnPrinterWorkingListener;
 	
+	private Context mContext;
 	private BXLConfigLoader bxlConfigLoader;
 	private POSPrinter posPrinter;
-	private String logicalName;
 	
-	public static BixolonPrinterFragment newInstance(ArrayList<PrinterUtils.PrintUtilLine> printFormatLst){
-		BixolonPrinterFragment f = new BixolonPrinterFragment();
-		Bundle b = new Bundle();
-		b.putParcelableArrayList("printlines", printFormatLst);
-		f.setArguments(b);
-		return f;
+	public BixolonBluetoothPrinter(Context context, 
+			ArrayList<PrinterUtils.PrintUtilLine> printFormatLst, OnPrinterWorkingListener listener){
+		mOnPrinterWorkingListener = listener;
+		mContext = context;
+		mPrintFormatLst = printFormatLst;
+		initPrinter();
 	}
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setBondedDevices();
-		bxlConfigLoader = new BXLConfigLoader(getActivity());
+	public void initPrinter() {
+		bxlConfigLoader = new BXLConfigLoader(mContext);
 		try {
 			bxlConfigLoader.openFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 			bxlConfigLoader.newFile();
 		}
-		posPrinter = new POSPrinter(getActivity());
 		
-		mPrintFormatLst = getArguments().getParcelableArrayList("printlines");
-	}
-
-	public void setOnPrintedListener(OnPrintedListener listener){
-		mOnPrintedListener = listener;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		if(bondedDevices != null && bondedDevices.size() == 1){
-			setSelectedPrinter(0);
-			print();
+		posPrinter = new POSPrinter(mContext);
+		List<JposEntry> savedPrinters = getSavedPrinters();
+		if(savedPrinters.isEmpty()){
+			// show printer list for select
+			BluetoothPrinterListDialogFragment f = 
+					new BluetoothPrinterListDialogFragment();
 			
-			getDialog().dismiss();
+			Activity host = (Activity) mContext;
+			f.show(host.getFragmentManager(), BluetoothPrinterListDialogFragment.TAG);
+			f.setOnSelectedPrinterListener(new BluetoothPrinterListDialogFragment.OnSelectedPrinterListener() {
+				
+				@Override
+				public void onSelectedPrinter() {
+					print();
+				}
+			});
 		}else{
-//			try {
-//				List<JposEntry> entries = bxlConfigLoader.getEntries();
-//			} catch (Exception e) {
-//				
-//			}
-			 
-			 Intent enableBtIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-			 startActivity(enableBtIntent);
-			 dismiss();
+			print();
 		}
 	}
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View content = inflater.inflate(R.layout.bixolon_printer_layout, null);
-		ListView lvPrinter = (ListView) content.findViewById(R.id.listView1);
-		
-		arrayAdapter = new ArrayAdapter<CharSequence>(getActivity(),
-				android.R.layout.simple_list_item_single_choice, bondedDevices);
-		lvPrinter.setAdapter(arrayAdapter);
-		lvPrinter.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		lvPrinter.setOnItemClickListener(this);
-		
-		lvPrinter.setVisibility(View.GONE);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Please select printer");
-		builder.setView(content);
-		builder.setNegativeButton("Close", new DialogInterface.OnClickListener(){
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {}
-			
-		});
-		builder.setPositiveButton("Print", null);
-		
-		final AlertDialog dialog = builder.create();
-		dialog.show();
-		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				print();
-				dialog.dismiss();
-			}
-			
-		});
-		return dialog;
+	private List<JposEntry> getSavedPrinters(){
+		List<JposEntry> jposEntry = null;
+		try {
+			jposEntry = bxlConfigLoader.getEntries();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jposEntry;
 	}
 	
 	private void print(){
 		String textToPrint = createTextToPrint();
-		try {
-			posPrinter.open(logicalName);
-			posPrinter.claim(0);
-			posPrinter.setDeviceEnabled(true);
-			posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
-		} catch (JposException e) {
-			e.printStackTrace();
-			Toast.makeText(getActivity(), "Please open bluetooth printer", Toast.LENGTH_SHORT).show();
-		} finally {
-			try {
-				posPrinter.close();
-				mOnPrintedListener.onPrinted();
-			} catch (JposException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		new PrintTask().execute(textToPrint);
+	}
+	
+	private class PrintTask extends AsyncTask<String, Integer, Integer>{
+
+		public static final int SUCCESS = 0;
+		public static final int ERROR = -1;
+		
+		private CharSequence message;
+		
+		@Override
+		protected void onPreExecute() {
+			mOnPrinterWorkingListener.onPrintStart();
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			if(result == SUCCESS){
+				mOnPrinterWorkingListener.onPrintFinish();
+			}else if (result == ERROR){
+				mOnPrinterWorkingListener.onPrinterError(message);
 			}
 		}
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			int statusCode = SUCCESS;
+			String textToPrint = params[0];
+			try {
+				List<JposEntry> savedPrinters = getSavedPrinters();
+				if(savedPrinters != null && !savedPrinters.isEmpty()){
+					String logicalName = savedPrinters.get(0).getLogicalName();
+					posPrinter.open(logicalName);
+					posPrinter.claim(0);
+					posPrinter.setDeviceEnabled(true);
+					posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
+				}
+			} catch (JposException e) {
+				e.printStackTrace();
+				statusCode = ERROR;
+				message = e.getMessage();
+			} finally {
+				try {
+					if(posPrinter != null){
+						posPrinter.close();
+					}
+				} catch (JposException e) {
+					e.printStackTrace();
+				}
+			}
+			return statusCode;
+		}
+		
 	}
 	
 	private String createTextToPrint(){
@@ -214,135 +199,155 @@ public class BixolonPrinterFragment extends DialogFragment implements OnItemClic
 		return textToPrint.toString();
 	}
 	
-	protected String createLine(String sign){
-		StringBuilder line = new StringBuilder();
-		for(int i = 0; i <= HORIZONTAL_MAX_SPACE; i++){
-			line.append(sign);
-		}
-		return line.toString();
+	public static interface OnPrinterWorkingListener{
+		void onPrintStart();
+		void onPrintFinish();
+		void onPrinterError(CharSequence message);
 	}
 	
-	protected String adjustAlignCenter(String text){
-		int rimSpace = (HORIZONTAL_MAX_SPACE - calculateLength(text)) / 2;
-		StringBuilder empText = new StringBuilder();
-		for(int i = 0; i < rimSpace; i++){
-			empText.append(" ");
-		}
-		return empText.toString() + text + empText.toString();
-	}
-	
-	protected String createHorizontalSpace(int usedSpace){
-		StringBuilder space = new StringBuilder();
-		if(usedSpace > HORIZONTAL_MAX_SPACE){
-			usedSpace = HORIZONTAL_MAX_SPACE - 2;
-		}
-		for(int i = usedSpace; i <= HORIZONTAL_MAX_SPACE; i++){
-			space.append(" ");
-		}
-		return space.toString();
-	}
-	
-	protected int calculateLength(String text){
-		if(text == null)
-			return 0;
-		int length = 0;
-		for(int i = 0; i < text.length(); i++){
-			int code = (int) text.charAt(i);
-			if(code != 3633 
-					// thai
-					&& code != 3636
-					&& code != 3637
-					&& code != 3638
-					&& code != 3639
-					&& code != 3640
-					&& code != 3641
-					&& code != 3642
-					&& code != 3655
-					&& code != 3656
-					&& code != 3657
-					&& code != 3658
-					&& code != 3659
-					&& code != 3660
-					&& code != 3661
-					&& code != 3662){
-				length ++;
-			}
-		}
-		return length == 0 ? text.length() : length;
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		setSelectedPrinter(position);
-	}
-	
-	private void setSelectedPrinter(int position){
-		String device = (String) arrayAdapter.getItem(position);//((TextView) view).getText().toString();
+	public static class BluetoothPrinterListDialogFragment extends DialogFragment implements OnItemClickListener{
 
-		logicalName = device.substring(0, device.indexOf(DEVICE_ADDRESS_START));
+		public static final String TAG = BluetoothPrinterListDialogFragment.class.getSimpleName();
+		public static final int REQUEST_FOR_BLUETOOTH_SETTING = 1;
+		
+		private final ArrayList<CharSequence> bondedDevices = new ArrayList<CharSequence>();
+		private ArrayAdapter<CharSequence> arrayAdapter;
+		
+		private OnSelectedPrinterListener onSelectedPrinterListener;
+		
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
 
-		String address = device.substring(device.indexOf(DEVICE_ADDRESS_START)
-				+ DEVICE_ADDRESS_START.length(),
-				device.indexOf(DEVICE_ADDRESS_END));
-
-		try {
-			for (Object entry : bxlConfigLoader.getEntries()) {
-				JposEntry jposEntry = (JposEntry) entry;
-				bxlConfigLoader.removeEntry(jposEntry.getLogicalName());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			setBondedDevices();
+			arrayAdapter = new ArrayAdapter<CharSequence>(getActivity(),
+					android.R.layout.simple_list_item_single_choice, bondedDevices);
 		}
 
-		try {
-			bxlConfigLoader.addEntry(logicalName,
-					BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER,
-					logicalName,
-					BXLConfigLoader.DEVICE_BUS_BLUETOOTH, address);
+		public void setOnSelectedPrinterListener(OnSelectedPrinterListener listener){
+			this.onSelectedPrinterListener = listener;
+		}
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			View content = inflater.inflate(R.layout.bixolon_printer_layout, null);
+			ListView lvPrinter = (ListView) content.findViewById(R.id.listView1);
 			
-			bxlConfigLoader.saveFile();
-		} catch (Exception e) {
-			e.printStackTrace();
+			lvPrinter.setAdapter(arrayAdapter);
+			lvPrinter.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			lvPrinter.setOnItemClickListener(this);
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle(R.string.please_select_printer);
+			builder.setView(content);
+			builder.setNegativeButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if(onSelectedPrinterListener != null)
+						onSelectedPrinterListener.onSelectedPrinter();
+				}
+				
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			dialog.setCancelable(false);
+			dialog.setCanceledOnTouchOutside(false);
+			return dialog;
 		}
-	}
+		
+		private void setSelectedPrinter(int position){
+			String device = (String) arrayAdapter.getItem(position);
+
+			String logicalName = device.substring(0, device.indexOf(DEVICE_ADDRESS_START));
+
+			String address = device.substring(device.indexOf(DEVICE_ADDRESS_START)
+					+ DEVICE_ADDRESS_START.length(),
+					device.indexOf(DEVICE_ADDRESS_END));
+			
+			clearEntry();
+			addEntry(logicalName, address);
+		}
+
+		public void addEntry(String logicalName, String address){
+			BXLConfigLoader bxlConfigLoader = new BXLConfigLoader(getActivity());
+			try {
+				bxlConfigLoader.addEntry(logicalName,
+						BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER,
+						logicalName,
+						BXLConfigLoader.DEVICE_BUS_BLUETOOTH, address);
+				
+				bxlConfigLoader.saveFile();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void clearEntry(){
+			BXLConfigLoader bxlConfigLoader = new BXLConfigLoader(getActivity());
+			try {
+				for (Object entry : bxlConfigLoader.getEntries()) {
+					JposEntry jposEntry = (JposEntry) entry;
+					bxlConfigLoader.removeEntry(jposEntry.getLogicalName());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		private void setBondedDevices() {
+			bondedDevices.clear();
+
+			BluetoothAdapter bluetoothAdapter = BluetoothAdapter
+					.getDefaultAdapter();
+			
+			boolean isRequestSetting = false;
+			
+			if(bluetoothAdapter.isEnabled()){
+				Set<BluetoothDevice> bondedDeviceSet = bluetoothAdapter
+						.getBondedDevices();
 	
-	@Override
-	public void dismiss() {
-		super.dismiss();
-		mOnPrintedListener.onDismiss(getDialog());
-	}
-
-	@Override
-	public void onDestroy() {
-		try {
-			posPrinter.close();
-		} catch (JposException e) {
-			e.printStackTrace();
+				if(!bondedDeviceSet.isEmpty()){
+					for (BluetoothDevice device : bondedDeviceSet) {
+						bondedDevices.add(device.getName() + DEVICE_ADDRESS_START
+								+ device.getAddress() + DEVICE_ADDRESS_END);
+					}
+		
+					if (arrayAdapter != null) {
+						arrayAdapter.notifyDataSetChanged();
+					}
+				}else{
+					isRequestSetting = true;
+				}
+			}else{
+				isRequestSetting = true;
+			}
+			
+			if(isRequestSetting){
+				Intent intentBluetooth = new Intent();
+		        intentBluetooth.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+		        startActivityForResult(intentBluetooth, REQUEST_FOR_BLUETOOTH_SETTING);
+			}
 		}
-		super.onDestroy();
-	}
-
-	private void setBondedDevices() {
-		logicalName = null;
-		bondedDevices.clear();
-
-		BluetoothAdapter bluetoothAdapter = BluetoothAdapter
-				.getDefaultAdapter();
-		Set<BluetoothDevice> bondedDeviceSet = bluetoothAdapter
-				.getBondedDevices();
-
-		for (BluetoothDevice device : bondedDeviceSet) {
-			bondedDevices.add(device.getName() + DEVICE_ADDRESS_START
-					+ device.getAddress() + DEVICE_ADDRESS_END);
+		
+		
+		@Override
+		public void onActivityResult(int requestCode, int resultCode,
+				Intent data) {
+			if(requestCode == REQUEST_FOR_BLUETOOTH_SETTING){
+				setBondedDevices();
+			}
 		}
 
-		if (arrayAdapter != null) {
-			arrayAdapter.notifyDataSetChanged();
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			setSelectedPrinter(position);
 		}
-	}
-	
-	public static interface OnPrintedListener extends DialogInterface.OnDismissListener{
-		void onPrinted();
+		
+		public static interface OnSelectedPrinterListener{
+			void onSelectedPrinter();
+		}
 	}
 }

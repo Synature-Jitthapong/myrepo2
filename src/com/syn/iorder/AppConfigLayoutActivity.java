@@ -110,10 +110,14 @@ public class AppConfigLayoutActivity extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
+				BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment bxlFragment = 
+						new BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment();
 				if(isChecked){
 					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, true).commit();
+					bxlFragment.show(getFragmentManager(), BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment.TAG);
 				}else{
 					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, false).commit();
+					bxlFragment.clearEntry();
 				}
 			}
 		});
