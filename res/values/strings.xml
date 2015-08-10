@@ -521,4 +521,5 @@ Tel: +66(0)-2-530-3835-6 Fax: +66(0)-2-530-3092 E-mail: info@synaturegroup.com</
 	<string name="enable_bt_printer">Enable bluetooth printer</string>
 	
 	<string name="connect_to_bt_printer_fail">Cannot connect to bluetooth printer. Make sure printer is open.</string>
+	<string name="print_test_text">123xxstreet,xxxcity,xxxxstate\n******TEL**9999-99-9999****C#2\n***November.23,*2007***PM*4:24\napples******************$20.00\ngrapes******************$30.00\nbananas*****************$40.00\nlemons******************$50.00\noranges*****************$60.00\nTax*excluded.**********$200.00\nTax*****5.0%************$10.00\n______________________________\nTotal******************$210.00\n</string>
 </resources>

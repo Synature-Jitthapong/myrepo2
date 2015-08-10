@@ -4,4 +4,9 @@
         <item>@string/load_table_v1</item>
         <item>@string/load_table_v2</item>
     </string-array>
+    
+    <string-array name="bluetooth_printer_vendors">
+        <item>EPSON</item>
+        <item>BIXOLON</item>
+    </string-array>
 </resources>

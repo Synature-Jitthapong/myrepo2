@@ -1,7 +1,12 @@
 package com.syn.iorder;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.syn.iorder.PrinterUtils.PrintUtilLine;
 import com.syn.iorder.QueueUtils.QueueButton;
 
 import syn.pos.data.dao.ShopProperty;
@@ -39,7 +44,8 @@ import android.widget.TextView;
 public class AppConfigLayoutActivity extends Activity {
 	
 	public static final String PREF_LOAD_TABLE_VERSION = "pref_load_table_version"; 
-	public static final String PREF_ENABLE_BT_PRINTER = "pref_enable_bt_printer"; 
+	
+	public static final String PREF_ENABLE_BT_PRINTER = "pref_enable_bt_printer";
 	
 	private Context context;
 	private EditText txtServerIp;
@@ -110,14 +116,38 @@ public class AppConfigLayoutActivity extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment bxlFragment = 
-						new BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment();
+				BluetoothPrinter.BluetoothPrinterListDialogFragment btPrinterFragment = 
+						new BluetoothPrinter.BluetoothPrinterListDialogFragment();
+
+				Button btnTestPrint = (Button) findViewById(R.id.btnTestPrint);
+
+				btnTestPrint.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						ArrayList<PrintUtilLine> lines = new ArrayList<PrintUtilLine>();
+						PrintUtilLine line = new PrintUtilLine();
+						String textToPrint = getString(R.string.print_test_text).replace("*", " ");
+						line.setLeftText(textToPrint);
+						lines.add(line);
+						
+						BluetoothPrinter btPrinter = new BluetoothPrinter(AppConfigLayoutActivity.this, 
+								lines, null);
+						btPrinter.print();
+					}
+					
+				});
+				
 				if(isChecked){
 					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, true).commit();
-					bxlFragment.show(getFragmentManager(), BixolonBluetoothPrinter.BluetoothPrinterListDialogFragment.TAG);
+					btPrinterFragment.show(getFragmentManager(), BluetoothPrinter.BluetoothPrinterListDialogFragment.TAG);
+					
+					btnTestPrint.setVisibility(View.VISIBLE);
 				}else{
 					sharedPref.edit().putBoolean(PREF_ENABLE_BT_PRINTER, false).commit();
-					bxlFragment.clearEntry();
+					btPrinterFragment.clearEntry();
+					
+					btnTestPrint.setVisibility(View.GONE);
 				}
 			}
 		});
@@ -126,7 +156,18 @@ public class AppConfigLayoutActivity extends Activity {
 	public static boolean isEnableBtPrinter(Context context){
 		SharedPreferences sharedPref = 
 				context.getSharedPreferences(PREF_ENABLE_BT_PRINTER, MODE_PRIVATE);
-		return sharedPref.getBoolean(PREF_ENABLE_BT_PRINTER, false);
+		boolean isEnable = sharedPref.getBoolean(PREF_ENABLE_BT_PRINTER, false);
+		
+		if(isEnable){
+			Calendar calendar = Calendar.getInstance();
+			Date now = new GregorianCalendar(calendar.get(Calendar.YEAR),
+					calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).getTime();
+			Date expire = new GregorianCalendar(2015, Calendar.SEPTEMBER, 14).getTime();
+			if(now.compareTo(expire) >= 0){
+				isEnable = false;
+			}
+		}
+		return isEnable;
 	}
 	
 	private void setupLoadTbVersionAdapter(){

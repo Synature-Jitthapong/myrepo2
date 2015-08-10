@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -145,13 +146,14 @@ public class LongBillPrintFragment extends DialogFragment{
 //					mPrintUtilLineLst = lines;
 //					mLongBillAdapter.notifyDataSetChanged();
 					
-					BixolonBluetoothPrinter bxlPrinter = new BixolonBluetoothPrinter(getActivity(), 
+					BluetoothPrinter btPrinter = new BluetoothPrinter(getActivity(), 
 							lines, mOnPrinterWorkingListener);
+					btPrinter.print();
 				}
 			};
 			
-	private BixolonBluetoothPrinter.OnPrinterWorkingListener mOnPrinterWorkingListener
-		= new BixolonBluetoothPrinter.OnPrinterWorkingListener() {
+	private BluetoothPrinter.OnPrinterWorkingListener mOnPrinterWorkingListener
+		= new BluetoothPrinter.OnPrinterWorkingListener() {
 			
 			@Override
 			public void onPrintStart() {
@@ -167,7 +169,7 @@ public class LongBillPrintFragment extends DialogFragment{
 			public void onPrinterError(CharSequence message) {
 				new AlertDialog.Builder(getActivity())
 				.setCancelable(false)
-				.setMessage(R.string.connect_to_bt_printer_fail)
+				.setMessage(getString(R.string.connect_to_bt_printer_fail) + (TextUtils.isEmpty(message) ? "" : "\n >>" + message + "<<"))
 				.setNeutralButton(R.string.global_btn_close, new DialogInterface.OnClickListener() {
 					
 					@Override

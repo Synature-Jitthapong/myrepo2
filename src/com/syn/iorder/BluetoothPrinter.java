@@ -10,6 +10,11 @@ import jpos.POSPrinterConst;
 import jpos.config.JposEntry;
 
 import com.bxl.config.editor.BXLConfigLoader;
+import com.epson.eposprint.BatteryStatusChangeEventListener;
+import com.epson.eposprint.Builder;
+import com.epson.eposprint.EposException;
+import com.epson.eposprint.Print;
+import com.epson.eposprint.StatusChangeEventListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,8 +25,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,8 +36,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class BixolonBluetoothPrinter extends TextPrintBase{
+public class BluetoothPrinter extends TextPrintBase{
 
+	public static final int EPSON = 0;
+	public static final int BIXOLON = 1;
+	public static final String EPSON_PRINTER_MODEL = "TM-P20";
+	
+	public static final String PREF_BT_PRINTER_VENDOR = "pref_bt_printer_vendor";
+	public static final String PREF_BT_PRINTER_MAC_ADDRESS = "pref_bt_printer_mac_address";
+	
 	private static String ESCAPE_CHARACTERS = new String(new byte[] {0x1b, 0x7c});
 
 	private static final String DEVICE_ADDRESS_START = " (";
@@ -41,27 +55,79 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 	private OnPrinterWorkingListener mOnPrinterWorkingListener;
 	
 	private Context mContext;
-	private BXLConfigLoader bxlConfigLoader;
-	private POSPrinter posPrinter;
+	private Print mEpsonPrinter;
+	private BXLConfigLoader mBxlConfigLoader;
+	private POSPrinter mBixolonPrinter;
 	
-	public BixolonBluetoothPrinter(Context context, 
-			ArrayList<PrinterUtils.PrintUtilLine> printFormatLst, OnPrinterWorkingListener listener){
-		mOnPrinterWorkingListener = listener;
+	public BluetoothPrinter(Context context, ArrayList<PrinterUtils.PrintUtilLine> printFormatLst, 
+			OnPrinterWorkingListener listener){
 		mContext = context;
 		mPrintFormatLst = printFormatLst;
-		initPrinter();
+		mOnPrinterWorkingListener = listener;
 	}
 	
-	public void initPrinter() {
-		bxlConfigLoader = new BXLConfigLoader(mContext);
-		try {
-			bxlConfigLoader.openFile();
-		} catch (Exception e) {
-			e.printStackTrace();
-			bxlConfigLoader.newFile();
+	public void print(){
+		int printerVendor = getPrinterVendor();
+		if(printerVendor == EPSON){
+			printToEpsonPrinter();
+		}else if(printerVendor == BIXOLON){
+			initConfigLoader();
+			printToBixolonPrinter();
+		}else{
+			mOnPrinterWorkingListener.onPrinterError("");
 		}
-		
-		posPrinter = new POSPrinter(mContext);
+	}
+	
+	private void printToEpsonPrinter() {
+		mEpsonPrinter = new Print(mContext);
+		final SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		String mac = sharedPref.getString(PREF_BT_PRINTER_MAC_ADDRESS, null);
+		final int interval = 1000;
+		final int statusMonitor = Print.TRUE;
+		if(mac != null){
+			try {
+				mEpsonPrinter.openPrinter(Print.DEVTYPE_BLUETOOTH, mac, statusMonitor, interval);
+				com.epson.eposprint.Builder builder = createEpsonBuilder();
+				new EPSONPrintTask().execute(builder);
+			} catch (EposException e) {
+				if(mOnPrinterWorkingListener != null)
+					mOnPrinterWorkingListener.onPrinterError(e.getMessage());
+			}
+		}else{
+			BluetoothPrinterListDialogFragment f = 
+					new BluetoothPrinterListDialogFragment();
+			
+			Activity host = (Activity) mContext;
+			f.show(host.getFragmentManager(), BluetoothPrinterListDialogFragment.TAG);
+			f.setOnSelectedPrinterListener(new BluetoothPrinterListDialogFragment.OnSelectedPrinterListener() {
+				
+				@Override
+				public void onSelectedPrinter() {
+					try {
+						final String mac = sharedPref.getString(PREF_BT_PRINTER_MAC_ADDRESS, null);
+						mEpsonPrinter.openPrinter(Print.DEVTYPE_BLUETOOTH, mac, statusMonitor, interval);
+						com.epson.eposprint.Builder builder = createEpsonBuilder();
+						new EPSONPrintTask().execute(builder);
+					} catch (EposException e) {
+						if(mOnPrinterWorkingListener != null)
+							mOnPrinterWorkingListener.onPrinterError(e.getMessage());
+					}
+				}
+			});
+		}
+	}
+
+	private com.epson.eposprint.Builder createEpsonBuilder() throws EposException{
+		com.epson.eposprint.Builder builder = new com.epson.eposprint.Builder(
+				EPSON_PRINTER_MODEL, Builder.MODEL_ANK, mContext);
+		builder.addTextFont(Builder.FONT_C);
+		builder.addText(createTextToPrint(EPSON));
+		return builder;
+	}
+	
+	private void printToBixolonPrinter(){
+		mBixolonPrinter = new POSPrinter(mContext);
 		List<JposEntry> savedPrinters = getSavedPrinters();
 		if(savedPrinters.isEmpty()){
 			// show printer list for select
@@ -74,30 +140,107 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 				
 				@Override
 				public void onSelectedPrinter() {
-					print();
+					String textToPrint = createTextToPrint(BIXOLON);
+					new BixolonPrintTask().execute(textToPrint);
 				}
 			});
 		}else{
-			print();
+			String textToPrint = createTextToPrint(BIXOLON);
+			new BixolonPrintTask().execute(textToPrint);
+		}	
+	}
+	
+	private void initConfigLoader(){
+		mBxlConfigLoader = new BXLConfigLoader(mContext);
+		try {
+			mBxlConfigLoader.openFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+			mBxlConfigLoader.newFile();
 		}
 	}
-
+	
+	public int getPrinterVendor(){
+		int printerVendor = 0;
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		printerVendor = sharedPref.getInt(PREF_BT_PRINTER_VENDOR, -1);
+		
+		return printerVendor;
+	}
+	
 	private List<JposEntry> getSavedPrinters(){
 		List<JposEntry> jposEntry = null;
 		try {
-			jposEntry = bxlConfigLoader.getEntries();
+			jposEntry = mBxlConfigLoader.getEntries();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return jposEntry;
 	}
 	
-	private void print(){
-		String textToPrint = createTextToPrint();
-		new PrintTask().execute(textToPrint);
+	private class EPSONPrintTask extends AsyncTask<com.epson.eposprint.Builder, Integer, Integer> implements StatusChangeEventListener, 
+		BatteryStatusChangeEventListener{
+
+		public static final int SUCCESS = 0;
+		public static final int ERROR = -1;
+		
+		private CharSequence message;
+		
+		public EPSONPrintTask(){
+			mEpsonPrinter.setBatteryStatusChangeEventCallback(this);
+			mEpsonPrinter.setStatusChangeEventCallback(this);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			if(mOnPrinterWorkingListener != null)
+				mOnPrinterWorkingListener.onPrintStart();
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			if(result == SUCCESS){
+				if(mOnPrinterWorkingListener != null)
+					mOnPrinterWorkingListener.onPrintFinish();
+			}else if (result == ERROR){
+				if(mOnPrinterWorkingListener != null)
+					mOnPrinterWorkingListener.onPrinterError(message);
+			}
+		}
+
+		@Override
+		public void onBatteryStatusChangeEvent(String arg0, int arg1) {
+		}
+
+		@Override
+		public void onStatusChangeEvent(String arg0, int arg1) {
+		}
+
+		@Override
+		protected Integer doInBackground(com.epson.eposprint.Builder... params) {
+			int status = SUCCESS;
+			com.epson.eposprint.Builder builder = params[0];
+			try {
+				mEpsonPrinter.sendData(builder, 10 * 1000, new int[1], new int[1]);
+			} catch (EposException e) {
+				status = ERROR;
+				message = e.getMessage();
+			} finally{
+				try {
+					builder.clearCommandBuffer();
+					builder = null;
+					mEpsonPrinter.closePrinter();
+				} catch (Exception e) {
+					builder = null;
+				}
+			}
+			return status;
+		}
+		
 	}
 	
-	private class PrintTask extends AsyncTask<String, Integer, Integer>{
+	private class BixolonPrintTask extends AsyncTask<String, Integer, Integer>{
 
 		public static final int SUCCESS = 0;
 		public static final int ERROR = -1;
@@ -106,15 +249,18 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 		
 		@Override
 		protected void onPreExecute() {
-			mOnPrinterWorkingListener.onPrintStart();
+			if(mOnPrinterWorkingListener != null)
+				mOnPrinterWorkingListener.onPrintStart();
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			if(result == SUCCESS){
-				mOnPrinterWorkingListener.onPrintFinish();
+				if(mOnPrinterWorkingListener != null)
+					mOnPrinterWorkingListener.onPrintFinish();
 			}else if (result == ERROR){
-				mOnPrinterWorkingListener.onPrinterError(message);
+				if(mOnPrinterWorkingListener != null)
+					mOnPrinterWorkingListener.onPrinterError(message);
 			}
 		}
 
@@ -126,10 +272,10 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 				List<JposEntry> savedPrinters = getSavedPrinters();
 				if(savedPrinters != null && !savedPrinters.isEmpty()){
 					String logicalName = savedPrinters.get(0).getLogicalName();
-					posPrinter.open(logicalName);
-					posPrinter.claim(0);
-					posPrinter.setDeviceEnabled(true);
-					posPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
+					mBixolonPrinter.open(logicalName);
+					mBixolonPrinter.claim(0);
+					mBixolonPrinter.setDeviceEnabled(true);
+					mBixolonPrinter.printNormal(POSPrinterConst.PTR_S_RECEIPT, textToPrint);
 				}
 			} catch (JposException e) {
 				e.printStackTrace();
@@ -137,8 +283,8 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 				message = e.getMessage();
 			} finally {
 				try {
-					if(posPrinter != null){
-						posPrinter.close();
+					if(mBixolonPrinter != null){
+						mBixolonPrinter.close();
 					}
 				} catch (JposException e) {
 					e.printStackTrace();
@@ -149,11 +295,14 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 		
 	}
 	
-	private String createTextToPrint(){
+	private String createTextToPrint(int printerVendor){
 		ArrayList<PrinterUtils.PrintUtilLine> lines = mPrintFormatLst;
 		
 		StringBuilder textToPrint = new StringBuilder();
-		textToPrint.append(ESCAPE_CHARACTERS + "cM"); // font c
+		
+		if(printerVendor == BIXOLON){
+			textToPrint.append(ESCAPE_CHARACTERS + "cM"); // font c
+		}
 		
 		for(PrinterUtils.PrintUtilLine line : lines){
 			int lineType = line.getPrintLineType();
@@ -241,7 +390,7 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(R.string.please_select_printer);
 			builder.setView(content);
-			builder.setNegativeButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
+			builder.setPositiveButton(R.string.global_btn_close, new DialogInterface.OnClickListener(){
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -257,19 +406,35 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 			return dialog;
 		}
 		
-		private void setSelectedPrinter(int position){
+		private void setSelectedPrinter(final int position){
 			String device = (String) arrayAdapter.getItem(position);
-
+			
 			String logicalName = device.substring(0, device.indexOf(DEVICE_ADDRESS_START));
-
 			String address = device.substring(device.indexOf(DEVICE_ADDRESS_START)
 					+ DEVICE_ADDRESS_START.length(),
 					device.indexOf(DEVICE_ADDRESS_END));
 			
-			clearEntry();
-			addEntry(logicalName, address);
+			int vendor = getPrinterVendor(logicalName);
+			SharedPreferences sharedPref = PreferenceManager
+					.getDefaultSharedPreferences(getActivity());
+			sharedPref.edit().putInt(PREF_BT_PRINTER_VENDOR, vendor).commit();
+			if(vendor == 0){
+				sharedPref.edit().putString(PREF_BT_PRINTER_MAC_ADDRESS, address).commit();
+			}else{
+				clearEntry();
+				addEntry(logicalName, address);
+			}
 		}
 
+		private int getPrinterVendor(String deviceName){
+			int vendor = EPSON;
+			if(deviceName.matches(".*SPP.*"))
+				vendor = BIXOLON;
+			else if(deviceName.matches(".*TM-P20.*"))
+				vendor = EPSON;
+			return vendor;
+		}
+		
 		public void addEntry(String logicalName, String address){
 			BXLConfigLoader bxlConfigLoader = new BXLConfigLoader(getActivity());
 			try {
@@ -282,6 +447,12 @@ public class BixolonBluetoothPrinter extends TextPrintBase{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		public void clearEpson(){
+			SharedPreferences sharedPref = PreferenceManager
+					.getDefaultSharedPreferences(getActivity());
+			sharedPref.edit().putInt(PREF_BT_PRINTER_VENDOR, -1).commit();
 		}
 		
 		public void clearEntry(){

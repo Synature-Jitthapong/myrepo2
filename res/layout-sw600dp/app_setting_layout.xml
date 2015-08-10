@@ -202,6 +202,30 @@
         </LinearLayout>
 
         <LinearLayout
+                android:id="@+id/btPrinterContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal" >
+
+				<CheckBox
+				    android:id="@+id/chkEnableBtPrinter"
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="1" 
+				    android:text="@string/enable_bt_printer"/>
+				
+				<Button 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:id="@+id/btnTestPrint"
+    				android:background="@drawable/light_grey_button"
+				    android:text="Test Print"/>
+
+        </LinearLayout>
+        
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_span="2"

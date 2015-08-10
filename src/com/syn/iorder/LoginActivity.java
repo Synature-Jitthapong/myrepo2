@@ -8,6 +8,7 @@ import syn.pos.data.model.ShopData;
 import syn.pos.data.model.TableName;
 import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
