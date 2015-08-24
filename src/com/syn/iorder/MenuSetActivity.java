@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.HorizontalScrollView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -110,8 +112,9 @@ public class MenuSetActivity extends Activity {
 		ImageLoader imgLoader = new ImageLoader(this);
 
 		if (pcgLst.size() > 0) {
-			int i = 0;
-			for (final ProductGroups.PComponentGroup pcgData : pcgLst) {
+			for (int i = 0; i < pcgLst.size(); i++) {
+				final ProductGroups.PComponentGroup pcgData = pcgLst.get(i);
+				
 				final View v = inflater.inflate(
 						R.layout.pcomponentgroup_template, null);
 				v.setId(pcgData.getPGroupID());
@@ -146,7 +149,8 @@ public class MenuSetActivity extends Activity {
 				}
 
 				// if setgroup 0
-				if (pcgData.getSetGroupNo() == 0) {
+				boolean isSetGroup0 = pcgData.getSetGroupNo() == 0;
+				if (isSetGroup0) {
 					v.setEnabled(false);
 					// v.setBackgroundResource(R.drawable.btn_default_disabled_holo_light);
 
@@ -195,7 +199,6 @@ public class MenuSetActivity extends Activity {
 						}
 
 					});
-
 				}
 
 //				LayoutParams layoutParam = new LayoutParams(
@@ -203,9 +206,15 @@ public class MenuSetActivity extends Activity {
 //						1f);
 //				layoutParam.width = 250;
 //				v.setMinimumWidth(200);
-				layout.addView(v);
+				
+				if(!isSetGroup0){
+					layout.addView(v);
+				}
+			}
 
-				i++;
+			try {
+				layout.getChildAt(0).callOnClick();
+			} catch (Exception e) {
 			}
 		}
 
@@ -361,7 +370,7 @@ public class MenuSetActivity extends Activity {
 		if (pcgLst.size() > 0) {
 			POSOrdering posOrder = new POSOrdering(CONTEXT);
 			for (ProductGroups.PComponentGroup pg : pcgLst) {
-				if (pg.getRequireAmount() > 0) {
+				if (pg.getRequireAmount() > 0 && pg.getSetGroupNo() != 0) {
 					pGroupName = pg.getSetGroupName();
 					double count = posOrder.countOrderSet(TRANSACTION_ID,
 							ORDER_ID, pg.getPGroupID());
@@ -546,6 +555,28 @@ public class MenuSetActivity extends Activity {
 									pcs.getPGroupID(), requireAmount);
 
 							listAllSetOrder();
+							
+							if(balance == 0){
+								ViewGroup layout = (ViewGroup) findViewById(R.id.layout);
+								for(int i = 0; i < layout.getChildCount(); i++){
+									View child = layout.getChildAt(i);
+									if(child.getId() == pcs.getPGroupID()){
+										if(i < layout.getChildCount() - 1){
+											View nextChild = layout.getChildAt(i + 1);
+											nextChild.setSelected(true);
+											nextChild.callOnClick();
+											
+											ViewParent rootView = layout.getParent();
+											if(rootView != null){
+												HorizontalScrollView horView = (HorizontalScrollView) rootView;
+												int x = (int)nextChild.getX();
+												horView.smoothScrollTo(x, 0);
+											}
+										}
+										break;
+									}
+								}
+							}
 						}
 
 					} else {
