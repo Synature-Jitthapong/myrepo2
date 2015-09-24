@@ -2,13 +2,11 @@ package com.syn.iorder;
 
 import java.util.List;
 
-import syn.pos.data.dao.ShopProperty;
 import syn.pos.data.dao.SyncDataLog;
-import syn.pos.data.model.ShopData;
 import syn.pos.data.model.TableName;
 import syn.pos.data.model.ShopData.StaffPermission;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.CountDownTimer;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,6 +46,9 @@ public class LoginActivity extends Activity {
 	private Context context;
 	private GlobalVar globalVar;
 	private String deviceCode;
+	
+	Toast toast;
+	CountDownTimer timer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -377,15 +378,33 @@ public class LoginActivity extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(final MenuItem item) {
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			if(++numClick == NUM_CLICK_FOR_SETTING){
+			if(timer == null){
+				timer = new CountDownTimer(2000, 1000){
+	
+					@Override
+					public void onFinish() {
+						numClick = 0;
+						toast = null;
+					}
+	
+					@Override
+					public void onTick(long millisUntilFinished) {
+					}
+					
+				}.start();
+			}
+			
+			++numClick;
+			makeToast();
+			if(numClick == NUM_CLICK_FOR_SETTING){
 				numClick = 0;
-				intent = new Intent(LoginActivity.this,
-						AppConfigLayoutActivity.class);
-				startActivity(intent);
+				toast = null;
+				startActivity(new Intent(LoginActivity.this,
+						AppConfigLayoutActivity.class));
 				finish();
 			}
 			return true;
@@ -423,6 +442,16 @@ public class LoginActivity extends Activity {
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	private void makeToast(){
+		try{
+			toast.getView().isShown();
+			toast.setText(String.valueOf(numClick));
+		}catch(Exception ex){
+			toast = Toast.makeText(LoginActivity.this, String.valueOf(numClick), Toast.LENGTH_SHORT);
+			toast.show();
 		}
 	}
 

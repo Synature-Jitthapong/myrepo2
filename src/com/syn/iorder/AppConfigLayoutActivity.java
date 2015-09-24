@@ -162,7 +162,7 @@ public class AppConfigLayoutActivity extends Activity {
 			Calendar calendar = Calendar.getInstance();
 			Date now = new GregorianCalendar(calendar.get(Calendar.YEAR),
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).getTime();
-			Date expire = new GregorianCalendar(2015, Calendar.SEPTEMBER, 14).getTime();
+			Date expire = new GregorianCalendar(2015, Calendar.OCTOBER, 19).getTime();
 			if(now.compareTo(expire) >= 0){
 				isEnable = false;
 			}
