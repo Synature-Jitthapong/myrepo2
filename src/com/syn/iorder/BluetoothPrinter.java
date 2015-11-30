@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -301,7 +302,7 @@ public class BluetoothPrinter extends TextPrintBase{
 		StringBuilder textToPrint = new StringBuilder();
 		
 		if(printerVendor == BIXOLON){
-			textToPrint.append(ESCAPE_CHARACTERS + "cM"); // font c
+			textToPrint.append(ESCAPE_CHARACTERS + "cM");
 		}
 		
 		for(PrinterUtils.PrintUtilLine line : lines){
